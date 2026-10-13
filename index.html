@@ -1164,6 +1164,7 @@
     <div class="ds-label">Sauvegarde</div>
     <button class="ds-nav-btn" onclick="exportProgress()"><span>💾</span><span>Exporter</span></button>
     <button class="ds-nav-btn" onclick="document.getElementById('import-file-input').click()"><span>📂</span><span>Importer</span></button>
+    <button class="ds-nav-btn" onclick="openNotifSettings()" id="btn-notif"><span>🔔</span><span>Notifications</span><span id="notif-status-dot" style="margin-left:auto;width:8px;height:8px;border-radius:50%;display:none"></span></button>
   </div>
 
   <div class="ds-footer">
@@ -12352,11 +12353,275 @@ document.addEventListener('visibilitychange', () => { if(!document.hidden) updat
 // Enter submits login form
 crsBoot(); // parcours + héros
 setTimeout(badgeCheck, 1500); // check badges on load
+
+// ═══════════════════════════════════════════════
+// NOTIFICATIONS SYSTEM
+// ═══════════════════════════════════════════════
+const NOTIF_DEFAULTS = { enabled: false, reminderHour: 20, reminderMin: 0, streakAlert: true, goalCelebrate: true };
+function notifGet() { try { return JSON.parse(localStorage.getItem('aprende_notif') || 'null') || NOTIF_DEFAULTS; } catch(e) { return NOTIF_DEFAULTS; } }
+function notifSave(s) { localStorage.setItem('aprende_notif', JSON.stringify(s)); }
+
+function updateNotifDot() {
+  const dot = document.getElementById('notif-status-dot');
+  if(!dot) return;
+  const s = notifGet();
+  dot.style.display = 'inline-block';
+  dot.style.background = s.enabled ? '#58cc02' : '#888';
+}
+
+async function requestNotifPermission() {
+  if(!('Notification' in window)) { showToast('Notifications non supportées sur ce navigateur', 'error-toast'); return false; }
+  if(Notification.permission === 'granted') return true;
+  if(Notification.permission === 'denied') { showToast('Notifications bloquées — autorise-les dans les réglages du navigateur', 'error-toast'); return false; }
+  const perm = await Notification.requestPermission();
+  return perm === 'granted';
+}
+
+function openNotifSettings() {
+  const s = notifGet();
+  const html = `
+    <div style="max-width:400px;margin:auto">
+      <h3 style="margin:0 0 1rem;text-align:center">🔔 Notifications</h3>
+
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:.8rem;background:rgba(255,255,255,.05);border-radius:12px;margin-bottom:.8rem">
+        <span style="font-weight:700">Activer les notifications</span>
+        <label class="notif-toggle">
+          <input type="checkbox" id="notif-enabled" ${s.enabled ? 'checked' : ''} onchange="toggleNotif(this.checked)">
+          <span class="notif-slider"></span>
+        </label>
+      </div>
+
+      <div id="notif-options" style="${s.enabled ? '' : 'opacity:.4;pointer-events:none'}">
+        <div style="padding:.8rem;background:rgba(255,255,255,.05);border-radius:12px;margin-bottom:.8rem">
+          <div style="font-weight:600;margin-bottom:.5rem">⏰ Rappel quotidien</div>
+          <div style="display:flex;align-items:center;gap:.5rem">
+            <span style="color:var(--muted);font-size:.85rem">Heure :</span>
+            <input type="number" id="notif-hour" value="${s.reminderHour}" min="0" max="23" style="width:50px;padding:.3rem;border-radius:8px;border:1px solid rgba(255,255,255,.2);background:rgba(0,0,0,.3);color:#fff;text-align:center;font-size:1rem" onchange="saveNotifTime()">
+            <span style="font-weight:700">:</span>
+            <input type="number" id="notif-min" value="${String(s.reminderMin).padStart(2,'0')}" min="0" max="59" step="5" style="width:50px;padding:.3rem;border-radius:8px;border:1px solid rgba(255,255,255,.2);background:rgba(0,0,0,.3);color:#fff;text-align:center;font-size:1rem" onchange="saveNotifTime()">
+          </div>
+          <div style="font-size:.75rem;color:var(--muted);margin-top:.3rem">Si tu n'as pas révisé, tu recevras un rappel</div>
+        </div>
+
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:.8rem;background:rgba(255,255,255,.05);border-radius:12px;margin-bottom:.8rem">
+          <div>
+            <div style="font-weight:600">🔥 Alerte streak en danger</div>
+            <div style="font-size:.75rem;color:var(--muted)">Si tu vas perdre ta série</div>
+          </div>
+          <label class="notif-toggle">
+            <input type="checkbox" id="notif-streak" ${s.streakAlert ? 'checked' : ''} onchange="saveNotifOptions()">
+            <span class="notif-slider"></span>
+          </label>
+        </div>
+
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:.8rem;background:rgba(255,255,255,.05);border-radius:12px;margin-bottom:.8rem">
+          <div>
+            <div style="font-weight:600">🎯 Objectif atteint</div>
+            <div style="font-size:.75rem;color:var(--muted)">Félicitations quand tu finis ton objectif</div>
+          </div>
+          <label class="notif-toggle">
+            <input type="checkbox" id="notif-goal" ${s.goalCelebrate ? 'checked' : ''} onchange="saveNotifOptions()">
+            <span class="notif-slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <button onclick="testNotification()" style="width:100%;padding:.7rem;border:none;border-radius:12px;background:linear-gradient(135deg,#1cb0f6,#1899d6);color:#fff;font-weight:700;cursor:pointer;font-size:.9rem;margin-top:.5rem">
+        🧪 Tester une notification
+      </button>
+      <button onclick="closeModal('notif-modal')" style="width:100%;padding:.6rem;border:none;border-radius:12px;background:rgba(255,255,255,.1);color:#fff;cursor:pointer;margin-top:.5rem;font-size:.85rem">Fermer</button>
+    </div>
+  `;
+  showGenericModal('notif-modal', html);
+}
+
+function showGenericModal(id, html) {
+  let m = document.getElementById(id);
+  if(m) { m.querySelector('.modal-body').innerHTML = html; m.style.display = 'flex'; return; }
+  m = document.createElement('div');
+  m.id = id;
+  m.style.cssText = 'position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(4px)';
+  m.innerHTML = `<div class="modal-body" style="background:var(--card);border-radius:16px;padding:1.5rem;max-width:440px;width:100%;max-height:85vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.5)">${html}</div>`;
+  m.addEventListener('click', e => { if(e.target === m) closeModal(id); });
+  document.body.appendChild(m);
+}
+function closeModal(id) { const m = document.getElementById(id); if(m) m.style.display = 'none'; }
+
+async function toggleNotif(on) {
+  const s = notifGet();
+  if(on) {
+    const ok = await requestNotifPermission();
+    if(!ok) { document.getElementById('notif-enabled').checked = false; return; }
+    s.enabled = true;
+    notifSave(s);
+    scheduleReminder(s);
+    showToast('🔔 Notifications activées !', 'correct-toast');
+  } else {
+    s.enabled = false;
+    notifSave(s);
+    cancelReminder();
+    showToast('🔕 Notifications désactivées', '');
+  }
+  const opts = document.getElementById('notif-options');
+  if(opts) { opts.style.opacity = on ? '1' : '.4'; opts.style.pointerEvents = on ? 'auto' : 'none'; }
+  updateNotifDot();
+}
+
+function saveNotifTime() {
+  const s = notifGet();
+  s.reminderHour = parseInt(document.getElementById('notif-hour').value) || 20;
+  s.reminderMin = parseInt(document.getElementById('notif-min').value) || 0;
+  notifSave(s);
+  if(s.enabled) scheduleReminder(s);
+}
+
+function saveNotifOptions() {
+  const s = notifGet();
+  s.streakAlert = document.getElementById('notif-streak').checked;
+  s.goalCelebrate = document.getElementById('notif-goal').checked;
+  notifSave(s);
+}
+
+// ── Scheduling with setInterval (works while tab is open) + SW message ──
+let _notifInterval = null;
+function scheduleReminder(s) {
+  cancelReminder();
+  // Check every 60 seconds if it's time to send a reminder
+  _notifInterval = setInterval(() => {
+    checkReminderTime();
+  }, 60000);
+  // Also try periodic sync if available
+  tryPeriodicSync();
+}
+function cancelReminder() {
+  if(_notifInterval) { clearInterval(_notifInterval); _notifInterval = null; }
+}
+
+function checkReminderTime() {
+  const s = notifGet();
+  if(!s.enabled) return;
+  const now = new Date();
+  const h = now.getHours(), m = now.getMinutes();
+  const todayKey = rpgDayKey();
+  const alreadySent = localStorage.getItem('notif_sent_' + todayKey);
+
+  // Daily reminder at set time
+  if(h === s.reminderHour && m === s.reminderMin && !alreadySent) {
+    const dg = dgGet();
+    const todayMin = Math.floor((dg.sessions[todayKey] || 0) / 60);
+    if(todayMin < dg.target) {
+      sendLocalNotification(
+        '¡Aprende! 🎓',
+        `C'est l'heure de réviser ! Tu as fait ${todayMin}/${dg.target} min aujourd'hui. Ta série de ${parseInt(localStorage.getItem('streak')||'0')} jours t'attend 🔥`,
+        'daily-reminder'
+      );
+      localStorage.setItem('notif_sent_' + todayKey, '1');
+    }
+  }
+
+  // Streak danger alert at 22:00
+  if(s.streakAlert && h === 22 && m === 0 && !localStorage.getItem('streak_alert_' + todayKey)) {
+    const dg = dgGet();
+    const todayMin = Math.floor((dg.sessions[todayKey] || 0) / 60);
+    const streak = parseInt(localStorage.getItem('streak') || '0');
+    if(todayMin < 1 && streak > 0) {
+      sendLocalNotification(
+        '🔥 Streak en danger !',
+        `Tu n'as pas révisé aujourd'hui ! Ta série de ${streak} jours va se briser à minuit !`,
+        'streak-danger'
+      );
+      localStorage.setItem('streak_alert_' + todayKey, '1');
+    }
+  }
+}
+
+function sendLocalNotification(title, body, tag) {
+  if(Notification.permission !== 'granted') return;
+  // Try via service worker first (works even if tab is in background on mobile)
+  if(navigator.serviceWorker && navigator.serviceWorker.controller) {
+    navigator.serviceWorker.controller.postMessage({
+      type: 'SCHEDULE_NOTIFICATION',
+      delay: 0,
+      title, body, tag
+    });
+  } else {
+    // Fallback: direct notification
+    try { new Notification(title, { body, tag, icon: '🎓' }); } catch(e) {}
+  }
+}
+
+// Goal celebration notification
+function notifGoalReached() {
+  const s = notifGet();
+  if(!s.enabled || !s.goalCelebrate) return;
+  sendLocalNotification(
+    '🎯 Bravo !',
+    'Tu as atteint ton objectif quotidien ! Continue comme ça 💪',
+    'goal-reached'
+  );
+}
+
+// Try to register periodic background sync
+async function tryPeriodicSync() {
+  if(!('serviceWorker' in navigator)) return;
+  try {
+    const reg = await navigator.serviceWorker.ready;
+    if('periodicSync' in reg) {
+      await reg.periodicSync.register('aprende-reminder', { minInterval: 12 * 60 * 60 * 1000 });
+    }
+  } catch(e) { /* periodicSync not available — fallback to setInterval */ }
+}
+
+function testNotification() {
+  if(Notification.permission !== 'granted') {
+    requestNotifPermission().then(ok => {
+      if(ok) doTestNotif();
+    });
+  } else {
+    doTestNotif();
+  }
+}
+function doTestNotif() {
+  sendLocalNotification(
+    '¡Aprende! 🎓 — Test',
+    'Les notifications fonctionnent ! Tu recevras tes rappels quotidiens 🔥',
+    'test-notif'
+  );
+  showToast('✅ Notification de test envoyée !', 'correct-toast');
+}
+
+// ── Boot: start scheduler if enabled ──
+(function bootNotif() {
+  const s = notifGet();
+  updateNotifDot();
+  if(s.enabled && Notification.permission === 'granted') {
+    scheduleReminder(s);
+  }
+})();
+
+// ── Hook into dgCheckComplete for goal notifications ──
+const _origDgCheckComplete = dgCheckComplete;
+dgCheckComplete = function(dg) {
+  const k = dgToday(), wasDone = dg['done_' + k];
+  _origDgCheckComplete(dg);
+  if(!wasDone && dg['done_' + k]) notifGoalReached();
+};
 </script>
+
+<!-- Notification toggle CSS -->
+<style>
+.notif-toggle { position:relative;display:inline-block;width:48px;height:26px }
+.notif-toggle input { opacity:0;width:0;height:0 }
+.notif-slider { position:absolute;cursor:pointer;inset:0;background:#444;border-radius:26px;transition:.3s }
+.notif-slider:before { content:'';position:absolute;height:20px;width:20px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.3s }
+.notif-toggle input:checked + .notif-slider { background:#58cc02 }
+.notif-toggle input:checked + .notif-slider:before { transform:translateX(22px) }
+</style>
+
 <script>
 // PWA Service Worker
 if('serviceWorker' in navigator) {
-  const swCode = "\n// \u00a1Aprende! Service Worker\nconst CACHE_NAME = 'aprende-v1';\nconst ASSETS = ['./', 'index.html'];\n\nself.addEventListener('install', e => {\n  e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting()));\n});\n\nself.addEventListener('activate', e => {\n  e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))).then(() => self.clients.claim()));\n});\n\nself.addEventListener('fetch', e => {\n  if(e.request.method !== 'GET') return;\n  e.respondWith(\n    caches.match(e.request).then(r => r || fetch(e.request).then(resp => {\n      if(resp.ok && resp.type === 'basic') {\n        const clone = resp.clone();\n        caches.open(CACHE_NAME).then(c => c.put(e.request, clone));\n      }\n      return resp;\n    }).catch(() => caches.match('./')))\n  );\n});\n";
+  const swCode = "\n// \u00a1Aprende! Service Worker\nconst CACHE_NAME = 'aprende-v2';\nconst ASSETS = ['./', 'index.html'];\n\nself.addEventListener('install', e => {\n  e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting()));\n});\n\nself.addEventListener('activate', e => {\n  e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))).then(() => self.clients.claim()));\n});\n\nself.addEventListener('fetch', e => {\n  if(e.request.method !== 'GET') return;\n  e.respondWith(\n    caches.match(e.request).then(r => r || fetch(e.request).then(resp => {\n      if(resp.ok && resp.type === 'basic') {\n        const clone = resp.clone();\n        caches.open(CACHE_NAME).then(c => c.put(e.request, clone));\n      }\n      return resp;\n    }).catch(() => caches.match('./')))\n  );\n});\n";
   const swBlob = new Blob([swCode], {type: 'application/javascript'});
   const swURL = URL.createObjectURL(swBlob);
   // Blob SW won't work on all browsers, try external first
