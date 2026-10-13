@@ -1165,6 +1165,7 @@
     <button class="ds-nav-btn" onclick="exportProgress()"><span>💾</span><span>Exporter</span></button>
     <button class="ds-nav-btn" onclick="document.getElementById('import-file-input').click()"><span>📂</span><span>Importer</span></button>
     <button class="ds-nav-btn" onclick="openNotifSettings()" id="btn-notif"><span>🔔</span><span>Notifications</span><span id="notif-status-dot" style="margin-left:auto;width:8px;height:8px;border-radius:50%;display:none"></span></button>
+    <button class="ds-nav-btn" onclick="toggleSfxBtn()" id="btn-sfx"><span>🔊</span><span>Sons</span><span id="sfx-status-dot" style="margin-left:auto;width:8px;height:8px;border-radius:50%;display:none"></span></button>
   </div>
 
   <div class="ds-footer">
@@ -12353,6 +12354,136 @@ document.addEventListener('visibilitychange', () => { if(!document.hidden) updat
 // Enter submits login form
 crsBoot(); // parcours + héros
 setTimeout(badgeCheck, 1500); // check badges on load
+
+// ═══════════════════════════════════════════════
+// SOUND EFFECTS (Duolingo-style correct / wrong)
+// ═══════════════════════════════════════════════
+const SFX = (() => {
+  let ctx;
+  function getCtx() {
+    if (!ctx || ctx.state === 'closed') ctx = new (window.AudioContext || window.webkitAudioContext)();
+    if (ctx.state === 'suspended') ctx.resume();
+    return ctx;
+  }
+  // ── Correct: bright ascending two-note chime ──
+  function playCorrect() {
+    try {
+      const c = getCtx(), now = c.currentTime;
+      // Note 1: E5
+      const o1 = c.createOscillator(), g1 = c.createGain();
+      o1.type = 'sine'; o1.frequency.value = 659.25;
+      g1.gain.setValueAtTime(0.22, now);
+      g1.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+      o1.connect(g1); g1.connect(c.destination);
+      o1.start(now); o1.stop(now + 0.25);
+      // Note 2: C6 (major feel)
+      const o2 = c.createOscillator(), g2 = c.createGain();
+      o2.type = 'sine'; o2.frequency.value = 1046.50;
+      g2.gain.setValueAtTime(0, now + 0.08);
+      g2.gain.linearRampToValueAtTime(0.25, now + 0.1);
+      g2.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+      o2.connect(g2); g2.connect(c.destination);
+      o2.start(now + 0.08); o2.stop(now + 0.4);
+      // Harmonic shimmer
+      const o3 = c.createOscillator(), g3 = c.createGain();
+      o3.type = 'triangle'; o3.frequency.value = 1318.51;
+      g3.gain.setValueAtTime(0, now + 0.08);
+      g3.gain.linearRampToValueAtTime(0.08, now + 0.12);
+      g3.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+      o3.connect(g3); g3.connect(c.destination);
+      o3.start(now + 0.08); o3.stop(now + 0.35);
+    } catch(e) {}
+  }
+  // ── Wrong: low descending buzz ──
+  function playWrong() {
+    try {
+      const c = getCtx(), now = c.currentTime;
+      // Low tone
+      const o1 = c.createOscillator(), g1 = c.createGain();
+      o1.type = 'square'; o1.frequency.value = 185;
+      o1.frequency.linearRampToValueAtTime(140, now + 0.25);
+      g1.gain.setValueAtTime(0.15, now);
+      g1.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+      o1.connect(g1); g1.connect(c.destination);
+      o1.start(now); o1.stop(now + 0.3);
+      // Second dissonant tone
+      const o2 = c.createOscillator(), g2 = c.createGain();
+      o2.type = 'sawtooth'; o2.frequency.value = 233;
+      o2.frequency.linearRampToValueAtTime(175, now + 0.2);
+      g2.gain.setValueAtTime(0.07, now);
+      g2.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+      o2.connect(g2); g2.connect(c.destination);
+      o2.start(now); o2.stop(now + 0.25);
+    } catch(e) {}
+  }
+  // ── Almost: mid-range wobble ──
+  function playAlmost() {
+    try {
+      const c = getCtx(), now = c.currentTime;
+      const o = c.createOscillator(), g = c.createGain();
+      o.type = 'triangle'; o.frequency.value = 440;
+      o.frequency.setValueAtTime(440, now);
+      o.frequency.linearRampToValueAtTime(466, now + 0.1);
+      o.frequency.linearRampToValueAtTime(440, now + 0.2);
+      g.gain.setValueAtTime(0.15, now);
+      g.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+      o.connect(g); g.connect(c.destination);
+      o.start(now); o.stop(now + 0.3);
+    } catch(e) {}
+  }
+
+  // ── Sound preference (stored in localStorage) ──
+  function sfxEnabled() {
+    try { return localStorage.getItem('aprende_sfx') !== 'off'; } catch(e) { return true; }
+  }
+  function sfxSetEnabled(on) {
+    try { localStorage.setItem('aprende_sfx', on ? 'on' : 'off'); } catch(e) {}
+    document.getElementById('sfx-status-dot')?.style && updateSfxDot();
+  }
+  function updateSfxDot() {
+    const dot = document.getElementById('sfx-status-dot');
+    if (!dot) return;
+    dot.style.display = 'block';
+    dot.style.background = sfxEnabled() ? '#58cc02' : '#777';
+  }
+
+  // ── MutationObserver: auto-detect correct/wrong classes ──
+  let lastSfxTime = 0;
+  const DEBOUNCE = 120; // ms — avoid double-fires
+  const observer = new MutationObserver(muts => {
+    if (!sfxEnabled()) return;
+    const now = Date.now();
+    if (now - lastSfxTime < DEBOUNCE) return;
+    for (const m of muts) {
+      if (m.type !== 'attributes' || m.attributeName !== 'class') continue;
+      const el = m.target;
+      if (!el.classList) continue;
+      if (el.classList.contains('correct') || el.classList.contains('ok')) {
+        lastSfxTime = now; playCorrect(); return;
+      }
+      if (el.classList.contains('wrong') || el.classList.contains('bad')) {
+        lastSfxTime = now; playWrong(); return;
+      }
+      if (el.classList.contains('almost')) {
+        lastSfxTime = now; playAlmost(); return;
+      }
+    }
+  });
+  observer.observe(document.body, { attributes: true, subtree: true, attributeFilter: ['class'] });
+
+  // Init dot
+  setTimeout(updateSfxDot, 500);
+
+  return { playCorrect, playWrong, playAlmost, sfxEnabled, sfxSetEnabled, updateSfxDot };
+})();
+
+function toggleSfxBtn() {
+  const on = !SFX.sfxEnabled();
+  SFX.sfxSetEnabled(on);
+  const btn = document.getElementById('btn-sfx');
+  if (btn) btn.querySelector('span').textContent = on ? '🔊' : '🔇';
+  if (on) SFX.playCorrect(); // preview sound when turning on
+}
 
 // ═══════════════════════════════════════════════
 // NOTIFICATIONS SYSTEM
