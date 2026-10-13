@@ -86,10 +86,13 @@ const syncStorage = {
   getItem(key) {
     const val = SYNC.cache[key];
     if (val === undefined || val === null) return null;
-    return val;
+    // Firestore returns objects/maps — real localStorage always returns strings
+    if (typeof val === 'object') return JSON.stringify(val);
+    return String(val);
   },
   setItem(key, value) {
-    SYNC.cache[key] = value;
+    // Real localStorage stores everything as strings
+    SYNC.cache[key] = String(value);
     if (SYNC.uid) syncScheduleWrite(key);
   },
   removeItem(key) {
@@ -256,9 +259,8 @@ async function syncLoadAll(uid) {
       if (snap.exists) {
         const data = snap.data();
         for (const [key, val] of Object.entries(data)) {
-          // Firestore stores our values as strings (from localStorage shim)
-          // Keep them as-is — crsJ() will JSON.parse them
-          SYNC.cache[key] = val;
+          // Firestore may return objects/maps — normalize to strings like real localStorage
+          SYNC.cache[key] = (typeof val === 'object' && val !== null) ? JSON.stringify(val) : String(val);
           totalKeys++;
         }
       }
@@ -310,9 +312,11 @@ function syncStartListeners(uid) {
       const data = snap.data();
       let changed = false;
       for (const [key, val] of Object.entries(data)) {
+        // Normalize to strings like real localStorage
+        const strVal = (typeof val === 'object' && val !== null) ? JSON.stringify(val) : String(val);
         // Only update if value differs (avoid loops)
-        if (SYNC.cache[key] !== val) {
-          SYNC.cache[key] = val;
+        if (SYNC.cache[key] !== strVal) {
+          SYNC.cache[key] = strVal;
           changed = true;
         }
       }
