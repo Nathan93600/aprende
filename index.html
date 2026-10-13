@@ -12357,15 +12357,48 @@ crsBoot(); // parcours + héros
 setTimeout(badgeCheck, 1500); // check badges on load
 
 // ═══════════════════════════════════════════════
-// SOUND EFFECTS (Duolingo-style correct / wrong)
+// SOUND EFFECTS + HAPTICS (Duolingo-style feedback)
 // ═══════════════════════════════════════════════
 const SFX = (() => {
   let ctx;
+  let unlocked = false; // track if AudioContext was unlocked by user gesture
+
+  // ── Unlock AudioContext on first user gesture (mobile requirement) ──
+  function unlockAudio() {
+    if (unlocked) return;
+    try {
+      if (!ctx || ctx.state === 'closed') {
+        ctx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (ctx.state === 'suspended') {
+        ctx.resume().then(() => { unlocked = true; }).catch(() => {});
+      } else {
+        unlocked = true;
+      }
+      // Play a silent buffer to fully unlock on iOS
+      const buf = ctx.createBuffer(1, 1, 22050);
+      const src = ctx.createBufferSource();
+      src.buffer = buf;
+      src.connect(ctx.destination);
+      src.start(0);
+    } catch(e) {}
+  }
+  // Attach unlock to multiple user-gesture events (covers iOS Safari, Chrome, PWA)
+  ['touchstart', 'touchend', 'click', 'keydown'].forEach(evt => {
+    document.addEventListener(evt, unlockAudio, { once: false, passive: true });
+  });
+
   function getCtx() {
     if (!ctx || ctx.state === 'closed') ctx = new (window.AudioContext || window.webkitAudioContext)();
-    if (ctx.state === 'suspended') ctx.resume();
+    if (ctx.state === 'suspended') ctx.resume().catch(() => {});
     return ctx;
   }
+
+  // ── Vibration helper (safe cross-browser) ──
+  function vibrate(pattern) {
+    try { if (navigator.vibrate) navigator.vibrate(pattern); } catch(e) {}
+  }
+
   // ── Correct: bright ascending two-note chime ──
   function playCorrect() {
     try {
@@ -12394,6 +12427,7 @@ const SFX = (() => {
       o3.connect(g3); g3.connect(c.destination);
       o3.start(now + 0.08); o3.stop(now + 0.35);
     } catch(e) {}
+    vibrate(40); // short success tap
   }
   // ── Wrong: low descending buzz ──
   function playWrong() {
@@ -12416,6 +12450,7 @@ const SFX = (() => {
       o2.connect(g2); g2.connect(c.destination);
       o2.start(now); o2.stop(now + 0.25);
     } catch(e) {}
+    vibrate([80, 40, 80]); // double-buzz error pattern
   }
   // ── Almost: mid-range wobble ──
   function playAlmost() {
@@ -12431,6 +12466,26 @@ const SFX = (() => {
       o.connect(g); g.connect(c.destination);
       o.start(now); o.stop(now + 0.3);
     } catch(e) {}
+    vibrate([30, 20, 30]); // gentle double-tap
+  }
+
+  // ── Combo celebration: play when getting several correct in a row ──
+  function playCombo() {
+    try {
+      const c = getCtx(), now = c.currentTime;
+      // Rapid ascending arpeggio C5→E5→G5→C6
+      [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
+        const o = c.createOscillator(), g = c.createGain();
+        o.type = 'sine'; o.frequency.value = freq;
+        const t = now + i * 0.06;
+        g.gain.setValueAtTime(0, t);
+        g.gain.linearRampToValueAtTime(0.18, t + 0.02);
+        g.gain.exponentialRampToValueAtTime(0.001, t + 0.2);
+        o.connect(g); g.connect(c.destination);
+        o.start(t); o.stop(t + 0.2);
+      });
+    } catch(e) {}
+    vibrate([30, 20, 30, 20, 60]); // celebratory pattern
   }
 
   // ── Sound preference (stored in localStorage) ──
@@ -12448,11 +12503,66 @@ const SFX = (() => {
     dot.style.background = sfxEnabled() ? '#58cc02' : '#777';
   }
 
+  // ── Vibration-only preference ──
+  function vibeEnabled() {
+    try { return localStorage.getItem('aprende_vibe') !== 'off'; } catch(e) { return true; }
+  }
+  function vibeSetEnabled(on) {
+    try { localStorage.setItem('aprende_vibe', on ? 'on' : 'off'); } catch(e) {}
+  }
+
+  // ── Visual flash effect (green/red overlay like Duolingo) ──
+  let flashEl = null;
+  function flashScreen(color) {
+    if (!flashEl) {
+      flashEl = document.createElement('div');
+      flashEl.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:0;transition:opacity .15s ease-out';
+      document.body.appendChild(flashEl);
+    }
+    flashEl.style.background = color;
+    flashEl.style.opacity = '0.18';
+    setTimeout(() => { flashEl.style.opacity = '0'; }, 180);
+  }
+
+  // ── Mini confetti burst (for combos ≥ 5) ──
+  function confettiBurst() {
+    const canvas = document.createElement('canvas');
+    canvas.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:9998';
+    canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+    document.body.appendChild(canvas);
+    const ctx2d = canvas.getContext('2d');
+    const colors = ['#58cc02','#ffc800','#ff4b4b','#1cb0f6','#ce82ff','#ff9600'];
+    const pieces = Array.from({length: 40}, () => ({
+      x: canvas.width / 2 + (Math.random() - 0.5) * 60,
+      y: canvas.height * 0.45,
+      vx: (Math.random() - 0.5) * 12,
+      vy: -Math.random() * 14 - 4,
+      r: Math.random() * 5 + 2,
+      c: colors[Math.floor(Math.random() * colors.length)],
+      rot: Math.random() * Math.PI * 2,
+      vr: (Math.random() - 0.5) * 0.3
+    }));
+    let frame = 0;
+    function draw() {
+      ctx2d.clearRect(0, 0, canvas.width, canvas.height);
+      pieces.forEach(p => {
+        p.x += p.vx; p.y += p.vy; p.vy += 0.5; p.rot += p.vr;
+        ctx2d.save(); ctx2d.translate(p.x, p.y); ctx2d.rotate(p.rot);
+        ctx2d.fillStyle = p.c; ctx2d.fillRect(-p.r, -p.r/2, p.r*2, p.r);
+        ctx2d.restore();
+      });
+      frame++;
+      if (frame < 50) requestAnimationFrame(draw);
+      else canvas.remove();
+    }
+    requestAnimationFrame(draw);
+  }
+
   // ── MutationObserver: auto-detect correct/wrong classes ──
   let lastSfxTime = 0;
+  let comboCount = 0;
   const DEBOUNCE = 120; // ms — avoid double-fires
   const observer = new MutationObserver(muts => {
-    if (!sfxEnabled()) return;
     const now = Date.now();
     if (now - lastSfxTime < DEBOUNCE) return;
     for (const m of muts) {
@@ -12460,13 +12570,34 @@ const SFX = (() => {
       const el = m.target;
       if (!el.classList) continue;
       if (el.classList.contains('correct') || el.classList.contains('ok')) {
-        lastSfxTime = now; playCorrect(); return;
+        lastSfxTime = now;
+        comboCount++;
+        if (sfxEnabled()) {
+          if (comboCount >= 5 && comboCount % 5 === 0) {
+            playCombo(); confettiBurst();
+          } else {
+            playCorrect();
+          }
+        }
+        if (vibeEnabled()) vibrate(40);
+        flashScreen('rgba(88, 204, 2, 0.5)'); // green flash
+        return;
       }
       if (el.classList.contains('wrong') || el.classList.contains('bad')) {
-        lastSfxTime = now; playWrong(); return;
+        lastSfxTime = now;
+        comboCount = 0; // reset combo
+        if (sfxEnabled()) playWrong();
+        if (vibeEnabled()) vibrate([80, 40, 80]);
+        flashScreen('rgba(255, 75, 75, 0.5)'); // red flash
+        return;
       }
       if (el.classList.contains('almost')) {
-        lastSfxTime = now; playAlmost(); return;
+        lastSfxTime = now;
+        comboCount = 0;
+        if (sfxEnabled()) playAlmost();
+        if (vibeEnabled()) vibrate([30, 20, 30]);
+        flashScreen('rgba(255, 200, 0, 0.5)'); // amber flash
+        return;
       }
     }
   });
@@ -12475,7 +12606,8 @@ const SFX = (() => {
   // Init dot
   setTimeout(updateSfxDot, 500);
 
-  return { playCorrect, playWrong, playAlmost, sfxEnabled, sfxSetEnabled, updateSfxDot };
+  return { playCorrect, playWrong, playAlmost, playCombo, sfxEnabled, sfxSetEnabled,
+           vibeEnabled, vibeSetEnabled, updateSfxDot, confettiBurst, vibrate };
 })();
 
 function toggleSfxBtn() {
@@ -12491,18 +12623,26 @@ function toggleSfxBtn() {
 // ═══════════════════════════════════════════════
 function openSettingsModal() {
   const sfxOn = SFX.sfxEnabled();
+  const vibeOn = SFX.vibeEnabled();
   const s = (typeof notifGet === 'function') ? notifGet() : { enabled: false, reminderHour: 20, reminderMin: 0, streakAlert: true, goalCelebrate: true };
   const html = `
     <div style="max-width:420px;margin:auto;max-height:80vh;overflow-y:auto;padding-right:4px">
       <h3 style="margin:0 0 1.2rem;text-align:center;font-size:1.2rem">⚙️ Réglages</h3>
 
-      <!-- SONS -->
+      <!-- SONS & VIBRATIONS -->
       <div style="margin-bottom:1.2rem">
-        <div style="font-weight:800;font-size:.95rem;margin-bottom:.5rem;color:#ffc800">🔊 Sons</div>
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:.8rem;background:rgba(255,255,255,.05);border-radius:12px">
-          <span style="font-weight:600">Effets sonores (correct / faux)</span>
+        <div style="font-weight:800;font-size:.95rem;margin-bottom:.5rem;color:#ffc800">🔊 Sons & Vibrations</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:.8rem;background:rgba(255,255,255,.05);border-radius:12px;margin-bottom:.6rem">
+          <div><div style="font-weight:600">🔊 Effets sonores</div><div style="font-size:.73rem;color:var(--muted)">Sons correct / faux / presque</div></div>
           <label class="notif-toggle">
             <input type="checkbox" id="settings-sfx" ${sfxOn ? 'checked' : ''} onchange="SFX.sfxSetEnabled(this.checked); if(this.checked) SFX.playCorrect();">
+            <span class="notif-slider"></span>
+          </label>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:.8rem;background:rgba(255,255,255,.05);border-radius:12px">
+          <div><div style="font-weight:600">📳 Vibrations</div><div style="font-size:.73rem;color:var(--muted)">Retour haptique correct / faux</div></div>
+          <label class="notif-toggle">
+            <input type="checkbox" id="settings-vibe" ${vibeOn ? 'checked' : ''} onchange="SFX.vibeSetEnabled(this.checked); if(this.checked) navigator.vibrate && navigator.vibrate(40);">
             <span class="notif-slider"></span>
           </label>
         </div>
