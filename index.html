@@ -11055,6 +11055,10 @@ function crsResult(good, corr, extra) {
     if(crs.n === 4 && crs.mode !== 'test') crs.bossHP = Math.max(0, crs.bossHP - 1);
     if(rpg) rpgBossHit(1, true);
     try { haptic('light'); } catch(e) {}
+    // Direct SFX call (bypasses MutationObserver — works on iOS Safari)
+    if(typeof SFX!=='undefined'&&SFX.sfxEnabled()){crs._sfxCombo=(crs._sfxCombo||0)+1;if(crs._sfxCombo>=5&&crs._sfxCombo%5===0){SFX.playCombo();SFX.confettiBurst();}else{SFX.playCorrect();}}
+    if(typeof SFX!=='undefined'&&SFX.vibeEnabled()){SFX.vibrate(40);}
+    SFX&&SFX.flashScreen&&SFX.flashScreen('rgba(88, 204, 2, 0.5)');
     document.getElementById('ls-body')?.classList.add('anim-correct'); setTimeout(() => document.getElementById('ls-body')?.classList.remove('anim-correct'), 400);
     const _xpAmt = crs.n === 4 ? 3 : 2;
     showXPPop(_xpAmt, window.innerWidth / 2, window.innerHeight / 3);
@@ -11064,6 +11068,10 @@ function crsResult(good, corr, extra) {
     crsFoot('ok', `<div class="ft">✅ ${CRS_PRAISE[Math.floor(Math.random() * CRS_PRAISE.length)]}</div>${extra ? `<div class="fx">${crsEsc(extra)}</div>` : ''}`);
   } else {
     crs.mistakes++;
+    // Direct SFX call (bypasses MutationObserver — works on iOS Safari)
+    if(typeof SFX!=='undefined'&&SFX.sfxEnabled()){SFX.playWrong();crs._sfxCombo=0;}
+    if(typeof SFX!=='undefined'&&SFX.vibeEnabled()){SFX.vibrate([80,40,80]);}
+    SFX&&SFX.flashScreen&&SFX.flashScreen('rgba(255, 75, 75, 0.5)');
     document.getElementById('ls-body')?.classList.add('anim-wrong');
     document.getElementById('ls-body').style.animation = 'shake-intense .5s ease-out';
     setTimeout(() => { document.getElementById('ls-body')?.classList.remove('anim-wrong'); document.getElementById('ls-body').style.animation = ''; }, 600);
@@ -12569,6 +12577,8 @@ const SFX = (() => {
       if (m.type !== 'attributes' || m.attributeName !== 'class') continue;
       const el = m.target;
       if (!el.classList) continue;
+      // Skip course exercises — SFX is called directly from crsResult()
+      if (el.closest && el.closest('#screen-lesson')) continue;
       if (el.classList.contains('correct') || el.classList.contains('ok')) {
         lastSfxTime = now;
         comboCount++;
