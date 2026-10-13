@@ -1,5 +1,5 @@
-// ¡Aprende! Service Worker v3 — Multi-file + Notifications
-const CACHE_NAME = 'aprende-v4';
+// ¡Aprende! Service Worker v4 — Multi-file + Notifications
+const CACHE_NAME = 'aprende-v5';
 const ASSETS = [
   './',
   'index.html',

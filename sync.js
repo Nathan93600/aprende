@@ -1,12 +1,9 @@
 // ═══════════════════════════════════════════════════════════
-// ¡Aprende! — sync.js · Firebase Auth + Firestore (100% online)
+// ¡Aprende! — sync.js v2 · Firebase Auth + Firestore (100% online)
 // Loaded BEFORE app.js — replaces localStorage entirely
 // ═══════════════════════════════════════════════════════════
 
-// Firebase SDK loaded via CDN <script> tags in index.html (firebase-app, firebase-auth, firebase-firestore)
-const { initializeApp } = firebase.app ? firebase : self.firebase;
-
-// ── Firebase config ──────────────────────────────────────
+// Firebase SDK loaded via CDN <script> tags in index.html
 const firebaseConfig = {
   apiKey: "AIzaSyDM70jiVoSQCEy3DWy2eiDhIaeJKtTNf44",
   authDomain: "aprende-61173.firebaseapp.com",
@@ -21,7 +18,7 @@ const firebaseApp = firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-// Enable offline persistence (Firestore cache — works without network)
+// Enable offline persistence
 db.enablePersistence({ synchronizeTabs: true }).catch(err => {
   if (err.code === 'failed-precondition') {
     console.warn('[Sync] Persistence failed: multiple tabs open');
@@ -31,27 +28,20 @@ db.enablePersistence({ synchronizeTabs: true }).catch(err => {
 });
 
 // ═══════════════════════════════════════════════════════════
-// SYNC STATE — in-memory cache of Firestore data
+// SYNC STATE
 // ═══════════════════════════════════════════════════════════
 const SYNC = {
   uid: null,
-  ready: false,         // true once initial load from Firestore is done
-  cache: {},            // full in-memory mirror of all user data
-  _listeners: [],       // onReady callbacks
-  _unsubs: [],          // Firestore snapshot unsubscribers
-  _writeQueue: [],      // pending writes (debounced)
+  ready: false,
+  cache: {},            // in-memory mirror — all values are STRINGS (like real localStorage)
+  _listeners: [],
+  _unsubs: [],          // Firestore real-time listener unsubscribers
   _writeTimer: null,
+  _loadFailed: false,   // true if Firestore read failed (rules, network…)
+  _appBooted: false,    // prevent double initApp()
 };
 
 // ── Documents mapping ────────────────────────────────────
-// Firestore doc paths: users/{uid}/{collection}
-// "state"    → srs_data, XP, score, streak, mastered arrays, aura_map, revlog, pron/grammar SRS, rpg
-// "courses"  → crs_prog, crs_added, crs_done_*, crs_resume
-// "settings" → sfx, vibe, notif, daily_goal, desktop_mode, srs_new_per_day
-// "journal"  → learning sessions (journal_sessions array)
-// "games"    → native_best_* high scores, conjugation stars
-
-// All keys that go into each Firestore doc:
 const DOC_MAP = {
   state: [
     'srs_data', 'es_xp', 'ln_xp', 'en_xp', 'score', 'streak',
@@ -72,27 +62,22 @@ const DOC_MAP = {
   ]
 };
 
-// Reverse map: key → doc name
 const KEY_TO_DOC = {};
 for (const [doc, keys] of Object.entries(DOC_MAP)) {
   for (const k of keys) KEY_TO_DOC[k] = doc;
 }
 
-// Dynamic key routing
 function docForKey(key) {
   if (KEY_TO_DOC[key]) return KEY_TO_DOC[key];
   if (key.startsWith('crs_done_')) return 'courses';
   if (key.startsWith('native_best_')) return 'games';
   if (key.startsWith('ct_stars_')) return 'games';
   if (key.startsWith('notif_sent_') || key.startsWith('streak_alert_')) return 'settings';
-  // Fallback: state
   return 'state';
 }
 
 // ═══════════════════════════════════════════════════════════
-// localStorage SHIM — drop-in replacement
-// app.js calls localStorage.getItem/setItem/removeItem
-// We intercept and route to in-memory cache + Firestore
+// localStorage SHIM
 // ═══════════════════════════════════════════════════════════
 
 const _realLS = window.localStorage;
@@ -103,46 +88,26 @@ const syncStorage = {
     if (val === undefined || val === null) return null;
     return val;
   },
-
   setItem(key, value) {
-    const old = SYNC.cache[key];
     SYNC.cache[key] = value;
-    // Schedule Firestore write (debounced)
-    if (SYNC.uid) {
-      syncScheduleWrite(key);
-    }
+    if (SYNC.uid) syncScheduleWrite(key);
   },
-
   removeItem(key) {
     delete SYNC.cache[key];
-    if (SYNC.uid) {
-      syncScheduleWrite(key, true);
-    }
+    if (SYNC.uid) syncScheduleWrite(key, true);
   },
-
-  // For compatibility — rarely used but just in case
-  clear() {
-    SYNC.cache = {};
-  },
-
-  get length() {
-    return Object.keys(SYNC.cache).length;
-  },
-
-  key(index) {
-    return Object.keys(SYNC.cache)[index] || null;
-  }
+  clear() { SYNC.cache = {}; },
+  get length() { return Object.keys(SYNC.cache).length; },
+  key(index) { return Object.keys(SYNC.cache)[index] || null; }
 };
 
-// ── Override localStorage globally ───────────────────────
-// This makes ALL existing localStorage calls go through our shim
 Object.defineProperty(window, 'localStorage', {
   get() { return syncStorage; },
   configurable: true
 });
 
 // ═══════════════════════════════════════════════════════════
-// DEBOUNCED WRITES TO FIRESTORE
+// DEBOUNCED WRITES
 // ═══════════════════════════════════════════════════════════
 
 const _pendingKeys = new Set();
@@ -150,13 +115,12 @@ const _pendingKeys = new Set();
 function syncScheduleWrite(key, isDelete) {
   _pendingKeys.add(key);
   if (SYNC._writeTimer) clearTimeout(SYNC._writeTimer);
-  SYNC._writeTimer = setTimeout(syncFlush, 500); // batch writes every 500ms
+  SYNC._writeTimer = setTimeout(syncFlush, 500);
 }
 
-function syncFlush() {
+async function syncFlush() {
   if (!SYNC.uid || _pendingKeys.size === 0) return;
 
-  // Group pending keys by doc
   const docUpdates = {};
   for (const key of _pendingKeys) {
     const doc = docForKey(key);
@@ -170,31 +134,49 @@ function syncFlush() {
   }
   _pendingKeys.clear();
 
-  // Write each doc
   for (const [docName, data] of Object.entries(docUpdates)) {
     const ref = db.collection('users').doc(SYNC.uid).collection('data').doc(docName);
-    ref.set(data, { merge: true }).catch(err => {
-      console.error(`[Sync] Write failed for ${docName}:`, err);
-    });
+    try {
+      await ref.set(data, { merge: true });
+    } catch (err) {
+      console.error(`[Sync] ❌ Write failed for ${docName}:`, err);
+      syncShowError(`Sauvegarde échouée (${err.code || err.message}). Vérifie les règles Firestore.`);
+    }
   }
 }
 
-// Force-flush before page unload
 window.addEventListener('beforeunload', () => {
   if (_pendingKeys.size > 0) syncFlush();
 });
 
-// Also flush on visibility hidden (mobile)
 document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'hidden' && _pendingKeys.size > 0) syncFlush();
 });
+
+// ═══════════════════════════════════════════════════════════
+// ERROR UI — visible feedback when Firestore fails
+// ═══════════════════════════════════════════════════════════
+
+function syncShowError(msg) {
+  let banner = document.getElementById('sync-error-banner');
+  if (!banner) {
+    banner = document.createElement('div');
+    banner.id = 'sync-error-banner';
+    banner.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99999;background:#d32f2f;color:#fff;padding:12px 16px;font-size:14px;text-align:center;font-family:system-ui,sans-serif;';
+    document.body.appendChild(banner);
+  }
+  banner.textContent = '⚠️ ' + msg;
+  banner.style.display = 'block';
+  // Auto-hide after 8s
+  clearTimeout(banner._timer);
+  banner._timer = setTimeout(() => { banner.style.display = 'none'; }, 8000);
+}
 
 // ═══════════════════════════════════════════════════════════
 // AUTH — Google Sign-In
 // ═══════════════════════════════════════════════════════════
 
 function syncShowLogin() {
-  // Show login overlay
   let overlay = document.getElementById('sync-login-overlay');
   if (!overlay) {
     overlay = document.createElement('div');
@@ -226,7 +208,6 @@ async function syncGoogleLogin() {
     const btn = document.getElementById('sync-google-btn');
     if (btn) { btn.disabled = true; btn.textContent = 'Connexion…'; }
     await auth.signInWithPopup(provider);
-    // onAuthStateChanged will handle the rest
   } catch (err) {
     console.error('[Sync] Google login failed:', err);
     const btn = document.getElementById('sync-google-btn');
@@ -234,7 +215,6 @@ async function syncGoogleLogin() {
       btn.disabled = false;
       btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg> Connexion avec Google`;
     }
-    // Show error to user
     if (err.code === 'auth/popup-blocked') {
       alert('Pop-up bloqué ! Autorise les pop-ups pour ce site.');
     } else if (err.code !== 'auth/popup-closed-by-user') {
@@ -244,20 +224,26 @@ async function syncGoogleLogin() {
 }
 
 function syncLogout() {
+  // Unsubscribe from real-time listeners
+  for (const unsub of SYNC._unsubs) {
+    try { unsub(); } catch(e) {}
+  }
+  SYNC._unsubs = [];
   auth.signOut();
-  // Clear cache and show login
   SYNC.cache = {};
   SYNC.uid = null;
   SYNC.ready = false;
+  SYNC._appBooted = false;
   syncShowLogin();
 }
 
 // ═══════════════════════════════════════════════════════════
-// LOAD DATA FROM FIRESTORE → cache
+// LOAD DATA FROM FIRESTORE
 // ═══════════════════════════════════════════════════════════
 
 async function syncLoadAll(uid) {
   SYNC.uid = uid;
+  SYNC._loadFailed = false;
   const docs = ['state', 'courses', 'settings', 'games'];
 
   try {
@@ -265,19 +251,43 @@ async function syncLoadAll(uid) {
       docs.map(d => db.collection('users').doc(uid).collection('data').doc(d).get())
     );
 
+    let totalKeys = 0;
     for (const snap of snaps) {
       if (snap.exists) {
         const data = snap.data();
         for (const [key, val] of Object.entries(data)) {
+          // Firestore stores our values as strings (from localStorage shim)
+          // Keep them as-is — crsJ() will JSON.parse them
           SYNC.cache[key] = val;
+          totalKeys++;
         }
       }
     }
 
-    console.log('[Sync] Loaded', Object.keys(SYNC.cache).length, 'keys from Firestore');
+    console.log(`[Sync] ✅ Loaded ${totalKeys} keys from Firestore`);
+
+    if (totalKeys === 0) {
+      console.log('[Sync] ℹ️ No data in Firestore yet (new user or rules blocking reads)');
+    }
   } catch (err) {
-    console.error('[Sync] Failed to load from Firestore:', err);
-    // Firestore offline persistence should still give us cached data
+    console.error('[Sync] ❌ Failed to load from Firestore:', err);
+    SYNC._loadFailed = true;
+
+    if (err.code === 'permission-denied') {
+      syncShowError('Accès Firestore refusé ! Les règles de sécurité doivent être configurées. Voir la console.');
+      console.error('[Sync] 🔒 PERMISSION DENIED — Tu dois configurer les règles Firestore :\n' +
+        'Va dans Firebase Console → Firestore Database → Règles et colle :\n\n' +
+        'rules_version = \'2\';\n' +
+        'service cloud.firestore {\n' +
+        '  match /databases/{database}/documents {\n' +
+        '    match /users/{userId}/data/{doc} {\n' +
+        '      allow read, write: if request.auth != null && request.auth.uid == userId;\n' +
+        '    }\n' +
+        '  }\n' +
+        '}\n');
+    } else {
+      syncShowError(`Erreur de chargement (${err.code || err.message})`);
+    }
   }
 
   SYNC.ready = true;
@@ -289,23 +299,63 @@ async function syncLoadAll(uid) {
   SYNC._listeners = [];
 }
 
-// ── Migrate localStorage → Firestore (first login) ──────
+// ── Real-time listeners for cross-device sync ───────────
+function syncStartListeners(uid) {
+  const docs = ['state', 'courses', 'settings', 'games'];
+
+  for (const docName of docs) {
+    const ref = db.collection('users').doc(uid).collection('data').doc(docName);
+    const unsub = ref.onSnapshot(snap => {
+      if (!snap.exists) return;
+      const data = snap.data();
+      let changed = false;
+      for (const [key, val] of Object.entries(data)) {
+        // Only update if value differs (avoid loops)
+        if (SYNC.cache[key] !== val) {
+          SYNC.cache[key] = val;
+          changed = true;
+        }
+      }
+      if (changed && SYNC._appBooted) {
+        console.log(`[Sync] 🔄 Remote update received for doc: ${docName}`);
+        // Refresh RPG and UI if state changed
+        if (docName === 'state' && typeof rpgInit === 'function') {
+          try { rpgInit(); } catch(e) {}
+          try { updateHomeStats(); } catch(e) {}
+        }
+      }
+    }, err => {
+      console.warn(`[Sync] Listener error for ${docName}:`, err.code || err.message);
+    });
+    SYNC._unsubs.push(unsub);
+  }
+}
+
+// ── Migrate localStorage → Firestore (first login only) ──
 async function syncMigrateFromLocal(uid) {
   // Check if user already has data in Firestore
-  const stateDoc = await db.collection('users').doc(uid).collection('data').doc('state').get();
-  if (stateDoc.exists && stateDoc.data().srs_data) {
-    console.log('[Sync] User already has Firestore data, skipping migration');
-    return false;
+  try {
+    const stateDoc = await db.collection('users').doc(uid).collection('data').doc('state').get();
+    if (stateDoc.exists && Object.keys(stateDoc.data()).length > 0) {
+      console.log('[Sync] ✅ User already has Firestore data, skipping migration');
+      return false;
+    }
+  } catch (err) {
+    if (err.code === 'permission-denied') {
+      console.error('[Sync] ❌ Cannot check for existing data — permission denied. Skipping migration.');
+      return false;
+    }
+    throw err;
   }
 
-  // Read from real localStorage
+  // Read from real localStorage (the original, not the shim)
   const keysToMigrate = [
     'srs_data', 'es_xp', 'ln_xp', 'en_xp', 'score', 'streak',
     'mastered', 'es_mastered', 'ln_mastered', 'en_mastered',
     'aura_map', 'srs_revlog', 'pron_srs', 'grammar_srs',
     'crs_prog', 'crs_added', 'rpg', 'srs_new_per_day',
     'aprende_sfx', 'aprende_vibe', 'aprende_notif',
-    'daily_goal', 'desktop_mode', 'crs_resume'
+    'daily_goal', 'desktop_mode', 'crs_resume', 'badge_dg_count'
   ];
 
   const migrated = {};
@@ -328,7 +378,7 @@ async function syncMigrateFromLocal(uid) {
   }
 
   if (count === 0) {
-    console.log('[Sync] No localStorage data to migrate');
+    console.log('[Sync] ℹ️ No localStorage data to migrate');
     return false;
   }
 
@@ -340,15 +390,28 @@ async function syncMigrateFromLocal(uid) {
     docUpdates[doc][key] = val;
   }
 
-  const batch = db.batch();
-  for (const [docName, data] of Object.entries(docUpdates)) {
-    const ref = db.collection('users').doc(uid).collection('data').doc(docName);
-    batch.set(ref, data, { merge: true });
-  }
-  await batch.commit();
+  try {
+    const batch = db.batch();
+    for (const [docName, data] of Object.entries(docUpdates)) {
+      const ref = db.collection('users').doc(uid).collection('data').doc(docName);
+      batch.set(ref, data, { merge: true });
+    }
+    await batch.commit();
+    console.log(`[Sync] ✅ Migrated ${count} keys from localStorage to Firestore`);
 
-  console.log(`[Sync] Migrated ${count} keys from localStorage to Firestore`);
-  return true;
+    // Also populate cache immediately so initApp finds data
+    for (const [key, val] of Object.entries(migrated)) {
+      SYNC.cache[key] = val;
+    }
+
+    return true;
+  } catch (err) {
+    console.error('[Sync] ❌ Migration write failed:', err);
+    if (err.code === 'permission-denied') {
+      syncShowError('Migration échouée — règles Firestore non configurées !');
+    }
+    return false;
+  }
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -357,30 +420,37 @@ async function syncMigrateFromLocal(uid) {
 
 auth.onAuthStateChanged(async user => {
   if (user) {
-    console.log('[Sync] Signed in as', user.displayName || user.email);
+    console.log('[Sync] Signed in as', user.displayName || user.email, '— UID:', user.uid);
     syncHideLogin();
-
-    // Show user avatar in app
     syncUpdateUI(user);
 
-    // Try migrate from localStorage on first login
+    // Try migrate from real localStorage on first login
     try {
       await syncMigrateFromLocal(user.uid);
     } catch (e) {
-      console.warn('[Sync] Migration failed:', e);
+      console.warn('[Sync] Migration error:', e);
     }
 
-    // Load all data
+    // Load all data from Firestore
     await syncLoadAll(user.uid);
 
-    // Boot the app
-    if (typeof initApp === 'function') {
+    // Start real-time listeners for cross-device sync
+    syncStartListeners(user.uid);
+
+    // Boot the app (only once per auth session)
+    if (!SYNC._appBooted && typeof initApp === 'function') {
+      SYNC._appBooted = true;
       initApp();
     }
   } else {
-    // Not signed in — show login
+    // Unsubscribe listeners
+    for (const unsub of SYNC._unsubs) {
+      try { unsub(); } catch(e) {}
+    }
+    SYNC._unsubs = [];
     SYNC.uid = null;
     SYNC.ready = false;
+    SYNC._appBooted = false;
     syncShowLogin();
   }
 });
@@ -390,7 +460,6 @@ auth.onAuthStateChanged(async user => {
 // ═══════════════════════════════════════════════════════════
 
 function syncUpdateUI(user) {
-  // Add user avatar/name in sidebar or header
   let avatar = document.getElementById('sync-avatar');
   if (!avatar) {
     avatar = document.createElement('div');
@@ -410,30 +479,19 @@ function syncUpdateUI(user) {
 }
 
 // ═══════════════════════════════════════════════════════════
-// SYNC READY HELPER — for app.js to wait on
+// SYNC READY HELPERS
 // ═══════════════════════════════════════════════════════════
 
 function onSyncReady(cb) {
-  if (SYNC.ready) {
-    cb();
-  } else {
-    SYNC._listeners.push(cb);
-  }
+  if (SYNC.ready) cb();
+  else SYNC._listeners.push(cb);
 }
 
-// Export status check
 function isSyncReady() { return SYNC.ready; }
 function getSyncUID() { return SYNC.uid; }
-
-// ═══════════════════════════════════════════════════════════
-// EXPORT/IMPORT INTEGRATION
-// ═══════════════════════════════════════════════════════════
-
-// Override export to read from cache (already works via shim)
-// Override import to write to Firestore
 function syncForceFlush() {
   if (SYNC._writeTimer) clearTimeout(SYNC._writeTimer);
   syncFlush();
 }
 
-console.log('[Sync] Firebase sync module loaded');
+console.log('[Sync] Firebase sync module loaded (v2)');
