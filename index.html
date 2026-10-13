@@ -1543,9 +1543,21 @@
 </div>
 
 <!-- Notification toggle CSS -->
+
+<!-- Firebase SDK (compat mode — CDN) -->
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+
+<!-- Sync layer (replaces localStorage with Firestore) -->
+<script src="sync.js"></script>
+
+<!-- Course data -->
 <script src="courses/es.js"></script>
 <script src="courses/ln.js"></script>
 <script src="courses/en.js"></script>
+
+<!-- Main app (boots after auth) -->
 <script src="app.js"></script>
 </body>
 </html>

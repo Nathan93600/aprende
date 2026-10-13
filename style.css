@@ -1475,3 +1475,45 @@
 .notif-slider:before { content:'';position:absolute;height:20px;width:20px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.3s }
 .notif-toggle input:checked + .notif-slider { background:#58cc02 }
 .notif-toggle input:checked + .notif-slider:before { transform:translateX(22px) }
+
+/* ═══════════════ Firebase Login Overlay ═══════════════ */
+#sync-login-overlay {
+  position:fixed; inset:0; z-index:99999;
+  background:var(--bg, #0a0205);
+  display:flex; align-items:center; justify-content:center;
+  opacity:0; pointer-events:none;
+  transition: opacity .3s ease;
+}
+#sync-login-overlay.visible { opacity:1; pointer-events:auto; }
+
+.sync-login-box {
+  text-align:center; padding:2rem;
+  max-width:360px; width:90%;
+}
+.sync-login-logo {
+  font-family:'Unbounded',sans-serif;
+  font-size:2.5rem; font-weight:900;
+  background:linear-gradient(135deg, #ff1744, #d500f9, #00e5ff);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  background-clip:text;
+  margin-bottom:.5rem;
+}
+.sync-login-sub {
+  color:var(--muted, #c08090); font-size:.95rem;
+  margin-bottom:2rem;
+}
+.sync-google-btn {
+  display:inline-flex; align-items:center; gap:10px;
+  padding:12px 28px; border-radius:12px;
+  background:#fff; color:#333; border:none;
+  font-size:1rem; font-weight:600;
+  cursor:pointer; transition:transform .15s, box-shadow .15s;
+  box-shadow:0 2px 12px rgba(0,0,0,.3);
+}
+.sync-google-btn:hover { transform:scale(1.03); box-shadow:0 4px 20px rgba(0,0,0,.4); }
+.sync-google-btn:active { transform:scale(.97); }
+.sync-google-btn:disabled { opacity:.6; cursor:wait; }
+.sync-login-offline {
+  color:var(--muted, #c08090); font-size:.8rem;
+  margin-top:1.5rem; line-height:1.4;
+}
