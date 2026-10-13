@@ -1227,6 +1227,7 @@
   <button class="tb-btn" data-tab="games" onclick="tabGo('games')"><span>🎮</span>Jeux</button>
   <button class="tb-btn" data-tab="hero" onclick="tabGo('hero')"><span>⚔️</span>Héros</button>
   <button class="tb-btn" data-tab="shop" onclick="tabGo('shop')"><span>🏪</span>Boutique</button>
+  <button class="tb-btn" data-tab="settings" onclick="openSettingsModal()"><span>⚙️</span>Réglages</button>
 </nav>
 <div id="crs-modal" onclick="if(event.target===this)crsCloseModal()"><div class="cm-box" id="crs-modal-box"></div></div>
 
@@ -12483,6 +12484,75 @@ function toggleSfxBtn() {
   const btn = document.getElementById('btn-sfx');
   if (btn) btn.querySelector('span').textContent = on ? '🔊' : '🔇';
   if (on) SFX.playCorrect(); // preview sound when turning on
+}
+
+// ═══════════════════════════════════════════════
+// SETTINGS MODAL (mobile-accessible)
+// ═══════════════════════════════════════════════
+function openSettingsModal() {
+  const sfxOn = SFX.sfxEnabled();
+  const s = (typeof notifGet === 'function') ? notifGet() : { enabled: false, reminderHour: 20, reminderMin: 0, streakAlert: true, goalCelebrate: true };
+  const html = `
+    <div style="max-width:420px;margin:auto;max-height:80vh;overflow-y:auto;padding-right:4px">
+      <h3 style="margin:0 0 1.2rem;text-align:center;font-size:1.2rem">⚙️ Réglages</h3>
+
+      <!-- SONS -->
+      <div style="margin-bottom:1.2rem">
+        <div style="font-weight:800;font-size:.95rem;margin-bottom:.5rem;color:#ffc800">🔊 Sons</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:.8rem;background:rgba(255,255,255,.05);border-radius:12px">
+          <span style="font-weight:600">Effets sonores (correct / faux)</span>
+          <label class="notif-toggle">
+            <input type="checkbox" id="settings-sfx" ${sfxOn ? 'checked' : ''} onchange="SFX.sfxSetEnabled(this.checked); if(this.checked) SFX.playCorrect();">
+            <span class="notif-slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <!-- NOTIFICATIONS -->
+      <div style="margin-bottom:1.2rem">
+        <div style="font-weight:800;font-size:.95rem;margin-bottom:.5rem;color:#1cb0f6">🔔 Notifications</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:.8rem;background:rgba(255,255,255,.05);border-radius:12px;margin-bottom:.6rem">
+          <span style="font-weight:600">Activer les notifications</span>
+          <label class="notif-toggle">
+            <input type="checkbox" id="settings-notif-on" ${s.enabled ? 'checked' : ''} onchange="toggleNotif(this.checked); document.getElementById('settings-notif-opts').style.opacity=this.checked?1:.4; document.getElementById('settings-notif-opts').style.pointerEvents=this.checked?'auto':'none';">
+            <span class="notif-slider"></span>
+          </label>
+        </div>
+        <div id="settings-notif-opts" style="${s.enabled ? '' : 'opacity:.4;pointer-events:none'}">
+          <div style="padding:.8rem;background:rgba(255,255,255,.05);border-radius:12px;margin-bottom:.6rem">
+            <div style="font-weight:600;margin-bottom:.4rem">⏰ Rappel quotidien</div>
+            <div style="display:flex;align-items:center;gap:.5rem">
+              <span style="color:var(--muted);font-size:.85rem">Heure :</span>
+              <input type="number" id="settings-notif-hour" value="${s.reminderHour}" min="0" max="23" style="width:50px;padding:.3rem;border-radius:8px;border:1px solid rgba(255,255,255,.2);background:rgba(0,0,0,.3);color:#fff;text-align:center;font-size:1rem" onchange="document.getElementById('notif-hour')&&(document.getElementById('notif-hour').value=this.value); saveNotifTime()">
+              <span style="font-weight:700">:</span>
+              <input type="number" id="settings-notif-min" value="${String(s.reminderMin).padStart(2,'0')}" min="0" max="59" step="5" style="width:50px;padding:.3rem;border-radius:8px;border:1px solid rgba(255,255,255,.2);background:rgba(0,0,0,.3);color:#fff;text-align:center;font-size:1rem" onchange="document.getElementById('notif-min')&&(document.getElementById('notif-min').value=this.value); saveNotifTime()">
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:.8rem;background:rgba(255,255,255,.05);border-radius:12px;margin-bottom:.6rem">
+            <div><div style="font-weight:600">🔥 Alerte streak</div><div style="font-size:.73rem;color:var(--muted)">Si tu vas perdre ta série</div></div>
+            <label class="notif-toggle"><input type="checkbox" ${s.streakAlert ? 'checked' : ''} onchange="document.getElementById('notif-streak')&&(document.getElementById('notif-streak').checked=this.checked); saveNotifOptions()"><span class="notif-slider"></span></label>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:.8rem;background:rgba(255,255,255,.05);border-radius:12px;margin-bottom:.6rem">
+            <div><div style="font-weight:600">🎯 Objectif atteint</div><div style="font-size:.73rem;color:var(--muted)">Félicitations quand tu finis</div></div>
+            <label class="notif-toggle"><input type="checkbox" ${s.goalCelebrate ? 'checked' : ''} onchange="document.getElementById('notif-goal')&&(document.getElementById('notif-goal').checked=this.checked); saveNotifOptions()"><span class="notif-slider"></span></label>
+          </div>
+          <button onclick="testNotification()" style="width:100%;padding:.6rem;border:none;border-radius:10px;background:linear-gradient(135deg,#1cb0f6,#1899d6);color:#fff;font-weight:700;cursor:pointer;font-size:.85rem">🧪 Tester</button>
+        </div>
+      </div>
+
+      <!-- DONNÉES -->
+      <div style="margin-bottom:1rem">
+        <div style="font-weight:800;font-size:.95rem;margin-bottom:.5rem;color:#58cc02">💾 Données</div>
+        <div style="display:flex;gap:.5rem">
+          <button onclick="exportProgress(); closeModal('settings-modal')" style="flex:1;padding:.7rem;border:none;border-radius:10px;background:rgba(255,255,255,.1);color:#fff;font-weight:700;cursor:pointer;font-size:.85rem">💾 Exporter</button>
+          <button onclick="document.getElementById('import-file-input').click(); closeModal('settings-modal')" style="flex:1;padding:.7rem;border:none;border-radius:10px;background:rgba(255,255,255,.1);color:#fff;font-weight:700;cursor:pointer;font-size:.85rem">📂 Importer</button>
+        </div>
+      </div>
+
+      <button onclick="closeModal('settings-modal')" style="width:100%;padding:.7rem;border:none;border-radius:12px;background:rgba(255,255,255,.08);color:#fff;cursor:pointer;font-size:.9rem;font-weight:600">Fermer</button>
+    </div>
+  `;
+  showGenericModal('settings-modal', html);
 }
 
 // ═══════════════════════════════════════════════
