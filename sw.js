@@ -1,5 +1,5 @@
-// ¡Aprende! Service Worker v4 — Multi-file + Notifications
-const CACHE_NAME = 'aprende-v5';
+// ¡Aprende! Service Worker v6 — rpgInit guard against fresh hero on synced data
+const CACHE_NAME = 'aprende-v7';
 const ASSETS = [
   './',
   'index.html',

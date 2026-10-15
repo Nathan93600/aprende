@@ -8281,12 +8281,27 @@ let rpg = null;
 function rpgToNext(l) { if(l < 5) return 25 * l; if(l === 5) return 150; return Math.round(((l * l) * 0.25 + 10 * l + 139.75) / 10) * 10; }
 function rpgDayKey(t) { const d = new Date(t || Date.now()); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
 function rpgLangXP() { const g = k => parseInt(localStorage.getItem(k) || '0') || 0; return { es: g('es_xp'), ln: g('ln_xp'), en: g('en_xp') }; }
-function rpgSave() { if(rpg) crsSetJ('rpg', rpg); }
+function rpgSave() { if(rpg && !rpg._noSave) crsSetJ('rpg', rpg); }
 function rpgLog(t) { if(!rpg) return; rpg.log.unshift(rpgDayKey() + ' · ' + t); rpg.log = rpg.log.slice(0, 40); }
 function rpgInit() {
   rpg = crsJ('rpg', null);
   const lx = rpgLangXP(), revlog = srsRevlogLoad();
   if(!rpg || typeof rpg !== 'object') {
+    // ── Guard Firestore : si le cache SYNC contient des données mais rpg est null,
+    // c'est un problème de parsing, PAS un vrai nouveau joueur → on ne crée pas de héros
+    if(typeof SYNC !== 'undefined' && SYNC.cache && Object.keys(SYNC.cache).length > 5) {
+      console.error('[RPG] ⚠️ rpg null/invalide malgré', Object.keys(SYNC.cache).length, 'clés en cache SYNC.');
+      console.error('[RPG] Raw rpg value:', typeof SYNC.cache['rpg'], SYNC.cache['rpg'] ? String(SYNC.cache['rpg']).substring(0, 200) : SYNC.cache['rpg']);
+      // Héros temporaire en mémoire — on ne sauvegarde PAS pour ne pas écraser Firestore
+      const tot = lx.es + lx.ln + lx.en;
+      rpg = { lvl: 1, xp: 0, hp: RPG_MAXHP, gold: 0, cls: null, streak: 0, best: 0, streakDay: null, freezes: 0,
+              day: rpgDayKey(), dayXP: 0, dayLessons: 0, claimed: [], seen: lx, revSeen: revlog.length, boss: null, bossN: 0,
+              rewards: [{ e: '📺', n: 'Un épisode de série', c: 30 }, { e: '🍫', n: 'Une pause gourmande', c: 20 }, { e: '🎮', n: '30 min de jeu vidéo', c: 40 }],
+              log: [], trophies: [], rest: false, goldFrac: 0, deaths: 0, _noSave: true };
+      console.warn('[RPG] 🛡️ Héros temporaire créé (non sauvegardé). Recharge la page pour récupérer les vraies données.');
+      rpgBossEnsure();
+      return; // ← on sort SANS appeler rpgSync pour ne rien écraser
+    }
     const tot = lx.es + lx.ln + lx.en;
     // série de départ = jours consécutifs avec des révisions
     const days = new Set(revlog.map(r => rpgDayKey(r[1])));
