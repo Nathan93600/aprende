@@ -1,0 +1,1871 @@
+const COURSE_LN = {
+  "sections": [
+    [
+      "A1",
+      "Mbote !",
+      "Saluer, la famille, les nombres, la maison, manger"
+    ],
+    [
+      "A2",
+      "Bomoi ya mokolo na mokolo",
+      "Le temps, se déplacer, le corps, les gens, le marché"
+    ],
+    [
+      "B1",
+      "Kolobela makambo",
+      "Penser, ressentir, débattre, commencer, relier ses idées"
+    ],
+    [
+      "B2",
+      "Lingala ya Kinshasa",
+      "Contractions orales, tons, emphase, expressions cultes"
+    ]
+  ],
+  "units": [
+    {
+      "e": "👋",
+      "t": "Mbote !",
+      "s": 0,
+      "g": {
+        "t": "Les pronoms",
+        "tip": "ngai (je/moi) · yo (tu) · ye (il/elle) · biso (nous) · bino (vous) · bango (eux). Devant un verbe : na- · o- · a- · to- · bo- · ba-.",
+        "q": [
+          [
+            "« Nous » se dit…",
+            [
+              "biso",
+              "bino",
+              "bango"
+            ],
+            0,
+            "biso = nous · bino = vous · bango = eux"
+          ],
+          [
+            "Na-linga = …",
+            [
+              "je veux / j'aime",
+              "tu veux",
+              "ils veulent"
+            ],
+            0,
+            "na- = je ; o- = tu ; ba- = ils"
+          ]
+        ]
+      },
+      "w": [
+        [
+          "Mbote",
+          "Bonjour / Salut",
+          "Mbote tata, sango nini ?",
+          "Bonjour papa, quoi de neuf ?",
+          1
+        ],
+        [
+          "Sango nini ?",
+          "Quoi de neuf ? / Comment ça va ?",
+          "Mbote ndeko, sango nini ?",
+          "Salut frère, quoi de neuf ?",
+          1
+        ],
+        [
+          "Malamu",
+          "Bien / Bon",
+          "Nazali malamu, matondo.",
+          "Je vais bien, merci.",
+          1
+        ],
+        [
+          "Matondo",
+          "Merci",
+          "Matondo mingi mpo na lisalisi.",
+          "Merci beaucoup pour l'aide.",
+          1
+        ],
+        [
+          "Nkombo na yo nani ?",
+          "Comment tu t'appelles ?",
+          "Nkombo na yo nani ? Nkombo na ngai Nathan.",
+          "Comment tu t'appelles ? Je m'appelle Nathan.",
+          1
+        ],
+        [
+          "Yambi",
+          "Bienvenue !",
+          "Yambi !",
+          "Bienvenue !",
+          0
+        ],
+        [
+          "Koyamba",
+          "Accueillir / Embrasser / Répondre (téléphone)",
+          "Kende koyamba ye, azozela yo.",
+          "Va l'accueillir, elle t'attend.",
+          0
+        ],
+        [
+          "Biso",
+          "Nous (pronom personnel)",
+          "Biso tozali awa.",
+          "Nous sommes ici.",
+          0
+        ],
+        [
+          "Bango",
+          "Eux / Elles",
+          "Bango nde balobaki maloba oyo.",
+          "Ce sont eux qui ont dit ces paroles.",
+          0
+        ],
+        [
+          "Ee / Te",
+          "Oui / Non",
+          "Olingi kolia ? Ee, nalingi.",
+          "Tu veux manger ? Oui, je veux.",
+          1
+        ]
+      ]
+    },
+    {
+      "e": "👨‍👩‍👧",
+      "t": "Libota",
+      "s": 0,
+      "g": {
+        "t": "Les classes de noms",
+        "tip": "Le pluriel change le préfixe : mo-→ba- (motu → batu), mo-→mi- (mokolo → mikolo), li-→ma- (liloba → maloba), e-→bi- (eloko → biloko).",
+        "q": [
+          [
+            "Pluriel de « liloba » (mot) :",
+            [
+              "maloba",
+              "biloba",
+              "baloba"
+            ],
+            0,
+            "li- → ma-"
+          ],
+          [
+            "Pluriel de « eloko » (chose) :",
+            [
+              "biloko",
+              "maloko",
+              "baloko"
+            ],
+            0,
+            "e- → bi-"
+          ]
+        ]
+      },
+      "w": [
+        [
+          "Libota",
+          "Famille / Clan",
+          "Libota na ngai ezali motuya mingi pona ngai.",
+          "Ma famille est très importante pour moi.",
+          0
+        ],
+        [
+          "Tata",
+          "Papa / Père",
+          "Tata na ngai azali na mosala.",
+          "Mon père est au travail.",
+          1
+        ],
+        [
+          "Mama",
+          "Maman / Mère",
+          "Mama alambi madesu.",
+          "Maman a cuisiné des haricots.",
+          1
+        ],
+        [
+          "Ndeko",
+          "Frère / Sœur / Proche",
+          "Ndeko na ngai ya mwasi afandaka na Paris.",
+          "Ma sœur habite à Paris.",
+          1
+        ],
+        [
+          "Mwana / Bana",
+          "Enfant / Enfants",
+          "Bana bazali kobeta masano.",
+          "Les enfants sont en train de jouer.",
+          1
+        ],
+        [
+          "Muninga",
+          "Ami(e) / Copain / Voisin",
+          "Lelo ya yo, lobi ya moninga.",
+          "Aujourd'hui c'est pour toi, demain pour ton voisin.",
+          0
+        ],
+        [
+          "Batu / Motu",
+          "Personne / Gens / Individu",
+          "Ngomba na ngomba ekutanaka te kasi batu na batu bakutanaka.",
+          "Les montagnes ne se rencontrent pas, mais les hommes si.",
+          0
+        ],
+        [
+          "Mokolo",
+          "Jour / Adulte / Ancien",
+          "Lelo ezali mokolo ya suka.",
+          "Aujourd'hui c'est le dernier jour.",
+          0
+        ],
+        [
+          "Kobala",
+          "Se marier",
+          "Djo azalaki na likoki te ya kobala.",
+          "Djo n'avait pas les moyens de se marier.",
+          0
+        ],
+        [
+          "Libala",
+          "Mariage",
+          "Libala na bango ekozala lobi.",
+          "Leur mariage aura lieu demain.",
+          0
+        ]
+      ]
+    },
+    {
+      "e": "🔢",
+      "t": "Motango",
+      "s": 0,
+      "g": {
+        "t": "Compter",
+        "tip": "moko · mibale · misato · minei · mitano · motoba · nsambo · mwambe · libwa · zomi. Le nombre se place après le nom : bana mibale.",
+        "q": [
+          [
+            "« Trois » se dit…",
+            [
+              "misato",
+              "minei",
+              "mitano"
+            ],
+            0,
+            "1 moko · 2 mibale · 3 misato"
+          ],
+          [
+            "« Deux enfants » =",
+            [
+              "bana mibale",
+              "mibale bana",
+              "mwana mibale"
+            ],
+            0,
+            "nom au pluriel + nombre après"
+          ]
+        ]
+      },
+      "w": [
+        [
+          "Moko",
+          "Un / Seul / Unique",
+          "Moto moko te.",
+          "Personne (litt. pas un seul homme).",
+          0
+        ],
+        [
+          "Mibale",
+          "Deux / Tous les deux",
+          "Bolingo na biso mibale ekosila te.",
+          "Notre amour à nous deux ne finira pas.",
+          0
+        ],
+        [
+          "Misato",
+          "Trois",
+          "Nazali na bandeko misato.",
+          "J'ai trois frères et sœurs.",
+          1
+        ],
+        [
+          "Minei",
+          "Quatre",
+          "Tokozonga na mikolo minei.",
+          "On revient dans quatre jours.",
+          1
+        ],
+        [
+          "Mitano",
+          "Cinq",
+          "Mbongo ya mitano ekoki te.",
+          "Cinq (billets) ne suffisent pas.",
+          1
+        ],
+        [
+          "Zomi",
+          "Dix",
+          "Nazali na dolare zomi.",
+          "J'ai dix dollars.",
+          1
+        ],
+        [
+          "Boni ?",
+          "Combien ? / Comment ?",
+          "Ntalo na yango boni ?",
+          "C'est combien ?",
+          1
+        ],
+        [
+          "Mbongo",
+          "Argent",
+          "Nazali na mbongo te lelo.",
+          "Je n'ai pas d'argent aujourd'hui.",
+          1
+        ],
+        [
+          "Kofuta",
+          "Payer / Compenser / Récompenser",
+          "Kofuta ngai te, nasali yango ofele.",
+          "Ne me paye pas, j'ai fait ça gratuitement.",
+          0
+        ]
+      ]
+    },
+    {
+      "e": "🏠",
+      "t": "Ndako mpe balabala",
+      "s": 0,
+      "g": {
+        "t": "La préposition « na »",
+        "tip": "« na » couvre à / dans / avec / et : na ndako (à la maison), na ye (avec lui), ngai na yo (moi et toi). « ya » relie deux noms : ndako ya tata (la maison de papa).",
+        "q": [
+          [
+            "« La maison de papa » =",
+            [
+              "ndako ya tata",
+              "ndako na tata",
+              "tata ya ndako"
+            ],
+            0,
+            "ya relie le possédé au possesseur"
+          ],
+          [
+            "« Avec lui » =",
+            [
+              "na ye",
+              "ya ye",
+              "pe ye"
+            ],
+            0,
+            "na = avec"
+          ]
+        ]
+      },
+      "w": [
+        [
+          "Ndako",
+          "Maison",
+          "Ndako na biso ezali mosika te.",
+          "Notre maison n'est pas loin.",
+          1
+        ],
+        [
+          "Pa",
+          "Chez / À la maison de",
+          "Kende pa ngai.",
+          "Viens chez moi.",
+          0
+        ],
+        [
+          "Kati / Katikati",
+          "À l'intérieur / Entre / Au milieu / Centre",
+          "Na kati ezalaki molili.",
+          "À l'intérieur il faisait sombre.",
+          0
+        ],
+        [
+          "Kuna",
+          "Là-bas / Là",
+          "Biso tozali awa, bango bazali kuna.",
+          "Nous on est ici, eux ils sont là-bas.",
+          0
+        ],
+        [
+          "Libándá",
+          "Dehors / Extérieur",
+          "Malili eza makasi libanda.",
+          "Il fait très froid dehors.",
+          0
+        ],
+        [
+          "Balabala",
+          "Rue / Route / Voie publique",
+          "Bakuluna basundoli ye na balabala.",
+          "Les bandits l'ont abandonné dans la rue.",
+          0
+        ],
+        [
+          "Musika / Mosika",
+          "Loin / Distance / Éloignement",
+          "Ndako na ye ezali musika mingi.",
+          "Sa maison est très loin.",
+          0
+        ],
+        [
+          "Kovanda",
+          "Vivre / S'asseoir / Rester / Demeurer",
+          "Bana bavandaki na mabele mpo na bakiti ezalaki te.",
+          "Les enfants s'assirent par terre car il n'y avait pas de chaises.",
+          0
+        ],
+        [
+          "Na",
+          "À / Avec / Dans / De (préposition polyvalente)",
+          "Na kati ya zamba.",
+          "À l'intérieur de la forêt.",
+          0
+        ],
+        [
+          "Ya",
+          "De / À (préposition)",
+          "Ndako ya bandeko ezali na etando monene.",
+          "La maison des frères est très spacieuse.",
+          0
+        ],
+        [
+          "Na libanda",
+          "Dehors / À l'extérieur",
+          "Bana bazali kobɛta na libanda.",
+          "Les enfants jouent dehors.",
+          0
+        ]
+      ]
+    },
+    {
+      "e": "🍽️",
+      "t": "Kolia mpe komela",
+      "s": 0,
+      "g": {
+        "t": "Conjuguer au présent (-i)",
+        "tip": "Préfixe sujet + racine + -i : na-ling-i (je veux), o-ling-i (tu veux), a-ling-i (il veut). Le -i exprime aussi un état atteint : nasepeli (je suis content).",
+        "q": [
+          [
+            "« Tu veux » =",
+            [
+              "olingi",
+              "nalingi",
+              "alingi"
+            ],
+            0,
+            "o- = tu"
+          ],
+          [
+            "« Nous voulons » =",
+            [
+              "tolingi",
+              "bolingi",
+              "balingi"
+            ],
+            0,
+            "to- = nous"
+          ]
+        ]
+      },
+      "w": [
+        [
+          "Kolia",
+          "Manger",
+          "Nalingi kolia fufu na pondu.",
+          "Je veux manger du foufou avec du pondu.",
+          1
+        ],
+        [
+          "Komela",
+          "Boire",
+          "Ozali komela mai ?",
+          "Tu bois de l'eau ?",
+          1
+        ],
+        [
+          "Mai",
+          "Eau",
+          "Pesa ngai mai, nayoki mposa.",
+          "Donne-moi de l'eau, j'ai soif.",
+          1
+        ],
+        [
+          "Kolinga",
+          "Aimer / Vouloir",
+          "Nalingi yo mingi.",
+          "Je t'aime beaucoup.",
+          1
+        ],
+        [
+          "Sukali",
+          "Sucre",
+          "Tia sukali moke na kafe.",
+          "Mets un peu de sucre dans le café.",
+          0
+        ],
+        [
+          "Kosomba",
+          "Acheter",
+          "Nalingi kosomba ndako na ngonga ya sima.",
+          "Je veux acheter une maison plus tard.",
+          0
+        ],
+        [
+          "Komeka",
+          "Essayer / Tester / Goûter / Mesurer",
+          "Meka nanu kotanga oyo.",
+          "Essaie d'abord de lire ça.",
+          0
+        ],
+        [
+          "Kozua / Kozwa",
+          "Prendre / Obtenir / Recevoir / Attraper",
+          "Nazui diplôme.",
+          "J'ai obtenu le diplôme.",
+          0
+        ],
+        [
+          "Nzala",
+          "Faim",
+          "Nazali na nzala makasi.",
+          "J'ai très faim.",
+          1
+        ]
+      ]
+    },
+    {
+      "e": "⏰",
+      "t": "Tango",
+      "s": 1,
+      "g": {
+        "t": "La négation « te »",
+        "tip": "On ajoute simplement « te » à la fin : nalingi → nalingi te (je ne veux pas). Nandimi te = je ne suis pas d'accord.",
+        "q": [
+          [
+            "« Je ne sais pas » (nayebi = je sais) :",
+            [
+              "nayebi te",
+              "te nayebi",
+              "nayebi pe"
+            ],
+            0,
+            "te se place à la fin"
+          ],
+          [
+            "« Nandimi te » veut dire…",
+            [
+              "je ne suis pas d'accord",
+              "je suis d'accord",
+              "j'ai oublié"
+            ],
+            0,
+            "kondima = accepter + te"
+          ]
+        ]
+      },
+      "w": [
+        [
+          "Tango",
+          "Quand / Temps / Moment",
+          "Tango akitaka, akitaka na nkembo.",
+          "Quand il descend, il descend dans la gloire.",
+          0
+        ],
+        [
+          "Mikolo",
+          "Jours",
+          "Mikolo ezali koleka noki mingi.",
+          "Les jours passent très vite.",
+          0
+        ],
+        [
+          "Sikoyo",
+          "Maintenant",
+          "Tozali koya epayi na bino sikoyo.",
+          "Nous venons vers vous maintenant.",
+          0
+        ],
+        [
+          "Kala",
+          "Autrefois / Il y a longtemps / Jadis",
+          "Nakozonga kala mingi te.",
+          "Je vais rentrer bientôt (litt. pas longtemps).",
+          0
+        ],
+        [
+          "Liboso",
+          "Avant / D'abord / En premier / Devant",
+          "Eloko ya liboso.",
+          "La chose en premier.",
+          0
+        ],
+        [
+          "Nanu",
+          "Encore / D'abord / En premier",
+          "Meka nanu kotanga.",
+          "Essaie d'abord de lire.",
+          0
+        ],
+        [
+          "Lelo",
+          "Aujourd'hui",
+          "Lelo nazali na mosala mingi.",
+          "Aujourd'hui j'ai beaucoup de travail.",
+          1
+        ],
+        [
+          "Lobi",
+          "Hier / Demain (selon le temps du verbe)",
+          "Lobi nakokende na zando.",
+          "Demain j'irai au marché.",
+          1
+        ],
+        [
+          "Ntongo",
+          "Matin",
+          "Natelemaka ntongo makasi.",
+          "Je me lève tôt le matin.",
+          1
+        ],
+        [
+          "Butu",
+          "Nuit / Soir",
+          "Butu malamu !",
+          "Bonne nuit !",
+          1
+        ]
+      ]
+    },
+    {
+      "e": "🚶",
+      "t": "Kotambola",
+      "s": 1,
+      "g": {
+        "t": "L'impératif",
+        "tip": "Ordre à une personne : racine + -a (Yoka ! Landá !). À plusieurs : bo- devant (Boyoka !). Défense : infinitif + te (Kobosana te !).",
+        "q": [
+          [
+            "« Écoutez ! » (à plusieurs) :",
+            [
+              "Boyoka !",
+              "Yoka !",
+              "Bayoka !"
+            ],
+            0,
+            "bo- = vous (pluriel)"
+          ],
+          [
+            "« N'oublie pas ! » :",
+            [
+              "Kobosana te !",
+              "Bosana te !",
+              "Nabosani te !"
+            ],
+            0,
+            "défense = ko- + verbe + te"
+          ]
+        ]
+      },
+      "w": [
+        [
+          "Kotambola",
+          "Marcher / Avancer / Se déplacer / Voyager",
+          "Tambola na mokili, bongo omona makambo.",
+          "Parcours le monde et tu verras les problèmes.",
+          0
+        ],
+        [
+          "Kobemba",
+          "Voyager / Se déplacer",
+          "Ethan na Gaby bakei mobembo.",
+          "Ethan et Gaby sont partis en voyage.",
+          0
+        ],
+        [
+          "Kokita",
+          "Atterrir / Descendre / Se poser",
+          "Mpepo ekiti.",
+          "L'avion atterrit.",
+          0
+        ],
+        [
+          "Libanda ya mpepo",
+          "Aéroport (litt. extérieur de l'avion)",
+          "Tokokutana na libanda ya mpepo.",
+          "On se retrouvera à l'aéroport.",
+          0
+        ],
+        [
+          "Mbangu",
+          "Vitesse / Rapidité (ya mbangu = rapide)",
+          "Sala mbangu !",
+          "Fais vite !",
+          0
+        ],
+        [
+          "Kolanda",
+          "Suivre",
+          "Landá ngai na nzela ya ndenge malamu.",
+          "Suis-moi sur le bon chemin.",
+          0
+        ],
+        [
+          "Kokenda",
+          "Aller / Partir",
+          "Kende kozua bisaka na yo.",
+          "Va prendre tes affaires.",
+          0
+        ],
+        [
+          "Kozonga",
+          "Revenir / Retourner / Rentrer",
+          "Akozonga lisusu ? - Te, akei libela.",
+          "Il reviendra ? - Non, il est parti définitivement.",
+          0
+        ],
+        [
+          "Yoka",
+          "Écouter / Entendre",
+          "Yoka nanu motuna na ngai liboso ya koyanola ngai.",
+          "Écoute d'abord ma question avant de me répondre.",
+          0
+        ],
+        [
+          "Bosana",
+          "Oublie ! (impératif de kobosana)",
+          "Bosana yango !",
+          "Oublie ça !",
+          0
+        ]
+      ]
+    },
+    {
+      "e": "💪",
+      "t": "Nzoto",
+      "s": 1,
+      "g": {
+        "t": "Le futur na-ko-",
+        "tip": "Futur = préfixe sujet + ko- + racine + -a : nakokende (j'irai), akozonga (il reviendra), tokolia (nous mangerons).",
+        "q": [
+          [
+            "« J'irai » =",
+            [
+              "nakokende",
+              "nakendaki",
+              "nazokende"
+            ],
+            0,
+            "na + ko + kende"
+          ],
+          [
+            "« Il reviendra » =",
+            [
+              "akozonga",
+              "azongi",
+              "azongaki"
+            ],
+            0,
+            "a + ko + zonga"
+          ]
+        ]
+      },
+      "w": [
+        [
+          "Nzoto",
+          "Corps / Santé",
+          "Mbote, boni nzoto ?",
+          "Bonjour, comment ça va ?",
+          0
+        ],
+        [
+          "Kosola",
+          "Tousser",
+          "Azali kosola makasi banda na ntongo.",
+          "Il tousse beaucoup depuis ce matin.",
+          0
+        ],
+        [
+          "Kobika",
+          "Être sauvé / Guérir / Survivre",
+          "Osengeli komela mino po obika.",
+          "Tu dois prendre tes médicaments pour guérir.",
+          0
+        ],
+        [
+          "Kolemba",
+          "Être fatigué / En avoir marre / Se lasser",
+          "Nalembi mosala.",
+          "Je suis fatigué du travail.",
+          0
+        ],
+        [
+          "Kolenga",
+          "Trembler / Frissonner / Grelotter",
+          "Azolenga likolo ya kobanga.",
+          "Elle tremble à cause de la peur.",
+          0
+        ],
+        [
+          "Zemi",
+          "Grossesse / Femme enceinte",
+          "Aza na zemi ya sanza misatu.",
+          "Elle est enceinte de 3 mois.",
+          0
+        ],
+        [
+          "Kobota",
+          "Accoucher / Donner naissance / Mettre au monde",
+          "Ndeko na ngai ya mwasi awuti kobota.",
+          "Ma sœur vient d'accoucher.",
+          0
+        ],
+        [
+          "Kobotama",
+          "Être né / Naître",
+          "Nabotamaki na Kin.",
+          "Je suis né à Kin.",
+          0
+        ],
+        [
+          "Na-ko- (futur)",
+          "Marqueur du FUTUR 'je vais' (na=je, ko=marqueur futur)",
+          "Nakolia.",
+          "Je vais manger.",
+          0
+        ],
+        [
+          "Kobela",
+          "Être malade",
+          "Mwana azali kobela banda lobi.",
+          "L'enfant est malade depuis hier.",
+          1
+        ]
+      ]
+    },
+    {
+      "e": "🤝",
+      "t": "Bato",
+      "s": 1,
+      "g": {
+        "t": "Le réciproque -an-",
+        "tip": "-an- = « l'un l'autre » : kokuta (trouver) → kokutana (se rencontrer) ; kolinga → kolingana (s'aimer mutuellement).",
+        "q": [
+          [
+            "« S'aimer mutuellement » =",
+            [
+              "kolingana",
+              "kolingisa",
+              "kolingela"
+            ],
+            0,
+            "-an- = réciproque"
+          ],
+          [
+            "Kokutana veut dire…",
+            [
+              "se rencontrer",
+              "trouver seul",
+              "tromper"
+            ],
+            0,
+            "kokuta + -an-"
+          ]
+        ]
+      },
+      "w": [
+        [
+          "Kokutana",
+          "Se rencontrer / Se trouver",
+          "Tokokutana lobi.",
+          "On se retrouvera demain.",
+          0
+        ],
+        [
+          "Kokuta",
+          "Trouver",
+          "Nakuti mbongo na nzela.",
+          "J'ai trouvé de l'argent sur le chemin.",
+          0
+        ],
+        [
+          "Elongo",
+          "Ensemble / En même temps",
+          "Tokende elongo.",
+          "Allons ensemble.",
+          0
+        ],
+        [
+          "Kobína / Bina",
+          "Danser",
+          "Nazobina.",
+          "Je suis en train de danser.",
+          0
+        ],
+        [
+          "Mabína",
+          "Danse (nom)",
+          "Nalingaka mabina.",
+          "J'aime (toujours) la danse.",
+          0
+        ],
+        [
+          "Kofinga",
+          "Insulter / Offenser",
+          "Kofinga ngai te !",
+          "Ne m'insulte pas !",
+          0
+        ],
+        [
+          "Kosaka",
+          "Tromper / Avoir par la ruse",
+          "A kosaki ye.",
+          "Il/elle l'a trompé(e).",
+          0
+        ],
+        [
+          "Mibale",
+          "Deux / Tous les deux",
+          "Bolingo na biso mibale ekosila te.",
+          "Notre amour à nous deux ne finira pas.",
+          0
+        ],
+        [
+          "Kosolola",
+          "Discuter / Bavarder",
+          "Tosololaki tii na butu.",
+          "On a discuté jusqu'au soir.",
+          1
+        ]
+      ]
+    },
+    {
+      "e": "🛍️",
+      "t": "Wenze",
+      "s": 1,
+      "g": {
+        "t": "Le causatif -is-",
+        "tip": "-is- = faire faire / rendre : kolemba (être fatigué) → kolembisa (épuiser) ; kobakisa (ajouter) ; kondima → kondimisa (convaincre).",
+        "q": [
+          [
+            "« Convaincre » (kondima = accepter) :",
+            [
+              "kondimisa",
+              "kondimana",
+              "kondimela"
+            ],
+            0,
+            "-is- = faire accepter"
+          ],
+          [
+            "Kolembisa veut dire…",
+            [
+              "épuiser / calmer",
+              "être fatigué",
+              "se lasser seul"
+            ],
+            0,
+            "rendre fatigué"
+          ]
+        ]
+      },
+      "w": [
+        [
+          "Koteka / Teki",
+          "Vendre / fig. Trahir / Vendre quelqu'un",
+          "Akomi koteka nguba na zando.",
+          "Elle a commencé à vendre des arachides au marché.",
+          0
+        ],
+        [
+          "Biloko / Eloko",
+          "Choses / Objets / Affaires / Bagages",
+          "Biloko na yo ezali kilo mingi.",
+          "Tes bagages pèsent beaucoup.",
+          0
+        ],
+        [
+          "Liputa / Maputa",
+          "Pagne / Tissu africain",
+          "Alati liputa.",
+          "Elle porte un pagne.",
+          0
+        ],
+        [
+          "Kotonga / Tonga",
+          "Coudre / Construire / Bâtir / Tresser (ton bas)",
+          "Batongaka mboka na maloba te.",
+          "On ne construit pas une ville avec des mots.",
+          0
+        ],
+        [
+          "Tonga / Ntonga",
+          "Aiguille / Seringue",
+          "Batubi ye tonga na misisa.",
+          "Ils l'ont piqué avec une aiguille.",
+          0
+        ],
+        [
+          "Kobakisa",
+          "Ajouter / Additionner",
+          "Bakisa matabisi.",
+          "Ajoute le pourboire.",
+          0
+        ],
+        [
+          "Kolembisa",
+          "Épuiser / Amollir / Calmer",
+          "Mosala oyo elembisi ngai.",
+          "Ce travail m'a épuisé.",
+          0
+        ],
+        [
+          "Kondimisa",
+          "Convaincre / Persuader",
+          "Amekaki kondimisa ngai.",
+          "Il a essayé de me convaincre.",
+          0
+        ],
+        [
+          "Zando",
+          "Marché",
+          "Mama akei na zando.",
+          "Maman est allée au marché.",
+          1
+        ],
+        [
+          "Ntalo",
+          "Prix",
+          "Ntalo ya liputa oyo ezali makasi.",
+          "Le prix de ce pagne est élevé.",
+          1
+        ]
+      ]
+    },
+    {
+      "e": "💭",
+      "t": "Kobanza",
+      "s": 2,
+      "g": {
+        "t": "L'habituel -aka",
+        "tip": "-aka = action habituelle : nalingi (je veux, maintenant) → nalingaka (j'aime, toujours). Nasalaka mosala = je travaille (d'habitude).",
+        "q": [
+          [
+            "« J'aime (toujours, par habitude) » =",
+            [
+              "nalingaka",
+              "nalingi",
+              "nakolinga"
+            ],
+            0,
+            "-aka = habitude"
+          ],
+          [
+            "Nalingaka mbisi veut dire…",
+            [
+              "j'aime le poisson (en général)",
+              "je vais aimer le poisson",
+              "j'ai aimé le poisson hier"
+            ],
+            0,
+            "habituel"
+          ]
+        ]
+      },
+      "w": [
+        [
+          "Kobanza",
+          "Penser / Réfléchir",
+          "Nabanzi na yo.",
+          "Je pense à toi.",
+          0
+        ],
+        [
+          "Kondima / Dima",
+          "Accepter / Admettre / Croire / Être d'accord",
+          "Nandimi na yo.",
+          "Je suis d'accord avec toi.",
+          0
+        ],
+        [
+          "Nandimi te",
+          "Je ne suis pas d'accord / Je refuse",
+          "Nandimi likambo yango te.",
+          "Je ne suis pas d'accord avec ça.",
+          0
+        ],
+        [
+          "Bondimi",
+          "Foi / Croyance",
+          "Bondimi na ye ezali makasi.",
+          "Sa foi est forte.",
+          0
+        ],
+        [
+          "Mpo / Po",
+          "Parce que / Pour (po = oral)",
+          "Nalingi po yo kelela ngai.",
+          "J'aime parce que tu m'as créé.",
+          0
+        ],
+        [
+          "Kasi",
+          "Mais / Cependant",
+          "Nalingi kokende, kasi mbula ezali.",
+          "Je veux partir, mais il pleut.",
+          0
+        ],
+        [
+          "Yango wana",
+          "C'est pourquoi / Voilà pourquoi",
+          "Yango wana sikoyo oza awa na biso.",
+          "C'est pourquoi tu es ici maintenant.",
+          0
+        ],
+        [
+          "-aka (habituel)",
+          "⭐ Suffixe HABITUEL / ITÉRATIF (ex: nalingi→nalingaka = j'aime toujours)",
+          "Nalingaka Nzambe.",
+          "J'aime Dieu (toujours).",
+          0
+        ],
+        [
+          "Nalingaka",
+          "J'aime (habituel, toujours — kolinga + -aka)",
+          "Nalingaka yo.",
+          "Je t'aime (toujours).",
+          0
+        ]
+      ]
+    },
+    {
+      "e": "❤️",
+      "t": "Motema",
+      "s": 2,
+      "g": {
+        "t": "Le progressif -zo-",
+        "tip": "Kinshasa contracte « nazali ko- » en « nazo- » : nazali kolia → nazolia (je suis en train de manger).",
+        "q": [
+          [
+            "« Je suis en train de parler » =",
+            [
+              "nazoloba",
+              "nalobaka",
+              "nakoloba"
+            ],
+            0,
+            "nazo- = nazali ko-"
+          ],
+          [
+            "Azosepela veut dire…",
+            [
+              "il est en train de se réjouir",
+              "il se réjouira",
+              "il s'est réjoui"
+            ],
+            0,
+            "-zo- = en cours"
+          ]
+        ]
+      },
+      "w": [
+        [
+          "Motema / Mitema",
+          "Cœur / Force de caractère",
+          "Nabombi yango na kati ya motema na ngai.",
+          "J'ai caché ça dans mon cœur.",
+          0
+        ],
+        [
+          "Kosepela / Sepela",
+          "Se réjouir / Apprécier / Être content",
+          "Nasepeli koyeba yo.",
+          "Ravi(e) de te connaître.",
+          0
+        ],
+        [
+          "Nasepeli",
+          "Je suis content(e) / J'apprécie",
+          "Nasepeli makasi.",
+          "J'ai beaucoup apprécié.",
+          0
+        ],
+        [
+          "Kobanga",
+          "Avoir peur / Craindre / Respecter",
+          "Tina ya kobanga ezali te.",
+          "Il n'y a pas de raison d'avoir peur.",
+          0
+        ],
+        [
+          "Somo",
+          "Terreur / Peur / Horreur",
+          "Somo ekoti ngai.",
+          "La terreur m'a envahi.",
+          0
+        ],
+        [
+          "Kolimbisa",
+          "Pardonner",
+          "Alimbisi ngai.",
+          "Il m'a pardonné.",
+          0
+        ],
+        [
+          "-zo- (progressif)",
+          "Marqueur du présent PROGRESSIF 'être en train de'",
+          "Nazobina.",
+          "Je suis en train de danser.",
+          0
+        ],
+        [
+          "Kolengela",
+          "Arranger / Prendre soin / Préparer",
+          "Mama azali kolengela bilei.",
+          "Maman prépare le repas.",
+          0
+        ],
+        [
+          "Kosepela",
+          "Se réjouir",
+          "Nasepeli mingi lelo.",
+          "Je me réjouis beaucoup aujourd'hui.",
+          1
+        ]
+      ]
+    },
+    {
+      "e": "⚖️",
+      "t": "Makambo",
+      "s": 2,
+      "g": {
+        "t": "Le passé -aki",
+        "tip": "-aki = passé (raconter) : nalobaki (j'ai dit / je disais), bayaki (ils sont venus). Bango nde balobaki = ce sont eux qui ont dit.",
+        "q": [
+          [
+            "« Ils ont dit » =",
+            [
+              "balobaki",
+              "balobi",
+              "bakoloba"
+            ],
+            0,
+            "ba- + lob + -aki"
+          ],
+          [
+            "Nakendaki veut dire…",
+            [
+              "je suis allé",
+              "j'irai",
+              "je vais d'habitude"
+            ],
+            0,
+            "-aki = passé"
+          ]
+        ]
+      },
+      "w": [
+        [
+          "Likambo / Makambo",
+          "Affaire / Problème / Cas / Conflit",
+          "Likambo nini mwasi na ngai ?",
+          "Quel est le problème, ma femme ?",
+          0
+        ],
+        [
+          "Makambu",
+          "Affaires / Problèmes / Situations",
+          "Makambu nyonso ezali kosilama malamu.",
+          "Toutes les affaires se règlent bien.",
+          0
+        ],
+        [
+          "Bissembo",
+          "Justice / Équité",
+          "Basali bissembo na mokili ekozala na kimia.",
+          "Si on pratique la justice, le monde aura la paix.",
+          0
+        ],
+        [
+          "Kobwaka",
+          "Jeter / Abandonner / Rejeter",
+          "Kobwaka bosoto na nzela te.",
+          "Ne jette pas les ordures dans la rue.",
+          0
+        ],
+        [
+          "Kobimisa ye pa na ye",
+          "Le/la mettre dehors / L'expulser de chez lui/elle",
+          "Tata abimisaki ye na ndako.",
+          "Le père l'a mis à la porte de la maison.",
+          0
+        ],
+        [
+          "Kosenga / Senga",
+          "Demander / Exiger / Solliciter",
+          "Nasengi bolimbisi.",
+          "Je demande pardon.",
+          0
+        ],
+        [
+          "Kosengela",
+          "Falloir / Devoir (obligation)",
+          "Esengeli osala mosala.",
+          "Il faut que tu travailles.",
+          0
+        ],
+        [
+          "Pamba",
+          "Pour rien / En vain / Inutilement",
+          "Abeti ngai pamba te.",
+          "Elle ne m'a pas frappé pour rien.",
+          0
+        ]
+      ]
+    },
+    {
+      "e": "🧭",
+      "t": "Kobanda",
+      "s": 2,
+      "g": {
+        "t": "La trilogie des temps",
+        "tip": "Passé -aki (nalingaki) · présent -i / -zo- (nalingi, nazolinga) · futur na-ko- (nakolinga) · habituel -aka (nalingaka).",
+        "q": [
+          [
+            "« Je commencerai » =",
+            [
+              "nakobanda",
+              "nabandaki",
+              "nabandaka"
+            ],
+            0,
+            "ko- = futur"
+          ],
+          [
+            "« J'ai commencé (passé raconté) » =",
+            [
+              "nabandaki",
+              "nakobanda",
+              "nazobanda"
+            ],
+            0,
+            "-aki = passé"
+          ]
+        ]
+      },
+      "w": [
+        [
+          "Kobanda / Banda",
+          "Commencer / Débuter",
+          "Nabandi kotanga buku oyo.",
+          "J'ai commencé à lire ce livre.",
+          0
+        ],
+        [
+          "Ebandeli",
+          "Le début / Le commencement",
+          "Na ebandeli, ezalaki pasi.",
+          "Au début, c'était difficile.",
+          0
+        ],
+        [
+          "Bandá",
+          "Depuis (préposition)",
+          "Bandá kala.",
+          "Depuis longtemps.",
+          0
+        ],
+        [
+          "Suka / Nsuka",
+          "Fin / Dernier / Limite",
+          "Lelo ezali mokolo ya suka.",
+          "Aujourd'hui c'est le dernier jour.",
+          0
+        ],
+        [
+          "Kozongela",
+          "Recommencer / Répéter / Revenir vers",
+          "Zongela ngai.",
+          "Répète-moi ça / Reviens vers moi.",
+          0
+        ],
+        [
+          "Kokoka",
+          "Pouvoir",
+          "Nakoki kosala yango.",
+          "Je peux le faire.",
+          0
+        ],
+        [
+          "Kotia",
+          "Mettre / Poser / Enfiler (vêtement)",
+          "Atia pilipili na liso na ngai.",
+          "Il m'a mis du piment dans l'œil.",
+          0
+        ],
+        [
+          "Komesana",
+          "S'habituer",
+          "Komesana na bomoi ya sika ezali mpasi te.",
+          "S'habituer à une nouvelle vie n'est pas difficile.",
+          0
+        ]
+      ]
+    },
+    {
+      "e": "🔗",
+      "t": "Kokangisa makanisi",
+      "s": 2,
+      "g": {
+        "t": "Les connecteurs",
+        "tip": "pe (aussi/et) · kasi (mais) · mpo (parce que) · kutu (d'ailleurs) · yango wana (c'est pourquoi) · lokola (comme).",
+        "q": [
+          [
+            "« C'est pourquoi » =",
+            [
+              "yango wana",
+              "kasi",
+              "lokola"
+            ],
+            0,
+            "yango wana = voilà pourquoi"
+          ],
+          [
+            "« D'ailleurs / en plus » =",
+            [
+              "kutu",
+              "pe",
+              "mpo"
+            ],
+            0,
+            "kutu insiste"
+          ]
+        ]
+      },
+      "w": [
+        [
+          "Pe",
+          "Aussi / Et / De même",
+          "Yo pe, motema na ngai.",
+          "Toi aussi, mon cœur.",
+          0
+        ],
+        [
+          "Kutu",
+          "De plus / En plus / D'ailleurs",
+          "Kutu ye azalaki te.",
+          "De plus, lui n'était même pas là.",
+          0
+        ],
+        [
+          "Lokola",
+          "Comme / Tel que / Pareil à",
+          "Bazali lokola mai na moto.",
+          "Ils sont comme l'eau et le feu.",
+          0
+        ],
+        [
+          "Kaka boye",
+          "Comme ça / Juste comme ça / Sans raison",
+          "Osundola mwasi na yo na bana kaka boye.",
+          "Tu as abandonné ta femme et les enfants comme ça.",
+          0
+        ],
+        [
+          "Mususu / Basusu",
+          "Autre / Un autre / Certains",
+          "Basusu kokufa, basusu kobotama, mokili ezalaka boye.",
+          "Certains meurent, d'autres naissent, le monde est ainsi.",
+          0
+        ],
+        [
+          "Misusu",
+          "Certains / D'autres / Quelques-uns",
+          "Bazali kobatela mino malamu te, mosusu esila ngala.",
+          "Ils ne conservent pas bien les médicaments, certains sont expirés.",
+          0
+        ],
+        [
+          "Mobimba",
+          "Tout entier, complet",
+          "Mboka mobimba ezali na kimia.",
+          "Tout le pays est en paix.",
+          0
+        ],
+        [
+          "Yango",
+          "Ça / Cela / Celui-là",
+          "Nalingi ata kokanisa yango te.",
+          "Je ne veux même pas y penser.",
+          0
+        ]
+      ]
+    },
+    {
+      "e": "🎤",
+      "t": "Lingala ya Kinshasa",
+      "s": 3,
+      "g": {
+        "t": "Contractions orales",
+        "tip": "À l'oral : ezali te → ezape ; nazali ko- → nazo- ; mpo → po. Comprendre ces formes = comprendre Kinshasa.",
+        "q": [
+          [
+            "« Ezape » est la contraction de…",
+            [
+              "ezali te",
+              "ezali pe",
+              "ezali na"
+            ],
+            0,
+            "ezali te → ezape"
+          ],
+          [
+            "« Po » à l'oral =",
+            [
+              "mpo",
+              "pe",
+              "pamba"
+            ],
+            0,
+            "mpo → po"
+          ]
+        ]
+      },
+      "w": [
+        [
+          "Ezali te / Ezape",
+          "Ce n'est pas (ezape = contraction orale Kinshasa)",
+          "Ezali te eloko.",
+          "Ce n'est aucune chose.",
+          0
+        ],
+        [
+          "Yo muta / Yo nde",
+          "C'est toi qui (particule emphatique)",
+          "Yo muta kelela biso.",
+          "C'est toi qui nous a créés.",
+          0
+        ],
+        [
+          "Tolemba te",
+          "On n'abandonne pas ! (expression culte)",
+          "Ata ezali pasi, tolemba te !",
+          "Même si c'est dur, on n'abandonne pas !",
+          0
+        ],
+        [
+          "Kobaka pardon",
+          "Demander pardon (idiomatique Kinshasa)",
+          "Nabaki pardon.",
+          "J'ai demandé pardon.",
+          0
+        ],
+        [
+          "Ngunda",
+          "Asile / Refuge / Exil (argot)",
+          "Baboti na ye babwakaki ngunda na Poto.",
+          "(fig., argot) Ses parents ont demandé l'asile en Europe. Kobwaka ngunda = demander l'asile.",
+          0
+        ],
+        [
+          "Zua",
+          "Prendre / Attraper",
+          "Zua nga foto ya kitoko.",
+          "Prends-moi une belle photo.",
+          0
+        ],
+        [
+          "Kobosana te",
+          "N'oublie pas ! / N'oubliez pas !",
+          "Kobosana ngai te !",
+          "Ne m'oublie pas !",
+          0
+        ],
+        [
+          "Nabosani",
+          "J'ai oublié / J'oublie",
+          "Nabosani nzela.",
+          "J'ai oublié le chemin.",
+          0
+        ]
+      ]
+    },
+    {
+      "e": "🎵",
+      "t": "Matóno (les tons)",
+      "s": 3,
+      "g": {
+        "t": "Les tons changent le sens",
+        "tip": "Le lingala est tonal : kokóma (haut, arriver/devenir) ≠ kokòma (bas, écrire) ; kobaka (bas, poser) ≠ kobáka (haut, attacher).",
+        "q": [
+          [
+            "Kokòma (ton bas) veut dire…",
+            [
+              "écrire",
+              "arriver",
+              "devenir"
+            ],
+            0,
+            "bas = écrire ; haut = arriver/devenir"
+          ],
+          [
+            "Kobáka (ton haut) veut dire…",
+            [
+              "attacher / clouer",
+              "poser / percher",
+              "ajouter"
+            ],
+            0,
+            "kobáka = attacher"
+          ]
+        ]
+      },
+      "w": [
+        [
+          "Kokóma",
+          "Arriver / Devenir / Commencer à (ton haut)",
+          "Ndaku oyo ekomi kitoko.",
+          "Cette maison est devenue belle.",
+          0
+        ],
+        [
+          "Kokòma",
+          "Écrire (ton bas, homophone !)",
+          "Koma kombo na yo.",
+          "Écris ton nom.",
+          0
+        ],
+        [
+          "Mokomi",
+          "Écrivain / Auteur",
+          "Alingi kozala mokomi.",
+          "Il veut devenir écrivain.",
+          0
+        ],
+        [
+          "Kobaka",
+          "Poser / Percher (ton bas)",
+          "Ndeke ebaki na nzete.",
+          "L'oiseau s'est perché sur l'arbre.",
+          0
+        ],
+        [
+          "Kobáka",
+          "Attacher / Clouer / Injecter (ton haut)",
+          "Monganga abaki ngai mangwele.",
+          "Le médecin m'a fait une piqûre.",
+          0
+        ],
+        [
+          "Koganga / Ganga",
+          "Crier / Hurler / Aboyer",
+          "Tika koganga makasi.",
+          "Arrête de crier fort.",
+          0
+        ],
+        [
+          "Kokata / Kata",
+          "Couper / Raccrocher (téléphone) / Traverser",
+          "Nakati lipa.",
+          "J'ai coupé le pain.",
+          0
+        ],
+        [
+          "Kobenda",
+          "Tirer / Attirer / Étirer",
+          "Mbisi abendi ndobo.",
+          "Le poisson tire sur la ligne.",
+          0
+        ]
+      ]
+    },
+    {
+      "e": "🌍",
+      "t": "Mokili",
+      "s": 3,
+      "g": {
+        "t": "L'emphase « Yo muta / nde »",
+        "tip": "« Yo muta » ou « nde » met en relief : Yo muta okelaki yango = c'est toi qui l'as créé. Bango nde balobaki = ce sont eux qui ont dit.",
+        "q": [
+          [
+            "« C'est toi qui… » =",
+            [
+              "yo muta / yo nde",
+              "yo pe",
+              "yo te"
+            ],
+            0,
+            "particule emphatique"
+          ],
+          [
+            "Dans « Bango nde balobaki », nde sert à…",
+            [
+              "insister sur bango",
+              "nier",
+              "former le futur"
+            ],
+            0,
+            "nde = c'est … qui"
+          ]
+        ]
+      },
+      "w": [
+        [
+          "Mokili",
+          "Monde / Terre",
+          "Biloko nyonso ya mokili.",
+          "Toutes les choses du monde.",
+          0
+        ],
+        [
+          "Nzambe",
+          "Dieu",
+          "Nalingaka Nzambe.",
+          "J'aime Dieu.",
+          0
+        ],
+        [
+          "Kokelela / Kelela",
+          "Créer / Création",
+          "Nzambe akeleli biso.",
+          "Dieu nous a créés.",
+          0
+        ],
+        [
+          "Ezali na / Ezana",
+          "Qui sont dans / Qui existent dans",
+          "Biloko ezana mokili.",
+          "Les choses qui existent dans le monde.",
+          0
+        ],
+        [
+          "Kopanza / Panza",
+          "Répandre / Diffuser / Disperser",
+          "Basi oyo bazopanza basango ya lokuta.",
+          "Ces filles répandent des mensonges.",
+          0
+        ],
+        [
+          "Kolona",
+          "Semer / Planter",
+          "Nakolona madesu.",
+          "Je vais planter des haricots.",
+          0
+        ],
+        [
+          "Eloko",
+          "Objet / Chose",
+          "Pesa ngai eloko ya kolia.",
+          "Donne-moi quelque chose à manger.",
+          0
+        ],
+        [
+          "Kowuta",
+          "Depuis / Venir de",
+          "Tobandi kozwa masano kowuta lelo na butu.",
+          "Nous avons commencé à jouer depuis ce soir.",
+          0
+        ]
+      ]
+    },
+    {
+      "e": "🔥",
+      "t": "Tolemba te !",
+      "s": 3,
+      "g": {
+        "t": "L'applicatif -el-",
+        "tip": "-el- = faire pour / vers quelqu'un : kozonga → kozongela (revenir vers, recommencer) ; kosenga → kosengela (falloir).",
+        "q": [
+          [
+            "Kozongela veut dire…",
+            [
+              "revenir vers / recommencer",
+              "revenir seul",
+              "faire revenir"
+            ],
+            0,
+            "-el- = vers / pour"
+          ],
+          [
+            "Laquelle porte l'applicatif -el- ?",
+            [
+              "kolengela",
+              "kolembisa",
+              "kokutana"
+            ],
+            0,
+            "kolengela = préparer pour"
+          ]
+        ]
+      },
+      "w": [
+        [
+          "Makasi",
+          "Fort / Puissant / Beaucoup (intensificateur)",
+          "Nalela yo makasi.",
+          "Je t'aime fort.",
+          0
+        ],
+        [
+          "Kobeba",
+          "Se gâter / S'abîmer",
+          "Mbuma oyo ekozali kobeba noki.",
+          "Ce fruit est en train de s'abîmer rapidement.",
+          0
+        ],
+        [
+          "Kosimba",
+          "Tenir / Saisir / Attraper / Coller",
+          "Esimbi te.",
+          "Ça ne tient pas / Ça ne prend pas.",
+          0
+        ],
+        [
+          "Kobeta",
+          "Frapper / Jouer (instrument)",
+          "Bazali kobeta ndembo na libanda.",
+          "Ils jouent au football dehors.",
+          0
+        ],
+        [
+          "Kobenda miso",
+          "Attirer l'attention (litt. tirer les yeux)",
+          "Mwasi wana azali kobenda miso ya batu nyonso.",
+          "Cette femme attire l'attention de tout le monde.",
+          0
+        ],
+        [
+          "Kobenda nzoto",
+          "S'étirer / Faire des étirements",
+          "Nabendi nzoto liboso ya kopota mbangu.",
+          "Je m'étire avant de courir.",
+          0
+        ],
+        [
+          "Liloba / Maloba",
+          "Mot / Parole",
+          "Batongaka mboka na maloba te.",
+          "On ne construit pas une ville avec des mots.",
+          0
+        ],
+        [
+          "Koloba / Loba",
+          "Parler / Dire",
+          "Nayebi koloba lingala.",
+          "Je sais parler lingala.",
+          0
+        ],
+        [
+          "Kotanga",
+          "Lire / Compter / Étudier",
+          "Mwana na yo alingi kotanga mingi.",
+          "Ton enfant veut beaucoup étudier.",
+          0
+        ],
+        [
+          "Kolakisa",
+          "Montrer / Enseigner",
+          "Lakisa ngai nzela.",
+          "Montre-moi le chemin.",
+          0
+        ]
+      ]
+    }
+  ]
+};
