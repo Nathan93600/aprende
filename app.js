@@ -8418,9 +8418,18 @@ function rpgLangXP() { const g = k => parseInt(localStorage.getItem(k) || '0') |
 function rpgSave() { if(rpg && !rpg._noSave) crsSetJ('rpg', rpg); }
 function rpgLog(t) { if(!rpg) return; rpg.log.unshift(rpgDayKey() + ' · ' + t); rpg.log = rpg.log.slice(0, 40); }
 function rpgInit() {
+  const _prevRpg = (typeof rpg !== 'undefined' && rpg && rpg.lvl && !rpg._noSave) ? rpg : null;
   rpg = crsJ('rpg', null);
   const lx = rpgLangXP(), revlog = srsRevlogLoad();
   if(!rpg || typeof rpg !== 'object') {
+    // Guard: keep existing in-memory rpg if cache returned null but we had valid data
+    if(_prevRpg) {
+      console.warn('[RPG] ⚠️ Cache returned null but valid rpg was in memory (lvl:', _prevRpg.lvl, '). Keeping it.');
+      rpg = _prevRpg;
+      rpgBossEnsure();
+      rpgSync(true);
+      return;
+    }
     // ── Guard Firestore : si le cache SYNC contient des données mais rpg est null,
     // c'est un problème de parsing, PAS un vrai nouveau joueur → on ne crée pas de héros
     if(typeof SYNC !== 'undefined' && SYNC.cache && Object.keys(SYNC.cache).length > 5) {
@@ -8460,7 +8469,7 @@ function rpgGainRaw(n, silent) {
     if(!silent) { rpgLog(`⭐ Niveau ${rpg.lvl} atteint (PV restaurés)`); showToast(`⭐ Niveau ${rpg.lvl} ! PV restaurés`, 'correct-toast'); try { confetti('big'); } catch(e) {} }
   }
 }
-function rpgGainXP(n) { if(rpg.cls === 'mage') n = Math.round(n * 1.2); rpg.dayXP += n; rpgGainRaw(n); }
+function rpgGainXP(n, silent) { if(rpg.cls === 'mage') n = Math.round(n * 1.2); rpg.dayXP += n; rpgGainRaw(n, silent); }
 function rpgAddGold(n) { if(n <= 0) return; if(rpg.cls === 'rogue') n *= 1.3; rpg.gold = Math.round((rpg.gold + n) * 10) / 10; }
 function rpgHeal(n) { rpg.hp = Math.min(RPG_MAXHP, rpg.hp + n); }
 function rpgDamage(n, why) {
@@ -8529,7 +8538,7 @@ function rpgSync(silent) {
   ['es', 'ln', 'en'].forEach(l => { const d = lx[l] - (rpg.seen[l] || 0); if(d > 0) gained += d; });
   rpg.seen = lx;
   if(gained > 0) {
-    rpgGainXP(gained);
+    rpgGainXP(gained, silent);
     rpg.goldFrac = (rpg.goldFrac || 0) + gained / 10;
     const g = Math.floor(rpg.goldFrac); if(g) { rpg.goldFrac -= g; rpgAddGold(g); }
   }

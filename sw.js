@@ -1,5 +1,5 @@
-// ¡Aprende! Service Worker v9 — fix Firestore sync + Oct 18 generation
-const CACHE_NAME = 'aprende-v9';
+// ¡Aprende! Service Worker v10 — fix RPG level-up loop + Oct 18
+const CACHE_NAME = 'aprende-v10';
 const ASSETS = [
   './',
   'index.html',

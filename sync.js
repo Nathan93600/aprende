@@ -352,24 +352,27 @@ function syncStartListeners(uid) {
       if (changed && SYNC._appBooted) {
         console.log(`[Sync] 🔄 Remote update received for doc: ${docName}`);
         if (docName === 'state') {
-          // Only call rpgInit if rpg data in cache is valid (prevent fresh hero overwrite)
-          const rpgRaw = SYNC.cache['rpg'];
-          if (rpgRaw) {
-            try {
-              const rpgParsed = JSON.parse(rpgRaw);
-              if (rpgParsed && typeof rpgParsed === 'object' && rpgParsed.lvl) {
-                console.log('[Sync] ✅ rpg data valid in remote update, refreshing (lvl:', rpgParsed.lvl, ')');
-                try { rpgInit(); } catch(e) {}
-              } else {
-                console.warn('[Sync] ⚠️ rpg parsed but invalid, skipping rpgInit to protect data');
+          // ── ANTI-LOOP: Don't call rpgInit if rpg is already active in memory.
+          // onSnapshot fires on our OWN writes (offline persistence), which causes:
+          // onSnapshot → rpgInit → rpgSync → rpgSave → onSnapshot → infinite loop
+          if (typeof rpg === 'undefined' || !rpg || rpg._noSave) {
+            const rpgRaw = SYNC.cache['rpg'];
+            if (rpgRaw) {
+              try {
+                const rpgParsed = JSON.parse(rpgRaw);
+                if (rpgParsed && typeof rpgParsed === 'object' && rpgParsed.lvl) {
+                  console.log('[Sync] ✅ rpg not yet active, initializing from remote (lvl:', rpgParsed.lvl, ')');
+                  try { rpgInit(); } catch(e) {}
+                }
+              } catch(e) {
+                console.warn('[Sync] ⚠️ rpg parse failed, skipping rpgInit');
               }
-            } catch(e) {
-              console.warn('[Sync] ⚠️ rpg parse failed, skipping rpgInit. Raw value type:', typeof rpgRaw, 'preview:', String(rpgRaw).substring(0, 100));
             }
           } else {
-            console.warn('[Sync] ⚠️ No rpg in cache after remote update, skipping rpgInit');
+            console.log('[Sync] ⏩ rpg already active (lvl:', rpg.lvl, '), skipping rpgInit on remote update');
           }
-          try { updateHomeStats(); } catch(e) {}
+          try { if(typeof updateHomeStats === 'function') updateHomeStats(); } catch(e) {}
+          try { if(typeof updateSRSDueBadges === 'function') updateSRSDueBadges(); } catch(e) {}
         }
       }
     }, err => {
