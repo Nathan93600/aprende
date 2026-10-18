@@ -1,5 +1,5 @@
-// ¡Aprende! Service Worker v13 — fix missing course translations in SRS + Oct 18
-const CACHE_NAME = 'aprende-v13';
+// ¡Aprende! Service Worker v14 — fix SRS counter jump (sync race condition)
+const CACHE_NAME = 'aprende-v14';
 const ASSETS = [
   './',
   'index.html',

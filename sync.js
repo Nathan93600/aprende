@@ -405,6 +405,8 @@ function syncStartListeners(uid) {
       for (const [key, val] of Object.entries(data)) {
         // Normalize to strings like real localStorage
         const strVal = (typeof val === 'object' && val !== null) ? JSON.stringify(val) : String(val);
+        // Skip keys with pending local changes (prevent remote overwrite of unsynced data)
+        if (_pendingKeys.has(key)) continue;
         // Only update if value differs (avoid loops)
         if (SYNC.cache[key] !== strVal) {
           SYNC.cache[key] = strVal;
@@ -435,6 +437,12 @@ function syncStartListeners(uid) {
           }
           try { if(typeof updateHomeStats === 'function') updateHomeStats(); } catch(e) {}
           try { if(typeof updateSRSDueBadges === 'function') updateSRSDueBadges(); } catch(e) {}
+          // Refresh SRS screen if currently active (counter jumps fix)
+          try {
+            if (typeof srsRefresh === 'function' && document.getElementById('screen-srs') && document.getElementById('screen-srs').classList.contains('active')) {
+              srsRefresh();
+            }
+          } catch(e) {}
         }
       }
     }, err => {
