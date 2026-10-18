@@ -8708,7 +8708,7 @@ function renderShop() {
 const crsOrigShowScreen = showScreen;
 const crsOrigSelectLang = selectLang;
 const crsOrigGoHome = goHome;
-const CRS_TAB_SCREENS = { 'screen-path': 'path', 'home': 'games', 'home-ln': 'games', 'home-en': 'games', 'screen-hero': 'hero', 'screen-shop': 'shop' };
+const CRS_TAB_SCREENS = { 'screen-path': 'path', 'screen-srs': 'srs', 'home': 'games', 'home-ln': 'games', 'home-en': 'games', 'screen-hero': 'hero', 'screen-shop': 'shop' };
 showScreen = function(id) {
   crsOrigShowScreen(id);
   const tb = document.getElementById('crs-tabbar');
