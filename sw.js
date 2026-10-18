@@ -1,5 +1,5 @@
-// ¡Aprende! Service Worker v11 — fix data persistence on refresh + Oct 18
-const CACHE_NAME = 'aprende-v11';
+// ¡Aprende! Service Worker v12 — fix emergency save race condition + Oct 18
+const CACHE_NAME = 'aprende-v12';
 const ASSETS = [
   './',
   'index.html',
