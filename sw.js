@@ -1,5 +1,5 @@
-// ¡Aprende! Service Worker v8 — immersion mode + Oct 16 generation
-const CACHE_NAME = 'aprende-v8';
+// ¡Aprende! Service Worker v9 — fix Firestore sync + Oct 18 generation
+const CACHE_NAME = 'aprende-v9';
 const ASSETS = [
   './',
   'index.html',

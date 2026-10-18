@@ -86,10 +86,13 @@ const syncStorage = {
   getItem(key) {
     const val = SYNC.cache[key];
     if (val === undefined || val === null) return null;
-    return val;
+    // Firestore returns objects/maps — real localStorage always returns strings
+    if (typeof val === 'object') return JSON.stringify(val);
+    return String(val);
   },
   setItem(key, value) {
-    SYNC.cache[key] = value;
+    // Real localStorage stores everything as strings
+    SYNC.cache[key] = String(value);
     if (SYNC.uid) syncScheduleWrite(key);
   },
   removeItem(key) {
@@ -135,11 +138,40 @@ async function syncFlush() {
   _pendingKeys.clear();
 
   for (const [docName, data] of Object.entries(docUpdates)) {
+    // Debug: estimate document write size
+    let writeSize = 0;
+    const fieldSizes = {};
+    for (const [k, v] of Object.entries(data)) {
+      const sz = typeof v === 'string' ? v.length : 32;
+      fieldSizes[k] = sz;
+      writeSize += k.length + sz + 32;
+    }
+    console.log(`[Sync] 📝 Writing ${docName}: ${Object.keys(data).length} fields, ~${(writeSize/1024).toFixed(1)} KB`, fieldSizes);
+
     const ref = db.collection('users').doc(SYNC.uid).collection('data').doc(docName);
     try {
       await ref.set(data, { merge: true });
     } catch (err) {
-      console.error(`[Sync] ❌ Write failed for ${docName}:`, err);
+      console.error(`[Sync] ❌ Write failed for ${docName}:`, err, 'Fields:', Object.keys(data), 'Sizes:', fieldSizes);
+
+      // If full-doc write fails, try writing fields one by one to isolate the bad one
+      if (err.code === 'invalid-argument') {
+        console.warn(`[Sync] 🔍 Retrying ${docName} field-by-field to isolate bad value...`);
+        let fixed = 0;
+        for (const [k, v] of Object.entries(data)) {
+          try {
+            await ref.set({ [k]: v }, { merge: true });
+            fixed++;
+          } catch (e2) {
+            console.error(`[Sync] ❌ Field "${k}" failed:`, e2.code, '— type:', typeof v, 'length:', typeof v === 'string' ? v.length : '?', 'preview:', String(v).substring(0, 80));
+          }
+        }
+        if (fixed > 0) {
+          console.log(`[Sync] ✅ Saved ${fixed}/${Object.keys(data).length} fields individually for ${docName}`);
+          return; // Don't show error if partial save succeeded
+        }
+      }
+
       syncShowError(`Sauvegarde échouée (${err.code || err.message}). Vérifie les règles Firestore.`);
     }
   }
@@ -256,9 +288,8 @@ async function syncLoadAll(uid) {
       if (snap.exists) {
         const data = snap.data();
         for (const [key, val] of Object.entries(data)) {
-          // Firestore stores our values as strings (from localStorage shim)
-          // Keep them as-is — crsJ() will JSON.parse them
-          SYNC.cache[key] = val;
+          // Firestore may return objects/maps — normalize to strings like real localStorage
+          SYNC.cache[key] = (typeof val === 'object' && val !== null) ? JSON.stringify(val) : String(val);
           totalKeys++;
         }
       }
@@ -310,17 +341,34 @@ function syncStartListeners(uid) {
       const data = snap.data();
       let changed = false;
       for (const [key, val] of Object.entries(data)) {
+        // Normalize to strings like real localStorage
+        const strVal = (typeof val === 'object' && val !== null) ? JSON.stringify(val) : String(val);
         // Only update if value differs (avoid loops)
-        if (SYNC.cache[key] !== val) {
-          SYNC.cache[key] = val;
+        if (SYNC.cache[key] !== strVal) {
+          SYNC.cache[key] = strVal;
           changed = true;
         }
       }
       if (changed && SYNC._appBooted) {
         console.log(`[Sync] 🔄 Remote update received for doc: ${docName}`);
-        // Refresh RPG and UI if state changed
-        if (docName === 'state' && typeof rpgInit === 'function') {
-          try { rpgInit(); } catch(e) {}
+        if (docName === 'state') {
+          // Only call rpgInit if rpg data in cache is valid (prevent fresh hero overwrite)
+          const rpgRaw = SYNC.cache['rpg'];
+          if (rpgRaw) {
+            try {
+              const rpgParsed = JSON.parse(rpgRaw);
+              if (rpgParsed && typeof rpgParsed === 'object' && rpgParsed.lvl) {
+                console.log('[Sync] ✅ rpg data valid in remote update, refreshing (lvl:', rpgParsed.lvl, ')');
+                try { rpgInit(); } catch(e) {}
+              } else {
+                console.warn('[Sync] ⚠️ rpg parsed but invalid, skipping rpgInit to protect data');
+              }
+            } catch(e) {
+              console.warn('[Sync] ⚠️ rpg parse failed, skipping rpgInit. Raw value type:', typeof rpgRaw, 'preview:', String(rpgRaw).substring(0, 100));
+            }
+          } else {
+            console.warn('[Sync] ⚠️ No rpg in cache after remote update, skipping rpgInit');
+          }
           try { updateHomeStats(); } catch(e) {}
         }
       }
@@ -436,6 +484,10 @@ auth.onAuthStateChanged(async user => {
 
     // Start real-time listeners for cross-device sync
     syncStartListeners(user.uid);
+
+    // Debug — log rpg value before boot
+    const _rpgVal = SYNC.cache['rpg'];
+    console.log('[Sync] 🔍 rpg in cache before initApp:', typeof _rpgVal, _rpgVal ? (String(_rpgVal).substring(0, 80) + '…') : _rpgVal);
 
     // Boot the app (only once per auth session)
     if (!SYNC._appBooted && typeof initApp === 'function') {
