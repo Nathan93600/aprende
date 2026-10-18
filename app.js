@@ -6807,8 +6807,28 @@ function toggleSRSSim() {
     }, 1000);
     showToast('⏩ Mode simulation activé', 'correct-toast');
   } else {
+    // Reschedule cards whose due dates were set during simulation
+    // (their due timestamp is way too close relative to their declared interval)
+    const data = srsLoad();
+    const realDay = 86400000;
+    let fixed = 0;
+    for (const [k, c] of Object.entries(data)) {
+      if (!c.interval || c.interval < 1 || !c.lr) continue;
+      const expectedMs = c.interval * realDay;
+      const actualMs = c.due - c.lr;
+      // If actual gap is less than half what the interval should be in real time, it was set during sim
+      if (actualMs < expectedMs * 0.5) {
+        c.due = c.lr + expectedMs;
+        fixed++;
+      }
+    }
+    if (fixed) {
+      srsSave(data);
+      console.log(`[Aprende] 🔄 Rescaled ${fixed} cards from simulation to real time`);
+    }
     showToast('⏸️ Mode simulation désactivé', 'correct-toast');
   }
+  srsRefresh();
 }
 
 function openSRS(lang) {
@@ -9499,6 +9519,7 @@ function initApp() {
 
   updateHomeStats();
   renderJournal('es');
+  crsMergeAdded(); // Re-merge course words into decks (cache is now populated by sync.js)
   srsMigrateAllToFsrs(); // SM-2 → FSRS (une seule fois, avec copie de sécurité)
   srsMigrateKeys(); // Fix cards saved under an old spelling
   updateSRSDueBadges(); // Show SRS due counts on language selector badges

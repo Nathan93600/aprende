@@ -1,5 +1,5 @@
-// ¡Aprende! Service Worker v12 — fix emergency save race condition + Oct 18
-const CACHE_NAME = 'aprende-v12';
+// ¡Aprende! Service Worker v13 — fix missing course translations in SRS + Oct 18
+const CACHE_NAME = 'aprende-v13';
 const ASSETS = [
   './',
   'index.html',
