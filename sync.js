@@ -182,12 +182,14 @@ async function syncFlush() {
 // So we save pending keys to real localStorage as a safety net.
 window.addEventListener('beforeunload', () => {
   if (_pendingKeys.size === 0) return;
-  // 1. Try the async Firestore write (may not complete)
+  // 1. Snapshot pending keys BEFORE syncFlush clears them (clear is synchronous!)
+  const keysToSave = [..._pendingKeys];
+  // 2. Try the async Firestore write (may not complete — and clears _pendingKeys)
   syncFlush();
-  // 2. Synchronous safety net: save pending data to real localStorage
+  // 3. Synchronous safety net: save pending data to real localStorage
   try {
     const emergency = {};
-    for (const key of _pendingKeys) {
+    for (const key of keysToSave) {
       if (SYNC.cache[key] !== undefined) emergency[key] = SYNC.cache[key];
     }
     if (Object.keys(emergency).length > 0) {
@@ -199,11 +201,13 @@ window.addEventListener('beforeunload', () => {
 
 document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'hidden' && _pendingKeys.size > 0) {
+    // Snapshot pending keys BEFORE syncFlush clears them
+    const keysToSave = [..._pendingKeys];
     syncFlush();
     // Also save to real localStorage as safety net
     try {
       const emergency = {};
-      for (const key of _pendingKeys) {
+      for (const key of keysToSave) {
         if (SYNC.cache[key] !== undefined) emergency[key] = SYNC.cache[key];
       }
       if (Object.keys(emergency).length > 0) {
