@@ -1,5 +1,5 @@
-// ¡Aprende! Service Worker v14 — fix SRS counter jump (sync race condition)
-const CACHE_NAME = 'aprende-v14';
+// ¡Aprende! Service Worker v15 — stale-while-revalidate for instant updates
+const CACHE_NAME = 'aprende-v15';
 const ASSETS = [
   './',
   'index.html',
@@ -21,15 +21,22 @@ self.addEventListener('activate', e => {
 });
 
 self.addEventListener('fetch', e => {
-  if(e.request.method !== 'GET') return;
+  if (e.request.method !== 'GET') return;
+
+  // Stale-while-revalidate: serve from cache immediately, fetch fresh in background
   e.respondWith(
-    caches.match(e.request).then(r => r || fetch(e.request).then(resp => {
-      if(resp.ok && resp.type === 'basic') {
-        const clone = resp.clone();
-        caches.open(CACHE_NAME).then(c => c.put(e.request, clone));
-      }
-      return resp;
-    }).catch(() => caches.match('./')))
+    caches.open(CACHE_NAME).then(cache =>
+      cache.match(e.request).then(cached => {
+        const fetchPromise = fetch(e.request).then(resp => {
+          if (resp.ok && resp.type === 'basic') {
+            cache.put(e.request, resp.clone());
+          }
+          return resp;
+        }).catch(() => cached); // offline fallback
+
+        return cached || fetchPromise; // serve cache first if available, otherwise wait for network
+      })
+    )
   );
 });
 
