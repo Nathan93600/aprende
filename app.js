@@ -7448,6 +7448,8 @@ function srsRefresh() {
     }
     document.getElementById('srs-empty').style.display = 'block';
     document.getElementById('srs-active').style.display = 'none';
+    // ── CRITICAL: flush SRS progress when queue is empty (session done) ──
+    if(typeof syncCriticalFlush === 'function') syncCriticalFlush();
     return;
   }
   document.getElementById('srs-empty').style.display = 'none';
@@ -8264,6 +8266,8 @@ function crsFinish(ko) {
   }
   crsAddLangXP(lang, xp);
   if(rpg) { rpgAddGold(gold); rpgSync(); }
+  // ── CRITICAL: flush to Firestore immediately so refresh doesn't lose progress ──
+  if(typeof syncCriticalFlush === 'function') syncCriticalFlush();
   document.getElementById('ls-fill').style.width = '100%';
   document.getElementById('ls-boss').style.display = 'none';
   crsFoot('', '');
@@ -8286,6 +8290,8 @@ function crsOpenChest(lang, u) {
   const gold = 15 + Math.floor(Math.random() * 26);
   const potion = Math.random() < .3;
   if(rpg) { rpgAddGold(gold); if(potion) rpgHeal(rpg.cls === 'healer' ? 25 : 15); rpgLog(`🎁 Coffre : +${gold} or${potion ? ' + potion' : ''}`); rpgSave(); }
+  // ── CRITICAL: flush chest + progression immediately ──
+  if(typeof syncCriticalFlush === 'function') syncCriticalFlush();
   try { confetti('big'); } catch(e) {}
   crsModal(`<div style="text-align:center"><div style="font-size:4rem">🎁</div><div class="cm-t">Coffre ouvert !</div>
     <div class="cm-s">+${gold} 🪙${potion ? '<br>🧪 Une potion de soin ! (+PV)' : ''}</div>

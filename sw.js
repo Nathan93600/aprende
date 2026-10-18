@@ -1,5 +1,5 @@
-// ¡Aprende! Service Worker v10 — fix RPG level-up loop + Oct 18
-const CACHE_NAME = 'aprende-v10';
+// ¡Aprende! Service Worker v11 — fix data persistence on refresh + Oct 18
+const CACHE_NAME = 'aprende-v11';
 const ASSETS = [
   './',
   'index.html',

@@ -177,12 +177,40 @@ async function syncFlush() {
   }
 }
 
+// ── Emergency save: write pending data to REAL localStorage on unload ──
+// syncFlush() is async and can't complete during page unload.
+// So we save pending keys to real localStorage as a safety net.
 window.addEventListener('beforeunload', () => {
-  if (_pendingKeys.size > 0) syncFlush();
+  if (_pendingKeys.size === 0) return;
+  // 1. Try the async Firestore write (may not complete)
+  syncFlush();
+  // 2. Synchronous safety net: save pending data to real localStorage
+  try {
+    const emergency = {};
+    for (const key of _pendingKeys) {
+      if (SYNC.cache[key] !== undefined) emergency[key] = SYNC.cache[key];
+    }
+    if (Object.keys(emergency).length > 0) {
+      _realLS.setItem('_sync_emergency', JSON.stringify(emergency));
+      console.log('[Sync] 🛟 Emergency save:', Object.keys(emergency).length, 'keys to real localStorage');
+    }
+  } catch(e) { console.warn('[Sync] Emergency save failed:', e); }
 });
 
 document.addEventListener('visibilitychange', () => {
-  if (document.visibilityState === 'hidden' && _pendingKeys.size > 0) syncFlush();
+  if (document.visibilityState === 'hidden' && _pendingKeys.size > 0) {
+    syncFlush();
+    // Also save to real localStorage as safety net
+    try {
+      const emergency = {};
+      for (const key of _pendingKeys) {
+        if (SYNC.cache[key] !== undefined) emergency[key] = SYNC.cache[key];
+      }
+      if (Object.keys(emergency).length > 0) {
+        _realLS.setItem('_sync_emergency', JSON.stringify(emergency));
+      }
+    } catch(e) {}
+  }
 });
 
 // ═══════════════════════════════════════════════════════════
@@ -296,6 +324,36 @@ async function syncLoadAll(uid) {
     }
 
     console.log(`[Sync] ✅ Loaded ${totalKeys} keys from Firestore`);
+
+    // ── Recover emergency data from real localStorage ──
+    // If the previous session had pending writes that didn't make it to Firestore,
+    // they were saved to real localStorage. Merge them back and push to Firestore.
+    try {
+      const emergencyRaw = _realLS.getItem('_sync_emergency');
+      if (emergencyRaw) {
+        const emergency = JSON.parse(emergencyRaw);
+        const emergencyKeys = Object.keys(emergency);
+        if (emergencyKeys.length > 0) {
+          console.log(`[Sync] 🛟 Recovering ${emergencyKeys.length} emergency keys:`, emergencyKeys);
+          let recovered = 0;
+          for (const [key, val] of Object.entries(emergency)) {
+            // Only restore if the Firestore value is older/missing
+            // (emergency data is newer since it was written at unload)
+            SYNC.cache[key] = val;
+            _pendingKeys.add(key);
+            recovered++;
+          }
+          if (recovered > 0) {
+            console.log(`[Sync] 🛟 Merged ${recovered} emergency keys, flushing to Firestore...`);
+            await syncFlush();
+          }
+        }
+        _realLS.removeItem('_sync_emergency');
+      }
+    } catch(e) {
+      console.warn('[Sync] Emergency recovery failed:', e);
+      try { _realLS.removeItem('_sync_emergency'); } catch(e2) {}
+    }
 
     if (totalKeys === 0) {
       console.log('[Sync] ℹ️ No data in Firestore yet (new user or rules blocking reads)');
@@ -546,7 +604,17 @@ function isSyncReady() { return SYNC.ready; }
 function getSyncUID() { return SYNC.uid; }
 function syncForceFlush() {
   if (SYNC._writeTimer) clearTimeout(SYNC._writeTimer);
-  syncFlush();
+  return syncFlush();
+}
+
+// ── Critical flush: for lesson completion, SRS saves, RPG saves ──
+// Immediately writes pending data to Firestore (no debounce).
+// Call this after any operation whose loss would frustrate the user.
+function syncCriticalFlush() {
+  if (SYNC._writeTimer) { clearTimeout(SYNC._writeTimer); SYNC._writeTimer = null; }
+  if (!SYNC.uid || _pendingKeys.size === 0) return Promise.resolve();
+  console.log('[Sync] ⚡ Critical flush:', [..._pendingKeys].join(', '));
+  return syncFlush();
 }
 
 console.log('[Sync] Firebase sync module loaded (v2)');
