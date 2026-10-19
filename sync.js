@@ -124,8 +124,13 @@ function syncScheduleWrite(key, isDelete) {
 async function syncFlush() {
   if (!SYNC.uid || _pendingKeys.size === 0) return;
 
+  // ── FIX: Snapshot keys being flushed — DON'T clear _pendingKeys yet.
+  // Clearing before async writes lets onSnapshot overwrite cache with stale data
+  // because the _pendingKeys guard (line ~409) becomes empty mid-flight.
+  const flushing = new Set(_pendingKeys);
+
   const docUpdates = {};
-  for (const key of _pendingKeys) {
+  for (const key of flushing) {
     const doc = docForKey(key);
     if (!docUpdates[doc]) docUpdates[doc] = {};
     const val = SYNC.cache[key];
@@ -135,7 +140,6 @@ async function syncFlush() {
       docUpdates[doc][key] = val;
     }
   }
-  _pendingKeys.clear();
 
   for (const [docName, data] of Object.entries(docUpdates)) {
     // Debug: estimate document write size
@@ -168,13 +172,22 @@ async function syncFlush() {
         }
         if (fixed > 0) {
           console.log(`[Sync] ✅ Saved ${fixed}/${Object.keys(data).length} fields individually for ${docName}`);
-          return; // Don't show error if partial save succeeded
+          // Remove successfully flushed keys from _pendingKeys
+          for (const key of flushing) _pendingKeys.delete(key);
+          return;
         }
       }
 
+      // ── FIX: Re-queue failed keys so they're retried on next flush
+      console.warn(`[Sync] 🔄 Re-queuing failed keys for ${docName} for retry`);
+      // Keys stay in _pendingKeys — they'll be retried
       syncShowError(`Sauvegarde échouée (${err.code || err.message}). Vérifie les règles Firestore.`);
+      return; // Stop flushing other docs — retry everything next time
     }
   }
+
+  // ── All writes succeeded — NOW remove flushed keys from _pendingKeys
+  for (const key of flushing) _pendingKeys.delete(key);
 }
 
 // ── Emergency save: write pending data to REAL localStorage on unload ──
@@ -415,6 +428,10 @@ function syncStartListeners(uid) {
       }
       if (changed && SYNC._appBooted) {
         console.log(`[Sync] 🔄 Remote update received for doc: ${docName}`);
+        // ── Invalidate in-memory caches when remote data arrives
+        if (typeof srsInvalidateCache === 'function') srsInvalidateCache();
+        if (typeof srsRevlogInvalidateCache === 'function') srsRevlogInvalidateCache();
+
         if (docName === 'state') {
           // ── ANTI-LOOP: Don't call rpgInit if rpg is already active in memory.
           // onSnapshot fires on our OWN writes (offline persistence), which causes:
@@ -443,6 +460,20 @@ function syncStartListeners(uid) {
               srsRefresh();
             }
           } catch(e) {}
+        }
+        // ── FIX: Re-render course path when courses doc updates remotely
+        // Without this, a user completing a lesson sees stale path state
+        // until they navigate away and back (crs_prog changes weren't triggering UI update)
+        if (docName === 'courses') {
+          try {
+            if (typeof crsRefreshBars === 'function') crsRefreshBars();
+            // If user is currently viewing a path screen, re-render it
+            const activePathScreen = document.querySelector('[id^="screen-path-"].active');
+            if (activePathScreen && typeof renderPath === 'function') {
+              const pathLang = activePathScreen.id.replace('screen-path-', '');
+              if (pathLang) renderPath(pathLang);
+            }
+          } catch(e) { console.warn('[Sync] courses re-render error:', e); }
         }
       }
     }, err => {

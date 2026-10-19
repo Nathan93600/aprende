@@ -6751,12 +6751,18 @@ function srsFormatInterval(card, grade, seed) {
 }
 
 
+// ── In-memory cache: avoids JSON.parse on every srsLoad call (20+ call sites)
+let _srsDataCache = null;
 function srsLoad() {
-  return JSON.parse(localStorage.getItem('srs_data') || '{}');
+  if (_srsDataCache) return _srsDataCache;
+  _srsDataCache = JSON.parse(localStorage.getItem('srs_data') || '{}');
+  return _srsDataCache;
 }
 function srsSave(data) {
+  _srsDataCache = data;
   localStorage.setItem('srs_data', JSON.stringify(data));
 }
+function srsInvalidateCache() { _srsDataCache = null; }
 
 function srsKey(lang, word) {
   return `${lang}:${word}`;
@@ -7299,24 +7305,34 @@ function srsAddNew() {
   const data = srsLoad();
   const deck = getDeckForLang(lang);
   let added = 0;
+  const addedKeys = [];
   shuffle([...deck]).forEach(card => {
     if(added >= 10) return;
     const word = lang === 'es' ? card.es : lang === 'ln' ? card.ln : card.en;
     const k = srsKey(lang, word);
     if(!data[k]) {
       data[k] = { ef: 2.5, interval: 0, reps: 0, due: Date.now(), lang };
+      addedKeys.push(k);
       added++;
     }
   });
   srsSave(data);
+  // ── FIX: Boost today's new-card limit so the just-added cards appear immediately.
+  // Without this, cards are added but hidden behind the daily new-card cap.
+  if(added > 0) {
+    srsState._extraNew = (srsState._extraNew || 0) + added;
+  }
   showToast(`✨ +${added} cartes ajoutées`, 'correct-toast');
   srsRefresh();
 }
 
 // ── Historique des révisions (comme le « revlog » d'Anki) ──
 // entrée : [clé, horodatage ms, note 0-3, type (0 nouvelle · 1 apprentissage · 2 révision · 3 réapprentissage), intervalle j, durée ms]
-function srsRevlogLoad() { try { return JSON.parse(localStorage.getItem('srs_revlog') || '[]'); } catch(e) { return []; } }
-function srsRevlogSave(log) { try { localStorage.setItem('srs_revlog', JSON.stringify(log)); } catch(e) { console.warn('[Aprende] revlog non sauvegardé', e); } }
+// ── In-memory cache for revlog (11+ call sites)
+let _srsRevlogCache = null;
+function srsRevlogLoad() { try { if (_srsRevlogCache) return _srsRevlogCache; _srsRevlogCache = JSON.parse(localStorage.getItem('srs_revlog') || '[]'); return _srsRevlogCache; } catch(e) { return []; } }
+function srsRevlogSave(log) { try { _srsRevlogCache = log; localStorage.setItem('srs_revlog', JSON.stringify(log)); } catch(e) { console.warn('[Aprende] revlog non sauvegardé', e); } }
+function srsRevlogInvalidateCache() { _srsRevlogCache = null; }
 function srsStartOfToday() { const n = new Date(); return new Date(n.getFullYear(), n.getMonth(), n.getDate()).getTime(); }
 
 // ── Limite de nouvelles cartes par jour (par langue) ──
@@ -7359,7 +7375,8 @@ function srsBuildQueue(lang) {
   const start = srsStartOfToday();
   const fams = new Set(srsRevlogLoad().filter(r => r[1] >= start && r[0].startsWith(lang + ':')).map(r => srsFamilyKey(r[0].split(':').slice(1).join(':'))));
   [...learnNow, ...learnLater, ...reviews].forEach(e => fams.add(srsFamilyKey(e.word)));
-  const limit = filter ? Infinity : Math.max(0, srsNewPerDay() - srsIntroducedToday(lang));
+  const baseLimit = filter ? Infinity : Math.max(0, srsNewPerDay() - srsIntroducedToday(lang));
+  const limit = baseLimit + (srsState._extraNew || 0);
   const picked = []; let buried = 0;
   for(const e of shuffle(news)) {
     if(picked.length >= limit) break;
@@ -8557,6 +8574,15 @@ function rpgCron() {
   }
   rpg.day = today; rpg.dayXP = 0; rpg.dayLessons = 0; rpg.claimed = [];
 }
+// ── Throttle: rpgSync is heavy (srsRevlogLoad, rpgDailyState, rpgSave, crsRefreshBars).
+// Called on every showScreen, so throttle to max once per 2 seconds.
+let _rpgSyncLast = 0;
+function rpgSyncThrottled(silent) {
+  const now = Date.now();
+  if (now - _rpgSyncLast < 2000) return;
+  _rpgSyncLast = now;
+  rpgSync(silent);
+}
 function rpgSync(silent) {
   if(!rpg) return;
   rpgCron();
@@ -8718,7 +8744,7 @@ showScreen = function(id) {
   }
   crsTheme(id === 'lang-select' ? 'hub' : currentLang);
   document.body.classList.toggle('t-sky', ['screen-path', 'screen-lesson', 'home-ln', 'screen-hero', 'screen-shop'].includes(id));
-  if(rpg) rpgSync(id === 'screen-lesson');
+  if(rpg) rpgSyncThrottled(id === 'screen-lesson');
   if(id === 'lang-select') renderHub();
 };
 selectLang = function(lang) { openPath(lang); };
@@ -8731,7 +8757,11 @@ function crsBoot() {
   try { rpgInit(); } catch(e) { console.error('[Aprende] RPG init', e); }
   crsTheme('hub');
   renderHub();
-  document.addEventListener('visibilitychange', () => { if(!document.hidden && rpg) { rpgSync(); const ls = document.getElementById('lang-select'); if(ls && ls.classList.contains('active')) renderHub(); } });
+  document.addEventListener('visibilitychange', () => {
+    if(document.hidden) return;
+    if(rpg) { rpgSync(); const ls = document.getElementById('lang-select'); if(ls && ls.classList.contains('active')) renderHub(); }
+    try { updateSRSDueBadges(); } catch(e) {}
+  });
 }
 
 
@@ -9591,7 +9621,7 @@ function toggleDesktopMode() {
 // Enter key for shuffle frappe
 document.getElementById('shuf-fr-input')?.addEventListener('keydown', e => { if(e.key === 'Enter') checkShufFrappe(); });
 // Refresh SRS badges when the tab becomes visible again (user comes back after a day)
-document.addEventListener('visibilitychange', () => { if(!document.hidden) updateSRSDueBadges(); });
+// visibilitychange → updateSRSDueBadges merged into crsBoot listener
 // Enter submits login form
 crsBoot(); // parcours + héros
 setTimeout(badgeCheck, 1500); // check badges on load
