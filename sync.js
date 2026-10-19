@@ -1,7 +1,49 @@
 // ═══════════════════════════════════════════════════════════
-// ¡Aprende! — sync.js v2 · Firebase Auth + Firestore (100% online)
-// Loaded BEFORE app.js — replaces localStorage entirely
+// ¡Aprende! — sync.js v3 · Firebase sync (desktop) / localStorage natif (mobile PWA)
+// Loaded BEFORE app.js
 // ═══════════════════════════════════════════════════════════
+
+// ── MODE LOCAL : PWA standalone sur mobile → vrai localStorage, pas de Firebase ──
+const SYNC_LOCAL_MODE = (() => {
+  const standalone = window.matchMedia('(display-mode: standalone)').matches
+    || window.navigator.standalone === true;  // iOS Safari
+  const mobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  // Force local mode via URL param: ?local=1
+  const forceLocal = new URLSearchParams(location.search).get('local') === '1';
+  // Force cloud mode via URL param: ?cloud=1 (for testing sync on mobile)
+  const forceCloud = new URLSearchParams(location.search).get('cloud') === '1';
+  if (forceCloud) return false;
+  return forceLocal || (standalone && mobile);
+})();
+
+if (SYNC_LOCAL_MODE) {
+  console.log('[Sync] 📱 Mode local (PWA mobile) — localStorage natif, pas de Firebase');
+
+  // Expose stubs on window so app.js doesn't crash on sync calls
+  window.SYNC = { uid: null, ready: true, cache: {}, _listeners: [], _unsubs: [], _writeTimer: null, _loadFailed: false, _appBooted: false };
+  window.onSyncReady = function(cb) { try { cb(); } catch(e) { console.error('[Sync] onReady error:', e); } };
+  window.isSyncReady = function() { return true; };
+  window.getSyncUID = function() { return 'local'; };
+  window.syncCriticalFlush = function() { return Promise.resolve(); };
+  window.syncForceFlush = function() { return Promise.resolve(); };
+  window.srsInvalidateCache = function() { if(typeof window._srsDataCache !== 'undefined') window._srsDataCache = null; };
+  window.srsRevlogInvalidateCache = function() { if(typeof window._srsRevlogCache !== 'undefined') window._srsRevlogCache = null; };
+
+  // Hide login screen, boot app directly
+  document.addEventListener('DOMContentLoaded', () => {
+    const login = document.getElementById('sync-login');
+    if (login) login.style.display = 'none';
+    // Show all screens that might be hidden behind login
+    document.querySelectorAll('.screen').forEach(s => s.style.removeProperty('display'));
+    if (typeof initApp === 'function' && !window.SYNC._appBooted) {
+      window.SYNC._appBooted = true;
+      initApp();
+    }
+  });
+}
+
+// ── Si mode local, on arrête ici — le reste du fichier est pour Firebase ──
+if (!SYNC_LOCAL_MODE) {
 
 // Firebase SDK loaded via CDN <script> tags in index.html
 const firebaseConfig = {
@@ -660,4 +702,6 @@ function syncCriticalFlush() {
   return syncFlush();
 }
 
-console.log('[Sync] Firebase sync module loaded (v2)');
+console.log('[Sync] Firebase sync module loaded (v3)');
+
+} // ← end of if (!SYNC_LOCAL_MODE)
