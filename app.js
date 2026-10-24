@@ -4497,7 +4497,37 @@ const JOURNAL_SESSIONS = [
       ["tutear ≠ vouvoyer", "Tutear = tutoyer (traiter de tú). Le contraire est tratar de usted. En Espagne le tutoiement domine au quotidien ; en Amérique latine, usted reste plus fréquent même entre proches dans certains pays (Colombie, Costa Rica)."],
       ["parole ≠ parole", "En anglais, parole = libération conditionnelle. Le sens français (« parole ») se dit word ou speech. À distinguer aussi de probation (sursis avec mise à l'épreuve, sans prison)."]
     ]
+  },
+  {
+    date: "24 oct. 2026",
+    label: "Nuances du quotidien · Slang US expressif",
+    es: [
+      ["cosilla","Petite chose / Bricole (dim. affectueux de cosa)"],
+      ["ruido","Bruit"],
+      ["hacer gracia","Faire rire / Amuser"],
+      ["despierta","Éveillée / Dégourdie (fig.)"],
+      ["convivir","Cohabiter / Vivre ensemble (au quotidien)"],
+      ["desapercibido","Inaperçu / Qui passe inaperçu"],
+      ["cortesía","Politesse / Courtoisie"],
+      ["hacer una tontería","Faire une bêtise / une connerie"],
+      ["que le saquen","Qu'on le sorte / vire (subj. de sacar)"],
+      ["lupa","Loupe (litt.) / fig. passer au crible"]
+    ],
+    ln: [],
+    en: [
+      ["to slop","Renverser salement / Éclabousser (fam.)"],
+      ["jiggling","Qui gigote / tremble / secoue"]
+    ],
+    alertes: [
+      ["Diminutif -illa (cosilla)","Le suffixe -illa est un diminutif affectueux comme -ito : cosa → cosilla (petite chose, bricole). Courant à l'oral."],
+      ["hacer gracia ≠ tener gracia","hacer gracia = faire rire (me hace gracia = ça me fait rire). tener gracia = être drôle / ironique (¡tiene gracia! = c'est un comble !). Ne pas confondre."],
+      ["despierto : double sens","despierto = éveillé (litt. pas endormi) et aussi dégourdi, vif d'esprit (fig.). ser despierto = être dégourdi. estar despierto = être réveillé."],
+      ["sacar au subjonctif : saquen","sacar → saque, saques, saque, saquemos, saquéis, saquen. Le -c- devient -qu- devant -e pour garder le son [k]. Comme buscar → busquen, tocar → toquen."],
+      ["to slop vs to spill 🇬🇧","to spill = renverser (neutre). to slop = renverser de façon sale, éclabousser en faisant du dégât. Plus visuel et familier."],
+      ["jiggling vs giggling 🇬🇧","jiggling = secouer, faire trembler (physique). giggling = glousser, pouffer de rire (son). Attention à ne pas confondre : le J fait toute la différence."]
+    ]
   }
+
 ];
 
 function openJournal(lang) {
@@ -9054,6 +9084,26 @@ const STORIES = {
         { type: 'line', who: 'S', text: '¡Gracias! No los voy a malgastar esta oportunidad.', tr: 'Merci ! Je ne vais pas gaspiller cette opportunité.' }
       ]
     },
+  ,
+    { id: 'roommate', title: '🏠 La convivencia', desc: 'Marcos et sa colocataire ont une discussion sur le quotidien.', level: 'B2',
+      chars: { M: ['🧑', 'Marcos'], L: ['👩', 'Lucía'] },
+      steps: [
+        { type: 'line', who: 'L', text: 'Marcos, tengo unas cosillas que hablar contigo.', tr: 'Marcos, j\'ai quelques bricoles à te dire.' },
+        { type: 'line', who: 'M', text: '¿Qué pasa? Espero que no sea nada grave.', tr: 'Qu\'est-ce qui se passe ? J\'espère que ce n\'est rien de grave.' },
+        { type: 'q', prompt: 'Que veut dire « cosillas » ?', opts: ['Des gros problèmes', 'Des petites choses / bricoles', 'Des courses'], ans: 1 },
+        { type: 'line', who: 'L', text: 'Es que haces mucho ruido por la noche. No puedo dormir.', tr: 'C\'est que tu fais beaucoup de bruit la nuit. Je ne peux pas dormir.' },
+        { type: 'line', who: 'M', text: 'Perdona, no quería pasar desapercibido… bueno, al revés, no sabía que se oía tanto.', tr: 'Pardon, je ne voulais pas passer inaperçu… enfin, l\'inverse, je ne savais pas que ça s\'entendait autant.' },
+        { type: 'q', prompt: 'Que signifie « pasar desapercibido » ?', opts: ['Être désespéré', 'Passer inaperçu', 'Être apprécié'], ans: 1 },
+        { type: 'line', who: 'L', text: 'Mira, convivir con alguien requiere un poco de cortesía, ¿no?', tr: 'Écoute, cohabiter avec quelqu\'un demande un peu de politesse, non ?' },
+        { type: 'line', who: 'M', text: 'Tienes razón. No quiero hacer ninguna tontería que te moleste.', tr: 'Tu as raison. Je ne veux pas faire de bêtise qui te dérange.' },
+        { type: 'q', prompt: 'Traduis : « hacer una tontería »', opts: ['Faire une bonne action', 'Faire une bêtise', 'Faire un effort'], ans: 1 },
+        { type: 'line', who: 'L', text: 'Me hace gracia que digas eso, porque ayer dejaste la cocina hecha un desastre.', tr: 'Ça me fait rire que tu dises ça, parce qu\'hier tu as laissé la cuisine dans un état catastrophique.' },
+        { type: 'line', who: 'M', text: 'Bueno, soy despierto para algunas cosas… y un desastre para otras. Prometo mirarlo con lupa a partir de ahora.', tr: 'Bon, je suis dégourdi pour certaines choses… et un désastre pour d\'autres. Je promets d\'y regarder à la loupe dorénavant.' },
+        { type: 'q', prompt: '« Mirarlo con lupa » signifie…', opts: ['Ignorer les détails', 'Regarder à la loupe / examiner attentivement', 'Acheter une loupe'], ans: 1 },
+        { type: 'line', who: 'L', text: 'Más te vale, que no quiero que te saquen del piso.', tr: 'T\'as intérêt, je ne veux pas qu\'on te vire de l\'appart.' },
+        { type: 'line', who: 'M', text: '¡Descuida! A partir de mañana, soy el mejor compañero de piso del mundo.', tr: 'T\'inquiète ! À partir de demain, je suis le meilleur coloc du monde.' }
+      ]
+    }
   ],
   ln: [
     { id: 'mbote', title: '👋 Mbote!', desc: 'Une rencontre au quartier.', level: 'A1',
