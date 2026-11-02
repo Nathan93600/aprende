@@ -6803,7 +6803,10 @@ function srsAddCard(lang, word) {
   const data = srsLoad();
   const k = srsKey(lang, word);
   if(!data[k]) {
-    data[k] = { ef: 2.5, interval: 0, reps: 0, due: Date.now(), lang };
+    // Store translation + example so card is self-contained even if removed from deck later
+    const cardData = srsGetCardData(lang, word);
+    const fr = cardData ? cardData.fr : '';
+    data[k] = { ef: 2.5, interval: 0, reps: 0, due: Date.now(), lang, word, fr };
     srsSave(data);
   }
 }
@@ -7121,14 +7124,15 @@ function srsRenderStack() {
 
   visible.forEach((card, i) => {
     let data = srsGetCardData(card.lang, card.word);
-    // Fallback: if card no longer in deck, still render using what the SRS stored
+    // Fallback: if card no longer in deck, use translation stored in SRS data
     if(!data) {
+      const srsData = srsLoad()[card.key] || {};
       data = {
         [card.lang]: card.word,
         es: card.lang === 'es' ? card.word : '',
         ln: card.lang === 'ln' ? card.word : '',
         en: card.lang === 'en' ? card.word : '',
-        fr: '(traduction non disponible)'
+        fr: srsData.fr || '(traduction non disponible)'
       };
     }
     const front = card.lang === 'es' ? data.es : card.lang === 'ln' ? data.ln : data.en;
@@ -7341,7 +7345,8 @@ function srsAddNew() {
     const word = lang === 'es' ? card.es : lang === 'ln' ? card.ln : card.en;
     const k = srsKey(lang, word);
     if(!data[k]) {
-      data[k] = { ef: 2.5, interval: 0, reps: 0, due: Date.now(), lang };
+      const fr = lang === 'es' ? card.fr : lang === 'ln' ? card.fr : card.fr;
+      data[k] = { ef: 2.5, interval: 0, reps: 0, due: Date.now(), lang, word, fr };
       addedKeys.push(k);
       added++;
     }
@@ -7938,7 +7943,7 @@ function crsStart(lang, u, n, mode, resume) {
   document.getElementById('ls-boss-name').textContent = '👹 Gardien : ' + (unit ? unit.t : '');
   document.getElementById('ls-boss-fill').style.width = resume ? Math.round(100 * crs.bossHP / Math.max(1, crs.bossMax)) + '%' : '100%';
   showScreen('screen-lesson');
-  dgStartSession();
+  dgStartSession(lang);
   crsShow();
 }
 function crsSaveResume() {
@@ -8329,7 +8334,11 @@ function crsFinish(ko) {
     if(!title && mode === 'immersion') title = acc >= 90 ? '🌍 Immersion brillante !' : '🌍 Examen immersion terminé !';
     if(!title) title = acc === 100 ? '🌟 Leçon parfaite !' : 'Leçon terminée !';
     if(acc === 100) crsSetJ('badge_perfect', true);
-    if(rpg) rpg.dayLessons++;
+    if(rpg) {
+      rpg.dayLessons++;
+      if(!rpg.dayLessonsLang) rpg.dayLessonsLang = { es: 0, ln: 0, en: 0 };
+      rpg.dayLessonsLang[lang] = (rpg.dayLessonsLang[lang] || 0) + 1;
+    }
   }
   crsAddLangXP(lang, xp);
   if(rpg) { rpgAddGold(gold); rpgSync(); }
@@ -8475,9 +8484,13 @@ const RPG_CLASSES = {
 };
 const RPG_BOSSES = [['🐉', 'le Dragon de l\'Oubli'], ['👻', 'le Spectre du Subjonctif'], ['🦂', 'le Scorpion des Faux-Amis'], ['🐍', 'l\'Hydre des Tons'], ['🦁', 'le Lion de la Procrastination'], ['🧟', 'le Zombie des Mots Latins']];
 const RPG_DAILIES = [
-  { id: 'rev', e: '🧠', n: 'Réviser 20 cartes SRS', max: 20 },
-  { id: 'lesson', e: '🗺️', n: 'Terminer 1 leçon du parcours', max: 1 },
-  { id: 'xp', e: '⚡', n: 'Gagner 100 XP', max: 100 },
+  { id: 'rev_es', e: '🇪🇸', n: 'Réviser 7 cartes espagnol', max: 7, lang: 'es', cat: 'rev' },
+  { id: 'rev_ln', e: '🇨🇩', n: 'Réviser 7 cartes lingala', max: 7, lang: 'ln', cat: 'rev' },
+  { id: 'rev_en', e: '🇬🇧', n: 'Réviser 7 cartes anglais', max: 7, lang: 'en', cat: 'rev' },
+  { id: 'lesson_es', e: '🇪🇸', n: '1 leçon espagnol', max: 1, lang: 'es', cat: 'lesson' },
+  { id: 'lesson_ln', e: '🇨🇩', n: '1 leçon lingala', max: 1, lang: 'ln', cat: 'lesson' },
+  { id: 'lesson_en', e: '🇬🇧', n: '1 leçon anglais', max: 1, lang: 'en', cat: 'lesson' },
+  { id: 'trilingue', e: '🌍', n: 'Étudier les 3 langues', max: 3, cat: 'tri' },
 ];
 const RPG_SHOP = [
   { id: 'potion', e: '🧪', n: 'Potion de soin', d: '+15 PV (Soigneur : +25)', cost: 25 },
@@ -8511,7 +8524,7 @@ function rpgInit() {
       // Héros temporaire en mémoire — on ne sauvegarde PAS pour ne pas écraser Firestore
       const tot = lx.es + lx.ln + lx.en;
       rpg = { lvl: 1, xp: 0, hp: RPG_MAXHP, gold: 0, cls: null, streak: 0, best: 0, streakDay: null, freezes: 0,
-              day: rpgDayKey(), dayXP: 0, dayLessons: 0, claimed: [], seen: lx, revSeen: revlog.length, boss: null, bossN: 0,
+              day: rpgDayKey(), dayXP: 0, dayLessons: 0, dayLessonsLang: { es: 0, ln: 0, en: 0 }, claimed: [], seen: lx, revSeen: revlog.length, boss: null, bossN: 0,
               rewards: [{ e: '📺', n: 'Un épisode de série', c: 30 }, { e: '🍫', n: 'Une pause gourmande', c: 20 }, { e: '🎮', n: '30 min de jeu vidéo', c: 40 }],
               log: [], trophies: [], rest: false, goldFrac: 0, deaths: 0, _noSave: true };
       console.warn('[RPG] 🛡️ Héros temporaire créé (non sauvegardé). Recharge la page pour récupérer les vraies données.');
@@ -8524,7 +8537,7 @@ function rpgInit() {
     let streak = 0, last = null;
     for(let i = 0; i < 400; i++) { const k = rpgDayKey(Date.now() - i * 86400000); if(days.has(k)) { streak++; if(!last) last = k; } else if(i > 0) break; }
     rpg = { lvl: 1, xp: 0, hp: RPG_MAXHP, gold: Math.floor(tot / 40), cls: null, streak, best: streak, streakDay: last, freezes: 1,
-            day: rpgDayKey(), dayXP: 0, dayLessons: 0, claimed: [], seen: lx, revSeen: revlog.length, boss: null, bossN: 0,
+            day: rpgDayKey(), dayXP: 0, dayLessons: 0, dayLessonsLang: { es: 0, ln: 0, en: 0 }, claimed: [], seen: lx, revSeen: revlog.length, boss: null, bossN: 0,
             rewards: [{ e: '📺', n: 'Un épisode de série', c: 30 }, { e: '🍫', n: 'Une pause gourmande', c: 20 }, { e: '🎮', n: '30 min de jeu vidéo', c: 40 }],
             log: [], trophies: [], rest: false, goldFrac: 0, deaths: 0 };
     rpgGainRaw(tot, true);
@@ -8579,8 +8592,22 @@ function rpgBossHit(n, noSave) {
 }
 function rpgDailyState() {
   const today = srsStartOfToday();
-  const rev = srsRevlogLoad().filter(r => r[1] >= today).length;
-  return { rev, lesson: rpg.dayLessons, xp: rpg.dayXP };
+  const todayRevs = srsRevlogLoad().filter(r => r[1] >= today);
+  const rev_es = todayRevs.filter(r => r[0].startsWith('es:')).length;
+  const rev_ln = todayRevs.filter(r => r[0].startsWith('ln:')).length;
+  const rev_en = todayRevs.filter(r => r[0].startsWith('en:')).length;
+  const dl = rpg.dayLessonsLang || { es: 0, ln: 0, en: 0 };
+  // Trilingue: count how many languages have activity today (rev or lesson)
+  const triActive = ['es', 'ln', 'en'].filter(l =>
+    todayRevs.some(r => r[0].startsWith(l + ':')) || dl[l] > 0
+  ).length;
+  return {
+    rev_es, rev_ln, rev_en,
+    lesson_es: dl.es || 0, lesson_ln: dl.ln || 0, lesson_en: dl.en || 0,
+    trilingue: triActive,
+    // Legacy compat
+    rev: rev_es + rev_ln + rev_en, lesson: (dl.es||0) + (dl.ln||0) + (dl.en||0), xp: rpg.dayXP
+  };
 }
 function rpgCron() {
   const today = rpgDayKey();
@@ -8602,7 +8629,7 @@ function rpgCron() {
     else if(rpg.freezes >= gap && rpg.streak > 0) { rpg.freezes -= gap; rpg.streakDay = y; rpgLog(`🧊 Gel de série utilisé (${gap})`); rpg.cronMsg = (rpg.cronMsg ? rpg.cronMsg + ' · ' : '') + '🧊 Ton gel a protégé ta série'; }
     else { if(rpg.streak) rpgLog(`💔 Série perdue (${rpg.streak} j)`); rpg.streak = 0; }
   }
-  rpg.day = today; rpg.dayXP = 0; rpg.dayLessons = 0; rpg.claimed = [];
+  rpg.day = today; rpg.dayXP = 0; rpg.dayLessons = 0; rpg.dayLessonsLang = { es: 0, ln: 0, en: 0 }; rpg.claimed = [];
 }
 // ── Throttle: rpgSync is heavy (srsRevlogLoad, rpgDailyState, rpgSave, crsRefreshBars).
 // Called on every showScreen, so throttle to max once per 2 seconds.
@@ -8630,23 +8657,122 @@ function rpgSync(silent) {
   const ds = rpgDailyState();
   RPG_DAILIES.forEach(d => {
     if(ds[d.id] >= d.max && !rpg.claimed.includes(d.id)) {
-      rpg.claimed.push(d.id); rpgAddGold(10); rpgGainRaw(15, silent); rpgBossHit(5, true);
+      rpg.claimed.push(d.id);
+      // Trilingue bonus gets extra reward
+      const isTriBonus = d.id === 'trilingue';
+      const goldReward = isTriBonus ? 20 : 10;
+      const xpReward = isTriBonus ? 25 : 15;
+      rpgAddGold(goldReward); rpgGainRaw(xpReward, silent); rpgBossHit(isTriBonus ? 10 : 5, true);
       // Track daily goal completions for badge
       const dgDone = dgGet(); if(dgDone['done_' + dgToday()]) { crsSetJ('badge_dg_count', (crsJ('badge_dg_count', 0)) + 1); }
-      rpgLog(`✅ Quotidienne : ${d.n} (+10 or, +15 XP)`);
-      if(!silent) showToast(`✅ ${d.n} : +10 🪙`, 'correct-toast');
+      // Track trilingue streak for badges
+      if(isTriBonus) {
+        crsSetJ('tri_days_count', (crsJ('tri_days_count', 0)) + 1);
+        const triLastDay = crsJ('tri_last_day', '');
+        const yesterday = rpgDayKey(Date.now() - 86400000);
+        const triStreak = triLastDay === yesterday ? (crsJ('tri_streak', 0)) + 1 : 1;
+        crsSetJ('tri_streak', triStreak);
+        crsSetJ('tri_last_day', rpgDayKey());
+        crsSetJ('tri_streak_best', Math.max(crsJ('tri_streak_best', 0), triStreak));
+      }
+      rpgLog(`✅ Quotidienne : ${d.n} (+${goldReward} or, +${xpReward} XP)`);
+      if(!silent) showToast(`✅ ${d.n} : +${goldReward} 🪙`, 'correct-toast');
     }
   });
   const today = rpgDayKey();
   const active = rpg.dayXP >= 10 || rpg.dayLessons > 0 || ds.rev > 0;
   if(active && rpg.streakDay !== today) {
     const y = rpgDayKey(Date.now() - 86400000);
+    const prevStreak = rpg.streak;
     rpg.streak = rpg.streakDay === y ? rpg.streak + 1 : 1;
     rpg.streakDay = today; rpg.best = Math.max(rpg.best || 0, rpg.streak);
-    if(!silent) showToast(`🔥 Série : ${rpg.streak} jour${rpg.streak > 1 ? 's' : ''} !`, 'correct-toast');
+    if(!silent) {
+      const milestones = [7, 14, 30, 50, 100, 150, 200, 365];
+      const hit = milestones.find(m => rpg.streak >= m && prevStreak < m);
+      if(hit) {
+        streakCelebrate(rpg.streak, hit);
+      } else {
+        showToast(`🔥 Série : ${rpg.streak} jour${rpg.streak > 1 ? 's' : ''} !`, 'correct-toast');
+      }
+    }
   }
   rpgSave();
   crsRefreshBars();
+}
+
+// ── Streak celebration + danger warning ──
+const STREAK_MILESTONES = {
+  7:   { e: '🔥', t: 'Flamme !',         d: '7 jours sans interruption — tu prends de bonnes habitudes !', gold: 15 },
+  14:  { e: '🔥🔥', t: 'Brasier !',      d: '14 jours ! Deux semaines de régularité — impressionnant.', gold: 25 },
+  30:  { e: '🌋', t: 'Volcan !',          d: '30 jours ! Un mois complet de travail quotidien !', gold: 50 },
+  50:  { e: '☄️', t: 'Météore !',         d: '50 jours de série — ta discipline est en feu !', gold: 75 },
+  100: { e: '💯', t: 'Centurion !',       d: '100 JOURS ! Un exploit rare — tu es imparable !', gold: 150 },
+  150: { e: '⭐', t: 'Étoile !',          d: '150 jours — tu fais partie de l\'élite !', gold: 200 },
+  200: { e: '🏆', t: 'Légende !',         d: '200 jours de série — légende vivante !', gold: 300 },
+  365: { e: '👑', t: 'Un an !',           d: '365 JOURS ! Une année entière — chapeau !', gold: 500 },
+};
+function _streakSpawnSparks(container, count) {
+  for(let i = 0; i < count; i++) {
+    const spark = document.createElement('span');
+    spark.className = 'streak-spark';
+    const angle = (Math.PI * 2 * i) / count;
+    const dist = 50 + Math.random() * 60;
+    const dx = Math.cos(angle) * dist, dy = Math.sin(angle) * dist;
+    spark.style.cssText = `left:50%;top:50%;--dx:${dx}px;--dy:${dy}px;animation-delay:${Math.random()*.3}s;background:${['#ffd700','#ff6b35','#ff4444','#ffaa00'][i%4]}`;
+    container.appendChild(spark);
+  }
+}
+function streakCelebrate(streak, milestone) {
+  const m = STREAK_MILESTONES[milestone] || { e: '🔥', t: `${milestone} jours !`, d: 'Bravo !', gold: milestone };
+  rpgAddGold(m.gold); rpgLog(`🔥 Milestone : ${m.t} (${streak} j, +${m.gold} or)`);
+  try { confetti('big'); } catch(e) {}
+  setTimeout(() => {
+    crsModal(`<div style="text-align:center">
+      <div class="streak-modal-bg">
+        <div class="streak-sparks" id="streak-sparks-box"></div>
+        <div class="streak-celebrate-anim">${m.e}</div>
+      </div>
+      <div class="cm-t" style="font-size:1.6rem;margin-top:.3rem">${m.t}</div>
+      <div class="streak-flames" style="font-size:3rem;font-weight:900;color:var(--fire);margin:.3rem 0">
+        <span class="streak-counter-anim">🔥 ${streak} jours</span>
+      </div>
+      <div class="cm-s">${m.d}</div>
+      <div style="margin-top:.5rem;font-weight:800;color:var(--gold)">+${m.gold} 🪙</div>
+      <button class="gbtn" onclick="crsCloseModal()">Continue !</button>
+    </div>`);
+    const box = document.getElementById('streak-sparks-box');
+    if(box) _streakSpawnSparks(box, 16);
+  }, 200);
+}
+
+function streakDangerHTML() {
+  if(!rpg || rpg.rest || rpg.streak < 1) return '';
+  const today = rpgDayKey();
+  if(rpg.streakDay === today) return ''; // already active today
+  const now = new Date();
+  const h = now.getHours();
+  const urgency = h >= 20 ? 'critical' : h >= 17 ? 'warning' : 'info';
+  const msgs = {
+    critical: `⚠️ Ta série de <b>${rpg.streak} j</b> se brise à minuit ! Révise vite !`,
+    warning:  `🔥 N'oublie pas de réviser — ta série de <b>${rpg.streak} j</b> t'attend !`,
+    info:     `💡 Ta série de <b>${rpg.streak} j</b> n'est pas encore sécurisée aujourd'hui.`
+  };
+  const colors = { critical: '#ff4444', warning: '#ff9800', info: 'var(--accent2)' };
+  const freezeNote = rpg.freezes > 0 ? ` <span style="font-size:.75rem;opacity:.7">(🧊 ${rpg.freezes} gel${rpg.freezes > 1 ? 's' : ''} en réserve)</span>` : '';
+  // Per-language status
+  const todayStart = srsStartOfToday();
+  const todayRevs = srsRevlogLoad().filter(r => r[1] >= todayStart);
+  const dl = rpg.dayLessonsLang || { es: 0, ln: 0, en: 0 };
+  const langFlags = { es: '🇪🇸', ln: '🇨🇩', en: '🇬🇧' };
+  const langNames = { es: 'ES', ln: 'LN', en: 'EN' };
+  const langStatus = ['es', 'ln', 'en'].map(l => {
+    const active = todayRevs.some(r => r[0].startsWith(l + ':')) || (dl[l] || 0) > 0;
+    return `<span class="sd-lang${active ? ' done' : ''}">${langFlags[l]} ${langNames[l]}</span>`;
+  }).join('');
+  return `<div class="streak-danger ${urgency}" style="border-color:${colors[urgency]}">
+    <span>${msgs[urgency]}${freezeNote}</span>
+    <div class="sd-langs">${langStatus}</div>
+  </div>`;
 }
 
 // ── Hub (choix de la langue) ──
@@ -8659,16 +8785,39 @@ function rpgBars() {
 }
 function rpgDailiesHTML() {
   const ds = rpgDailyState();
-  return RPG_DAILIES.map(d => {
+  const LANG_NAMES = { es: 'Espagnol', ln: 'Lingala', en: 'Anglais' };
+  let html = '';
+  // Group: SRS reviews by language
+  html += '<div class="dl-group"><span class="dl-group-label">🧠 Révisions SRS</span>';
+  ['es', 'ln', 'en'].forEach(l => {
+    const d = RPG_DAILIES.find(x => x.id === 'rev_' + l);
     const v = Math.min(d.max, Math.floor(ds[d.id])), ok = rpg.claimed.includes(d.id);
-    return `<div class="dl${ok ? ' ok' : ''}"><span class="ck">${ok ? '✓' : d.e}</span><span class="dlt">${d.n}</span><span class="dlp">${v} / ${d.max}</span></div>`;
-  }).join('');
+    html += `<div class="dl${ok ? ' ok' : ''}"><span class="ck">${ok ? '✓' : d.e}</span><span class="dlt">${d.n}</span><span class="dlp">${v} / ${d.max}</span></div>`;
+  });
+  html += '</div>';
+  // Group: Lessons by language
+  html += '<div class="dl-group"><span class="dl-group-label">🗺️ Leçons</span>';
+  ['es', 'ln', 'en'].forEach(l => {
+    const d = RPG_DAILIES.find(x => x.id === 'lesson_' + l);
+    const v = Math.min(d.max, Math.floor(ds[d.id])), ok = rpg.claimed.includes(d.id);
+    html += `<div class="dl${ok ? ' ok' : ''}"><span class="ck">${ok ? '✓' : d.e}</span><span class="dlt">${d.n}</span><span class="dlp">${v} / ${d.max}</span></div>`;
+  });
+  html += '</div>';
+  // Trilingue bonus
+  const tri = RPG_DAILIES.find(x => x.id === 'trilingue');
+  const triV = Math.min(tri.max, ds.trilingue), triOk = rpg.claimed.includes('trilingue');
+  html += `<div class="dl tri-daily${triOk ? ' ok' : ''}"><span class="ck">${triOk ? '✓' : tri.e}</span><span class="dlt">${tri.n}</span><span class="dlp">${triV} / ${tri.max}</span></div>`;
+  return html;
 }
 function renderHub() {
   if(!rpg) return;
   const b = RPG_BOSSES[rpg.boss.i];
   document.getElementById('hub-hero').innerHTML = `<div class="hub-ava">${rpgAvatar()}<b>${rpg.lvl}</b></div><div class="hub-bars"><div class="hub-name"><span>Niveau ${rpg.lvl}${rpg.cls ? ' · ' + RPG_CLASSES[rpg.cls].n : ''}</span><small>Héros ›</small></div>${rpgBars()}</div>`;
-  document.getElementById('hub-chips').innerHTML = `<span class="chip">🔥 ${rpg.streak} j</span><span class="chip">🪙 ${Math.floor(rpg.gold)}</span><span class="chip">🧊 ${rpg.freezes}</span><span class="chip">${b[0]} ${Math.ceil(rpg.boss.hp)} PV</span>`;
+  const streakActive = rpg.streakDay === rpgDayKey();
+  document.getElementById('hub-chips').innerHTML = `<span class="chip${rpg.streak >= 7 ? ' streak-flames' : ''}">${streakActive ? '🔥' : '💤'} <span class="${streakActive ? 'streak-counter-anim' : ''}">${rpg.streak} j</span></span><span class="chip">🪙 ${Math.floor(rpg.gold)}</span><span class="chip">🧊 ${rpg.freezes}</span><span class="chip">${b[0]} ${Math.ceil(rpg.boss.hp)} PV</span>`;
+  // Streak danger warning
+  const dangerSlot = document.getElementById('hub-streak-danger');
+  if(dangerSlot) dangerSlot.innerHTML = streakDangerHTML();
   ['es', 'ln', 'en'].forEach(l => {
     const st = crsStats(l), cur = crsCurrent(l), C = COURSES[l];
     const unit = C.units[Math.min(cur.u, C.units.length - 1)];
@@ -8680,12 +8829,12 @@ function renderHub() {
   // Render daily goal widget in hub
   const dgSlot = document.getElementById('dg-widget');
   if(dgSlot) dgRenderWidget();
-  document.getElementById('hub-dailies').innerHTML = `<div class="hub-h"><span>📋 Quotidiennes</span><span style="font-size:.75rem;color:var(--muted)">+10 🪙 chacune · −5 PV si oubliée</span></div>${rpgDailiesHTML()}${rpg.cronMsg ? `<div class="tipbox" style="margin-top:.5rem;font-size:.8rem">${crsEsc(rpg.cronMsg)}</div>` : ''}`;
+  document.getElementById('hub-dailies').innerHTML = `<div class="hub-h"><span>📋 Quotidiennes</span><span style="font-size:.75rem;color:var(--muted)">+10 🪙 chacune · −5 PV par oubli</span></div>${rpgDailiesHTML()}${rpg.cronMsg ? `<div class="tipbox" style="margin-top:.5rem;font-size:.8rem">${crsEsc(rpg.cronMsg)}</div>` : ''}`;
   if(rpg.isNew) {
     rpg.isNew = false; rpgSave();
     setTimeout(() => crsModal(`<div style="text-align:center"><div style="font-size:3.5rem">🧑🏾⚔️</div><div class="cm-t">Ton héros est né !</div>
       <div class="cm-s">Tes ${rpg.seen.es + rpg.seen.ln + rpg.seen.en} XP déjà gagnés te placent directement au <b>niveau ${rpg.lvl}</b>, avec ${Math.floor(rpg.gold)} pièces d'or.<br><br>
-      🗺️ Chaque langue a maintenant un <b>parcours</b> par unités jusqu'à ton objectif.<br>📋 3 <b>quotidiennes</b> te rapportent de l'or ; les oublier coûte des PV.<br>👹 Chaque bonne réponse (leçons et SRS) frappe le <b>boss de quête</b>.<br>🏪 Dépense ton or en potions, gels de série ou <b>tes propres récompenses</b>.</div>
+      🗺️ Chaque langue a maintenant un <b>parcours</b> par unités jusqu'à ton objectif.<br>📋 7 <b>quotidiennes</b> par langue te rapportent de l'or ; les oublier coûte des PV.<br>🌍 Le bonus <b>trilingue</b> récompense l'étude des 3 langues chaque jour.<br>👹 Chaque bonne réponse (leçons et SRS) frappe le <b>boss de quête</b>.<br>🏪 Dépense ton or en potions, gels de série ou <b>tes propres récompenses</b>.</div>
       <button class="gbtn" onclick="crsCloseModal();${rpg.lvl >= 10 ? 'openHero()' : ''}">${rpg.lvl >= 10 ? 'Choisir ma classe' : 'C\'est parti'}</button></div>`), 400);
   }
 }
@@ -8823,27 +8972,50 @@ function fuzzyMatch(attempt, expected) {
 // ═══════════════════════════════════════════════
 // FEATURE 3: OBJECTIFS QUOTIDIENS
 // ═══════════════════════════════════════════════
-const DG_OPTIONS = [5, 10, 15, 20]; // minutes
-function dgGet() { return crsJ('daily_goal', { target: 10, sessions: {} }); }
+const DG_OPTIONS = [5, 10, 15, 20]; // minutes per language
+const DG_LANG_LABELS = { es: '🇪🇸', ln: '🇨🇩', en: '🇬🇧' };
+function dgGet() { return crsJ('daily_goal', { target: 10, sessions: {}, langSessions: {} }); }
 function dgSave(dg) { crsSetJ('daily_goal', dg); }
 function dgToday() { return rpgDayKey(); }
-function dgAddTime(sec) {
+function dgAddTime(sec, lang) {
   const dg = dgGet(), k = dgToday();
   dg.sessions[k] = (dg.sessions[k] || 0) + sec;
+  // Per-language tracking
+  if(!dg.langSessions) dg.langSessions = {};
+  if(!dg.langSessions[k]) dg.langSessions[k] = {};
+  const lk = lang || currentLang || 'es';
+  dg.langSessions[k][lk] = (dg.langSessions[k][lk] || 0) + sec;
   // Purge old days
   const keys = Object.keys(dg.sessions).sort().slice(-7);
   const clean = {}; keys.forEach(d => clean[d] = dg.sessions[d]);
   dg.sessions = clean;
+  const lkeys = Object.keys(dg.langSessions).sort().slice(-7);
+  const lclean = {}; lkeys.forEach(d => lclean[d] = dg.langSessions[d]);
+  dg.langSessions = lclean;
   dgSave(dg);
   dgCheckComplete(dg);
 }
 function dgCheckComplete(dg) {
-  const k = dgToday(), done = (dg.sessions[k] || 0) / 60;
-  if(done >= dg.target && !dg['done_' + k]) {
+  const k = dgToday();
+  // Check per-language goals: all 3 languages must reach target
+  const ls = (dg.langSessions && dg.langSessions[k]) || {};
+  const allDone = ['es', 'ln', 'en'].every(l => Math.floor((ls[l] || 0) / 60) >= dg.target);
+  if(allDone && !dg['done_' + k]) {
     dg['done_' + k] = true; dgSave(dg);
-    showToast('🎯 Objectif quotidien atteint !', 'correct-toast');
+    showToast('🎯 Objectif quotidien atteint pour les 3 langues !', 'correct-toast');
     try { confetti('normal'); } catch(e) {}
-    if(rpg) { rpgAddGold(5); rpgGainRaw(10); rpgLog('🎯 Objectif quotidien atteint'); rpgSave(); }
+    if(rpg) { rpgAddGold(15); rpgGainRaw(20); rpgLog('🎯 Objectif trilingue quotidien atteint'); rpgSave(); }
+  } else {
+    // Check individual language completion
+    ['es', 'ln', 'en'].forEach(l => {
+      const lMin = Math.floor((ls[l] || 0) / 60);
+      if(lMin >= dg.target && !dg['done_' + k + '_' + l]) {
+        dg['done_' + k + '_' + l] = true; dgSave(dg);
+        const names = { es: 'espagnol', ln: 'lingala', en: 'anglais' };
+        showToast(`🎯 Objectif ${names[l]} atteint !`, 'correct-toast');
+        if(rpg) { rpgAddGold(3); rpgGainRaw(5); rpgSave(); }
+      }
+    });
   }
 }
 function dgSetTarget(t) {
@@ -8852,24 +9024,32 @@ function dgSetTarget(t) {
 }
 function dgRenderWidget() {
   const el = document.getElementById('dg-widget'); if(!el) return;
-  const dg = dgGet(), k = dgToday(), done = Math.floor((dg.sessions[k] || 0) / 60);
-  const pct = Math.min(100, Math.round(100 * done / dg.target));
-  const complete = done >= dg.target;
+  const dg = dgGet(), k = dgToday();
+  const ls = (dg.langSessions && dg.langSessions[k]) || {};
+  const totalDone = Math.floor((dg.sessions[k] || 0) / 60);
+  const langBars = ['es', 'ln', 'en'].map(l => {
+    const lMin = Math.floor((ls[l] || 0) / 60);
+    const pct = Math.min(100, Math.round(100 * lMin / dg.target));
+    const ok = lMin >= dg.target;
+    return `<div class="dg-lang-row"><span class="dg-flag">${DG_LANG_LABELS[l]}</span><div class="dg-bar"><i style="width:${pct}%;${ok ? 'background:var(--success)' : ''}"></i></div><span class="dg-lang-val" style="${ok ? 'color:var(--success)' : ''}">${lMin}/${dg.target}</span></div>`;
+  }).join('');
+  const allDone = ['es', 'ln', 'en'].every(l => Math.floor((ls[l] || 0) / 60) >= dg.target);
   el.innerHTML = `<div class="dg-wrap">
-    <div class="dg-row"><span>🎯 Objectif quotidien</span><span style="color:${complete ? 'var(--success)' : 'var(--accent2)'};font-weight:700">${done} / ${dg.target} min ${complete ? '✅' : ''}</span></div>
-    <div class="dg-bar"><i style="width:${pct}%"></i></div>
+    <div class="dg-row"><span>🎯 Objectif quotidien par langue</span><span style="color:${allDone ? 'var(--success)' : 'var(--accent2)'};font-weight:700">${totalDone} min total ${allDone ? '✅' : ''}</span></div>
+    ${langBars}
     <div class="dg-pick">${DG_OPTIONS.map(m => `<button class="${dg.target === m ? 'on' : ''}" onclick="dgSetTarget(${m})">${m} min</button>`).join('')}</div>
   </div>`;
 }
-// Session timer
-let _dgTimer = null, _dgStart = 0;
-function dgStartSession() {
+// Session timer (per-language)
+let _dgTimer = null, _dgStart = 0, _dgLang = 'es';
+function dgStartSession(lang) {
   if(_dgTimer) return;
+  _dgLang = lang || currentLang || 'es';
   _dgStart = Date.now();
   _dgTimer = setInterval(() => {
     const elapsed = Math.floor((Date.now() - _dgStart) / 1000);
     if(elapsed >= 30) { // save every 30s
-      dgAddTime(elapsed);
+      dgAddTime(elapsed, _dgLang);
       _dgStart = Date.now();
     }
   }, 30000);
@@ -8878,7 +9058,7 @@ function dgEndSession() {
   if(!_dgTimer) return;
   clearInterval(_dgTimer); _dgTimer = null;
   const elapsed = Math.floor((Date.now() - _dgStart) / 1000);
-  if(elapsed > 2) dgAddTime(elapsed);
+  if(elapsed > 2) dgAddTime(elapsed, _dgLang);
   dgRenderWidget();
 }
 
@@ -8898,7 +9078,7 @@ function openFCSwipe(lang) {
   const cards = shuffle([...deck]).slice(0, Math.min(20, deck.length));
   fcs = { lang, cards, idx: 0, known: 0, unknown: 0, startX: 0, startY: 0, dx: 0 };
   showScreen('screen-fcswipe');
-  dgStartSession();
+  dgStartSession(lang);
   fcsRender();
 }
 function fcSwipeQuit() { dgEndSession(); fcs = null; openPath(currentLang); }
@@ -8995,6 +9175,16 @@ const BADGES_DEF = [
   { id: 'boss3', e: '🐉', n: 'Chasseur', d: 'Vaincre 3 boss de quête', check: () => rpg && rpg.bossN >= 3 },
   { id: 'srs100', e: '🔁', n: 'Régulier', d: 'Faire 100 révisions SRS', check: () => srsRevlogLoad().length >= 100 },
   { id: 'daily_goal', e: '🎯', n: 'Discipliné', d: 'Atteindre l\'objectif quotidien 5 fois', check: () => (crsJ('badge_dg_count', 0)) >= 5 },
+  // Badges trilingues
+  { id: 'tri_day1', e: '🌍', n: 'Triglotte', d: 'Étudier les 3 langues dans la même journée', check: () => (crsJ('tri_days_count', 0)) >= 1 },
+  { id: 'tri_day7', e: '🗺️', n: 'Globe-trotter', d: '7 jours trilingues', check: () => (crsJ('tri_days_count', 0)) >= 7 },
+  { id: 'tri_day30', e: '🏛️', n: 'Polyglotte', d: '30 jours trilingues', check: () => (crsJ('tri_days_count', 0)) >= 30 },
+  { id: 'tri_streak3', e: '🔗', n: 'Trilingue régulier', d: '3 jours trilingues d\'affilée', check: () => (crsJ('tri_streak_best', 0)) >= 3 },
+  { id: 'tri_streak7', e: '⛓️', n: 'Chaîne dorée', d: '7 jours trilingues d\'affilée', check: () => (crsJ('tri_streak_best', 0)) >= 7 },
+  { id: 'tri_streak14', e: '💎', n: 'Diamant trilingue', d: '14 jours trilingues d\'affilée', check: () => (crsJ('tri_streak_best', 0)) >= 14 },
+  { id: 'srs_es100', e: '🇪🇸', n: 'Hispanista', d: '100 révisions en espagnol', check: () => srsRevlogLoad().filter(r => r[0].startsWith('es:')).length >= 100 },
+  { id: 'srs_ln100', e: '🇨🇩', n: 'Lingaliste', d: '100 révisions en lingala', check: () => srsRevlogLoad().filter(r => r[0].startsWith('ln:')).length >= 100 },
+  { id: 'srs_en100', e: '🇬🇧', n: 'Angliciste', d: '100 révisions en anglais', check: () => srsRevlogLoad().filter(r => r[0].startsWith('en:')).length >= 100 },
 ];
 function badgeCheck() {
   const earned = crsJ('badges_earned', []);
@@ -9168,7 +9358,7 @@ function storyPlay(lang, id) {
   showScreen('screen-story-play');
   document.getElementById('story-play-title').textContent = s.title;
   document.getElementById('story-play-body').innerHTML = '';
-  dgStartSession();
+  dgStartSession(lang);
   storyShowStep();
 }
 function storyShowStep() {
@@ -10168,29 +10358,40 @@ function checkReminderTime() {
   const todayKey = rpgDayKey();
   const alreadySent = localStorage.getItem('notif_sent_' + todayKey);
 
-  // Daily reminder at set time
+  // Daily reminder at set time — language-aware
   if(h === s.reminderHour && m === s.reminderMin && !alreadySent) {
     const dg = dgGet();
-    const todayMin = Math.floor((dg.sessions[todayKey] || 0) / 60);
-    if(todayMin < dg.target) {
+    const ls = (dg.langSessions && dg.langSessions[todayKey]) || {};
+    const langNames = { es: 'espagnol', ln: 'lingala', en: 'anglais' };
+    const langFlags = { es: '🇪🇸', ln: '🇨🇩', en: '🇬🇧' };
+    const missing = ['es', 'ln', 'en'].filter(l => Math.floor((ls[l] || 0) / 60) < dg.target);
+    if(missing.length > 0) {
+      const missingText = missing.map(l => `${langFlags[l]} ${langNames[l]}`).join(', ');
+      const totalMin = Math.floor((dg.sessions[todayKey] || 0) / 60);
       sendLocalNotification(
         '¡Aprende! 🎓',
-        `C'est l'heure de réviser ! Tu as fait ${todayMin}/${dg.target} min aujourd'hui. Ta série de ${parseInt(localStorage.getItem('streak')||'0')} jours t'attend 🔥`,
+        `C'est l'heure de réviser ! Il te reste : ${missingText}. ${totalMin} min étudiées aujourd'hui. Série : ${rpg ? rpg.streak : 0} j 🔥`,
         'daily-reminder'
       );
       localStorage.setItem('notif_sent_' + todayKey, '1');
     }
   }
 
-  // Streak danger alert at 22:00
+  // Streak danger alert at 22:00 — language-aware
   if(s.streakAlert && h === 22 && m === 0 && !localStorage.getItem('streak_alert_' + todayKey)) {
     const dg = dgGet();
-    const todayMin = Math.floor((dg.sessions[todayKey] || 0) / 60);
-    const streak = parseInt(localStorage.getItem('streak') || '0');
-    if(todayMin < 1 && streak > 0) {
+    const ls = (dg.langSessions && dg.langSessions[todayKey]) || {};
+    const langFlags = { es: '🇪🇸', ln: '🇨🇩', en: '🇬🇧' };
+    const langNames = { es: 'espagnol', ln: 'lingala', en: 'anglais' };
+    const inactive = ['es', 'ln', 'en'].filter(l => Math.floor((ls[l] || 0) / 60) < 1);
+    const streak = rpg ? rpg.streak : 0;
+    if(inactive.length > 0 && streak > 0) {
+      const inactiveText = inactive.map(l => `${langFlags[l]} ${langNames[l]}`).join(', ');
       sendLocalNotification(
         '🔥 Streak en danger !',
-        `Tu n'as pas révisé aujourd'hui ! Ta série de ${streak} jours va se briser à minuit !`,
+        inactive.length === 3
+          ? `Tu n'as pas révisé du tout aujourd'hui ! Ta série de ${streak} jours va se briser à minuit !`
+          : `Il te manque : ${inactiveText}. Ta série de ${streak} jours t'attend !`,
         'streak-danger'
       );
       localStorage.setItem('streak_alert_' + todayKey, '1');
