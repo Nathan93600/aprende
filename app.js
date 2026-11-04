@@ -7191,6 +7191,15 @@ function srsAutoEnqueueNew() {
       }
     }
   });
+  // 4) Reverse pass: patch any SRS card still missing fr by looking it up
+  Object.entries(data).forEach(([k, c]) => {
+    if(c.fr) return; // already has translation
+    const word = c.word || k.split(':').slice(1).join(':');
+    const lang = c.lang || k.split(':')[0];
+    const found = srsGetCardData(lang, word);
+    if(found && found.fr) { data[k].fr = found.fr; if(!data[k].word) data[k].word = word; patched++; }
+    else if(!data[k].word) { data[k].word = word; }
+  });
   if(added || patched) { srsSave(data); console.log('[Aprende] SRS auto-enqueue:', added, 'new,', patched, 'patched (fr/word backfill)'); }
 }
 
