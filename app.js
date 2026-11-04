@@ -6355,7 +6355,7 @@ function addByDayToSRS() {
     if(!word) return;
     const k = srsKey(lang, word);
     if(!srsData[k]) {
-      srsData[k] = { ef: 2.5, interval: 0, reps: 0, due: Date.now(), lang };
+      srsData[k] = { ef: 2.5, interval: 0, reps: 0, due: Date.now(), lang, word, fr: card.fr || '' };
       added++;
     } else alreadyIn++;
   });
@@ -6388,7 +6388,7 @@ function startByday() {
       const k = srsKey(lang, word);
       sessionKeys.add(k);
       if(!srsData[k]) {
-        srsData[k] = { ef: 2.5, interval: 0, reps: 0, due: Date.now(), lang };
+        srsData[k] = { ef: 2.5, interval: 0, reps: 0, due: Date.now(), lang, word, fr: card.fr || '' };
         added++;
       }
     });
@@ -7085,6 +7085,43 @@ function srsNorm(s) {
     .replace(/\b(to|a|an|the|sb|sth|someone|something)\b/g, ' ')
     .replace(/\s+/g, ' ').trim();
 }
+function _srsSearchArraySources(lang, word, norm) {
+  const f = lang === 'es' ? 'es' : lang === 'ln' ? 'ln' : 'en';
+  // Collect all [word, fr, ...] arrays from JOURNAL_SESSIONS + COURSES
+  const sources = [];
+  if(typeof JOURNAL_SESSIONS !== 'undefined') {
+    for(const sess of JOURNAL_SESSIONS) {
+      const arr = lang === 'es' ? (sess.es || sess.mots || []) : lang === 'ln' ? (sess.ln || []) : (sess.en || []);
+      if(arr.length) sources.push(arr);
+      // Also check alertes (grammar notes stored as [title, desc])
+      if(sess.alertes) sources.push(sess.alertes);
+    }
+  }
+  if(typeof COURSES !== 'undefined' && COURSES[lang]) {
+    for(const unit of COURSES[lang].units || []) {
+      if(unit.w && unit.w.length) sources.push(unit.w);
+    }
+  }
+  // Exact match first
+  for(const arr of sources) {
+    for(const entry of arr) {
+      if(Array.isArray(entry) && entry[0] === word) {
+        return { [f]: entry[0], fr: entry[1] || '' };
+      }
+    }
+  }
+  // Normalized match
+  if(norm) {
+    for(const arr of sources) {
+      for(const entry of arr) {
+        if(Array.isArray(entry) && srsNorm(entry[0]) === norm) {
+          return { [f]: entry[0], fr: entry[1] || '' };
+        }
+      }
+    }
+  }
+  return undefined;
+}
 function srsGetCardData(lang, word) {
   const deck = getDeckForLang(lang);
   const f = lang === 'es' ? 'es' : lang === 'ln' ? 'ln' : 'en';
@@ -7094,27 +7131,8 @@ function srsGetCardData(lang, word) {
   const n = srsNorm(word);
   const matches = deck.filter(c => srsNorm(c[f]) === n);
   if(matches.length === 1) return matches[0];
-  // Fallback 2: search in JOURNAL_SESSIONS (words may not be in VOCAB yet)
-  if(typeof JOURNAL_SESSIONS !== 'undefined') {
-    for(const sess of JOURNAL_SESSIONS) {
-      const arr = lang === 'es' ? (sess.es || sess.mots || []) : lang === 'ln' ? (sess.ln || []) : (sess.en || []);
-      for(const entry of arr) {
-        if(Array.isArray(entry) && entry[0] === word) {
-          return { [f]: entry[0], fr: entry[1] || '' };
-        }
-      }
-    }
-    // Normalized search in journal
-    for(const sess of JOURNAL_SESSIONS) {
-      const arr = lang === 'es' ? (sess.es || sess.mots || []) : lang === 'ln' ? (sess.ln || []) : (sess.en || []);
-      for(const entry of arr) {
-        if(Array.isArray(entry) && srsNorm(entry[0]) === n) {
-          return { [f]: entry[0], fr: entry[1] || '' };
-        }
-      }
-    }
-  }
-  return undefined;
+  // Fallback 2: search in JOURNAL_SESSIONS + COURSES
+  return _srsSearchArraySources(lang, word, n);
 }
 // One-time migration: rename SRS keys saved under an old spelling to the current deck spelling
 function srsMigrateKeys() {
@@ -7859,7 +7877,7 @@ function crsLearnWords(lang, words) {
     if(!crsDeckHas(lang, w[0])) { crsPushDeck(lang, w); a[lang].push(w.slice(0, 4)); nd++; }
     const card = srsGetCardData(lang, w[0]);
     const key = srsKey(lang, card ? card[lang] : w[0]);
-    if(!data[key]) { data[key] = { ef: 2.5, interval: 0, reps: 0, due: Date.now(), lang, st: 'new' }; ns++; }
+    if(!data[key]) { data[key] = { ef: 2.5, interval: 0, reps: 0, due: Date.now(), lang, st: 'new', word: w[0], fr: w[1] || '' }; ns++; }
   });
   crsSetJ('crs_added', a); srsSave(data);
   return { nd, ns };
