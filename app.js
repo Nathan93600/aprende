@@ -7151,6 +7151,41 @@ function srsMigrateKeys() {
   }
   if(changed) { srsSave(data); console.log('[Aprende] SRS keys migrated:', changed); }
 }
+// ── Auto-enqueue: at boot, add any VOCAB/JOURNAL/COURSE words not yet in SRS ──
+function srsAutoEnqueueNew() {
+  const data = srsLoad(); let added = 0;
+  ['es', 'ln', 'en'].forEach(lang => {
+    const f = lang;
+    // 1) Words from VOCAB decks (DATA / LINGALA / ENGLISH)
+    getDeckForLang(lang).forEach(card => {
+      const word = card[f]; if(!word) return;
+      const k = srsKey(lang, word);
+      if(!data[k]) { data[k] = { ef: 2.5, interval: 0, reps: 0, due: Date.now(), lang, word, fr: card.fr || '' }; added++; }
+    });
+    // 2) Words from JOURNAL_SESSIONS
+    if(typeof JOURNAL_SESSIONS !== 'undefined') {
+      for(const sess of JOURNAL_SESSIONS) {
+        const arr = lang === 'es' ? (sess.es || sess.mots || []) : lang === 'ln' ? (sess.ln || []) : (sess.en || []);
+        for(const entry of arr) {
+          if(!Array.isArray(entry) || !entry[0]) continue;
+          const k = srsKey(lang, entry[0]);
+          if(!data[k]) { data[k] = { ef: 2.5, interval: 0, reps: 0, due: Date.now(), lang, word: entry[0], fr: entry[1] || '' }; added++; }
+        }
+      }
+    }
+    // 3) Words from COURSES (parcours)
+    if(typeof COURSES !== 'undefined' && COURSES[lang]) {
+      for(const unit of COURSES[lang].units || []) {
+        for(const w of unit.w || []) {
+          if(!Array.isArray(w) || !w[0]) continue;
+          const k = srsKey(lang, w[0]);
+          if(!data[k]) { data[k] = { ef: 2.5, interval: 0, reps: 0, due: Date.now(), lang, word: w[0], fr: w[1] || '' }; added++; }
+        }
+      }
+    }
+  });
+  if(added) { srsSave(data); console.log('[Aprende] SRS auto-enqueue:', added, 'new cards'); }
+}
 
 function srsRenderStack() {
   const stack = document.getElementById('srs-stack');
@@ -9831,6 +9866,7 @@ function initApp() {
   crsMergeAdded(); // Re-merge course words into decks (cache is now populated by sync.js)
   srsMigrateAllToFsrs(); // SM-2 → FSRS (une seule fois, avec copie de sécurité)
   srsMigrateKeys(); // Fix cards saved under an old spelling
+  srsAutoEnqueueNew(); // Auto-add new words from VOCAB/JOURNAL/COURSES to SRS
   updateSRSDueBadges(); // Show SRS due counts on language selector badges
 
   // RPG init
