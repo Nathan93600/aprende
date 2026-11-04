@@ -6978,7 +6978,8 @@ function showSRSCalendar() {
 
   const wordChip = (entry) => {
     const cardData = srsGetCardData(lang, entry.word);
-    const fr = cardData ? cardData.fr : '—';
+    const srsEntry = data[entry.key] || {};
+    const fr = (cardData && cardData.fr) || srsEntry.fr || '—';
     const isNew = entry.reps === undefined || entry.reps === 0;
     const dueLabel = isNew ? 'jamais vu' : srsFormatDueDate(entry.due);
     const repsLabel = isNew ? 'nouveau' : `${entry.reps}× rev.`;
@@ -7153,7 +7154,7 @@ function srsMigrateKeys() {
 }
 // ── Auto-enqueue: at boot, add any VOCAB/JOURNAL/COURSE words not yet in SRS ──
 function srsAutoEnqueueNew() {
-  const data = srsLoad(); let added = 0;
+  const data = srsLoad(); let added = 0; let patched = 0;
   ['es', 'ln', 'en'].forEach(lang => {
     const f = lang;
     // 1) Words from VOCAB decks (DATA / LINGALA / ENGLISH)
@@ -7161,6 +7162,8 @@ function srsAutoEnqueueNew() {
       const word = card[f]; if(!word) return;
       const k = srsKey(lang, word);
       if(!data[k]) { data[k] = { ef: 2.5, interval: 0, reps: 0, due: Date.now(), lang, word, fr: card.fr || '' }; added++; }
+      else if(!data[k].fr && card.fr) { data[k].fr = card.fr; data[k].word = data[k].word || word; patched++; }
+      else if(!data[k].word) { data[k].word = word; patched++; }
     });
     // 2) Words from JOURNAL_SESSIONS
     if(typeof JOURNAL_SESSIONS !== 'undefined') {
@@ -7170,6 +7173,8 @@ function srsAutoEnqueueNew() {
           if(!Array.isArray(entry) || !entry[0]) continue;
           const k = srsKey(lang, entry[0]);
           if(!data[k]) { data[k] = { ef: 2.5, interval: 0, reps: 0, due: Date.now(), lang, word: entry[0], fr: entry[1] || '' }; added++; }
+          else if(!data[k].fr && entry[1]) { data[k].fr = entry[1]; data[k].word = data[k].word || entry[0]; patched++; }
+          else if(!data[k].word) { data[k].word = entry[0]; patched++; }
         }
       }
     }
@@ -7180,11 +7185,13 @@ function srsAutoEnqueueNew() {
           if(!Array.isArray(w) || !w[0]) continue;
           const k = srsKey(lang, w[0]);
           if(!data[k]) { data[k] = { ef: 2.5, interval: 0, reps: 0, due: Date.now(), lang, word: w[0], fr: w[1] || '' }; added++; }
+          else if(!data[k].fr && w[1]) { data[k].fr = w[1]; data[k].word = data[k].word || w[0]; patched++; }
+          else if(!data[k].word) { data[k].word = w[0]; patched++; }
         }
       }
     }
   });
-  if(added) { srsSave(data); console.log('[Aprende] SRS auto-enqueue:', added, 'new cards'); }
+  if(added || patched) { srsSave(data); console.log('[Aprende] SRS auto-enqueue:', added, 'new,', patched, 'patched (fr/word backfill)'); }
 }
 
 function srsRenderStack() {
