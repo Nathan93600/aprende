@@ -7093,7 +7093,28 @@ function srsGetCardData(lang, word) {
   // Fallback: card saved under an older spelling of the word
   const n = srsNorm(word);
   const matches = deck.filter(c => srsNorm(c[f]) === n);
-  return matches.length === 1 ? matches[0] : undefined;
+  if(matches.length === 1) return matches[0];
+  // Fallback 2: search in JOURNAL_SESSIONS (words may not be in VOCAB yet)
+  if(typeof JOURNAL_SESSIONS !== 'undefined') {
+    for(const sess of JOURNAL_SESSIONS) {
+      const arr = lang === 'es' ? (sess.es || sess.mots || []) : lang === 'ln' ? (sess.ln || []) : (sess.en || []);
+      for(const entry of arr) {
+        if(Array.isArray(entry) && entry[0] === word) {
+          return { [f]: entry[0], fr: entry[1] || '' };
+        }
+      }
+    }
+    // Normalized search in journal
+    for(const sess of JOURNAL_SESSIONS) {
+      const arr = lang === 'es' ? (sess.es || sess.mots || []) : lang === 'ln' ? (sess.ln || []) : (sess.en || []);
+      for(const entry of arr) {
+        if(Array.isArray(entry) && srsNorm(entry[0]) === n) {
+          return { [f]: entry[0], fr: entry[1] || '' };
+        }
+      }
+    }
+  }
+  return undefined;
 }
 // One-time migration: rename SRS keys saved under an old spelling to the current deck spelling
 function srsMigrateKeys() {
