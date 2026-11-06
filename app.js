@@ -7290,6 +7290,7 @@ function srsAutoEnqueueNew() {
 }
 
 function srsRenderStack() {
+  try {
   const stack = document.getElementById('srs-stack');
   stack.innerHTML = '';
   srsState.revealed = false;
@@ -7299,6 +7300,7 @@ function srsRenderStack() {
   document.getElementById('srs-counter').textContent = `${srsState.queue.length} à réviser`;
 
   visible.forEach((card, i) => {
+    try {
     let data = srsGetCardData(card.lang, card.word);
     // Fallback: if card no longer in deck, use translation stored in SRS data
     if(!data) {
@@ -7311,8 +7313,8 @@ function srsRenderStack() {
         fr: srsData.fr || '(traduction non disponible)'
       };
     }
-    const front = card.lang === 'es' ? data.es : card.lang === 'ln' ? data.ln : data.en;
-    const flag = SHUF_FLAGS[card.lang];
+    const front = (card.lang === 'es' ? data.es : card.lang === 'ln' ? data.ln : data.en) || card.word || '?';
+    const flag = (typeof SHUF_FLAGS !== 'undefined' && SHUF_FLAGS[card.lang]) || '';
 
     // Per-language gradients (as requested)
     const langBg = {
@@ -7329,17 +7331,23 @@ function srsRenderStack() {
     const el = document.createElement('div');
     el.className = 'srs-card ' + (i === 0 ? 'top' : i === 1 ? 'below-1' : 'below-2');
     // Solid dark overlay + colored gradient underneath — cards remain opaque
-    el.style.background = `linear-gradient(135deg, rgba(0,0,0,.72), rgba(0,0,0,.88)), ${langBg[card.lang]}`;
-    el.style.border = `2px solid ${langBorder[card.lang]}`;
+    el.style.background = `linear-gradient(135deg, rgba(0,0,0,.72), rgba(0,0,0,.88)), ${langBg[card.lang] || langBg.es}`;
+    el.style.border = `2px solid ${langBorder[card.lang] || langBorder.es}`;
 
     if(i === 0) {
       // Top card only: full content + click handler
+      let extraBadges = '';
+      try { if(card.lang === 'en') extraBadges += enLevelBadge(enLevelOf(data)); } catch(e) { console.warn('[SRS] enLevelBadge error:', e); }
+      try { if(card.leech) extraBadges += '<span title="Sangsue : oubliée 8 fois ou plus" style="margin-left:.4rem;padding:.12rem .45rem;border-radius:6px;font-size:.62rem;font-weight:800;letter-spacing:.05em;background:rgba(255,23,68,.2);color:#ff6b81;border:1px solid rgba(255,23,68,.6)">🩸 SANGSUE</span>'; } catch(e) {}
+      try { if(srsIsIntraday(card)) extraBadges += '<span style="margin-left:.4rem;padding:.12rem .45rem;border-radius:6px;font-size:.62rem;font-weight:800;background:rgba(255,235,59,.15);color:#ffeb3b;border:1px solid rgba(255,235,59,.5)">⏳ APPRENTISSAGE</span>'; } catch(e) {}
+      let exampleHtml = '';
+      try { exampleHtml = cardExampleHTML(card.lang, data); } catch(e) { console.warn('[SRS] cardExampleHTML error:', e); }
       el.innerHTML = `
-        <div style="font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.6)">${flag}${card.lang === 'en' ? enLevelBadge(enLevelOf(data)) : ''}${card.leech ? '<span title="Sangsue : oubliée 8 fois ou plus" style="margin-left:.4rem;padding:.12rem .45rem;border-radius:6px;font-size:.62rem;font-weight:800;letter-spacing:.05em;background:rgba(255,23,68,.2);color:#ff6b81;border:1px solid rgba(255,23,68,.6)">🩸 SANGSUE</span>' : ''}${srsIsIntraday(card) ? '<span style="margin-left:.4rem;padding:.12rem .45rem;border-radius:6px;font-size:.62rem;font-weight:800;background:rgba(255,235,59,.15);color:#ffeb3b;border:1px solid rgba(255,235,59,.5)">⏳ APPRENTISSAGE</span>' : ''}</div>
+        <div style="font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.6)">${flag}${extraBadges}</div>
         <div class="question-word srs-front-text" style="font-size:clamp(1.6rem,5.5vw,2.4rem);color:#fff;text-align:center;line-height:1.2;text-shadow:0 2px 12px rgba(0,0,0,.5)">${front}</div>
         <div class="srs-back-text" style="display:none;border-top:1px solid rgba(255,255,255,.2);padding-top:.8rem;width:100%;text-align:center;animation:fadeIn .3s ease">
           <div style="font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:var(--accent2);margin-bottom:.4rem">🇫🇷 Traduction</div>
-          <div style="font-size:1.3rem;font-weight:700;color:#fff">${data.fr}</div>${cardExampleHTML(card.lang, data)}
+          <div style="font-size:1.3rem;font-weight:700;color:#fff">${data.fr || '?'}</div>${exampleHtml}
         </div>
         <div class="srs-tap-text" style="font-size:.75rem;color:rgba(255,255,255,.55);opacity:.9">↓ Tap pour révéler</div>`;
       el.onclick = () => srsReveal();
@@ -7348,16 +7356,42 @@ function srsRenderStack() {
       el.innerHTML = '';
     }
     stack.appendChild(el);
+    } catch(cardErr) {
+      console.error('[SRS] Render error for card', card.key || card.word, ':', cardErr);
+      // Render a fallback card so user can still grade and move on
+      const el = document.createElement('div');
+      el.className = 'srs-card ' + (i === 0 ? 'top' : i === 1 ? 'below-1' : 'below-2');
+      el.style.background = 'linear-gradient(135deg, rgba(0,0,0,.72), rgba(0,0,0,.88)), linear-gradient(135deg, #ff6b1a, #d10a2e)';
+      el.style.border = '2px solid rgba(255,107,26,.6)';
+      if(i === 0) {
+        el.innerHTML = `<div style="color:rgba(255,255,255,.6);font-size:.7rem;letter-spacing:.18em;text-transform:uppercase">⚠️ ERREUR</div>
+          <div class="question-word srs-front-text" style="font-size:1.2rem;color:#fff;text-align:center">${card.word || '?'}</div>
+          <div class="srs-back-text" style="display:none;padding-top:.8rem;text-align:center;color:#ffa">
+            <div style="font-size:.85rem">Erreur de rendu</div>
+            <div style="font-size:.7rem;margin-top:.3rem;opacity:.7">${(cardErr.message || '').substring(0, 80)}</div>
+          </div>
+          <div class="srs-tap-text" style="font-size:.75rem;color:rgba(255,255,255,.55)">↓ Tap pour révéler</div>`;
+        el.onclick = () => srsReveal();
+      }
+      stack.appendChild(el);
+    }
   });
 
   srsState.currentCard = visible[0];
   srsState.shownAt = Date.now();
   // Update interval previews
+  try {
   if(srsState.currentCard) {
     const data = srsLoad()[srsState.currentCard.key];
     [0,1,2,3].forEach(g => {
       document.getElementById(`srs-int-${g}`).textContent = srsFormatInterval(data, g, srsState.currentCard.key);
     });
+  }
+  } catch(e) { console.error('[SRS] Interval preview error:', e); }
+  } catch(fatalErr) {
+    console.error('[SRS] FATAL srsRenderStack error:', fatalErr);
+    const stack = document.getElementById('srs-stack');
+    if(stack) stack.innerHTML = '<div style="padding:2rem;text-align:center;color:#ffa"><div style="font-size:1.5rem">⚠️</div><div style="margin-top:.5rem;font-size:.9rem">Erreur de rendu SRS</div><div style="margin-top:.3rem;font-size:.75rem;opacity:.7">' + (fatalErr.message || '') + '</div><div style="margin-top:1rem;font-size:.8rem">Recharge l\'app (↻) pour réessayer</div></div>';
   }
 }
 
@@ -7632,6 +7666,7 @@ function srsGetDue(lang) { return srsBuildQueue(lang); }
 function srsStats(lang) { srsBuildQueue(lang); return srsState.counts; }
 
 function srsRefresh() {
+  try {
   if(srsState.wakeTimer) { clearTimeout(srsState.wakeTimer); srsState.wakeTimer = null; }
   srsState.queue = srsBuildQueue(srsState.lang);
   const st = srsState.counts;
@@ -7703,6 +7738,14 @@ function srsRefresh() {
   document.getElementById('srs-empty').style.display = 'none';
   document.getElementById('srs-active').style.display = 'block';
   srsRenderStack();
+  } catch(e) {
+    console.error('[SRS] FATAL srsRefresh error:', e);
+    // Show error to user instead of blank screen
+    const stack = document.getElementById('srs-stack');
+    if(stack) stack.innerHTML = '<div style="padding:2rem;text-align:center;color:#ffa"><div style="font-size:1.5rem">⚠️</div><div style="margin-top:.5rem;font-size:.9rem">Erreur SRS</div><div style="margin-top:.3rem;font-size:.75rem;opacity:.7">' + ((e && e.message) || '') + '</div><div style="margin-top:1rem;font-size:.8rem">Recharge l\'app (↻) pour réessayer</div></div>';
+    document.getElementById('srs-empty').style.display = 'none';
+    document.getElementById('srs-active').style.display = 'block';
+  }
 }
 
 function srsGrade(grade) {
@@ -9995,10 +10038,10 @@ function initApp() {
   updateHomeStats();
   renderJournal('es');
   crsMergeAdded(); // Re-merge course words into decks (cache is now populated by sync.js)
-  srsMigrateAllToFsrs(); // SM-2 → FSRS (une seule fois, avec copie de sécurité)
-  srsMigrateKeys(); // Fix cards saved under an old spelling
-  srsAutoEnqueueNew(); // Auto-add new words from VOCAB/JOURNAL/COURSES to SRS
-  updateSRSDueBadges(); // Show SRS due counts on language selector badges
+  try { srsMigrateAllToFsrs(); } catch(e) { console.error('[Aprende] srsMigrateAllToFsrs error:', e); }
+  try { srsMigrateKeys(); } catch(e) { console.error('[Aprende] srsMigrateKeys error:', e); }
+  try { srsAutoEnqueueNew(); } catch(e) { console.error('[Aprende] srsAutoEnqueueNew error:', e); }
+  try { updateSRSDueBadges(); } catch(e) { console.error('[Aprende] updateSRSDueBadges error:', e); }
 
   // RPG init
   rpgInit();
