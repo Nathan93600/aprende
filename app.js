@@ -6414,8 +6414,11 @@ function getBydayDeck() {
   journalMots.forEach(([word, fr]) => {
     const cleanWord = word.split('/')[0].trim().toLowerCase();
     const found = fullDeck.find(c => {
-      const w = (lang === 'es' ? c.es : lang === 'ln' ? c.ln : c.en).toLowerCase();
-      return w === cleanWord || w.startsWith(cleanWord) || cleanWord.startsWith(w);
+      if(!c) return false;
+      const w = (lang === 'es' ? c.es : lang === 'ln' ? c.ln : c.en);
+      if(!w) return false;
+      const wl = w.toLowerCase();
+      return wl === cleanWord || wl.startsWith(cleanWord) || cleanWord.startsWith(wl);
     });
     if(found) deck.push(found);
     else deck.push({
