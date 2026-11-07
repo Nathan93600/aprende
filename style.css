@@ -30,8 +30,6 @@
     --glow-purple: 0 0 20px rgba(213,0,249,.4), 0 0 40px rgba(213,0,249,.2);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html { -webkit-tap-highlight-color: transparent; }
-  button, a, [onclick], input, select, textarea, label { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
   body {
     background:
       /* Yellow streaks top-left */
@@ -421,8 +419,7 @@
   .game-title-bar { flex: 1; }
   .game-title-bar h2 { font-family: 'Unbounded', sans-serif; font-size: 1rem; }
   .progress-wrap { height: 4px; background: var(--border); border-radius: 2px; margin-top: .4rem; }
-  .progress-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width .4s ease; position: relative; }
-  .progress-fill::after { content:''; position:absolute; left:6px; right:6px; top:1px; height:1px; border-radius:1px; background:rgba(255,255,255,.35); }
+  .progress-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width .4s ease; }
   .score-chip {
     font-family: 'Unbounded', sans-serif; font-size: .9rem;
     background: var(--surface2); padding: .4rem .8rem; border-radius: 8px;
@@ -632,9 +629,8 @@
   .tense-btn {
     background: var(--surface); border: 1.5px solid var(--border);
     color: var(--muted); border-radius: 8px; padding: .4rem .9rem;
-    font-size: .8rem; cursor: pointer; transition: transform .1s ease, border-color .15s ease, color .15s ease, background .15s ease;
+    font-size: .8rem; cursor: pointer; transition: all .2s;
   }
-  .tense-btn:active { transform: scale(.93); }
   .tense-btn.active, .tense-btn:hover { border-color: var(--accent3); color: var(--accent3); background: rgba(0,245,212,.07); }
 
   /* ── RESPONSIVE ── */
@@ -1067,8 +1063,7 @@
   .ls-top { width: 100%; max-width: 640px; display: flex; align-items: center; gap: .8rem; padding: 1rem 0 .6rem; position: relative; z-index: 5; }
   .ls-x { background: none; border: none; color: var(--muted); font-size: 1.5rem; cursor: pointer; font-weight: 900; min-width: 48px; min-height: 48px; display: grid; place-items: center; -webkit-tap-highlight-color: transparent; touch-action: manipulation; position: relative; z-index: 5; }
   .ls-bar { flex: 1; height: 16px; border-radius: 999px; background: rgba(255,255,255,.1); overflow: hidden; }
-  .ls-bar i { display: block; height: 100%; width: 0; background: linear-gradient(180deg,#89e219,#58cc02); border-radius: 999px; transition: width .35s; box-shadow: inset 0 -4px 0 rgba(0,0,0,.12); position: relative; }
-  .ls-bar i::before { content:''; position:absolute; left:8px; right:8px; top:3px; height:4px; border-radius:99px; background:rgba(255,255,255,.35); }
+  .ls-bar i { display: block; height: 100%; width: 0; background: linear-gradient(180deg,#89e219,#58cc02); border-radius: 999px; transition: width .35s; box-shadow: inset 0 -4px 0 rgba(0,0,0,.12); }
   .ls-hp { font-weight: 900; color: #ff6b6b; white-space: nowrap; }
   .ls-boss { width: 100%; max-width: 640px; display: flex; align-items: center; gap: .6rem; font-weight: 900; font-size: .8rem; margin-bottom: .4rem; }
   .ls-boss .rbar { flex: 1; height: 12px; }
@@ -1620,51 +1615,3 @@
   @media (max-width: 768px) {
     #desktop-toggle { display: none !important; }
   }
-
-  /* ═══════ FLUIDITY ENHANCEMENTS ═══════ */
-
-  /* Rising score indicator (+10 XP) */
-  .score-rise {
-    position: fixed; left: 50%; top: 40%;
-    transform: translate(-50%, -50%);
-    font-family: 'Unbounded', sans-serif; font-weight: 900; font-size: 1.8rem;
-    pointer-events: none; opacity: 0; z-index: 250;
-    text-shadow: 0 2px 12px rgba(0,0,0,.5);
-    animation: score-rise .8s ease-out forwards;
-  }
-  .score-rise.xp { color: var(--accent2); }
-  .score-rise.correct { color: var(--success); }
-  .score-rise.wrong { color: var(--error); }
-  @keyframes score-rise {
-    0%   { opacity: 1; transform: translate(-50%, -50%) scale(.6); }
-    20%  { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
-    40%  { opacity: 1; transform: translate(-50%, -60%); }
-    100% { opacity: 0; transform: translate(-50%, -180%); }
-  }
-
-  /* Smooth screen transitions */
-  .screen { transition: opacity .15s ease; }
-  .screen.entering { animation: screen-fade-in .2s ease-out; }
-  @keyframes screen-fade-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
-
-  /* Bottom nav smooth active state */
-  .nav-item { transition: color .15s ease, transform .1s ease; }
-  .nav-item:active { transform: scale(.9); }
-
-  /* SRS card smooth transitions */
-  .srs-card-wrapper { transition: transform .2s ease, opacity .2s ease; }
-
-  /* Hub cards press feedback */
-  .session-card { transition: transform .12s ease, box-shadow .12s ease; }
-  .session-card:active { transform: scale(.97) translateY(2px); }
-
-  /* Mode buttons press feedback */
-  .mode-btn { transition: transform .1s ease, border-color .15s ease, background .15s ease; }
-  .mode-btn:active { transform: scale(.94); }
-
-  /* Byday session cards press feedback */
-  .byday-session-btn:active { transform: scale(.97) !important; }
-
-  /* SRS action buttons */
-  .srs-btn { transition: transform .1s ease, box-shadow .1s ease; }
-  .srs-btn:active { transform: scale(.93); }

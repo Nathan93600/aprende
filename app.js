@@ -1678,11 +1678,10 @@ function updateHomeStats() {
 // NAVIGATION
 // ═══════════════════════════════════════════════
 function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active', 'entering'));
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   const target = document.getElementById(id);
   if(target) {
-    target.classList.add('active', 'entering');
-    target.addEventListener('animationend', () => target.classList.remove('entering'), { once: true });
+    target.classList.add('active');
     // Scroll to top with smooth behavior
     window.scrollTo({ top: 0, behavior: 'smooth' });
     // Refresh SRS due badges when returning to language selector
@@ -1767,17 +1766,6 @@ function addXP(n) {
   const xpKey = currentLang === 'ln' ? 'ln_xp' : currentLang === 'en' ? 'en_xp' : 'es_xp';
   const cur = parseInt(localStorage.getItem(xpKey)||'0');
   localStorage.setItem(xpKey, cur + n);
-  // Rising score indicator
-  if(n > 0) scoreRise(`+${n} XP`, 'xp');
-}
-
-/* ── Rising score indicator ── */
-function scoreRise(text, type = 'xp') {
-  const el = document.createElement('div');
-  el.className = `score-rise ${type}`;
-  el.textContent = text;
-  document.body.appendChild(el);
-  el.addEventListener('animationend', () => el.remove());
 }
 
 function setProgress(fillId, current, total) {
