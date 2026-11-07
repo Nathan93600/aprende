@@ -7212,11 +7212,11 @@ function _srsSearchArraySources(lang, word, norm) {
 function srsGetCardData(lang, word) {
   const deck = getDeckForLang(lang);
   const f = lang === 'es' ? 'es' : lang === 'ln' ? 'ln' : 'en';
-  const exact = deck.find(c => c[f] === word);
+  const exact = deck.find(c => c && c[f] === word);
   if(exact) return exact;
   // Fallback: card saved under an older spelling of the word
   const n = srsNorm(word);
-  const matches = deck.filter(c => srsNorm(c[f]) === n);
+  const matches = deck.filter(c => c && srsNorm(c[f]) === n);
   if(matches.length === 1) return matches[0];
   // Fallback 2: search in JOURNAL_SESSIONS + COURSES
   return _srsSearchArraySources(lang, word, n);
@@ -7228,7 +7228,7 @@ function srsMigrateKeys() {
     const lang = key.split(':')[0]; const word = key.split(':').slice(1).join(':');
     const f = lang === 'es' ? 'es' : lang === 'ln' ? 'ln' : 'en';
     const deck = getDeckForLang(lang);
-    if(deck.find(c => c[f] === word)) continue;
+    if(deck.find(c => c && c[f] === word)) continue;
     const card = srsGetCardData(lang, word);
     if(!card) continue;
     const newKey = `${lang}:${card[f]}`;
@@ -7245,6 +7245,7 @@ function srsAutoEnqueueNew() {
     const f = lang;
     // 1) Words from VOCAB decks (DATA / LINGALA / ENGLISH)
     getDeckForLang(lang).forEach(card => {
+      if(!card) return;
       const word = card[f]; if(!word) return;
       const k = srsKey(lang, word);
       if(!data[k]) { data[k] = { ef: 2.5, interval: 0, reps: 0, due: Date.now(), lang, word, fr: card.fr || '' }; added++; }
@@ -8040,7 +8041,7 @@ function crsStats(lang) {
 }
 
 // ── Mots du parcours → deck + SRS ──
-function crsDeckHas(lang, word) { const n = srsNorm(word); return getDeckForLang(lang).some(c => c[lang] === word || srsNorm(c[lang]) === n); }
+function crsDeckHas(lang, word) { const n = srsNorm(word); return getDeckForLang(lang).some(c => c && (c[lang] === word || srsNorm(c[lang]) === n)); }
 function crsPushDeck(lang, w) {
   if(lang === 'es') { DATA.push({ es: w[0], fr: w[1] }); if(w[2] && !ES_EXAMPLES[w[0]]) ES_EXAMPLES[w[0]] = [w[2], w[3]]; }
   else if(lang === 'ln') LINGALA.push({ ln: w[0], fr: w[1], ex_ln: w[2] || '', ex_fr: w[3] || '' });
@@ -8077,7 +8078,7 @@ function crsSpeak(lang, text) {
 function crsPool(lang) {
   const out = [];
   COURSES[lang].units.forEach(u => u.w.forEach(w => out.push([w[0], w[1]])));
-  getDeckForLang(lang).forEach(c => out.push([c[lang], c.fr]));
+  getDeckForLang(lang).forEach(c => { if(c) out.push([c[lang], c.fr]); });
   return out;
 }
 function crsDistract(lang, w, field, n, prefer) {
