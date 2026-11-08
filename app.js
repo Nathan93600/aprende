@@ -7717,18 +7717,21 @@ function buildDirectoryData(lang) {
     const srs = srsData[k];
     sources.vocab.push({ word: w, fr: c.fr || '', srs });
   });
-  // 2. Journal
-  const jKey = lang === 'es' ? 'journal_sessions' : lang === 'ln' ? 'ln_journal_sessions' : 'en_journal_sessions';
-  const sessions = JSON.parse(localStorage.getItem(jKey) || '[]');
+  // 2. Journal (from JOURNAL_SESSIONS array, not localStorage)
   const seenJ = new Set();
-  sessions.forEach(s => (s.words || s).forEach(pair => {
-    const w = Array.isArray(pair) ? pair[0] : (pair.es || pair.ln || pair.en || '');
-    const fr = Array.isArray(pair) ? (pair[1] || '') : (pair.fr || '');
-    if(!w || seenJ.has(w.toLowerCase())) return;
-    seenJ.add(w.toLowerCase());
-    const k = srsKey(lang, w);
-    sources.journal.push({ word: w, fr, srs: srsData[k] });
-  }));
+  if(typeof JOURNAL_SESSIONS !== 'undefined') {
+    JOURNAL_SESSIONS.forEach(s => {
+      const words = s[lang] || [];
+      words.forEach(pair => {
+        if(!Array.isArray(pair)) return;
+        const w = pair[0], fr = pair[1] || '';
+        if(!w || seenJ.has(w.toLowerCase())) return;
+        seenJ.add(w.toLowerCase());
+        const k = srsKey(lang, w);
+        sources.journal.push({ word: w, fr, srs: srsData[k] });
+      });
+    });
+  }
   // 3. Cours (leçons débloquées)
   const crs = COURSES[lang];
   if(crs && crs.units) {
