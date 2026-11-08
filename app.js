@@ -7438,10 +7438,8 @@ function srsRenderStack() {
     }
     const targetWord = (card.lang === 'es' ? data.es : card.lang === 'ln' ? data.ln : data.en) || card.word || '?';
     const flag = (typeof SHUF_FLAGS !== 'undefined' && SHUF_FLAGS[card.lang]) || '';
-    // Production mode: show FR on front for cards already reviewed (reps >= 1)
-    // Use a deterministic hash so the same card always shows the same direction
-    const hash = card.key ? card.key.split('').reduce((h, c) => ((h << 5) - h + c.charCodeAt(0)) | 0, 0) : 0;
-    const isProduction = card.reps >= 1 && (Math.abs(hash) % 3 === 0); // ~33% of reviewed cards
+    // Production mode: show FR on front for cards tagged dir:'prod' (learned via FR→target exercises)
+    const isProduction = card.dir === 'prod';
     const front = isProduction ? (data.fr || '?') : targetWord;
 
     // Per-language gradients (as requested)
@@ -8722,6 +8720,16 @@ function crsResult(good, corr, extra) {
   const ex = crs.q[crs.i];
   crs.checked = true;
   if(!ex.retry) { crs.graded++; if(good) crs.ok++; }
+  // Tag SRS card as production (FR→target) when answered correctly in ft/freetr exercises
+  if(good && (ex.t === 'ft' || ex.t === 'freetr') && ex.w) {
+    try {
+      const L = crs.lang;
+      const word = ex.w[0];
+      const k = srsKey(L, word);
+      const srsData = srsLoad();
+      if(srsData[k]) { srsData[k].dir = 'prod'; srsSave(srsData); }
+    } catch(e) { console.warn('[SRS] dir tag error:', e); }
+  }
   if(good) {
     if(crs.n === 4 && crs.mode !== 'test') crs.bossHP = Math.max(0, crs.bossHP - 1);
     if(rpg) rpgBossHit(1, true);
