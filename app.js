@@ -7579,13 +7579,17 @@ function srsAddNew() {
   });
   if(added > 0) {
     srsSave(data);
-    // ── FIX: Boost today's new-card limit so the just-added cards appear immediately.
-    // Without this, cards are added but hidden behind the daily new-card cap.
     srsState._extraNew = (srsState._extraNew || 0) + added;
     showToast(`✨ +${added} cartes ajoutées`, 'correct-toast');
   } else {
     showToast('📚 Tous les mots sont déjà dans le SRS !', 'info-toast');
   }
+  srsRefresh();
+}
+
+function srsUnlockMore(n) {
+  srsState._extraNew = (srsState._extraNew || 0) + n;
+  showToast(`🔓 +${n} nouvelles cartes débloquées`, 'correct-toast');
   srsRefresh();
 }
 
@@ -7743,8 +7747,30 @@ function srsRefresh() {
       } else {
         emptyTitle.textContent = 'Aucune carte à réviser !';
         emptyDesc.innerHTML = `Tu es à jour.${nextHint ? '<br><br>' + nextHint : '<br>Reviens plus tard ou ajoute de nouveaux mots.'}${limitHint}`;
-        addBtn.textContent = '+ Ajouter 10 mots';
-        addBtn.onclick = () => srsAddNew();
+        if(st.newLeft + st.buried > 0) {
+          // There are new cards waiting behind the daily limit — show unlock buttons
+          addBtn.textContent = '🔓 Réviser +10 nouvelles';
+          addBtn.onclick = () => srsUnlockMore(10);
+          // Add a second button for +20
+          let btn20 = document.getElementById('srs-empty-add20');
+          if(!btn20) {
+            btn20 = document.createElement('button');
+            btn20.id = 'srs-empty-add20';
+            btn20.className = addBtn.className;
+            btn20.style.marginTop = '8px';
+            btn20.style.background = 'var(--surface2, #2a2a4a)';
+            btn20.style.color = 'var(--text, #fff)';
+            addBtn.parentNode.insertBefore(btn20, addBtn.nextSibling);
+          }
+          btn20.style.display = '';
+          btn20.textContent = '🔓 Réviser +20 nouvelles';
+          btn20.onclick = () => srsUnlockMore(20);
+        } else {
+          addBtn.textContent = '+ Ajouter 10 mots';
+          addBtn.onclick = () => srsAddNew();
+          const btn20 = document.getElementById('srs-empty-add20');
+          if(btn20) btn20.style.display = 'none';
+        }
       }
     }
     document.getElementById('srs-empty').style.display = 'block';
