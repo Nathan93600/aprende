@@ -7436,11 +7436,8 @@ function srsRenderStack() {
         fr: srsData.fr || '(traduction non disponible)'
       };
     }
-    const targetWord = (card.lang === 'es' ? data.es : card.lang === 'ln' ? data.ln : data.en) || card.word || '?';
+    const front = (card.lang === 'es' ? data.es : card.lang === 'ln' ? data.ln : data.en) || card.word || '?';
     const flag = (typeof SHUF_FLAGS !== 'undefined' && SHUF_FLAGS[card.lang]) || '';
-    // Production mode: show FR on front for cards tagged dir:'prod' (learned via FR→target exercises)
-    const isProduction = card.dir === 'prod';
-    const front = isProduction ? (data.fr || '?') : targetWord;
 
     // Per-language gradients (as requested)
     const langBg = {
@@ -7472,10 +7469,10 @@ function srsRenderStack() {
         <div style="font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.6)">${flag}${extraBadges}</div>
         <div class="question-word srs-front-text" style="font-size:clamp(1.6rem,5.5vw,2.4rem);color:#fff;text-align:center;line-height:1.2;text-shadow:0 2px 12px rgba(0,0,0,.5)">${front}</div>
         <div class="srs-back-text" style="display:none;border-top:1px solid rgba(255,255,255,.2);padding-top:.8rem;width:100%;text-align:center;animation:fadeIn .3s ease">
-          <div style="font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:var(--accent2);margin-bottom:.4rem">${isProduction ? flag + ' Mot' : '🇫🇷 Traduction'}</div>
-          <div style="font-size:1.3rem;font-weight:700;color:#fff">${isProduction ? targetWord : (data.fr || '?')}</div>${exampleHtml}
+          <div style="font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:var(--accent2);margin-bottom:.4rem">🇫🇷 Traduction</div>
+          <div style="font-size:1.3rem;font-weight:700;color:#fff">${data.fr || '?'}</div>${exampleHtml}
         </div>
-        <div class="srs-tap-text" style="font-size:.75rem;color:rgba(255,255,255,.55);opacity:.9">${isProduction ? '🇫🇷→' + flag + ' Tap pour révéler' : '↓ Tap pour révéler'}</div>`;
+        <div class="srs-tap-text" style="font-size:.75rem;color:rgba(255,255,255,.55);opacity:.9">↓ Tap pour révéler</div>`;
       el.onclick = () => srsReveal();
     } else {
       // Below cards: empty (just the colored background — no bleeding text)
@@ -7685,7 +7682,6 @@ function srsAddNew() {
     if(!data[k]) {
       const fr = lang === 'es' ? card.fr : lang === 'ln' ? card.fr : card.fr;
       data[k] = { ef: 2.5, interval: 0, reps: 0, due: Date.now(), lang, word, fr };
-      if(card.dir) data[k].dir = card.dir; // propagate production direction from deck entry
       addedKeys.push(k);
       added++;
     }
@@ -8721,16 +8717,6 @@ function crsResult(good, corr, extra) {
   const ex = crs.q[crs.i];
   crs.checked = true;
   if(!ex.retry) { crs.graded++; if(good) crs.ok++; }
-  // Tag SRS card as production (FR→target) when answered correctly in ft/freetr exercises
-  if(good && (ex.t === 'ft' || ex.t === 'freetr') && ex.w) {
-    try {
-      const L = crs.lang;
-      const word = ex.w[0];
-      const k = srsKey(L, word);
-      const srsData = srsLoad();
-      if(srsData[k]) { srsData[k].dir = 'prod'; srsSave(srsData); }
-    } catch(e) { console.warn('[SRS] dir tag error:', e); }
-  }
   if(good) {
     if(crs.n === 4 && crs.mode !== 'test') crs.bossHP = Math.max(0, crs.bossHP - 1);
     if(rpg) rpgBossHit(1, true);
