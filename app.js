@@ -1766,6 +1766,16 @@ function addXP(n) {
   const xpKey = currentLang === 'ln' ? 'ln_xp' : currentLang === 'en' ? 'en_xp' : 'es_xp';
   const cur = parseInt(localStorage.getItem(xpKey)||'0');
   localStorage.setItem(xpKey, cur + n);
+  if(n > 0) scoreRise(`+${n} XP`, 'xp');
+}
+
+/* ── Rising score indicator ── */
+function scoreRise(text, type = 'xp') {
+  const el = document.createElement('div');
+  el.className = `score-rise ${type}`;
+  el.textContent = text;
+  document.body.appendChild(el);
+  el.addEventListener('animationend', () => el.remove());
 }
 
 function setProgress(fillId, current, total) {
