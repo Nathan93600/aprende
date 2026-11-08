@@ -7685,6 +7685,7 @@ function srsAddNew() {
     if(!data[k]) {
       const fr = lang === 'es' ? card.fr : lang === 'ln' ? card.fr : card.fr;
       data[k] = { ef: 2.5, interval: 0, reps: 0, due: Date.now(), lang, word, fr };
+      if(card.dir) data[k].dir = card.dir; // propagate production direction from deck entry
       addedKeys.push(k);
       added++;
     }
