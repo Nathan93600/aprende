@@ -7566,7 +7566,9 @@ function srsAddNew() {
   const addedKeys = [];
   shuffle([...deck]).forEach(card => {
     if(added >= 10) return;
+    if(!card) return;
     const word = lang === 'es' ? card.es : lang === 'ln' ? card.ln : card.en;
+    if(!word) return;
     const k = srsKey(lang, word);
     if(!data[k]) {
       const fr = lang === 'es' ? card.fr : lang === 'ln' ? card.fr : card.fr;
@@ -7575,13 +7577,15 @@ function srsAddNew() {
       added++;
     }
   });
-  srsSave(data);
-  // ── FIX: Boost today's new-card limit so the just-added cards appear immediately.
-  // Without this, cards are added but hidden behind the daily new-card cap.
   if(added > 0) {
+    srsSave(data);
+    // ── FIX: Boost today's new-card limit so the just-added cards appear immediately.
+    // Without this, cards are added but hidden behind the daily new-card cap.
     srsState._extraNew = (srsState._extraNew || 0) + added;
+    showToast(`✨ +${added} cartes ajoutées`, 'correct-toast');
+  } else {
+    showToast('📚 Tous les mots sont déjà dans le SRS !', 'info-toast');
   }
-  showToast(`✨ +${added} cartes ajoutées`, 'correct-toast');
   srsRefresh();
 }
 
