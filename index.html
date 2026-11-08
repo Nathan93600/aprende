@@ -507,6 +507,7 @@
       <button id="srs-undo-btn" onclick="srsUndo()" style="display:none;align-items:center;gap:.3rem;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.2);color:var(--text);padding:.4rem .7rem;border-radius:10px;font-size:.72rem;cursor:pointer;font-family:'Unbounded',sans-serif" title="Annuler la dernière réponse (Z)">↶</button>
       <button onclick="openStats(srsState.lang)" style="background:linear-gradient(135deg,rgba(0,229,255,.18),rgba(56,189,248,.1));border:1.5px solid rgba(0,229,255,.4);color:var(--text);padding:.4rem .7rem;border-radius:10px;font-size:.72rem;cursor:pointer;font-family:'Unbounded',sans-serif" title="Statistiques">📊</button>
       <button onclick="showSRSCalendar()" style="background:linear-gradient(135deg,rgba(213,0,249,.2),rgba(0,229,255,.15));border:1.5px solid rgba(213,0,249,.4);color:var(--text);padding:.4rem .7rem;border-radius:10px;font-size:.72rem;cursor:pointer;font-family:'Unbounded',sans-serif" title="Voir le calendrier des révisions">📅</button>
+      <button onclick="showDirectory()" style="background:linear-gradient(135deg,rgba(76,175,80,.2),rgba(0,229,255,.15));border:1.5px solid rgba(76,175,80,.4);color:var(--text);padding:.4rem .7rem;border-radius:10px;font-size:.72rem;cursor:pointer;font-family:'Unbounded',sans-serif" title="Annuaire des mots">📖</button>
       <span style="font-size:.72rem;color:var(--accent2);font-family:'Unbounded',sans-serif" id="srs-counter">0/0</span>
     </div>
   </div>
@@ -519,6 +520,19 @@
         <button onclick="closeSRSCalendar()" style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--text);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1.1rem">✕</button>
       </div>
       <div id="srs-calendar-content" style="max-height:70vh;overflow-y:auto"></div>
+    </div>
+  </div>
+
+  <!-- Directory modal -->
+  <div id="srs-directory-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(10px);z-index:1000;padding:1rem;overflow-y:auto" onclick="if(event.target===this) closeDirectory()">
+    <div style="max-width:560px;margin:0 auto;background:linear-gradient(135deg,var(--surface),var(--surface2));border:1.5px solid rgba(76,175,80,.4);border-radius:20px;padding:1.4rem 1.2rem;box-shadow:0 20px 60px rgba(0,0,0,.6)">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+        <div style="font-family:'Unbounded',sans-serif;font-size:1.05rem;background:linear-gradient(135deg,var(--neon-purple),var(--neon-cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">📖 Annuaire des mots</div>
+        <button onclick="closeDirectory()" style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--text);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1.1rem">✕</button>
+      </div>
+      <input id="dir-search" type="text" placeholder="🔍 Rechercher un mot…" oninput="filterDirectory()" style="width:100%;padding:.6rem .9rem;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:.85rem;margin-bottom:1rem;box-sizing:border-box">
+      <div id="dir-tabs" style="display:flex;gap:.4rem;margin-bottom:1rem;flex-wrap:wrap"></div>
+      <div id="dir-content" style="max-height:65vh;overflow-y:auto"></div>
     </div>
   </div>
 

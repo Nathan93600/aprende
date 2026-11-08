@@ -7593,6 +7593,111 @@ function srsUnlockMore(n) {
   srsRefresh();
 }
 
+// ── Annuaire de tous les mots ──
+let _dirData = null;
+function buildDirectoryData(lang) {
+  const srsData = srsLoad();
+  const sources = { vocab: [], journal: [], courses: [] };
+  // 1. Vocabulaire de base (DATA / ENGLISH / LINGALA)
+  const deck = getDeckForLang(lang);
+  deck.forEach(c => {
+    if(!c) return;
+    const w = lang === 'es' ? c.es : lang === 'ln' ? c.ln : c.en;
+    if(!w) return;
+    const k = srsKey(lang, w);
+    const srs = srsData[k];
+    sources.vocab.push({ word: w, fr: c.fr || '', srs });
+  });
+  // 2. Journal
+  const jKey = lang === 'es' ? 'journal_sessions' : lang === 'ln' ? 'ln_journal_sessions' : 'en_journal_sessions';
+  const sessions = JSON.parse(localStorage.getItem(jKey) || '[]');
+  const seenJ = new Set();
+  sessions.forEach(s => (s.words || s).forEach(pair => {
+    const w = Array.isArray(pair) ? pair[0] : (pair.es || pair.ln || pair.en || '');
+    const fr = Array.isArray(pair) ? (pair[1] || '') : (pair.fr || '');
+    if(!w || seenJ.has(w.toLowerCase())) return;
+    seenJ.add(w.toLowerCase());
+    const k = srsKey(lang, w);
+    sources.journal.push({ word: w, fr, srs: srsData[k] });
+  }));
+  // 3. Cours (leçons débloquées)
+  const crs = COURSES[lang];
+  if(crs && crs.units) {
+    crs.units.forEach(u => {
+      (u.w || []).forEach(w => {
+        const word = w[0], fr = w[1] || '';
+        const k = srsKey(lang, word);
+        sources.courses.push({ word, fr, unit: u.t || '', srs: srsData[k] });
+      });
+    });
+  }
+  return sources;
+}
+
+function srsStatusLabel(srs) {
+  if(!srs) return '<span style="color:var(--muted);font-size:.7rem">pas dans SRS</span>';
+  if(!srs.reps) return '<span style="color:#e91e63;font-size:.7rem">nouveau</span>';
+  if(srs.interval >= 21) return '<span style="color:#4caf50;font-size:.7rem">acquis</span>';
+  return '<span style="color:#fb923c;font-size:.7rem">en cours</span>';
+}
+
+function showDirectory() {
+  const lang = srsState.lang || currentLang || 'es';
+  _dirData = buildDirectoryData(lang);
+  const modal = document.getElementById('srs-directory-modal');
+  modal.style.display = '';
+  // Tabs
+  const tabs = document.getElementById('dir-tabs');
+  const counts = { vocab: _dirData.vocab.length, journal: _dirData.journal.length, courses: _dirData.courses.length };
+  const total = counts.vocab + counts.journal + counts.courses;
+  const labels = { all: `Tous (${total})`, vocab: `📚 Vocabulaire (${counts.vocab})`, journal: `📅 Journal (${counts.journal})`, courses: `🎓 Cours (${counts.courses})` };
+  tabs.innerHTML = Object.entries(labels).map(([k, v]) =>
+    `<button class="dir-tab${k === 'all' ? ' active' : ''}" data-dir-tab="${k}" onclick="setDirTab('${k}')" style="padding:.35rem .7rem;border-radius:8px;border:1px solid var(--border);background:${k === 'all' ? 'var(--accent)' : 'var(--surface)'};color:var(--text);font-size:.72rem;cursor:pointer">${v}</button>`
+  ).join('');
+  document.getElementById('dir-search').value = '';
+  setDirTab('all');
+}
+
+function setDirTab(tab) {
+  document.querySelectorAll('.dir-tab').forEach(b => {
+    b.classList.toggle('active', b.dataset.dirTab === tab);
+    b.style.background = b.dataset.dirTab === tab ? 'var(--accent)' : 'var(--surface)';
+  });
+  window._dirTab = tab;
+  filterDirectory();
+}
+
+function filterDirectory() {
+  if(!_dirData) return;
+  const q = (document.getElementById('dir-search').value || '').toLowerCase().trim();
+  const tab = window._dirTab || 'all';
+  let items = [];
+  if(tab === 'all' || tab === 'vocab') _dirData.vocab.forEach(w => items.push({ ...w, src: '📚' }));
+  if(tab === 'all' || tab === 'journal') _dirData.journal.forEach(w => items.push({ ...w, src: '📅' }));
+  if(tab === 'all' || tab === 'courses') _dirData.courses.forEach(w => items.push({ ...w, src: '🎓' }));
+  if(q) items = items.filter(w => w.word.toLowerCase().includes(q) || w.fr.toLowerCase().includes(q));
+  // Sort alphabetically
+  items.sort((a, b) => a.word.localeCompare(b.word, undefined, { sensitivity: 'base' }));
+  const box = document.getElementById('dir-content');
+  if(!items.length) {
+    box.innerHTML = '<div style="text-align:center;color:var(--muted);padding:2rem;font-size:.85rem">Aucun mot trouvé</div>';
+    return;
+  }
+  let html = `<div style="font-size:.72rem;color:var(--muted);margin-bottom:.6rem">${items.length} mot${items.length > 1 ? 's' : ''}</div>`;
+  items.forEach(w => {
+    html += `<div style="display:flex;justify-content:space-between;align-items:center;padding:.55rem .7rem;border-bottom:1px solid rgba(255,255,255,.05);gap:.5rem">`;
+    html += `<div style="flex:1;min-width:0"><div style="font-size:.85rem;color:var(--accent2);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${w.word}</div><div style="font-size:.75rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${w.fr}</div></div>`;
+    html += `<div style="display:flex;align-items:center;gap:.5rem;flex-shrink:0"><span style="font-size:.75rem">${w.src}</span>${srsStatusLabel(w.srs)}</div>`;
+    html += `</div>`;
+  });
+  box.innerHTML = html;
+}
+
+function closeDirectory() {
+  document.getElementById('srs-directory-modal').style.display = 'none';
+  _dirData = null;
+}
+
 // ── Historique des révisions (comme le « revlog » d'Anki) ──
 // entrée : [clé, horodatage ms, note 0-3, type (0 nouvelle · 1 apprentissage · 2 révision · 3 réapprentissage), intervalle j, durée ms]
 // ── In-memory cache for revlog (11+ call sites)
