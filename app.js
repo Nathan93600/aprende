@@ -50,9 +50,6 @@ function selectLang(lang) {
     updateNativeBests();
     updatePronBadge();
     showScreen('home-en');
-  } else if(lang === 'dz') {
-    updateDZStats();
-    showScreen('home-dz');
   }
 }
 
@@ -69,12 +66,12 @@ function updateSidebarBadges() {
   const now = Date.now();
   const todayEnd = new Date(); todayEnd.setHours(23,59,59,999);
   const endMs = todayEnd.getTime();
-  const counts = { es: 0, ln: 0, en: 0, dz: 0 };
+  const counts = { es: 0, ln: 0, en: 0 };
   Object.values(data).forEach(c => {
     if(counts[c.lang] === undefined || c.reps === 0) return;
     if(c.due <= endMs) counts[c.lang]++;
   });
-  ['es','ln','en','dz'].forEach(l => {
+  ['es','ln','en'].forEach(l => {
     const badge = document.getElementById('ds-badge-' + l);
     if(!badge) return;
     if(counts[l] > 0) { badge.textContent = counts[l]; badge.classList.add('visible'); }
@@ -450,300 +447,6 @@ function showLNResults(score, maxScore, mistakes) {
     document.getElementById('mistakes-list').innerHTML = mistakes.map(m=>`<div class="mistake-row"><span class="mistake-es">${m.ln}</span><span class="mistake-fr">${m.fr}</span></div>`).join('');
   } else { document.getElementById('mistakes-section').style.display='none'; }
   document.getElementById('result-replay-btn').onclick = () => showScreen('home-ln');
-  showScreen('screen-results');
-}
-
-// ═══════════════════════════════════════════════
-// DARIJA DATA & JEUX
-// ═══════════════════════════════════════════════
-const DARIJA = [
-  {dz:"السلام عليكم",fr:"Bonjour (formel)",ex_dz:"السلام عليكم، كيراك؟",ex_fr:"Bonjour, comment vas-tu ?"},
-  {dz:"صحا",fr:"Salut",ex_dz:"صحا خويا، واش راك؟",ex_fr:"Salut mon frère, comment tu vas ?"},
-  {dz:"بسلامة",fr:"Au revoir",ex_dz:"يلّا بسلامة، نشوفك غدوة",ex_fr:"Allez au revoir, je te vois demain"},
-  {dz:"صباح الخير",fr:"Bonjour (matin)",ex_dz:"صباح الخير، نعستي مليح؟",ex_fr:"Bonjour, tu as bien dormi ?"},
-  {dz:"مساء الخير",fr:"Bonsoir",ex_dz:"مساء الخير يا الوليدة",ex_fr:"Bonsoir maman"},
-  {dz:"تصبح على خير",fr:"Bonne nuit",ex_dz:"تصبح على خير، الله يحفظك",ex_fr:"Bonne nuit, que Dieu te protège"},
-  {dz:"كيراك؟",fr:"Comment vas-tu ? (masc.)",ex_dz:"كيراك اليوم؟",ex_fr:"Comment tu vas aujourd'hui ?"},
-  {dz:"كيراكي؟",fr:"Comment vas-tu ? (fém.)",ex_dz:"كيراكي يا ختي؟",ex_fr:"Comment vas-tu ma sœur ?"},
-  {dz:"واش راك؟",fr:"Comment ça va ? (informel)",ex_dz:"واش راك لاباس عليك؟",ex_fr:"Comment ça va, tout va bien ?"},
-  {dz:"وحشتني",fr:"Tu m'as manqué",ex_dz:"بزاف وحشتني يا خويا",ex_fr:"Tu m'as beaucoup manqué mon frère"},
-  {dz:"شكرا",fr:"Merci",ex_dz:"شكرا بزاف على المساعدة",ex_fr:"Merci beaucoup pour l'aide"},
-  {dz:"عفاك",fr:"S'il te plaît",ex_dz:"عفاك عطيني الخبز",ex_fr:"S'il te plaît donne-moi le pain"},
-  {dz:"يرحم والديك",fr:"S'il te plaît (respectueux)",ex_dz:"يرحم والديك ساعدني",ex_fr:"Aide-moi s'il te plaît"},
-  {dz:"سمحلي",fr:"Excuse-moi / Pardon",ex_dz:"سمحلي ما كنتش عارف",ex_fr:"Excuse-moi je ne savais pas"},
-  {dz:"إيه",fr:"Oui",ex_dz:"إيه نعرفو مليح",ex_fr:"Oui je le connais bien"},
-  {dz:"لا",fr:"Non",ex_dz:"لا ما نقدرش اليوم",ex_fr:"Non je ne peux pas aujourd'hui"},
-  {dz:"بصح",fr:"Mais / Cependant",ex_dz:"نبغيه بصح ما يقدرش يجي",ex_fr:"Je l'aime bien mais il ne peut pas venir"},
-  {dz:"برك",fr:"Assez / Seulement",ex_dz:"برك ما تزيدش",ex_fr:"Assez, n'en rajoute pas"},
-  {dz:"الله يبارك",fr:"Que Dieu bénisse",ex_dz:"الله يبارك فيك يا ابني",ex_fr:"Que Dieu te bénisse mon fils"},
-  {dz:"بارك الله فيك",fr:"Merci (religieux)",ex_dz:"بارك الله فيك على هاد الخدمة",ex_fr:"Merci pour ce service"},
-  {dz:"اليوم",fr:"Aujourd'hui",ex_dz:"اليوم راني مشغول بزاف",ex_fr:"Aujourd'hui je suis très occupé"},
-  {dz:"غدوة",fr:"Demain",ex_dz:"غدوة نروحو للبحر",ex_fr:"Demain on va à la mer"},
-  {dz:"البارح",fr:"Hier",ex_dz:"البارح شفت خالي",ex_fr:"Hier j'ai vu mon oncle"},
-  {dz:"دروك",fr:"Maintenant",ex_dz:"دروك لازم نمشي",ex_fr:"Maintenant il faut que j'y aille"},
-  {dz:"الدار",fr:"La maison",ex_dz:"روح للدار كي تكمل",ex_fr:"Rentre à la maison quand tu finis"},
-  {dz:"طونوبيل",fr:"Voiture",ex_dz:"شريت طونوبيل جديدة",ex_fr:"J'ai acheté une nouvelle voiture"},
-  {dz:"البيت",fr:"La chambre / pièce",ex_dz:"البيت تاعي واسع",ex_fr:"Ma chambre est grande"},
-  {dz:"الكوزينة",fr:"La cuisine",ex_dz:"ماما في الكوزينة",ex_fr:"Maman est dans la cuisine"},
-  {dz:"الباب",fr:"La porte",ex_dz:"سد الباب يرحم والديك",ex_fr:"Ferme la porte s'il te plaît"},
-  {dz:"السطح",fr:"La terrasse / le toit",ex_dz:"طلعنا للسطح نشربو أتاي",ex_fr:"On est montés sur la terrasse boire du thé"},
-  {dz:"الماء",fr:"L'eau",ex_dz:"عطيني شوية ماء",ex_fr:"Donne-moi un peu d'eau"},
-  {dz:"البلاصة",fr:"La place / l'endroit",ex_dz:"هاذي بلاصة مليحة",ex_fr:"C'est un bon endroit"},
-  {dz:"الخدمة",fr:"Le travail",ex_dz:"الخدمة صعيبة اليوم",ex_fr:"Le travail est dur aujourd'hui"},
-  {dz:"يقرا",fr:"Il étudie / Il lit",ex_dz:"خويا يقرا في الجامعة",ex_fr:"Mon frère étudie à l'université"},
-  {dz:"ياكل",fr:"Il mange",ex_dz:"ياكل ثلاث مرات في النهار",ex_fr:"Il mange trois fois par jour"},
-  {dz:"يشرب",fr:"Il boit",ex_dz:"يشرب قهوة كل صباح",ex_fr:"Il boit du café chaque matin"},
-  {dz:"يمشي",fr:"Il marche / Il va",ex_dz:"يمشي للخدمة بالرجلين",ex_fr:"Il va au travail à pied"},
-  {dz:"يحوّس",fr:"Il cherche",ex_dz:"يحوّس على خدمة جديدة",ex_fr:"Il cherche un nouveau travail"},
-  {dz:"الفلوس",fr:"L'argent",ex_dz:"ما عنديش الفلوس",ex_fr:"Je n'ai pas d'argent"},
-  {dz:"السوق",fr:"Le marché",ex_dz:"مشيت للسوق نشري الخضرة",ex_fr:"Je suis allé au marché acheter les légumes"},
-  {dz:"خويا",fr:"Mon frère",ex_dz:"خويا الكبير يخدم في وهران",ex_fr:"Mon grand frère travaille à Oran"},
-  {dz:"ختي",fr:"Ma sœur",ex_dz:"ختي تقرا الطب",ex_fr:"Ma sœur étudie la médecine"},
-  {dz:"الوليدة",fr:"Maman",ex_dz:"الوليدة طيبت الكسكسي",ex_fr:"Maman a préparé le couscous"},
-  {dz:"بابا",fr:"Papa",ex_dz:"بابا راح للخدمة بكري",ex_fr:"Papa est parti au travail tôt"},
-  {dz:"عمي",fr:"Mon oncle (paternel)",ex_dz:"عمي ساكن في العاصمة",ex_fr:"Mon oncle habite à la capitale"},
-  {dz:"خالي",fr:"Mon oncle (maternel)",ex_dz:"خالي جاب لينا الفواكه",ex_fr:"Mon oncle nous a amené des fruits"},
-  {dz:"الجدّ",fr:"Le grand-père",ex_dz:"الجدّ تاعي عمرو ثمانين عام",ex_fr:"Mon grand-père a quatre-vingts ans"},
-  {dz:"الجدّة",fr:"La grand-mère",ex_dz:"الجدّة تحكيلنا حكايات",ex_fr:"Grand-mère nous raconte des histoires"},
-  {dz:"لاباس الحمد لله",fr:"Ça va bien, Dieu merci",ex_dz:"كيراك؟ لاباس الحمد لله",ex_fr:"Comment tu vas ? Ça va bien, Dieu merci"},
-  {dz:"ما كاين باس",fr:"Pas de problème",ex_dz:"سمحلي — ما كاين باس",ex_fr:"Excuse-moi — Pas de problème"},
-  {dz:"نبغيك",fr:"Je t'aime",ex_dz:"نبغيك بزاف يا ماما",ex_fr:"Je t'aime beaucoup maman"},
-  {dz:"إن شاء الله",fr:"Si Dieu le veut",ex_dz:"غدوة نكملو إن شاء الله",ex_fr:"Demain on finira si Dieu le veut"},
-  {dz:"يلّا",fr:"Allez / Allons-y",ex_dz:"يلّا نمشيو",ex_fr:"Allez, on y va"},
-  {dz:"ما عليش",fr:"Ce n'est pas grave",ex_dz:"خسرتي؟ ما عليش المرة الجاية",ex_fr:"Tu as perdu ? Ce n'est pas grave, la prochaine fois"},
-  {dz:"كي ديرها كي ديرها",fr:"Quoi qu'il arrive",ex_dz:"كي ديرها كي ديرها لازم تكمل",ex_fr:"Quoi qu'il arrive il faut finir"},
-  {dz:"يعطيك الصحة",fr:"Bravo / Bien joué",ex_dz:"يعطيك الصحة على الخدمة",ex_fr:"Bravo pour le travail"},
-  {dz:"ربي يحفظك",fr:"Que Dieu te protège",ex_dz:"روح بالسلامة، ربي يحفظك",ex_fr:"Va en paix, que Dieu te protège"},
-  {dz:"على راسي",fr:"Avec plaisir / Sur ma tête",ex_dz:"تعاوني؟ على راسي",ex_fr:"Tu m'aides ? Avec plaisir"},
-  {dz:"بزاف",fr:"Beaucoup",ex_dz:"نحبك بزاف",ex_fr:"Je t'aime beaucoup"},
-  {dz:"شوية",fr:"Un peu",ex_dz:"عطيني شوية من هاذ",ex_fr:"Donne-moi un peu de ça"},
-  {dz:"واش",fr:"Est-ce que",ex_dz:"واش راك فاهم؟",ex_fr:"Est-ce que tu comprends ?"},
-  {dz:"علاش",fr:"Pourquoi",ex_dz:"علاش ما جيتيش؟",ex_fr:"Pourquoi tu n'es pas venu ?"},
-  {dz:"كيفاش",fr:"Comment",ex_dz:"كيفاش ندير هاد الحاجة؟",ex_fr:"Comment je fais cette chose ?"},
-  {dz:"وين",fr:"Où",ex_dz:"وين راك ساكن؟",ex_fr:"Où est-ce que tu habites ?"},
-  {dz:"هدرة",fr:"Discussion / Conversation",ex_dz:"بركات من الهدرة",ex_fr:"Assez de discussion"},
-  {dz:"نهدر",fr:"Je parle",ex_dz:"نهدر معاك بالصح",ex_fr:"Je te parle sincèrement"},
-  {dz:"فهمتني؟",fr:"Tu m'as compris ?",ex_dz:"هاذي هي المسألة، فهمتني؟",ex_fr:"C'est ça le problème, tu m'as compris ?"},
-  {dz:"الله غالب",fr:"C'est le destin / On n'y peut rien",ex_dz:"ما نجحتش، الله غالب",ex_fr:"Je n'ai pas réussi, on n'y peut rien"},
-  {dz:"الحمد لله",fr:"Dieu merci",ex_dz:"الحمد لله على كلشي",ex_fr:"Dieu merci pour tout"},
-  {dz:"ما شاء الله",fr:"MachAllah (admiration)",ex_dz:"ما شاء الله عليك، قريت مليح",ex_fr:"MachAllah, tu as bien étudié"},
-  {dz:"بسم الله",fr:"Au nom de Dieu",ex_dz:"بسم الله نبداو ناكلو",ex_fr:"Au nom de Dieu, on commence à manger"},
-  {dz:"سبحان الله",fr:"Gloire à Dieu",ex_dz:"سبحان الله شحال هاذ البلاصة زينة",ex_fr:"Gloire à Dieu, comme cet endroit est beau"},
-  {dz:"أستغفر الله",fr:"Que Dieu me pardonne",ex_dz:"أستغفر الله، ما كنتش قاصد",ex_fr:"Que Dieu me pardonne, ce n'était pas volontaire"},
-  {dz:"لا حول ولا قوة إلا بالله",fr:"Il n'y a de force qu'en Dieu",ex_dz:"لا حول ولا قوة إلا بالله، شحال من مشكل",ex_fr:"Il n'y a de force qu'en Dieu, que de problèmes"},
-  {dz:"بالصح",fr:"Vraiment / Sincèrement",ex_dz:"بالصح نقولك الحقيقة",ex_fr:"Sincèrement je te dis la vérité"},
-  {dz:"زعما",fr:"Soi-disant / Genre",ex_dz:"زعما ما يعرفش؟",ex_fr:"Soi-disant il ne sait pas ?"},
-  {dz:"الخبز",fr:"Le pain",ex_dz:"شري الخبز من الفرن",ex_fr:"Achète le pain à la boulangerie"},
-  {dz:"الكسكسي",fr:"Le couscous",ex_dz:"الجمعة ناكلو الكسكسي",ex_fr:"Le vendredi on mange le couscous"},
-  {dz:"اللحم",fr:"La viande",ex_dz:"اللحم غالي بزاف",ex_fr:"La viande est très chère"},
-  {dz:"الدجاج",fr:"Le poulet",ex_dz:"طيبت الدجاج مع الزيتون",ex_fr:"J'ai cuisiné le poulet avec les olives"},
-  {dz:"الحوت",fr:"Le poisson",ex_dz:"الحوت طازج من البحر",ex_fr:"Le poisson est frais de la mer"},
-  {dz:"الزيت",fr:"L'huile (d'olive)",ex_dz:"الزيت تاع بلادنا هو خير",ex_fr:"L'huile de chez nous est la meilleure"},
-  {dz:"الخضرة",fr:"Les légumes",ex_dz:"شريت الخضرة من السوق",ex_fr:"J'ai acheté les légumes au marché"},
-  {dz:"الفاكية",fr:"Les fruits",ex_dz:"الفاكية تاع الصيف بنينة",ex_fr:"Les fruits d'été sont délicieux"},
-  {dz:"القهوة",fr:"Le café",ex_dz:"نشرب القهوة كحلة بلا سكر",ex_fr:"Je bois le café noir sans sucre"},
-  {dz:"أتاي",fr:"Le thé (à la menthe)",ex_dz:"أتاي بالنعناع وبزاف سكر",ex_fr:"Thé à la menthe avec beaucoup de sucre"},
-  {dz:"لبن",fr:"Le lait fermenté",ex_dz:"في الصيف نشربو لبن بارد",ex_fr:"En été on boit du lait fermenté froid"},
-  {dz:"الشربات",fr:"La limonade / Le sirop",ex_dz:"الشربات باردة تروّح على القلب",ex_fr:"La limonade fraîche fait du bien"},
-  {dz:"المقروط",fr:"Le makroud (gâteau)",ex_dz:"الجدّة تعرف تدير المقروط مليح",ex_fr:"Grand-mère sait bien faire le makroud"},
-  {dz:"الزلابية",fr:"La zlabia (pâtisserie)",ex_dz:"في رمضان ناكلو الزلابية",ex_fr:"Pendant le Ramadan on mange la zlabia"},
-  {dz:"السكر",fr:"Le sucre",ex_dz:"بلا سكر عفاك",ex_fr:"Sans sucre s'il te plaît"},
-  {dz:"الحليب",fr:"Le lait",ex_dz:"الدراري يشربو الحليب",ex_fr:"Les enfants boivent du lait"}
-];
-
-// ── DARIJA GAME STATE ──
-let dzGameState = {};
-
-function updateDZStats() {
-  const dzMastered = JSON.parse(localStorage.getItem('dz_mastered')||'[]');
-  const dzXP = parseInt(localStorage.getItem('dz_xp')||'0');
-  animateCounter(document.getElementById('dz-stat-score'), dzXP);
-  animateCounter(document.getElementById('dz-stat-mastered'), dzMastered.length);
-}
-
-function startDZGame(game) {
-  if(game === 'flashcard') initDZFlashcard();
-  else if(game === 'qcm') initDZQCM();
-  else if(game === 'typing') initDZTyping();
-}
-
-// ── DARIJA FLASHCARD ──
-function initDZFlashcard() {
-  dzGameState = { cards: shuffle(DARIJA), idx: 0, correct: 0, flipped: false };
-  showScreen('screen-flashcard');
-  renderDZFlashcard();
-}
-
-function renderDZFlashcard() {
-  const {cards, idx} = dzGameState;
-  const card = cards[idx];
-  document.getElementById('fc-lang-front').textContent = '🇩🇿 Darija';
-  document.getElementById('fc-lang-back').textContent = '🇫🇷 Français';
-  document.getElementById('fc-es').textContent = card.dz;
-  document.getElementById('fc-fr').textContent = card.fr;
-  document.getElementById('fc-counter').textContent = `${idx+1}/${cards.length}`;
-  setProgress('fc-progress', idx, cards.length);
-  document.getElementById('flip-inner').classList.remove('flipped');
-  document.getElementById('fc-nav').style.display = 'none';
-  document.getElementById('fc-ai-area').innerHTML = card.ex_dz ? `<div class="ai-bubble"><div class="ai-badge">📖 Exemple</div><div style="margin-top:.3rem"><strong>${card.ex_dz}</strong>${card.ex_fr ? '<br><span style="color:var(--muted);font-size:.85rem">'+card.ex_fr+'</span>' : ''}</div></div>` : '';
-  dzGameState.flipped = false;
-  document.querySelector('.flip-container').onclick = flipDZCard;
-  document.getElementById('fc-nav').querySelectorAll('button').forEach((b,i) => {
-    b.onclick = i === 0 ? () => fcDZRate(false) : () => fcDZRate(true);
-  });
-}
-
-function flipDZCard() {
-  if(!dzGameState.flipped) {
-    document.getElementById('flip-inner').classList.add('flipped');
-    document.getElementById('fc-nav').style.display = 'flex';
-    dzGameState.flipped = true;
-  }
-}
-
-function fcDZRate(knew) {
-  const card = dzGameState.cards[dzGameState.idx];
-  const dzMastered = JSON.parse(localStorage.getItem('dz_mastered')||'[]');
-  const dzXP = parseInt(localStorage.getItem('dz_xp')||'0');
-  if(knew) {
-    dzGameState.correct++;
-    localStorage.setItem('dz_xp', dzXP + 10);
-    if(!dzMastered.includes(card.dz)) { dzMastered.push(card.dz); localStorage.setItem('dz_mastered', JSON.stringify(dzMastered)); }
-    showToast('✅ +10 XP', 'correct-toast');
-  } else {
-    showToast('😅 À retravailler', 'wrong-toast');
-  }
-  dzGameState.idx++;
-  if(dzGameState.idx >= dzGameState.cards.length) {
-    showDZResults(dzGameState.correct, dzGameState.cards.length, []);
-  } else renderDZFlashcard();
-}
-
-// ── DARIJA QCM ──
-function initDZQCM() {
-  dzGameState = { cards: shuffle(DARIJA), idx: 0, score: 0, streak: 0, mistakes: [] };
-  showScreen('screen-qcm');
-  renderDZQCM();
-}
-
-function renderDZQCM() {
-  const {cards, idx} = dzGameState;
-  const card = cards[idx];
-  document.getElementById('qcm-word').textContent = card.dz;
-  document.getElementById('qcm-hint').textContent = card.ex_dz || '';
-  setProgress('qcm-progress', idx, cards.length);
-  const others = shuffle(DARIJA.filter(w => w.dz !== card.dz)).slice(0,3);
-  const opts = shuffle([card, ...others]);
-  const cont = document.getElementById('qcm-options');
-  cont.innerHTML = '';
-  opts.forEach(opt => {
-    const btn = document.createElement('button');
-    btn.className = 'option-btn';
-    btn.textContent = opt.fr;
-    btn.addEventListener('click', () => checkDZQCM(btn, opt, card));
-    cont.appendChild(btn);
-  });
-  document.getElementById('qcm-ai-area').innerHTML = '';
-  document.getElementById('qcm-score').textContent = dzGameState.score + ' pts';
-  document.getElementById('qcm-streak').textContent = dzGameState.streak;
-}
-
-function checkDZQCM(btn, chosen, correct) {
-  const btns = document.querySelectorAll('#qcm-options .option-btn');
-  btns.forEach(b => b.disabled = true);
-  const dzXP = parseInt(localStorage.getItem('dz_xp')||'0');
-  if(chosen.dz === correct.dz) {
-    btn.classList.add('correct');
-    dzGameState.streak++;
-    const bonus = Math.min(dzGameState.streak,5)*10;
-    dzGameState.score += bonus;
-    localStorage.setItem('dz_xp', dzXP + bonus);
-    showToast(`✅ +${bonus} pts`, 'correct-toast');
-    if(correct.ex_dz) document.getElementById('qcm-ai-area').innerHTML = `<div class="ai-bubble"><div class="ai-badge">📖 Exemple</div><div style="margin-top:.3rem"><strong>${correct.ex_dz}</strong><br><span style="color:var(--muted);font-size:.85rem">${correct.ex_fr}</span></div></div>`;
-    setTimeout(() => { dzGameState.idx++; if(dzGameState.idx >= dzGameState.cards.length) showDZResults(dzGameState.score, dzGameState.cards.length*50, dzGameState.mistakes); else renderDZQCM(); }, correct.ex_dz ? 1800 : 800);
-  } else {
-    btn.classList.add('wrong');
-    btns.forEach(b => { if(b.textContent === correct.fr) b.classList.add('correct'); });
-    dzGameState.streak = 0;
-    dzGameState.mistakes.push(correct);
-    showToast(`❌ ${correct.dz} = ${correct.fr}`, 'wrong-toast');
-    setTimeout(() => { dzGameState.idx++; if(dzGameState.idx >= dzGameState.cards.length) showDZResults(dzGameState.score, dzGameState.cards.length*50, dzGameState.mistakes); else renderDZQCM(); }, 2000);
-  }
-}
-
-// ── DARIJA TYPING ──
-function initDZTyping() {
-  dzGameState = { cards: shuffle(DARIJA), idx: 0, score: 0, mistakes: [] };
-  showScreen('screen-typing');
-  document.getElementById('type-skip-btn').onclick = typeDZSkip;
-  document.getElementById('type-check-btn').onclick = typeDZCheck;
-  const inp = document.getElementById('type-input');
-  inp.onkeydown = e => { if(e.key==='Enter') typeDZCheck(); };
-  renderDZTyping();
-}
-
-function renderDZTyping() {
-  const card = dzGameState.cards[dzGameState.idx];
-  document.getElementById('type-word').textContent = card.fr;
-  const inp = document.getElementById('type-input');
-  inp.value = ''; inp.className = 'type-input';
-  inp.placeholder = 'اكتب بالدارجة…';
-  inp.focus();
-  setProgress('type-progress', dzGameState.idx, dzGameState.cards.length);
-  document.getElementById('type-score').textContent = dzGameState.score + ' pts';
-  document.getElementById('type-ai-area').innerHTML = '';
-}
-
-function typeDZCheck() {
-  const card = dzGameState.cards[dzGameState.idx];
-  const inp = document.getElementById('type-input');
-  const attempt = normalize(inp.value);
-  const correct = normalize(card.dz);
-  if(!attempt) return;
-  const dzXP = parseInt(localStorage.getItem('dz_xp')||'0');
-  if(attempt === correct || levenshtein(attempt,correct) <= 1) {
-    inp.classList.add('correct');
-    dzGameState.score += 20;
-    localStorage.setItem('dz_xp', dzXP+20);
-    showToast('✅ +20 XP', 'correct-toast');
-    if(card.ex_dz) document.getElementById('type-ai-area').innerHTML = `<div class="ai-bubble"><div class="ai-badge">📖 Exemple</div><strong>${card.ex_dz}</strong><br><span style="color:var(--muted);font-size:.85rem">${card.ex_fr}</span></div>`;
-    setTimeout(nextDZTyping, card.ex_dz ? 1800 : 700);
-  } else {
-    inp.classList.add('wrong');
-    dzGameState.mistakes.push(card);
-    showToast(`❌ → ${card.dz}`, 'wrong-toast');
-    document.getElementById('type-ai-area').innerHTML = `<div class="ai-bubble"><div class="ai-badge">❌ Correction</div><strong style="color:var(--success)">${card.dz}</strong> = ${card.fr}</div>`;
-    setTimeout(nextDZTyping, 2000);
-  }
-}
-
-function typeDZSkip() {
-  const card = dzGameState.cards[dzGameState.idx];
-  dzGameState.mistakes.push(card);
-  showToast(`⏭ ${card.dz}`, '');
-  nextDZTyping();
-}
-
-function nextDZTyping() {
-  dzGameState.idx++;
-  if(dzGameState.idx >= dzGameState.cards.length) showDZResults(dzGameState.score, dzGameState.cards.length*20, dzGameState.mistakes);
-  else renderDZTyping();
-}
-
-function showDZResults(score, maxScore, mistakes) {
-  const pct = Math.round(Math.min(score/maxScore,1)*100);
-  document.getElementById('result-ring').style.setProperty('--pct', pct+'%');
-  document.getElementById('result-pct').textContent = pct+'%';
-  document.getElementById('res-correct').textContent = Math.round(pct/100*(mistakes.length+Math.round(pct/100*10)));
-  document.getElementById('res-wrong').textContent = mistakes.length;
-  document.getElementById('res-xp').textContent = '+'+score;
-  document.getElementById('result-emoji').textContent = pct>=80?'🏆':pct>=60?'💪':'📚';
-  document.getElementById('result-title').textContent = pct>=80?'Excellent !':pct>=60?'Bien joué !':'Continue !';
-  if(mistakes.length>0) {
-    document.getElementById('mistakes-section').style.display='block';
-    document.getElementById('mistakes-list').innerHTML = mistakes.map(m=>`<div class="mistake-row"><span class="mistake-es">${m.dz}</span><span class="mistake-fr">${m.fr}</span></div>`).join('');
-  } else { document.getElementById('mistakes-section').style.display='none'; }
-  document.getElementById('result-replay-btn').onclick = () => showScreen('home-dz');
   showScreen('screen-results');
 }
 
@@ -1228,7 +931,6 @@ function cardExampleHTML(lang, card) {
   if(lang === 'en') return enExtrasHTML(card);
   if(lang === 'es') { const e = ES_EXAMPLES[card.es]; return e ? exampleBlock(e[0], e[1]) : ''; }
   if(lang === 'ln') return card.ex_ln ? exampleBlock(card.ex_ln, card.ex_fr) : '';
-  if(lang === 'dz') return card.ex_dz ? exampleBlock(card.ex_dz, card.ex_fr) : '';
   return '';
 }
 function startENGame(game) {
@@ -2003,9 +1705,6 @@ function goHome() {
     updateNativeBests();
     updatePronBadge();
     showScreen('home-en');
-  } else if(currentLang === 'dz') {
-    updateDZStats();
-    showScreen('home-dz');
   } else {
     updateHomeStats();
     showScreen('home');
@@ -2064,7 +1763,7 @@ function addXP(n) {
     saveState();
   }
   // Also update localStorage XP for lingala/english contexts
-  const xpKey = currentLang === 'ln' ? 'ln_xp' : currentLang === 'en' ? 'en_xp' : currentLang === 'dz' ? 'dz_xp' : 'es_xp';
+  const xpKey = currentLang === 'ln' ? 'ln_xp' : currentLang === 'en' ? 'en_xp' : 'es_xp';
   const cur = parseInt(localStorage.getItem(xpKey)||'0');
   localStorage.setItem(xpKey, cur + n);
   if(n > 0) scoreRise(`+${n} XP`, 'xp');
@@ -3968,7 +3667,7 @@ function renderGrammarJournal() {
     grouped[key].push(r);
   });
 
-  const langNames = { es: '🇪🇸 Espagnol', ln: '🇨🇩 Lingala', en: '🇬🇧 Anglais', dz: '🇩🇿 Darija' };
+  const langNames = { es: '🇪🇸 Espagnol', ln: '🇨🇩 Lingala', en: '🇬🇧 Anglais' };
   const langColors = { es: '#ff6b1a', ln: '#007FFF', en: '#4cc9f0' };
 
   // Compute due count
@@ -3986,7 +3685,6 @@ function renderGrammarJournal() {
         <button class="grammar-filter-btn ${grammarFilter.lang==='es'?'active':''}" onclick="setGrammarFilter('lang','es')" style="--f:#ff6b1a">🇪🇸 ES</button>
         <button class="grammar-filter-btn ${grammarFilter.lang==='ln'?'active':''}" onclick="setGrammarFilter('lang','ln')" style="--f:#007FFF">🇨🇩 LN</button>
         <button class="grammar-filter-btn ${grammarFilter.lang==='en'?'active':''}" onclick="setGrammarFilter('lang','en')" style="--f:#4cc9f0">🇬🇧 EN</button>
-        <button class="grammar-filter-btn ${grammarFilter.lang==='dz'?'active':''}" onclick="setGrammarFilter('lang','dz')" style="--f:#00a651">🇩🇿 DZ</button>
       </div>
       <div style="display:flex;gap:.5rem;align-items:center">
         <button onclick="startGrammarReview()" style="background:linear-gradient(135deg,#a855f7,#ec4899);border:none;color:#fff;padding:.6rem 1.1rem;border-radius:10px;font-family:'Unbounded',sans-serif;font-size:.78rem;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(168,85,247,.4)">
@@ -4055,7 +3753,7 @@ function setGrammarFilter(key, value) {
 function openGrammarRule(ruleId) {
   const rule = GRAMMAR_RULES.find(r => r.id === ruleId);
   if(!rule) return;
-  const langNames = { es: '🇪🇸 Espagnol', ln: '🇨🇩 Lingala', en: '🇬🇧 Anglais', dz: '🇩🇿 Darija' };
+  const langNames = { es: '🇪🇸 Espagnol', ln: '🇨🇩 Lingala', en: '🇬🇧 Anglais' };
   const langColors = { es: '#ff6b1a', ln: '#007FFF', en: '#4cc9f0' };
   const color = langColors[rule.lang];
   const srs = grammarSrsLoad()[rule.id];
@@ -4134,7 +3832,7 @@ function renderGrammarReviewCard() {
 
   const rule = grammarReviewQueue[grammarReviewIdx];
   const langColors = { es: '#ff6b1a', ln: '#007FFF', en: '#4cc9f0' };
-  const langNames = { es: '🇪🇸 Espagnol', ln: '🇨🇩 Lingala', en: '🇬🇧 Anglais', dz: '🇩🇿 Darija' };
+  const langNames = { es: '🇪🇸 Espagnol', ln: '🇨🇩 Lingala', en: '🇬🇧 Anglais' };
   const color = langColors[rule.lang];
   const srs = grammarSrsLoad()[rule.id] || { ef: 2.5, interval: 0, reps: 0 };
 
@@ -4940,13 +4638,12 @@ function renderJournal(lang) {
   const cont = document.getElementById('journal-content');
   const colors = { es:'var(--accent)', ln:'var(--success)', en:'#4cc9f0' };
   const color = colors[lang] || 'var(--accent)';
-  const colorRgb = { es:'255,77,109', ln:'0,200,150', en:'76,201,240', dz:'0,166,81' }[lang] || '255,77,109';
+  const colorRgb = { es:'255,77,109', ln:'0,200,150', en:'76,201,240' }[lang] || '255,77,109';
 
   const sessions = JOURNAL_SESSIONS.map(s => {
     const mots = lang === 'es' ? (s.es || s.mots || [])
                : lang === 'ln' ? (s.ln || [])
                : lang === 'en' ? (s.en || [])
-               : lang === 'dz' ? (s.dz || [])
                : [];
     return { ...s, mots };
   }).filter(s => s.mots.length > 0);
@@ -6290,8 +5987,8 @@ function checkChaine(chosen,nextLetter) {
 // ═══════════════════════════════════════════════
 let shufState = { lang:'es', count:15, mode:'flashcard', deck:[], idx:0, score:0, flipped:false };
 
-const SHUF_FLAGS = { es:'🇪🇸 Espagnol', ln:'🇨🇩 Lingala', en:'🇬🇧 Anglais', dz:'🇩🇿 Darija' };
-const SHUF_COLORS = { es:'var(--accent)', ln:'var(--success)', en:'#4cc9f0', dz:'#00a651' };
+const SHUF_FLAGS = { es:'🇪🇸 Espagnol', ln:'🇨🇩 Lingala', en:'🇬🇧 Anglais' };
+const SHUF_COLORS = { es:'var(--accent)', ln:'var(--success)', en:'#4cc9f0' };
 
 function openShuffle(lang) {
   shufState.lang = lang;
@@ -6323,7 +6020,6 @@ function getDeckForLang(lang) {
   if(lang==='es') return DATA;
   if(lang==='ln') return LINGALA;
   if(lang==='en') return ENGLISH;
-  if(lang==='dz') return DARIJA;
   return DATA;
 }
 
@@ -6394,7 +6090,6 @@ function getWord(card, lang) {
   if(lang==='es') return { front: card.es, back: card.fr };
   if(lang==='ln') return { front: card.ln, back: card.fr };
   if(lang==='en') return { front: card.en, back: card.fr };
-  if(lang==='dz') return { front: card.dz, back: card.fr };
   return { front: card.es, back: card.fr };
 }
 
@@ -6448,7 +6143,6 @@ function renderShufQCM() {
   const others = shuffle(fullDeck.filter(w=>{
     if(shufState.lang==='es') return w.es !== card.es;
     if(shufState.lang==='ln') return w.ln !== card.ln;
-    if(shufState.lang==='dz') return w.dz !== card.dz;
     return w.en !== card.en;
   })).slice(0,3);
   const opts = shuffle([card, ...others]);
@@ -6461,7 +6155,7 @@ function renderShufQCM() {
     btn.textContent = opt.fr;
     btn.addEventListener('click', ()=>{
       document.querySelectorAll('#shuf-qcm-opts .option-btn').forEach(b=>b.disabled=true);
-      const isCorrect = shufState.lang==='es' ? opt.es===card.es : shufState.lang==='ln' ? opt.ln===card.ln : shufState.lang==='dz' ? opt.dz===card.dz : opt.en===card.en;
+      const isCorrect = shufState.lang==='es' ? opt.es===card.es : shufState.lang==='ln' ? opt.ln===card.ln : opt.en===card.en;
       if(isCorrect){
         btn.classList.add('correct');
         shufState.score+=15; addXP(15);
@@ -6649,7 +6343,7 @@ function openByDay(lang) {
   currentLang = lang;
   bydayState.sessionIdx = -1;
   bydayState.mode = 'flashcard';
-  const titles = { es: '📆 Par jour — 🇪🇸', ln: '📆 Par jour — 🇨🇩', en: '📆 Par jour — 🇬🇧', dz: '📆 Par jour — 🇩🇿' };
+  const titles = { es: '📆 Par jour — 🇪🇸', ln: '📆 Par jour — 🇨🇩', en: '📆 Par jour — 🇬🇧' };
   document.getElementById('byday-title').textContent = titles[lang];
 
   // Filter sessions that have words in this language
@@ -6657,7 +6351,6 @@ function openByDay(lang) {
     const mots = lang === 'es' ? (s.es || s.mots || [])
                : lang === 'ln' ? (s.ln || [])
                : lang === 'en' ? (s.en || [])
-               : lang === 'dz' ? (s.dz || [])
                : [];
     return { ...s, mots, idx };
   }).filter(s => s.mots.length > 0).reverse(); // most recent first
@@ -7469,7 +7162,7 @@ function updateSRSDueBadges() {
     if(!counts.hasOwnProperty(c.lang)) return;
     if(c.due <= now && c.reps > 0) counts[c.lang]++;
   });
-  ['es','ln','en','dz'].forEach(lang => {
+  ['es','ln','en'].forEach(lang => {
     const badge = document.getElementById('srs-due-' + lang);
     if(!badge) return;
     const n = counts[lang];
@@ -7493,12 +7186,12 @@ function srsNorm(s) {
     .replace(/\s+/g, ' ').trim();
 }
 function _srsSearchArraySources(lang, word, norm) {
-  const f = lang;
+  const f = lang === 'es' ? 'es' : lang === 'ln' ? 'ln' : 'en';
   // Collect all [word, fr, ...] arrays from JOURNAL_SESSIONS + COURSES
   const sources = [];
   if(typeof JOURNAL_SESSIONS !== 'undefined') {
     for(const sess of JOURNAL_SESSIONS) {
-      const arr = lang === 'es' ? (sess.es || sess.mots || []) : lang === 'ln' ? (sess.ln || []) : lang === 'dz' ? (sess.dz || []) : (sess.en || []);
+      const arr = lang === 'es' ? (sess.es || sess.mots || []) : lang === 'ln' ? (sess.ln || []) : (sess.en || []);
       if(arr.length) sources.push(arr);
       // Also check alertes (grammar notes stored as [title, desc])
       if(sess.alertes) sources.push(sess.alertes);
@@ -7531,7 +7224,7 @@ function _srsSearchArraySources(lang, word, norm) {
 }
 function srsGetCardData(lang, word) {
   const deck = getDeckForLang(lang);
-  const f = lang;
+  const f = lang === 'es' ? 'es' : lang === 'ln' ? 'ln' : 'en';
   const exact = deck.find(c => c && c[f] === word);
   if(exact) return exact;
   // Fallback: card saved under an older spelling of the word
@@ -7546,7 +7239,7 @@ function srsMigrateKeys() {
   const data = srsLoad(); let changed = 0;
   for(const key of Object.keys(data)) {
     const lang = key.split(':')[0]; const word = key.split(':').slice(1).join(':');
-    const f = lang;
+    const f = lang === 'es' ? 'es' : lang === 'ln' ? 'ln' : 'en';
     const deck = getDeckForLang(lang);
     if(deck.find(c => c && c[f] === word)) continue;
     const card = srsGetCardData(lang, word);
@@ -7561,9 +7254,9 @@ function srsMigrateKeys() {
 // ── Auto-enqueue: at boot, add any VOCAB/JOURNAL/COURSE words not yet in SRS ──
 function srsAutoEnqueueNew() {
   const data = srsLoad(); let added = 0; let patched = 0;
-  ['es', 'ln', 'en', 'dz'].forEach(lang => {
+  ['es', 'ln', 'en'].forEach(lang => {
     const f = lang;
-    // 1) Words from VOCAB decks (DATA / LINGALA / ENGLISH / DARIJA)
+    // 1) Words from VOCAB decks (DATA / LINGALA / ENGLISH)
     getDeckForLang(lang).forEach(card => {
       if(!card) return;
       const word = card[f]; if(!word) return;
@@ -8261,7 +7954,7 @@ function celebrate(scorePct) {
 }
 
 // Course data loaded from courses/*.js
-const COURSES = { es: COURSE_ES, ln: COURSE_LN, en: COURSE_EN, dz: COURSE_DZ };
+const COURSES = { es: COURSE_ES, ln: COURSE_LN, en: COURSE_EN };
 // ═══════════════════════════════════════════════
 // PARCOURS (inspiré des mécaniques de Duolingo) + HÉROS RPG (inspiré d'Habitica, open source)
 // Code et contenus propres à ¡Aprende! — aucun élément de marque repris.
@@ -8273,7 +7966,6 @@ const CRS_META = {
   es: { flag: '🇪🇸', name: 'Espagnol', target: 'B2', tts: 'es-ES' },
   ln: { flag: '🇨🇩', name: 'Lingala', target: 'B2', tts: null },
   en: { flag: '🇺🇸', name: 'Anglais', target: 'C1 / natif', tts: 'en-US' },
-  dz: { flag: '🇩🇿', name: 'Darija', target: 'B2', tts: null },
 };
 const CRS_ZIG = [0, 46, 72, 46, 0, -46, -72, -46];
 const CRS_PRAISE = ['Excellent !', 'Parfait !', 'Bien joué !', 'Super !', 'Impeccable !', '¡Eso es!'];
@@ -8314,25 +8006,12 @@ const CRS_IMMERSION_PROMPTS = {
     readContext: '📖 Tángá peyanolá', readQuestion: 'Liloba oyo basugi elakisi nini?',
     check: 'Vérifier', cont: 'Kokoba', correct: 'Eyano ya malamu:',
     almost: 'Presque!', quit: 'Kolongwa na leçon?'
-  },
-  dz: {
-    tip: '💡 نصيحة ديال القواعد', newWord: '🆕 كلمة جديدة', vocab: 'المفردات',
-    whatMeans: 'واش يعني…', translation: 'الترجمة', howSay: 'كيفاش نقولو « %s »?',
-    listen: 'سمع', listenChoose: 'ضرب على لي سمعتي', fillBlank: 'كمّل الجملة',
-    grammar: '📘 القواعد', buildSentence: 'ركّب الجملة', translate: 'ترجم: « %s »',
-    matchPairs: 'جمع الأزواج', matchHint: 'ضرب على الأزواج لي يمشيو مع بعض',
-    dictation: '🎧 إملاء', dictHint: 'سمع و اكتب لي سمعتي',
-    freeTranslation: '✍️ ترجمة حرة', freeHint: 'ترجم بالدارجة:',
-    readContext: '📖 اقرا و جاوب', readQuestion: 'واش تعني الكلمة لي تحتها خط?',
-    check: 'تحقق', cont: 'كمّل', correct: 'الجواب الصحيح:',
-    almost: 'تقريبا!', quit: 'تخرج من الدرس?'
   }
 };
 const CRS_IMMERSION_PRAISE = {
   es: ['¡Excelente!', '¡Perfecto!', '¡Muy bien!', '¡Genial!', '¡Impecable!', '¡Así se hace!'],
   en: ['Excellent!', 'Perfect!', 'Well done!', 'Great!', 'Spot on!', 'Nailed it!'],
-  ln: ['Malamu mingi!', 'Parfait!', 'Bien joué!', 'Kitoko!', 'Impeccable!', 'Ezali bongo!'],
-  dz: ['ممتاز!', 'صحيح!', 'برافو!', 'هايل!', 'بزاف مليح!', 'هكذا نديرو!']
+  ln: ['Malamu mingi!', 'Parfait!', 'Bien joué!', 'Kitoko!', 'Impeccable!', 'Ezali bongo!']
 };
 function crsP(key, arg) {
   if(!crs || crs.mode !== 'immersion') {
@@ -8413,7 +8092,7 @@ function crsPushDeck(lang, w) {
 }
 function crsMergeAdded() {
   const a = crsJ('crs_added', {});
-  ['es', 'ln', 'en', 'dz'].forEach(l => (a[l] || []).forEach(w => { if(!crsDeckHas(l, w[0])) crsPushDeck(l, w); }));
+  ['es', 'ln', 'en'].forEach(l => (a[l] || []).forEach(w => { if(!crsDeckHas(l, w[0])) crsPushDeck(l, w); }));
 }
 function crsLearnWords(lang, words) {
   const a = crsJ('crs_added', {}); a[lang] = a[lang] || [];
@@ -9074,9 +8753,7 @@ const RPG_DAILIES = [
   { id: 'lesson_es', e: '🇪🇸', n: '1 leçon espagnol', max: 1, lang: 'es', cat: 'lesson' },
   { id: 'lesson_ln', e: '🇨🇩', n: '1 leçon lingala', max: 1, lang: 'ln', cat: 'lesson' },
   { id: 'lesson_en', e: '🇬🇧', n: '1 leçon anglais', max: 1, lang: 'en', cat: 'lesson' },
-  { id: 'rev_dz', e: '🇩🇿', n: 'Réviser 7 cartes darija', max: 7, lang: 'dz', cat: 'rev' },
-  { id: 'lesson_dz', e: '🇩🇿', n: '1 leçon darija', max: 1, lang: 'dz', cat: 'lesson' },
-  { id: 'trilingue', e: '🌍', n: 'Étudier les 4 langues', max: 4, cat: 'tri' },
+  { id: 'trilingue', e: '🌍', n: 'Étudier les 3 langues', max: 3, cat: 'tri' },
 ];
 const RPG_SHOP = [
   { id: 'potion', e: '🧪', n: 'Potion de soin', d: '+15 PV (Soigneur : +25)', cost: 25 },
@@ -9086,7 +8763,7 @@ const RPG_SHOP = [
 let rpg = null;
 function rpgToNext(l) { if(l < 5) return 25 * l; if(l === 5) return 150; return Math.round(((l * l) * 0.25 + 10 * l + 139.75) / 10) * 10; }
 function rpgDayKey(t) { const d = new Date(t || Date.now()); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
-function rpgLangXP() { const g = k => parseInt(localStorage.getItem(k) || '0') || 0; return { es: g('es_xp'), ln: g('ln_xp'), en: g('en_xp'), dz: g('dz_xp') }; }
+function rpgLangXP() { const g = k => parseInt(localStorage.getItem(k) || '0') || 0; return { es: g('es_xp'), ln: g('ln_xp'), en: g('en_xp') }; }
 function rpgSave() { if(rpg && !rpg._noSave) crsSetJ('rpg', rpg); }
 function rpgLog(t) { if(!rpg) return; rpg.log.unshift(rpgDayKey() + ' · ' + t); rpg.log = rpg.log.slice(0, 40); }
 function rpgInit() {
@@ -9182,9 +8859,9 @@ function rpgDailyState() {
   const rev_es = todayRevs.filter(r => r[0].startsWith('es:')).length;
   const rev_ln = todayRevs.filter(r => r[0].startsWith('ln:')).length;
   const rev_en = todayRevs.filter(r => r[0].startsWith('en:')).length;
-  const dl = rpg.dayLessonsLang || { es: 0, ln: 0, en: 0, dz: 0 };
-  // Multilingue: count how many languages have activity today (rev or lesson)
-  const triActive = ['es', 'ln', 'en', 'dz'].filter(l =>
+  const dl = rpg.dayLessonsLang || { es: 0, ln: 0, en: 0 };
+  // Trilingue: count how many languages have activity today (rev or lesson)
+  const triActive = ['es', 'ln', 'en'].filter(l =>
     todayRevs.some(r => r[0].startsWith(l + ':')) || dl[l] > 0
   ).length;
   return {
@@ -9230,7 +8907,7 @@ function rpgSync(silent) {
   if(!rpg) return;
   rpgCron();
   const lx = rpgLangXP(); let gained = 0;
-  ['es', 'ln', 'en', 'dz'].forEach(l => { const d = lx[l] - (rpg.seen[l] || 0); if(d > 0) gained += d; });
+  ['es', 'ln', 'en'].forEach(l => { const d = lx[l] - (rpg.seen[l] || 0); if(d > 0) gained += d; });
   rpg.seen = lx;
   if(gained > 0) {
     rpgGainXP(gained, silent);
@@ -9349,9 +9026,9 @@ function streakDangerHTML() {
   const todayStart = srsStartOfToday();
   const todayRevs = srsRevlogLoad().filter(r => r[1] >= todayStart);
   const dl = rpg.dayLessonsLang || { es: 0, ln: 0, en: 0 };
-  const langFlags = { es: '🇪🇸', ln: '🇨🇩', en: '🇬🇧', dz: '🇩🇿' };
-  const langNames = { es: 'ES', ln: 'LN', en: 'EN', dz: 'DZ' };
-  const langStatus = ['es', 'ln', 'en', 'dz'].map(l => {
+  const langFlags = { es: '🇪🇸', ln: '🇨🇩', en: '🇬🇧' };
+  const langNames = { es: 'ES', ln: 'LN', en: 'EN' };
+  const langStatus = ['es', 'ln', 'en'].map(l => {
     const active = todayRevs.some(r => r[0].startsWith(l + ':')) || (dl[l] || 0) > 0;
     return `<span class="sd-lang${active ? ' done' : ''}">${langFlags[l]} ${langNames[l]}</span>`;
   }).join('');
@@ -9371,22 +9048,20 @@ function rpgBars() {
 }
 function rpgDailiesHTML() {
   const ds = rpgDailyState();
-  const LANG_NAMES = { es: 'Espagnol', ln: 'Lingala', en: 'Anglais', dz: 'Darija' };
+  const LANG_NAMES = { es: 'Espagnol', ln: 'Lingala', en: 'Anglais' };
   let html = '';
   // Group: SRS reviews by language
   html += '<div class="dl-group"><span class="dl-group-label">🧠 Révisions SRS</span>';
-  ['es', 'ln', 'en', 'dz'].forEach(l => {
+  ['es', 'ln', 'en'].forEach(l => {
     const d = RPG_DAILIES.find(x => x.id === 'rev_' + l);
-    if(!d) return;
     const v = Math.min(d.max, Math.floor(ds[d.id])), ok = rpg.claimed.includes(d.id);
     html += `<div class="dl${ok ? ' ok' : ''}"><span class="ck">${ok ? '✓' : d.e}</span><span class="dlt">${d.n}</span><span class="dlp">${v} / ${d.max}</span></div>`;
   });
   html += '</div>';
   // Group: Lessons by language
   html += '<div class="dl-group"><span class="dl-group-label">🗺️ Leçons</span>';
-  ['es', 'ln', 'en', 'dz'].forEach(l => {
+  ['es', 'ln', 'en'].forEach(l => {
     const d = RPG_DAILIES.find(x => x.id === 'lesson_' + l);
-    if(!d) return;
     const v = Math.min(d.max, Math.floor(ds[d.id])), ok = rpg.claimed.includes(d.id);
     html += `<div class="dl${ok ? ' ok' : ''}"><span class="ck">${ok ? '✓' : d.e}</span><span class="dlt">${d.n}</span><span class="dlp">${v} / ${d.max}</span></div>`;
   });
@@ -9406,9 +9081,8 @@ function renderHub() {
   // Streak danger warning
   const dangerSlot = document.getElementById('hub-streak-danger');
   if(dangerSlot) dangerSlot.innerHTML = streakDangerHTML();
-  ['es', 'ln', 'en', 'dz'].forEach(l => {
+  ['es', 'ln', 'en'].forEach(l => {
     const st = crsStats(l), cur = crsCurrent(l), C = COURSES[l];
-    if(!C) return;
     const unit = C.units[Math.min(cur.u, C.units.length - 1)];
     const sec = C.sections[unit.s];
     const bar = document.getElementById('hc-bar-' + l); if(bar) bar.style.width = (100 * st.nodes / st.total) + '%';
@@ -9441,7 +9115,7 @@ function renderHero() {
   let cls = '';
   if(rpg.lvl >= 10 && !rpg.cls) cls = `<div class="hero-card"><div class="hub-h">🎓 Choisis ta classe</div><div class="cls-grid">${Object.entries(RPG_CLASSES).map(([k, c]) => `<button class="cls" onclick="rpgPickClass('${k}')"><b>${c.e}</b>${c.n}<div style="font-weight:700;color:var(--muted);margin-top:.2rem">${c.d}</div></button>`).join('')}</div></div>`;
   else if(rpg.lvl < 10) cls = `<div class="hero-card"><div class="hub-h">🎓 Classe</div><div class="cm-s" style="margin:0">Débloquée au niveau 10 (encore ${10 - rpg.lvl} niveau${10 - rpg.lvl > 1 ? 'x' : ''}).</div></div>`;
-  const prog = ['es', 'ln', 'en', 'dz'].map(l => { if(!COURSES[l]) return ''; const s = crsStats(l); return `<div class="dl"><span class="ck">${CRS_META[l].flag}</span><span>${CRS_META[l].name} → ${CRS_META[l].target}</span><span class="dlp">${s.units} / ${s.totalUnits} unités</span></div><div class="rbar xp" style="margin-bottom:.3rem"><i style="width:${100 * s.nodes / s.total}%"></i></div>`; }).join('');
+  const prog = ['es', 'ln', 'en'].map(l => { const s = crsStats(l); return `<div class="dl"><span class="ck">${CRS_META[l].flag}</span><span>${CRS_META[l].name} → ${CRS_META[l].target}</span><span class="dlp">${s.units} / ${s.totalUnits} unités</span></div><div class="rbar xp" style="margin-bottom:.3rem"><i style="width:${100 * s.nodes / s.total}%"></i></div>`; }).join('');
   document.getElementById('hero-body').innerHTML = `<div class="pg-title">⚔️ Ton héros</div>
     <div class="hero-card"><div class="hero-top"><div class="hero-ava">${rpgAvatar()}</div><div style="flex:1;min-width:0"><div class="hero-nm">Niveau ${rpg.lvl}</div><div class="hero-cl">${rpg.cls ? RPG_CLASSES[rpg.cls].n + ' · ' + RPG_CLASSES[rpg.cls].d : 'Aventurier'}</div></div></div>
       ${rpgBars()}
@@ -9502,7 +9176,7 @@ function renderShop() {
 const crsOrigShowScreen = showScreen;
 const crsOrigSelectLang = selectLang;
 const crsOrigGoHome = goHome;
-const CRS_TAB_SCREENS = { 'screen-path': 'path', 'screen-srs': 'srs', 'home': 'games', 'home-ln': 'games', 'home-en': 'games', 'home-dz': 'games', 'screen-hero': 'hero', 'screen-shop': 'shop' };
+const CRS_TAB_SCREENS = { 'screen-path': 'path', 'screen-srs': 'srs', 'home': 'games', 'home-ln': 'games', 'home-en': 'games', 'screen-hero': 'hero', 'screen-shop': 'shop' };
 showScreen = function(id) {
   crsOrigShowScreen(id);
   const tb = document.getElementById('crs-tabbar');
@@ -9511,7 +9185,7 @@ showScreen = function(id) {
     tb.querySelectorAll('.tb-btn').forEach(b => b.classList.toggle('on', b.dataset.tab === CRS_TAB_SCREENS[id]));
   }
   crsTheme(id === 'lang-select' ? 'hub' : currentLang);
-  document.body.classList.toggle('t-sky', ['screen-path', 'screen-lesson', 'home-ln', 'home-dz', 'screen-hero', 'screen-shop'].includes(id));
+  document.body.classList.toggle('t-sky', ['screen-path', 'screen-lesson', 'home-ln', 'screen-hero', 'screen-shop'].includes(id));
   if(rpg) rpgSyncThrottled(id === 'screen-lesson');
   if(id === 'lang-select') renderHub();
 };
@@ -9521,7 +9195,7 @@ goHome = function() {
   if(crsLastTab !== 'games') openPath(currentLang);
 };
 function crsBoot() {
-  ['home', 'home-ln', 'home-en', 'home-dz'].forEach(h => { const e = document.getElementById(h); if(e) e.classList.add('with-tabbar'); });
+  ['home', 'home-ln', 'home-en'].forEach(h => { const e = document.getElementById(h); if(e) e.classList.add('with-tabbar'); });
   try { rpgInit(); } catch(e) { console.error('[Aprende] RPG init', e); }
   crsTheme('hub');
   renderHub();
@@ -9562,7 +9236,7 @@ function fuzzyMatch(attempt, expected) {
 // FEATURE 3: OBJECTIFS QUOTIDIENS
 // ═══════════════════════════════════════════════
 const DG_OPTIONS = [5, 10, 15, 20]; // minutes per language
-const DG_LANG_LABELS = { es: '🇪🇸', ln: '🇨🇩', en: '🇬🇧', dz: '🇩🇿' };
+const DG_LANG_LABELS = { es: '🇪🇸', ln: '🇨🇩', en: '🇬🇧' };
 function dgGet() { return crsJ('daily_goal', { target: 10, sessions: {}, langSessions: {} }); }
 function dgSave(dg) { crsSetJ('daily_goal', dg); }
 function dgToday() { return rpgDayKey(); }
@@ -9588,19 +9262,19 @@ function dgCheckComplete(dg) {
   const k = dgToday();
   // Check per-language goals: all 3 languages must reach target
   const ls = (dg.langSessions && dg.langSessions[k]) || {};
-  const allDone = ['es', 'ln', 'en', 'dz'].every(l => Math.floor((ls[l] || 0) / 60) >= dg.target);
+  const allDone = ['es', 'ln', 'en'].every(l => Math.floor((ls[l] || 0) / 60) >= dg.target);
   if(allDone && !dg['done_' + k]) {
     dg['done_' + k] = true; dgSave(dg);
-    showToast('🎯 Objectif quotidien atteint pour les 4 langues !', 'correct-toast');
+    showToast('🎯 Objectif quotidien atteint pour les 3 langues !', 'correct-toast');
     try { confetti('normal'); } catch(e) {}
-    if(rpg) { rpgAddGold(15); rpgGainRaw(20); rpgLog('🎯 Objectif multilingue quotidien atteint'); rpgSave(); }
+    if(rpg) { rpgAddGold(15); rpgGainRaw(20); rpgLog('🎯 Objectif trilingue quotidien atteint'); rpgSave(); }
   } else {
     // Check individual language completion
-    ['es', 'ln', 'en', 'dz'].forEach(l => {
+    ['es', 'ln', 'en'].forEach(l => {
       const lMin = Math.floor((ls[l] || 0) / 60);
       if(lMin >= dg.target && !dg['done_' + k + '_' + l]) {
         dg['done_' + k + '_' + l] = true; dgSave(dg);
-        const names = { es: 'espagnol', ln: 'lingala', en: 'anglais', dz: 'darija' };
+        const names = { es: 'espagnol', ln: 'lingala', en: 'anglais' };
         showToast(`🎯 Objectif ${names[l]} atteint !`, 'correct-toast');
         if(rpg) { rpgAddGold(3); rpgGainRaw(5); rpgSave(); }
       }
@@ -9616,13 +9290,13 @@ function dgRenderWidget() {
   const dg = dgGet(), k = dgToday();
   const ls = (dg.langSessions && dg.langSessions[k]) || {};
   const totalDone = Math.floor((dg.sessions[k] || 0) / 60);
-  const langBars = ['es', 'ln', 'en', 'dz'].map(l => {
+  const langBars = ['es', 'ln', 'en'].map(l => {
     const lMin = Math.floor((ls[l] || 0) / 60);
     const pct = Math.min(100, Math.round(100 * lMin / dg.target));
     const ok = lMin >= dg.target;
     return `<div class="dg-lang-row"><span class="dg-flag">${DG_LANG_LABELS[l]}</span><div class="dg-bar"><i style="width:${pct}%;${ok ? 'background:var(--success)' : ''}"></i></div><span class="dg-lang-val" style="${ok ? 'color:var(--success)' : ''}">${lMin}/${dg.target}</span></div>`;
   }).join('');
-  const allDone = ['es', 'ln', 'en', 'dz'].every(l => Math.floor((ls[l] || 0) / 60) >= dg.target);
+  const allDone = ['es', 'ln', 'en'].every(l => Math.floor((ls[l] || 0) / 60) >= dg.target);
   el.innerHTML = `<div class="dg-wrap">
     <div class="dg-row"><span>🎯 Objectif quotidien par langue</span><span style="color:${allDone ? 'var(--success)' : 'var(--accent2)'};font-weight:700">${totalDone} min total ${allDone ? '✅' : ''}</span></div>
     ${langBars}
@@ -9748,8 +9422,8 @@ function showXPFloat(n) {
 // FEATURE 9: BADGES & MILESTONES
 // ═══════════════════════════════════════════════
 const BADGES_DEF = [
-  { id: 'first_lesson', e: '🌱', n: 'Premier pas', d: 'Terminer ta première leçon', check: () => { for(const l of ['es','ln','en','dz']) { if(!COURSES[l]) continue; for(let u=0;u<COURSES[l].units.length;u++) if(crsDone(l,u)>0) return true; } return false; } },
-  { id: 'first_boss', e: '⚔️', n: 'Tueur de boss', d: 'Vaincre ton premier boss', check: () => { for(const l of ['es','ln','en','dz']) { if(!COURSES[l]) continue; for(let u=0;u<COURSES[l].units.length;u++) if(crsDone(l,u)>=5) return true; } return false; } },
+  { id: 'first_lesson', e: '🌱', n: 'Premier pas', d: 'Terminer ta première leçon', check: () => { for(const l of ['es','ln','en']) { for(let u=0;u<COURSES[l].units.length;u++) if(crsDone(l,u)>0) return true; } return false; } },
+  { id: 'first_boss', e: '⚔️', n: 'Tueur de boss', d: 'Vaincre ton premier boss', check: () => { for(const l of ['es','ln','en']) { for(let u=0;u<COURSES[l].units.length;u++) if(crsDone(l,u)>=5) return true; } return false; } },
   { id: 'streak7', e: '🔥', n: 'Flamme', d: '7 jours de série', check: () => rpg && rpg.streak >= 7 },
   { id: 'streak30', e: '🌋', n: 'Volcan', d: '30 jours de série', check: () => rpg && rpg.streak >= 30 },
   { id: 'words50', e: '📚', n: 'Lecteur', d: 'Apprendre 50 mots (SRS)', check: () => Object.keys(srsLoad()).length >= 50 },
@@ -9759,7 +9433,7 @@ const BADGES_DEF = [
   { id: 'lvl10', e: '💎', n: 'Vétéran', d: 'Atteindre le niveau 10', check: () => rpg && rpg.lvl >= 10 },
   { id: 'lvl20', e: '👑', n: 'Légende', d: 'Atteindre le niveau 20', check: () => rpg && rpg.lvl >= 20 },
   { id: 'perfect', e: '🌟', n: 'Perfectionniste', d: 'Obtenir 100 % sur une leçon', check: () => crsJ('badge_perfect', false) },
-  { id: 'trilingual', e: '🌍', n: 'Polyglotte', d: 'Étudier les 4 langues', check: () => ['es','ln','en','dz'].every(l => { if(!COURSES[l]) return true; for(let u=0;u<COURSES[l].units.length;u++) if(crsDone(l,u)>0) return true; return false; }) },
+  { id: 'trilingual', e: '🌍', n: 'Trilingue', d: 'Étudier les 3 langues', check: () => ['es','ln','en'].every(l => { for(let u=0;u<COURSES[l].units.length;u++) if(crsDone(l,u)>0) return true; return false; }) },
   { id: 'gold500', e: '🪙', n: 'Riche', d: 'Accumuler 500 or', check: () => rpg && rpg.gold >= 500 },
   { id: 'boss3', e: '🐉', n: 'Chasseur', d: 'Vaincre 3 boss de quête', check: () => rpg && rpg.bossN >= 3 },
   { id: 'srs100', e: '🔁', n: 'Régulier', d: 'Faire 100 révisions SRS', check: () => srsRevlogLoad().length >= 100 },
@@ -10981,9 +10655,9 @@ function checkReminderTime() {
   if(h === s.reminderHour && m === s.reminderMin && !alreadySent) {
     const dg = dgGet();
     const ls = (dg.langSessions && dg.langSessions[todayKey]) || {};
-    const langNames = { es: 'espagnol', ln: 'lingala', en: 'anglais', dz: 'darija' };
-    const langFlags = { es: '🇪🇸', ln: '🇨🇩', en: '🇬🇧', dz: '🇩🇿' };
-    const missing = ['es', 'ln', 'en', 'dz'].filter(l => Math.floor((ls[l] || 0) / 60) < dg.target);
+    const langNames = { es: 'espagnol', ln: 'lingala', en: 'anglais' };
+    const langFlags = { es: '🇪🇸', ln: '🇨🇩', en: '🇬🇧' };
+    const missing = ['es', 'ln', 'en'].filter(l => Math.floor((ls[l] || 0) / 60) < dg.target);
     if(missing.length > 0) {
       const missingText = missing.map(l => `${langFlags[l]} ${langNames[l]}`).join(', ');
       const totalMin = Math.floor((dg.sessions[todayKey] || 0) / 60);
@@ -11000,9 +10674,9 @@ function checkReminderTime() {
   if(s.streakAlert && h === 22 && m === 0 && !localStorage.getItem('streak_alert_' + todayKey)) {
     const dg = dgGet();
     const ls = (dg.langSessions && dg.langSessions[todayKey]) || {};
-    const langFlags = { es: '🇪🇸', ln: '🇨🇩', en: '🇬🇧', dz: '🇩🇿' };
-    const langNames = { es: 'espagnol', ln: 'lingala', en: 'anglais', dz: 'darija' };
-    const inactive = ['es', 'ln', 'en', 'dz'].filter(l => Math.floor((ls[l] || 0) / 60) < 1);
+    const langFlags = { es: '🇪🇸', ln: '🇨🇩', en: '🇬🇧' };
+    const langNames = { es: 'espagnol', ln: 'lingala', en: 'anglais' };
+    const inactive = ['es', 'ln', 'en'].filter(l => Math.floor((ls[l] || 0) / 60) < 1);
     const streak = rpg ? rpg.streak : 0;
     if(inactive.length > 0 && streak > 0) {
       const inactiveText = inactive.map(l => `${langFlags[l]} ${langNames[l]}`).join(', ');

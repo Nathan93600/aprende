@@ -28,7 +28,7 @@
 <aside id="desktop-sidebar">
   <div class="ds-logo">
     <div class="ds-logo-text">¡Aprende!</div>
-    <div class="ds-logo-sub">Vocab Multilingue</div>
+    <div class="ds-logo-sub">Vocab Trilingue</div>
   </div>
 
   <div class="ds-section">
@@ -56,14 +56,6 @@
         <div class="ds-lang-sub">English</div>
       </div>
       <span class="ds-lang-badge" id="ds-badge-en"></span>
-    </button>
-    <button class="ds-lang-btn" data-lang="dz" onclick="selectLang('dz')">
-      <span class="ds-lang-flag">🇩🇿</span>
-      <div class="ds-lang-text">
-        <div class="ds-lang-name">Darija</div>
-        <div class="ds-lang-sub">دارجة جزائرية</div>
-      </div>
-      <span class="ds-lang-badge" id="ds-badge-dz"></span>
     </button>
   </div>
 
@@ -162,7 +154,7 @@
 <div class="screen active" id="lang-select">
   <div class="hub">
     <div class="hub-logo">¡Aprende!</div>
-    <div class="hub-tag">Espagnol B2 · Lingala B2 · Anglais C1/natif · Darija B2</div>
+    <div class="hub-tag">Espagnol B2 · Lingala B2 · Anglais C1/natif</div>
     <div class="hub-hero" onclick="openHero()" id="hub-hero"></div>
     <div class="hub-chips" id="hub-chips"></div>
     <div id="hub-streak-danger"></div>
@@ -178,10 +170,6 @@
     <div class="hub-card en" onclick="selectLang('en')">
       <div class="hc-row"><span class="hc-flag">🇺🇸</span><div><div class="hc-name">Anglais <span class="srs-due-badge" id="srs-due-en" style="display:none;background:#fff;color:#b22234;font-size:.62rem;font-weight:900;padding:.2rem .5rem;border-radius:999px">🧠 <span data-count>0</span></span></div><div class="hc-sub" id="hc-sub-en"></div><div class="lang-count" id="lang-count-en"></div></div><span class="hc-go">Continuer ▶</span></div>
       <div class="hc-prog"><div class="hc-bar"><i id="hc-bar-en"></i></div><div class="hc-meta"><span id="hc-unit-en"></span><span>Objectif C1 / natif</span></div></div>
-    </div>
-    <div class="hub-card dz" onclick="selectLang('dz')" style="background:linear-gradient(135deg,rgba(0,166,81,.12),rgba(210,16,52,.12));border-color:rgba(0,166,81,.3)">
-      <div class="hc-row"><span class="hc-flag">🇩🇿</span><div><div class="hc-name">Darija <span class="srs-due-badge" id="srs-due-dz" style="display:none;background:#fff;color:#00a651;font-size:.62rem;font-weight:900;padding:.2rem .5rem;border-radius:999px">🧠 <span data-count>0</span></span></div><div class="hc-sub" id="hc-sub-dz"></div><div class="lang-count" id="lang-count-dz"></div></div><span class="hc-go">Continuer ▶</span></div>
-      <div class="hc-prog"><div class="hc-bar"><i id="hc-bar-dz"></i></div><div class="hc-meta"><span id="hc-unit-dz"></span><span>Objectif B2</span></div></div>
     </div>
     <div class="hub-dailies" id="hub-dailies"></div>
   </div>
@@ -608,7 +596,6 @@
       <button class="stx-tab" data-lang="es" onclick="statsSetLang('es')">🇪🇸 Espagnol</button>
       <button class="stx-tab" data-lang="ln" onclick="statsSetLang('ln')">🇨🇩 Lingala</button>
       <button class="stx-tab" data-lang="en" onclick="statsSetLang('en')">🇬🇧 Anglais</button>
-      <button class="stx-tab" data-lang="dz" onclick="statsSetLang('dz')">🇩🇿 Darija</button>
       <button class="stx-tab" style="margin-left:auto" onclick="openSRS(statsLang)">🧠 Réviser</button>
     </div>
     <div id="stats-content"></div>
@@ -847,46 +834,6 @@
     <button class="btn btn-primary" onclick="openByDay('ln')" style="background:linear-gradient(135deg,#ffd60a,#fb923c)">📆 Par jour</button>
     <button class="btn btn-primary" onclick="openSRS('ln')" style="background:linear-gradient(135deg,#a855f7,#ec4899)">🧠 Révision SRS</button>
     <button class="btn btn-primary" onclick="openShuffle('ln')" style="background:linear-gradient(135deg,var(--success),#14b8a6)">🔀 Session rapide</button>
-  </div>
-</div>
-
-<!-- ═══════════ DARIJA HOME ═══════════ -->
-<div class="screen" id="home-dz">
-  <div style="background:radial-gradient(ellipse 80% 60% at 50% -10%,rgba(0,166,81,.18) 0%,transparent 70%),var(--bg);position:fixed;inset:0;z-index:-1"></div>
-  <div style="font-family:'Unbounded',sans-serif;font-size:clamp(2rem,6vw,3.5rem);font-weight:900;background:linear-gradient(135deg,#fff 30%,#00a651 70%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-align:center;margin-bottom:.3rem">🇩🇿 دارجة</div>
-  <div style="color:var(--muted);font-size:.85rem;letter-spacing:.15em;text-transform:uppercase;text-align:center;margin-bottom:2rem">Darija algérienne · Français</div>
-  <div class="stats-bar">
-    <div class="stat"><div class="stat-val" id="dz-stat-score">0</div><div class="stat-lbl">XP</div></div>
-    <div class="stat"><div class="stat-val" id="dz-stat-mastered">0</div><div class="stat-lbl">Maîtrisés</div></div>
-  </div>
-  <div class="games-grid" style="max-width:700px">
-    <div class="game-card" style="--card-color:#00a651;--card-glow:radial-gradient(circle at 50% 0%,#00a651,transparent 70%)" onclick="startDZGame('flashcard')">
-      <span class="card-icon">🃏</span>
-      <div class="card-title">Flashcards</div>
-      <div class="card-desc">Révise les mots darija → français avec auto-évaluation.</div>
-      <span class="card-badge">Révision libre</span>
-    </div>
-    <div class="game-card" style="--card-color:#d21034;--card-glow:radial-gradient(circle at 50% 0%,#d21034,transparent 70%)" onclick="startDZGame('qcm')">
-      <span class="card-icon">🎯</span>
-      <div class="card-title">QCM</div>
-      <div class="card-desc">4 choix, 1 bonne réponse. Teste ta mémoire sur le vocabulaire darija.</div>
-      <span class="card-badge">Score & Combo</span>
-    </div>
-    <div class="game-card" style="--card-color:#ffd60a;--card-glow:radial-gradient(circle at 50% 0%,#ffd60a,transparent 70%)" onclick="startDZGame('typing')">
-      <span class="card-icon">⌨️</span>
-      <div class="card-title">Frappe le mot</div>
-      <div class="card-desc">Vois le français, écris le mot en darija. Pure mémoire.</div>
-      <span class="card-badge">Mémoire active</span>
-    </div>
-  </div>
-  <div style="margin-top:2rem;display:flex;gap:.8rem;flex-wrap:wrap;justify-content:center">
-    <button class="btn btn-ghost" onclick="showScreen('lang-select')">🌍 Changer de langue</button>
-    <button class="btn btn-ghost" onclick="openJournal('dz')">📅 Journal des mots</button>
-    <button class="btn btn-ghost" onclick="openStats('dz')">📊 Stats</button>
-    <button class="btn btn-ghost" onclick="openGrammarJournal()" style="background:linear-gradient(135deg,rgba(0,166,81,.15),rgba(210,16,52,.15));border-color:rgba(0,166,81,.4);color:#90eeb8">📘 Grammaire</button>
-    <button class="btn btn-primary" onclick="openByDay('dz')" style="background:linear-gradient(135deg,#00a651,#14b8a6)">📆 Par jour</button>
-    <button class="btn btn-primary" onclick="openSRS('dz')" style="background:linear-gradient(135deg,#00a651,#d21034)">🧠 Révision SRS</button>
-    <button class="btn btn-primary" onclick="openShuffle('dz')" style="background:linear-gradient(135deg,#00a651,#ffd60a)">🔀 Session rapide</button>
   </div>
 </div>
 
@@ -1610,7 +1557,6 @@
 <script src="courses/es.js"></script>
 <script src="courses/ln.js"></script>
 <script src="courses/en.js"></script>
-<script src="courses/dz.js"></script>
 
 <!-- Main app (boots after auth) -->
 <script src="app.js"></script>

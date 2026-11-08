@@ -1,5 +1,5 @@
 // ¡Aprende! Service Worker v15 — stale-while-revalidate for instant updates
-const CACHE_NAME = 'aprende-v17';
+const CACHE_NAME = 'aprende-v16';
 const ASSETS = [
   './',
   'index.html',
@@ -9,8 +9,6 @@ const ASSETS = [
   'courses/es.js',
   'courses/ln.js',
   'courses/en.js',
-  'courses/dz.js',
-  'dz.js',
   'manifest.json'
 ];
 
