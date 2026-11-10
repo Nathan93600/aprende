@@ -9888,6 +9888,37 @@ function openBadges() {
 // ═══════════════════════════════════════════════
 const STORIES = {
   es: [
+    { id: 'partido', title: '🔀 Rumbo al partido', desc: 'En route pour le match avec Lucía. À toi de choisir tes répliques : l\'histoire suit tes choix.', level: 'B2',
+      chars: { T: ['🧑', 'Tú'], L: ['👩', 'Lucía'] },
+      steps: [
+        { type: 'line', who: 'L', text: '¡Venga, que llegamos tarde al partido! ¿Has metido las cosas en el maletero?', tr: 'Allez, on va être en retard au match ! Tu as mis les affaires dans le coffre ?' },
+        { type: 'choice', who: 'T', prompt: 'Tu as tout chargé. Tu réponds :', opts: [
+          { text: 'Sí, ya está todo en el maletero. Solo me falta coger las entradas.', tr: 'Oui, tout est déjà dans le coffre. Il me reste juste à prendre les billets.', best: true, note: 'maletero + coger (en Espagne) : parfait.',
+            then: [{ type: 'line', who: 'L', text: 'Pues cógelas ya, que nos vamos.', tr: 'Alors prends-les tout de suite, on y va.' }] },
+          { text: 'Sí, todo está en el cofre. Solo debo prender las entradas.', tr: '(calque) Oui, tout est dans le coffre. Je dois juste prendre les billets.', ok: false, note: 'Deux faux-amis : cofre = coffre au trésor (coffre de voiture = maletero), et prender = allumer (prendre = coger).',
+            then: [{ type: 'line', who: 'L', text: '¿En el cofre? ¿Qué somos, piratas? En el maletero, hombre. Coge las entradas y vámonos.', tr: 'Dans le coffre au trésor ? On est des pirates ? Dans le coffre de la voiture, enfin. Prends les billets et on y va.' }] },
+          { text: 'Sí, lo he puesto todo en el coche. Voy a por las entradas.', tr: 'Oui, j\'ai tout mis dans la voiture. Je vais chercher les billets.', note: 'Correct et naturel. Tu évites juste le mot que Lucía attendait : maletero.',
+            then: [{ type: 'line', who: 'L', text: 'Vale, date prisa.', tr: 'OK, dépêche-toi.' }] },
+        ] },
+        { type: 'line', who: 'L', text: '¡Cuidado! Agáchate, que el maletero no cierra bien y te vas a dar en la cabeza.', tr: 'Attention ! Baisse-toi, le coffre ferme mal et tu vas te cogner la tête.' },
+        { type: 'q', prompt: 'Que veut dire « agáchate » ?', opts: ['Dépêche-toi', 'Baisse-toi', 'Accroche-toi'], ans: 1 },
+        { type: 'line', who: 'L', text: 'Sube al coche. Y agárrate, que conduzco yo.', tr: 'Monte dans la voiture. Et accroche-toi, c\'est moi qui conduis.' },
+        { type: 'q', prompt: '« Sube al coche » veut dire…', opts: ['Subis la voiture', 'Monte dans la voiture', 'Sors de la voiture'], ans: 1 },
+        { type: 'line', who: 'L', text: '¿Has visto la plantilla de este año? Han fichado a tres jugadores nuevos.', tr: 'Tu as vu l\'effectif de cette année ? Ils ont recruté trois nouveaux joueurs.' },
+        { type: 'choice', who: 'T', prompt: 'Pour toi, le problème n\'est pas l\'effectif mais l\'entraîneur. Tu dis :', opts: [
+          { text: 'El problema no es la plantilla, pero el entrenador.', tr: '(calque) Le problème n\'est pas l\'effectif, mais l\'entraîneur.', ok: false, note: 'Après une négation qu\'on corrige, pero ne marche pas : il faut sino.',
+            then: [{ type: 'line', who: 'L', text: 'Sino el entrenador, querrás decir. Y sí, ahí te doy la razón.', tr: '« Sino el entrenador », tu veux dire. Et oui, là je te donne raison.' }] },
+          { text: 'El problema no es la plantilla, sino el entrenador. No es que el equipo juegue mal, sino que él no sabe hacer los cambios.', tr: 'Le problème, ce n\'est pas l\'effectif mais l\'entraîneur. Ce n\'est pas que l\'équipe joue mal, c\'est qu\'il ne sait pas faire les changements.', best: true, note: 'sino + nom, puis sino que + verbe conjugué : les deux dans la même réplique.',
+            then: [{ type: 'line', who: 'L', text: '¡Exacto! Siempre saca a los suplentes cuando ya es tarde.', tr: 'Exactement ! Il fait toujours entrer les remplaçants quand c\'est déjà trop tard.' }] },
+          { text: 'Para mí, el problema es el entrenador, no la plantilla.', tr: 'Pour moi, le problème c\'est l\'entraîneur, pas l\'effectif.', note: 'Correct : tu contournes sino en inversant la phrase. Entraîne-toi quand même à « no… sino… ».',
+            then: [{ type: 'line', who: 'L', text: 'Puede ser. A ver qué pasa hoy.', tr: 'Possible. On verra bien aujourd\'hui.' }] },
+        ] },
+        { type: 'line', who: 'L', text: 'Por cierto, ¿sacaste las entradas por internet o hay que recogerlas en taquilla?', tr: 'Au fait, tu as pris les billets sur internet ou il faut les récupérer au guichet ?' },
+        { type: 'q', prompt: 'Ici, « sacar las entradas » veut dire…', opts: ['Perdre les billets', 'Acheter / prendre les billets', 'Montrer les billets'], ans: 1 },
+        { type: 'line', who: 'T', text: 'Las saqué por internet. Las llevo en el móvil.', tr: 'Je les ai prises sur internet. Je les ai sur mon portable.' },
+        { type: 'line', who: 'L', text: 'Perfecto. ¡Pues a por los tres puntos!', tr: 'Parfait. Allez, on va chercher les trois points !' },
+      ]
+    },
     { id: 'cafe', title: '☕ En el café', desc: 'Pablo commande un café et rencontre une surprise.', level: 'A1',
       chars: { P: ['🧑', 'Pablo'], C: ['👩‍🍳', 'La camarera'] },
       steps: [
@@ -9995,6 +10026,43 @@ const STORIES = {
     },
   ],
   en: [
+    { id: 'outage', title: '🔀 The Outage', desc: 'Internet coupe juste avant une deadline. À toi de choisir tes répliques : l\'histoire suit tes choix.', level: 'C1',
+      chars: { Y: ['🧑', 'You'], M: ['👩', 'Maya'] },
+      steps: [
+        { type: 'line', who: 'M', text: 'Hey, did the internet just go down, or is it just me?', tr: 'Hé, internet vient de couper, ou c\'est juste moi ?' },
+        { type: 'choice', who: 'Y', prompt: 'Ça a coupé chez toi aussi. Tu réponds :', opts: [
+          { text: 'Yes, the connection stopped working ten minutes ago.', tr: 'Oui, la connexion a cessé de fonctionner il y a dix minutes.', note: 'Correct, mais scolaire. À l\'oral, un réseau « goes down ».',
+            then: [{ type: 'line', who: 'M', text: 'Stopped working, huh? You sound like tech support. Anyway, I have a deadline at midnight.', tr: 'A cessé de fonctionner, hein ? On dirait le support technique. Bref, j\'ai une deadline à minuit.' }] },
+          { text: 'Yeah, it went down like ten minutes ago, for some reason.', tr: 'Ouais, ça a coupé il y a genre dix minutes, va savoir pourquoi.', best: true, note: 'went down + for some reason : exactement ce que dirait un Américain.',
+            then: [{ type: 'line', who: 'M', text: 'Ugh, perfect timing. I have a deadline at midnight.', tr: 'Super, pile au bon moment. J\'ai une deadline à minuit.' }] },
+          { text: 'Yes, internet fell since ten minutes.', tr: '(calque) Oui, internet est tombé depuis dix minutes.', ok: false, note: 'Deux calques. Pour un réseau, « tomber » se dit go down. Et « depuis dix minutes » pour un événement passé = ten minutes ago.',
+            then: [{ type: 'line', who: 'M', text: 'It fell? You mean it went down. Either way, I have a deadline at midnight.', tr: 'Il est tombé ? Tu veux dire que ça a coupé. Dans tous les cas, j\'ai une deadline à minuit.' }] },
+        ] },
+        { type: 'line', who: 'M', text: 'I called the provider. I was on hold for an hour and nodded off twice.', tr: 'J\'ai appelé l\'opérateur. J\'ai attendu une heure en ligne et j\'ai piqué du nez deux fois.' },
+        { type: 'q', prompt: 'Que veut dire « nodded off » ?', opts: ['A raccroché', 'S\'est assoupie', 'S\'est énervée'], ans: 1 },
+        { type: 'line', who: 'M', text: 'And when I finally got someone, the guy wouldn\'t budge. No technician until Thursday.', tr: 'Et quand j\'ai enfin eu quelqu\'un, le type n\'a rien voulu savoir. Pas de technicien avant jeudi.' },
+        { type: 'choice', who: 'Y', prompt: 'Maya est à bout. Tu proposes un plan :', opts: [
+          { text: 'Hold on, I\'ve got an idea. Let\'s run by the café and grab some grub while we\'re at it.', tr: 'Attends, j\'ai une idée. On passe vite fait au café et on se prend à manger tant qu\'on y est.', best: true, note: 'hold on, run by, grub : trois expressions de ta semaine dans une seule phrase.',
+            then: [{ type: 'line', who: 'M', text: 'Now you\'re talking. I\'m starving anyway.', tr: 'Là tu parles. De toute façon je meurs de faim.' }] },
+          { text: 'Wait, I have an idea. We pass by the coffee and we take food.', tr: '(calque) Attends, j\'ai une idée. On passe au café et on prend à manger.', ok: false, note: 'Passer quelque part = run by / swing by (pass by = passer devant sans s\'arrêter). Coffee est la boisson, le lieu est café. Et on dit grab ou get food, pas take.',
+            then: [{ type: 'line', who: 'M', text: 'You mean run by the café? Sure. And yes, food. Please.', tr: 'Tu veux dire passer au café ? D\'accord. Et oui, à manger. S\'il te plaît.' }] },
+          { text: 'We could go to the café and use their Wi-Fi.', tr: 'On pourrait aller au café et utiliser leur Wi-Fi.', note: 'Correct et clair. Un natif glisserait un phrasal verb : run by, swing by.',
+            then: [{ type: 'line', who: 'M', text: 'Works for me. Let me grab my laptop.', tr: 'Ça me va. Je prends mon ordi.' }] },
+        ] },
+        { type: 'line', who: 'M', text: 'If my manager finds out I missed the deadline, I\'m gonna get an earful.', tr: 'Si ma manager apprend que j\'ai raté la deadline, je vais me faire passer un savon.' },
+        { type: 'q', prompt: '« Get an earful » veut dire…', opts: ['Recevoir des félicitations', 'Se faire passer un savon', 'Avoir mal aux oreilles'], ans: 1 },
+        { type: 'line', who: 'Y', text: 'Don\'t dwell on it. We\'ll make our way there, you\'ll hit send, done.', tr: 'Ne ressasse pas. On y va, tu envoies, terminé.' },
+        { type: 'line', who: 'M', text: 'Okay. And for the record, you\'re buying.', tr: 'OK. Et que ce soit dit, c\'est toi qui paies.' },
+        { type: 'choice', who: 'Y', prompt: 'Dernier mot :', opts: [
+          { text: 'I am agree, but you must me one.', tr: '(calque) Je suis d\'accord, mais tu m\'en dois une.', ok: false, note: '« I am agree » est l\'erreur classique : agree est un verbe (I agree). Et « tu m\'en dois une » = you owe me one.',
+            then: [{ type: 'line', who: 'M', text: 'You agree, and I owe you one. Got it. Let\'s go.', tr: 'Tu es d\'accord, et je t\'en dois une. Compris. On y va.' }] },
+          { text: 'All right, but you owe me a favor.', tr: 'D\'accord, mais tu me dois un service.', note: 'Correct. « You owe me one » est la version courte que tout le monde utilise.',
+            then: [{ type: 'line', who: 'M', text: 'Deal. Let\'s go before I nod off again.', tr: 'Marché conclu. On y va avant que je pique encore du nez.' }] },
+          { text: 'Fair enough. But you owe me one.', tr: 'Ça se tient. Mais tu m\'en dois une.', best: true, note: 'Fair enough : la réplique réflexe pour accepter de bonne grâce.',
+            then: [{ type: 'line', who: 'M', text: 'Deal. Let\'s go before I nod off again.', tr: 'Marché conclu. On y va avant que je pique encore du nez.' }] },
+        ] },
+      ]
+    },
     { id: 'coffee', title: '☕ Coffee shop', desc: 'Ordering coffee like a local.', level: 'B2',
       chars: { Y: ['🧑', 'You'], B: ['👩', 'Barista'] },
       steps: [
@@ -10053,7 +10121,8 @@ function openStories(lang) {
 function storyPlay(lang, id) {
   const s = (STORIES[lang] || []).find(x => x.id === id);
   if(!s) return;
-  story = { lang, id, data: s, step: 0, correct: 0, total: s.steps.filter(x => x.type === 'q').length };
+  // steps est une copie : les embranchements (type 'choice') y insèrent leur suite au fil des réponses
+  story = { lang, id, data: s, steps: s.steps.slice(), step: 0, correct: 0, total: s.steps.filter(x => x.type === 'q' || x.type === 'choice').length };
   showScreen('screen-story-play');
   document.getElementById('story-play-title').textContent = s.title;
   document.getElementById('story-play-body').innerHTML = '';
@@ -10061,8 +10130,8 @@ function storyPlay(lang, id) {
   storyShowStep();
 }
 function storyShowStep() {
-  if(!story || story.step >= story.data.steps.length) return storyEnd();
-  const s = story.data.steps[story.step], body = document.getElementById('story-play-body');
+  if(!story || story.step >= story.steps.length) return storyEnd();
+  const s = story.steps[story.step], body = document.getElementById('story-play-body');
   const btn = document.getElementById('story-next-btn');
   if(s.type === 'line') {
     const ch = story.data.chars[s.who];
@@ -10083,10 +10152,39 @@ function storyShowStep() {
     </div>`;
     btn.style.display = 'none';
     body.scrollTop = body.scrollHeight;
+  } else if(s.type === 'choice') {
+    // Embranchement : tu choisis ta réplique, l'histoire continue selon ton choix
+    body.innerHTML += `<div class="story-q" id="sq-${story.step}">
+      <div class="sq-prompt">💬 ${crsEsc(s.prompt || 'Que réponds-tu ?')}</div>
+      <div class="opts">${s.opts.map((o, i) => `<button class="opt" style="text-align:left" onclick="storyChoose(${story.step},${i})">${crsEsc(o.text)}</button>`).join('')}</div>
+    </div>`;
+    btn.style.display = 'none';
+    body.scrollTop = body.scrollHeight;
   }
 }
+function storyChoose(step, idx) {
+  const s = story.steps[step], q = document.getElementById('sq-' + step);
+  if(!q || q.dataset.answered) return;
+  q.dataset.answered = '1';
+  const o = s.opts[idx], good = o.ok !== false, body = document.getElementById('story-play-body');
+  q.querySelectorAll('.opt').forEach((b, i) => { b.disabled = true; if(i === idx) b.classList.add(good ? 'good' : 'bad'); else if(!good && s.opts[i].best) b.classList.add('good'); });
+  if(good) { story.correct++; try { haptic('light'); } catch(e) {} }
+  const ch = story.data.chars[s.who] || ['🧑', 'Toi'];
+  const isRight = s.who === Object.keys(story.data.chars)[1] || Object.keys(story.data.chars).length === 1;
+  const tag = o.best ? '✅ Le plus naturel' : good ? '👍 Correct' : '⚠️ À éviter';
+  body.innerHTML += `<div class="story-bubble${isRight ? '' : ' right'}">
+      <div class="story-ava">${ch[0]}</div>
+      <div class="story-msg"><b>${ch[1]}</b><br>${crsEsc(o.text)}<br><small style="color:var(--muted)">${crsEsc(o.tr || '')}</small></div>
+    </div>
+    <div class="tipbox" style="margin:.4rem 0 .8rem"><b>${tag}</b>${o.note ? ' · ' + crsEsc(o.note) : ''}</div>`;
+  if(CRS_META[story.lang].tts && good) crsSpeak(story.lang, o.text); // on ne fait pas prononcer une réplique fautive
+  if(o.then && o.then.length) story.steps.splice(step + 1, 0, ...o.then);
+  const btn = document.getElementById('story-next-btn');
+  btn.style.display = ''; btn.disabled = false; btn.textContent = 'Continuer';
+  body.scrollTop = body.scrollHeight;
+}
 function storyAnswer(step, idx) {
-  const s = story.data.steps[step], q = document.getElementById('sq-' + step);
+  const s = story.steps[step], q = document.getElementById('sq-' + step);
   if(!q || q.dataset.answered) return;
   q.dataset.answered = '1';
   const btns = q.querySelectorAll('.opt');
