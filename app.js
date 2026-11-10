@@ -6764,6 +6764,34 @@ function exportProgress(forGenere) {
   }
 }
 
+/* ── Fiche enrichie d'un mot : construite à partir de courses/feedback.js
+   (astuce pour retenir, autres façons de le dire avec leur nuance, pièges de francophone). ── */
+let _ficheIdx = null, _ficheBack = null;
+function ficheFind(lang, word) {
+  if(typeof CRS_FB === 'undefined' || !CRS_FB[lang] || !word) return null;
+  if(CRS_FB[lang][word]) return { key: word, fb: CRS_FB[lang][word] };
+  if(!_ficheIdx) { _ficheIdx = {}; for(const l in CRS_FB) { _ficheIdx[l] = {}; for(const k in CRS_FB[l]) _ficheIdx[l][crsFbNorm(k)] = k; } }
+  const k = _ficheIdx[lang][crsFbNorm(word)];
+  return k ? { key: k, fb: CRS_FB[lang][k] } : null;
+}
+function ficheHas(lang, word) { const f = ficheFind(lang, word); return !!(f && ((f.fb.alt && f.fb.alt.length) || (f.fb.err && f.fb.err.length) || f.fb.tip)); }
+function openFiche(lang, word, back) {
+  const f = ficheFind(lang, word); if(!f) return;
+  _ficheBack = typeof back === 'function' ? back : null;
+  let w = null;
+  for(const u of ((COURSES[lang] || {}).units || [])) { w = u.w.find(x => x[0] === f.key); if(w) break; }
+  const FL = { es: '🇪🇸', en: '🇬🇧', ln: '🇨🇩' }, spk = !!(CRS_META[lang] && CRS_META[lang].tts), tn = crsFbNorm(f.key);
+  const alts = (f.fb.alt || []).filter(a => crsFbNorm(a[0]) !== tn), errs = f.fb.err || [];
+  const sec = t => `<div style="font-weight:900;margin:1rem 0 .4rem">${t}</div>`;
+  crsModal(`<div class="cm-t">${FL[lang] || ''} ${crsEsc(f.key)} ${spk ? `<button class="spk" onclick="crsSpeak('${lang}', ficheFind('${lang}', decodeURIComponent('${encodeURIComponent(f.key)}')).key)">🔊</button>` : ''}</div>
+    ${w ? `<div class="cm-s">${crsEsc(w[1])}</div>${w[2] ? `<div class="gw"><div><div class="gw-e">« ${crsEsc(w[2])} »<br>${crsEsc(w[3])}</div></div>${spk ? `<button class="spk" onclick="crsSpeak('${lang}', decodeURIComponent('${encodeURIComponent(w[2])}'))">🔊</button>` : ''}</div>` : ''}` : ''}
+    ${f.fb.tip ? `${sec('💡 Pour retenir')}<div class="tipbox">${crsEsc(f.fb.tip)}</div>` : ''}
+    ${alts.length ? sec('Se dit aussi') + alts.map(a => `<div class="gw"><div><div class="gw-w">${crsEsc(a[0])}</div>${a[1] ? `<div class="gw-f">${crsEsc(a[1])}</div>` : ''}</div></div>`).join('') : ''}
+    ${errs.length ? sec('⚠️ Pièges') + errs.map(e => `<div class="gw"><div><div class="gw-w" style="text-decoration:line-through;opacity:.75">${crsEsc(e[0].replace(/^\*/, ''))}</div><div class="gw-f">${crsEsc(e[1])}</div></div></div>`).join('') : ''}
+    <button class="gbtn ghost" onclick="${_ficheBack ? '_ficheBack()' : 'crsCloseModal()'}">${_ficheBack ? '← Retour' : 'Fermer'}</button>`);
+  const box = document.getElementById('crs-modal-box'); if(box) box.scrollTop = 0;
+}
+
 /* ── Bilan de la semaine : calculé sur l'appareil à partir de l'historique des révisions (srs_revlog).
    Le « mot de Claude » (CRS_WEEK, dans courses/feedback.js) est la seule partie écrite à la main, à chaque « génère ». ── */
 function bilanData() {
@@ -6825,7 +6853,7 @@ function openBilan() {
       ${d.langs.map(x => `<div style="flex:1;text-align:center;border:1.5px solid var(--border);border-radius:12px;padding:.5rem .3rem"><div style="font-size:1.2rem">${FL[x.l]}</div><div style="font-weight:900">${x.n}</div><div style="font-size:.72rem;font-weight:800;color:var(--muted)">${x.n ? Math.round(100 * x.ok / x.n) + ' % réussis' : 'rien cette semaine'}</div></div>`).join('')}
     </div>
     ${d.worst.length ? `<div style="font-weight:900;margin-bottom:.4rem">Tes mots les plus ratés</div>
-      ${d.worst.map((x, i) => `<div class="gw">${CRS_META[x.lang] && CRS_META[x.lang].tts ? `<button class="spk" onclick="crsSpeak('${x.lang}', bilanData().worst[${i}].word)">🔊</button>` : ''}<div style="flex:1"><div class="gw-w">${FL[x.lang] || ''} ${crsEsc(x.word)}</div><div class="gw-f">${crsEsc(x.fr)}</div></div><div style="font-weight:900;white-space:nowrap">${x.n}× raté</div></div>`).join('')}` : (d.w.n ? '<div class="tipbox">Aucune carte ratée cette semaine 👏</div>' : '')}
+      ${d.worst.map((x, i) => `<div class="gw">${CRS_META[x.lang] && CRS_META[x.lang].tts ? `<button class="spk" onclick="crsSpeak('${x.lang}', bilanData().worst[${i}].word)">🔊</button>` : ''}<div style="flex:1"><div class="gw-w">${FL[x.lang] || ''} ${crsEsc(x.word)}</div><div class="gw-f">${crsEsc(x.fr)}</div></div><div style="font-weight:900;white-space:nowrap">${x.n}× raté</div>${ficheHas(x.lang, x.word) ? `<button class="spk" title="Fiche" onclick="openFiche('${x.lang}', bilanData().worst[${i}].word, openBilan)">＋</button>` : ''}</div>`).join('')}` : (d.w.n ? '<div class="tipbox">Aucune carte ratée cette semaine 👏</div>' : '')}
     ${week && week.notes && week.notes.length ? `<div style="font-weight:900;margin:1rem 0 .4rem">Le mot de Claude <span style="font-weight:700;color:var(--muted);font-size:.78rem">· ${crsEsc(week.date)}</span></div><div class="tipbox">${week.notes.map(n => '• ' + crsEsc(n)).join('<br>')}</div>` : ''}
     <button class="gbtn ghost" onclick="crsCloseModal()">Fermer</button>`);
 }
@@ -7586,6 +7614,7 @@ function srsRenderStack() {
         <div class="srs-back-text" style="display:none;border-top:1px solid rgba(255,255,255,.2);padding-top:.8rem;width:100%;text-align:center;animation:fadeIn .3s ease">
           <div style="font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:var(--accent2);margin-bottom:.4rem">🇫🇷 Traduction</div>
           <div style="font-size:1.3rem;font-weight:700;color:#fff">${data.fr || '?'}</div>${exampleHtml}
+          ${ficheHas(card.lang, card.word) ? `<button onclick="event.stopPropagation();openFiche(srsState.currentCard.lang, srsState.currentCard.word)" style="margin-top:.8rem;padding:.45rem .9rem;border-radius:999px;border:1.5px solid rgba(255,255,255,.45);background:rgba(255,255,255,.1);color:#fff;font-weight:800;font-size:.8rem;cursor:pointer">＋ Fiche : variantes et pièges</button>` : ''}
         </div>
         <div class="srs-tap-text" style="font-size:.75rem;color:rgba(255,255,255,.55);opacity:.9">↓ Tap pour révéler</div>`;
       el.onclick = () => srsReveal();
@@ -9037,7 +9066,7 @@ function crsGuide(lang, u) {
   const unit = COURSES[lang].units[u], spk = !!CRS_META[lang].tts;
   crsModal(`<div class="cm-t">📘 ${unit.e} ${crsEsc(unit.t)}</div>
     <div class="tipbox" style="margin-bottom:.8rem"><b>${crsEsc(unit.g.t)}</b><br>${crsEsc(unit.g.tip)}</div>
-    ${unit.w.map((w, i) => `<div class="gw">${spk ? `<button class="spk" onclick="crsSpeak('${lang}', COURSES['${lang}'].units[${u}].w[${i}][0])">🔊</button>` : ''}<div><div class="gw-w">${crsEsc(w[0])}${w[4] ? '<span class="unv">à valider</span>' : ''}</div><div class="gw-f">${crsEsc(w[1])}</div>${w[2] ? `<div class="gw-e">« ${crsEsc(w[2])} » — ${crsEsc(w[3])}</div>` : ''}</div></div>`).join('')}
+    ${unit.w.map((w, i) => `<div class="gw">${spk ? `<button class="spk" onclick="crsSpeak('${lang}', COURSES['${lang}'].units[${u}].w[${i}][0])">🔊</button>` : ''}<div style="flex:1"><div class="gw-w">${crsEsc(w[0])}${w[4] ? '<span class="unv">à valider</span>' : ''}</div><div class="gw-f">${crsEsc(w[1])}</div>${w[2] ? `<div class="gw-e">« ${crsEsc(w[2])} » — ${crsEsc(w[3])}</div>` : ''}</div>${ficheHas(lang, w[0]) ? `<button class="spk" title="Fiche" onclick="openFiche('${lang}', COURSES['${lang}'].units[${u}].w[${i}][0], () => crsGuide('${lang}', ${u}))">＋</button>` : ''}</div>`).join('')}
     <button class="gbtn ghost" onclick="crsCloseModal()">Fermer</button>`);
 }
 function crsAskTest(lang, sec) {

@@ -1,6 +1,7 @@
 // ¡Aprende! — Corrections multi-variantes pour la traduction libre (freetr)
 // Clé = mot cible exact (w[0]) du cours.
 //   alt : [[autre réponse acceptée, nuance (optionnelle)], ...]  -> compté juste
+//   tip : astuce pour retenir (optionnelle), affichée dans la fiche du mot
 //   err : [[erreur typique de francophone, explication], ...]    -> compté faux, avec explication ciblée
 //         (préfixe "*" = l'erreur est détectée n'importe où dans la réponse)
 // Rempli à chaque « génère » du vendredi pour les mots de la semaine.
@@ -364,22 +365,27 @@ const CRS_FB = {
 
     // ── Sur mesure — Tes bêtes noires (cartes SRS les plus ratées) ──
     "Quench": {
+      tip: "Pense à « thirst-quencher », le mot des pubs de soda pour « désaltérant ». Quench rime avec drench (tremper) : de l'eau dans les deux cas.",
       alt: [["quench your thirst"], ["slake", "littéraire"]],
       err: [["refresh", "Refresh = rafraîchir (une page, la mémoire). Étancher la soif = quench."], ["hydrate", "Hydrate = hydrater. Désaltérer, étancher = quench."]]
     },
     "Conceited": {
+      tip: "Vient de conceit (vanité), même famille que concept : quelqu'un de conceited a une trop haute idée de lui-même.",
       alt: [["arrogant"], ["full of himself", "oral, très courant"], ["full of yourself"], ["cocky", "familier : trop sûr de lui, plus que vaniteux"], ["vain", "= vaniteux, surtout sur l'apparence"], ["pretentious", "= prétentieux, qui se donne un genre"], ["proud", "nuance : proud est neutre ou positif (fier) ; conceited est toujours un reproche"]],
       err: [["concerned", "Confusion fréquente : concerned = inquiet / concerné. Orgueilleux = conceited."], ["orgulous", "Calque du français : ce mot ne s'emploie pas."]]
     },
     "to bestow (sth on sb)": {
+      tip: "be + stow (déposer, ranger) : déposer solennellement quelque chose SUR quelqu'un, d'où bestow ON.",
       alt: [["grant", "accorder (un droit, une demande)"], ["award", "décerner (un prix)"], ["confer", "très soutenu, pour un titre ou un diplôme"], ["give", "juste, mais perd tout le côté solennel"]],
       err: [["offer", "Offer = proposer. Pour un octroi solennel : bestow / grant / award."], ["bestow to", "La préposition est ON : bestow something ON someone."]]
     },
     "Crooked": {
+      tip: "A crook, c'est un crochet (la crosse du berger) et aussi un escroc. Ce qui est crooked est tordu comme un crochet ; a crooked cop est un flic « tordu », un ripou.",
       alt: [["bent", "plié, courbé"], ["twisted", "vrillé"], ["lopsided", "de travers, asymétrique"], ["wonky", "familier UK"]],
       err: [["crocked", "Crocked = (argot) bourré ou blessé. Tordu = crooked, avec deux o."], ["curved", "Curved = courbe, arrondi (c'est voulu). Crooked = tordu, de travers (c'est un défaut)."], ["torded", "Calque du français."]]
     },
     "Dwell": {
+      tip: "A dwelling = une habitation. Dwell on something, c'est « habiter » dans une pensée et ne plus en sortir.",
       alt: [["dwell on", "s'attarder sur"], ["linger", "s'attarder (dans un lieu)"], ["reside", "demeurer, soutenu"], ["live", "demeurer, neutre"]],
       err: [["delay", "Delay = retarder. S'attarder sur = dwell on."], ["stay late", "Stay late = rester tard. S'attarder sur un sujet = dwell on."]]
     }
@@ -387,34 +393,42 @@ const CRS_FB = {
   es: {
     // ── Sur mesure — Tus bestias negras (cartes SRS les plus ratées) ──
     "agacharse": {
+      tip: "Gacho = baissé, tombant (con la cabeza gacha = la tête basse). A-gach-arse, c'est se mettre « gacho ».",
       alt: [["ponerse en cuclillas", "s'accroupir précisément, sur les talons"], ["acuclillarse", "plus rare"], ["inclinarse", "se pencher (le buste seulement)"]],
       err: [["bajarse", "Bajarse = descendre (d'un bus, d'un vélo). Se baisser = agacharse."], ["bajar", "Bajar = descendre, ou baisser quelque chose. Se baisser = agacharse."], ["agachar", "Verbe pronominal : agacharSE."]]
     },
     "subir": {
+      tip: "Faux-ami total : subir = monter. Retiens la paire subir / bajar (monter / descendre), comme dans « sube el volumen ».",
       alt: [["montar", "monter sur ou dans (un cheval, un vélo), ou assembler"], ["ascender", "soutenu : ascension, promotion"]],
       err: [["levantar", "Levantar = lever, soulever. Monter = subir."], ["sufrir", "Sufrir = subir (au sens français). Le verbe espagnol subir veut dire monter."]]
     },
     "agarrar": {
+      tip: "Vient de garra (la griffe, la serre) : agarrar, c'est attraper comme avec des griffes.",
       alt: [["coger", "Espagne (vulgaire en Amérique latine)"], ["tomar", "prendre, neutre, partout"], ["atrapar", "attraper ce qui s'échappe"], ["pillar", "familier, Espagne"]],
       err: [["prender", "Faux-ami : prender = allumer, accrocher. Prendre = coger, tomar, agarrar."], ["agarar", "Deux r : agarrar."]]
     },
     "plantilla": {
+      tip: "Petite planta (plante du pied) : la plantilla est d'abord la semelle intérieure, donc un gabarit, puis la liste type du personnel, l'effectif.",
       alt: [["la plantilla"], ["modelo", "modèle, au sens général"], ["equipo", "l'équipe"], ["patrón", "patron (couture)"], ["plantel", "effectif d'une équipe, Amérique latine"]],
       err: [["efectivo", "Faux-ami : efectivo = argent liquide (pagar en efectivo). L'effectif d'une équipe = la plantilla."], ["plantillo", "Féminin : la plantilla."], ["planta", "Planta = plante, ou étage."]]
     },
     "sacar": {
+      tip: "Pense à un sac : sacar, c'est sortir quelque chose du sac. Sacar una nota, sacar dinero, sacar fotos : on tire toujours quelque chose de quelque part.",
       alt: [["obtener", "obtenir, plus soutenu"], ["conseguir", "obtenir en y arrivant"], ["extraer", "extraire"]],
       err: [["salir", "Salir = sortir soi-même (intransitif). Sortir quelque chose = sacar."], ["tirar", "Faux-ami : tirar = jeter, lancer. Tirer quelque chose de = sacar."], ["sortir", "Mot français. En espagnol : salir (soi-même), sacar (quelque chose)."]]
     },
     "sino que": {
+      tip: "No A, sino B. Si B contient un verbe conjugué, ajoute QUE : no me llamó, sino QUE me escribió.",
       alt: [],
       err: [["pero", "Après une négation qu'on corrige (« non pas A mais B »), l'espagnol exige sino / sino que, pas pero."], ["sino", "Sino seul va devant un nom, un adjectif ou un infinitif. Devant un verbe conjugué : sino QUE."], ["pero que", "La forme est sino que."], ["mas", "Mas = mais, littéraire et vieilli."]]
     },
     "maletero": {
+      tip: "maleta (valise) + -ero (l'endroit prévu pour) : là où vont les valises.",
       alt: [["el maletero"], ["baúl", "Argentine, Colombie"], ["cajuela", "Mexique"], ["maletera", "Pérou, Chili"]],
       err: [["cofre", "Faux-ami : cofre = coffre au trésor, coffret. Coffre de voiture = maletero."], ["maleta", "Maleta = la valise. Le coffre = el maletero."], ["caja", "Caja = boîte, caisse."]]
     },
     "coger": {
+      tip: "Même origine que « cueillir » (latin colligere) : coger, c'est cueillir, donc prendre. À éviter en Amérique latine.",
       alt: [["tomar", "neutre, partout"], ["agarrar", "Amérique latine"], ["pillar", "familier, Espagne"], ["atrapar", "attraper"]],
       err: [["prender", "Faux-ami : prender = allumer, accrocher."], ["cojer", "Avec un g : coger (mais yo cojo)."]]
     }
