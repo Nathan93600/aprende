@@ -695,11 +695,13 @@ function playRecorded(lang, text, rate, fallback) {
     const m = (typeof AUDIO_MAP !== 'undefined' && AUDIO_MAP[lang]) || null; if(!m || !text) return false;
     const id = m[String(text).replace(/\(.*?\)/g, '').trim()]; if(!id) return false;
     try { speechSynthesis.cancel(); } catch(e) {}
-    if(_recAudio) { try { _recAudio.pause(); } catch(e) {} }
+    const old = _recAudio;
     const a = new Audio('audio/' + lang + '/' + id + '.mp3'); _recAudio = a;
+    if(old) { try { old.pause(); } catch(e) {} }
     if(rate) a.playbackRate = Math.min(1.5, Math.max(.5, rate / 0.95));
     let failed = false;
-    const fb = () => { if(failed) return; failed = true; if(_recAudio === a) _recAudio = null; fallback(); };
+    // un enregistrement interrompu par le suivant ne doit pas déclencher la voix de secours
+    const fb = () => { if(failed || _recAudio !== a) return; failed = true; _recAudio = null; fallback(); };
     a.onerror = fb;
     const p = a.play(); if(p && p.catch) p.catch(fb);
     return true;
@@ -708,7 +710,7 @@ function playRecorded(lang, text, rate, fallback) {
 function speakEN(text, rate, noRec) {
   try {
     if(!noRec && playRecorded('en', text, rate, () => speakEN(text, rate, true))) return;
-    if(_recAudio) { try { _recAudio.pause(); } catch(e) {} _recAudio = null; }
+    if(_recAudio) { const old = _recAudio; _recAudio = null; try { old.pause(); } catch(e) {} }
     if(!('speechSynthesis' in window) || !text) return;
     speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(text.replace(/\(.*?\)/g,''));
@@ -8350,7 +8352,7 @@ function crsSpeak(lang, text, noRec) {
   if(lang === 'en') return speakEN(text);
   if(!noRec && playRecorded(lang, text, 0, () => crsSpeak(lang, text, true))) return;
   try {
-    if(_recAudio) { try { _recAudio.pause(); } catch(e) {} _recAudio = null; }
+    if(_recAudio) { const old = _recAudio; _recAudio = null; try { old.pause(); } catch(e) {} }
     speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(text); u.lang = 'es-ES'; u.rate = .95;
     const v = speechSynthesis.getVoices().find(v => v.lang && v.lang.startsWith('es')); if(v) u.voice = v;
