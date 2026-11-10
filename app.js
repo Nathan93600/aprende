@@ -8599,6 +8599,39 @@ function crsMatch(side, wi) {
   }
   ex.pick = null;
 }
+/* ── Corrections multi-variantes (traduction libre) — données dans courses/feedback.js ── */
+function crsFbNorm(s) {
+  return String(s || '').replace(/[’‘`´]/g, "'").replace(/…/g, '').toLowerCase().trim()
+    .replace(/[.!?,;:]+$/g, '').replace(/^to\s+(?=\S)/, '').replace(/\s+/g, ' ').trim();
+}
+function crsFbCheck(lang, w, val) {
+  const fb = (typeof CRS_FB !== 'undefined' && CRS_FB[lang] && CRS_FB[lang][w[0]]) || null;
+  const v = crsFbNorm(val);
+  const alts = fb && fb.alt ? fb.alt : [];
+  const others = alts.length ? `<span class="almost-msg">Se dit aussi : ${alts.slice(0, 4).map(a => `<b>${crsEsc(a[0])}</b>`).join(' · ')}</span>` : '';
+  // 1. réponse attendue (chaque variante séparée par « / » compte)
+  const targets = [w[0], ...String(w[0]).split(/\s+\/\s+/)];
+  let almost = false;
+  for(const t of targets) {
+    const m = fuzzyMatch(v, crsFbNorm(t));
+    if(m.exact) return { kind: 'exact', others };
+    if(m.almost) almost = true;
+  }
+  // 2. erreurs typiques — testées avant la tolérance aux fautes de frappe,
+  //    sinon « at the time being » passerait pour une coquille de « for the time being »
+  if(fb && fb.err) for(const e of fb.err) {
+    const sub = e[0][0] === '*', pat = crsFbNorm(sub ? e[0].slice(1) : e[0]);
+    if(sub ? v.includes(pat) : v === pat) return { kind: 'err', msg: e[1] };
+  }
+  // 3. autres formulations acceptées
+  for(const strict of [true, false]) for(const a of alts) {
+    if(a[0].includes('…')) continue;
+    const m = fuzzyMatch(v, crsFbNorm(a[0]));
+    if(strict ? m.exact : (m.almost && a[0].length > 6)) return { kind: 'alt', text: a[0], note: a[1] || '' };
+  }
+  if(almost) return { kind: 'almost', others };
+  return { kind: 'miss', others };
+}
 function crsCheck() {
   const ex = crs.q[crs.i], L = crs.lang;
   // NEW: dictée
@@ -8607,7 +8640,7 @@ function crsCheck() {
     const val = inp.value.trim(); if(!val) return;
     const m = fuzzyMatch(val, ex.w[0]);
     if(m.exact) { inp.classList.add('ok'); crsResult(true, ex.w[0], ex.w[2] ? `« ${ex.w[2]} » — ${ex.w[3]}` : ''); }
-    else if(m.almost) { inp.classList.add('ok'); crsResult(true, ex.w[0], `<span class="almost-msg">Presque ! La réponse exacte est : <b>${crsEsc(ex.w[0])}</b></span>${ex.w[2] ? `<br>« ${crsEsc(ex.w[2])} » — ${crsEsc(ex.w[3])}` : ''}`); }
+    else if(m.almost) { inp.classList.add('ok'); crsResult(true, ex.w[0], ex.w[2] ? `« ${ex.w[2]} » — ${ex.w[3]}` : '', `<span class="almost-msg">Presque ! La réponse exacte est : <b>${crsEsc(ex.w[0])}</b></span>`); }
     else { inp.classList.add('ko'); crsResult(false, ex.w[0], ex.w[2] ? `« ${ex.w[2]} » — ${ex.w[3]}` : ''); }
     crsSpeak(L, ex.w[0]); return;
   }
@@ -8615,10 +8648,13 @@ function crsCheck() {
   if(ex.t === 'freetr') {
     const inp = document.getElementById('ls-freetr-inp'); if(!inp) return;
     const val = inp.value.trim(); if(!val) return;
-    const m = fuzzyMatch(val, ex.w[0]);
-    if(m.exact) { inp.classList.add('ok'); crsResult(true, ex.w[0], ''); }
-    else if(m.almost) { inp.classList.add('ok'); crsResult(true, ex.w[0], `<span class="almost-msg">Presque ! → <b>${crsEsc(ex.w[0])}</b></span>`); }
-    else { inp.classList.add('ko'); crsResult(false, ex.w[0], ex.w[2] ? `« ${ex.w[2]} » — ${ex.w[3]}` : ''); }
+    const r = crsFbCheck(L, ex.w, val);
+    const exLine = ex.w[2] ? `« ${ex.w[2]} » — ${ex.w[3]}` : '';
+    if(r.kind === 'exact') { inp.classList.add('ok'); crsResult(true, ex.w[0], '', r.others); }
+    else if(r.kind === 'almost') { inp.classList.add('ok'); crsResult(true, ex.w[0], '', `<span class="almost-msg">Presque ! → <b>${crsEsc(ex.w[0])}</b></span>`); }
+    else if(r.kind === 'alt') { inp.classList.add('ok'); crsResult(true, ex.w[0], exLine, `<span class="almost-msg">✔︎ <b>${crsEsc(r.text)}</b> est valable aussi${r.note ? ' — ' + crsEsc(r.note) : ''}.<br>Ici on visait : <b>${crsEsc(ex.w[0])}</b></span>`); }
+    else if(r.kind === 'err') { inp.classList.add('ko'); crsResult(false, ex.w[0], exLine, `<span class="almost-msg">⚠️ <b>${crsEsc(val)}</b> — ${crsEsc(r.msg)}</span>`); }
+    else { inp.classList.add('ko'); crsResult(false, ex.w[0], exLine, r.others); }
     crsSpeak(L, ex.w[0]); return;
   }
   // readctx uses same logic as tf/ft
@@ -8713,7 +8749,7 @@ function animateStreak() {
   if (!el) return;
   el.style.animation = 'flame-dance 1.5s ease-in-out infinite';
 }
-function crsResult(good, corr, extra) {
+function crsResult(good, corr, extra, html) {
   const ex = crs.q[crs.i];
   crs.checked = true;
   if(!ex.retry) { crs.graded++; if(good) crs.ok++; }
@@ -8731,7 +8767,7 @@ function crsResult(good, corr, extra) {
     comboHit();
     if(crs.combo >= 3) particleBurst(window.innerWidth / 2, window.innerHeight / 2.5, null, 8);
     try { haptic('light'); } catch(e) {}
-    crsFoot('ok', `<div class="ft">✅ ${crsPraise()}</div>${extra ? `<div class="fx">${crsEsc(extra)}</div>` : ''}`);
+    crsFoot('ok', `<div class="ft">✅ ${crsPraise()}</div>${extra ? `<div class="fx">${crsEsc(extra)}</div>` : ''}${html ? `<div class="fx">${html}</div>` : ''}`);
   } else {
     crs.mistakes++;
     // Direct SFX call (bypasses MutationObserver — works on iOS Safari)
@@ -8748,7 +8784,7 @@ function crsResult(good, corr, extra) {
     let ko = false;
     if(rpg && crs.mode !== 'test') ko = rpgDamage(crs.n === 4 ? 2 : 1, 'leçon');
     if(ko) crs.ko = true;
-    crsFoot('ko', `<div class="ft">❌ ${corr ? crsP('correct') : crsP('almost')}</div>${corr ? `<div class="fx"><b>${crsEsc(corr)}</b></div>` : ''}${extra ? `<div class="fx">${crsEsc(extra)}</div>` : ''}`);
+    crsFoot('ko', `<div class="ft">❌ ${corr ? crsP('correct') : crsP('almost')}</div>${corr ? `<div class="fx"><b>${crsEsc(corr)}</b></div>` : ''}${extra ? `<div class="fx">${crsEsc(extra)}</div>` : ''}${html ? `<div class="fx">${html}</div>` : ''}`);
   }
   crsBar();
   crsSetBtn(crsP('cont'), true);
