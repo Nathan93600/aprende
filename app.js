@@ -11286,3 +11286,30 @@ if('serviceWorker' in navigator) {
 }
 // iOS standalone detection
 if(window.navigator.standalone) document.body.classList.add('ios-pwa');
+/* ── Menus Jeux : pastilles de catégorie construites à partir des sections existantes ── */
+function gamesMenuInit() {
+  ['home', 'home-ln', 'home-en'].forEach(id => {
+    const scr = document.getElementById(id); if(!scr || scr.querySelector('.gm-chips')) return;
+    const grids = [...scr.querySelectorAll('.games-grid')]; if(!grids.length) return;
+    const short = t => /conjug|gramm/i.test(t) ? '📋 Conjugaison' : /visuel|synesth/i.test(t) ? '🎨 Visuel' : /tap/i.test(t) ? '⚡ Tap' : /natif|pronon|accent|parler/i.test(t) ? '🗣️ Oral' : t.trim().slice(0, 16);
+    const secs = grids.map((g, i) => {
+      const wrap = g.parentElement === scr ? g : g.parentElement;
+      const head = wrap !== g && wrap.firstElementChild !== g ? wrap.firstElementChild.textContent : '';
+      if(wrap !== g) wrap.classList.add('gm-sec');
+      return { el: wrap, label: i === 0 && !head.trim() ? '🃏 Vocabulaire' : short(head) };
+    });
+    const bar = document.createElement('div'); bar.className = 'gm-chips';
+    const apply = k => {
+      secs.forEach((s, i) => s.el.classList.toggle('gm-hide', k !== -1 && k !== i));
+      bar.querySelectorAll('.gm-chip[data-k]').forEach(b => b.classList.toggle('on', +b.dataset.k === k));
+    };
+    const chip = (txt, k) => { const b = document.createElement('button'); b.className = 'gm-chip'; b.textContent = txt; b.dataset.k = k; b.onclick = () => apply(k); bar.appendChild(b); };
+    if(secs.length > 1) { chip('Tous', -1); secs.forEach((s, i) => chip(s.label, i)); }
+    const det = document.createElement('button'); det.className = 'gm-chip gm-det'; det.textContent = 'ⓘ Détails';
+    det.onclick = () => { det.classList.toggle('on', scr.classList.toggle('gm-details')); };
+    bar.appendChild(det);
+    secs[0].el.parentElement.insertBefore(bar, secs[0].el);
+    apply(-1);
+  });
+}
+try { gamesMenuInit(); } catch(e) { console.warn('[Aprende] menu jeux', e); }

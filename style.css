@@ -1717,3 +1717,62 @@
     .story-q, #story-play-body .tipbox, .hc-bar i { animation: none !important; }
     #story-play-body, .cm-box { scroll-behavior: auto; }
   }
+
+/* ═══════════════════════════════════════════════
+   Menus Jeux — tuiles compactes et filtres par catégorie (10/11/2026)
+   Inspiré de l'inventaire d'Habitica (tuiles icône + nom) et du hub d'entraînement de Duolingo
+   (pastilles de catégorie, boutons en relief). Les descriptions restent accessibles via « Détails ».
+   ═══════════════════════════════════════════════ */
+  #home .games-grid, #home-ln .games-grid, #home-en .games-grid {
+    grid-template-columns: repeat(auto-fill, minmax(98px, 1fr)) !important; gap: .6rem !important; max-width: 640px; margin-left: auto; margin-right: auto;
+  }
+  #home .game-card, #home-ln .game-card, #home-en .game-card {
+    padding: .7rem .4rem .6rem; border-radius: 18px; text-align: center; backdrop-filter: none;
+    display: flex; flex-direction: column; align-items: center; gap: .4rem; min-height: 104px;
+    background: var(--surface); border: 2px solid color-mix(in srgb, var(--card-color, var(--accent)) 45%, transparent);
+    box-shadow: 0 4px 0 color-mix(in srgb, var(--card-color, var(--accent)) 55%, #000);
+    transition: transform .1s ease, box-shadow .1s ease; animation: ux-rise .3s ease backwards;
+  }
+  #home .game-card:active, #home-ln .game-card:active, #home-en .game-card:active {
+    transform: translateY(3px); box-shadow: 0 1px 0 color-mix(in srgb, var(--card-color, var(--accent)) 55%, #000);
+  }
+  #home .game-card .card-icon, #home-ln .game-card .card-icon, #home-en .game-card .card-icon {
+    width: 52px; height: 52px; margin: 0; border-radius: 14px; display: grid; place-items: center; font-size: 1.7rem;
+    background: color-mix(in srgb, var(--card-color, var(--accent)) 22%, transparent);
+  }
+  #home .game-card .card-title, #home-ln .game-card .card-title, #home-en .game-card .card-title {
+    font-size: .74rem; line-height: 1.2; margin: 0; font-weight: 800;
+    display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+  }
+  #home .game-card .card-desc, #home-ln .game-card .card-desc, #home-en .game-card .card-desc,
+  #home .game-card .card-badge, #home-ln .game-card .card-badge, #home-en .game-card .card-badge { display: none; }
+  .gm-sec { margin-top: 1.1rem !important; }
+  .gm-sec > div:first-child { margin-bottom: .6rem !important; }
+
+  /* Vue « Détails » : une liste, avec la description de chaque jeu */
+  .gm-details .games-grid { grid-template-columns: 1fr !important; }
+  .gm-details .game-card { flex-direction: row !important; text-align: left !important; align-items: center !important; min-height: 0 !important; padding: .6rem .8rem !important; gap: .8rem !important; flex-wrap: wrap; }
+  .gm-details .game-card .card-icon { flex: 0 0 auto; width: 44px !important; height: 44px !important; }
+  .gm-details .game-card .card-title { flex: 1 1 60%; font-size: .9rem !important; -webkit-line-clamp: unset !important; display: block !important; }
+  .gm-details .game-card .card-desc { display: block !important; flex: 1 1 100%; font-size: .78rem; line-height: 1.4; margin: 0; }
+
+  /* Barre de filtres, collante en haut */
+  .gm-chips { position: sticky; top: 0; z-index: 5; display: flex; gap: .45rem; overflow-x: auto; width: 100%; max-width: 640px; margin: .2rem auto .8rem; padding: .5rem .1rem;
+    background: linear-gradient(var(--bg, #0f131b) 75%, transparent); scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .gm-chips::-webkit-scrollbar { display: none; }
+  .gm-chip { flex: 0 0 auto; border: 2px solid var(--border); background: var(--surface); color: var(--text); border-radius: 999px; padding: .42rem .85rem;
+    font: 800 .8rem 'Nunito', sans-serif; cursor: pointer; box-shadow: 0 3px 0 var(--border); transition: transform .1s ease, box-shadow .1s ease, background .15s ease; white-space: nowrap; }
+  .gm-chip:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--border); }
+  .gm-chip.on { background: var(--accent); border-color: var(--accent); color: #fff; box-shadow: 0 3px 0 color-mix(in srgb, var(--accent) 55%, #000); }
+  .gm-chip.gm-det { margin-left: auto; }
+  .gm-hide { display: none !important; }
+  /* En-tête plus compact pour gagner de la hauteur */
+  #home .stats-bar, #home-ln .stats-bar, #home-en .stats-bar { margin-bottom: .4rem; }
+  @media (prefers-reduced-motion: reduce) { #home .game-card, #home-ln .game-card, #home-en .game-card { animation: none !important; } }
+  /* Menus Jeux : toutes les tuiles à la même taille, en-tête resserré */
+  #home .game-card, #home-ln .game-card, #home-en .game-card { grid-column: auto !important; margin: 0 !important; }
+  #home .home-title, #home-ln .home-title, #home-en .home-title { font-size: clamp(1.5rem, 6vw, 2rem); margin-bottom: .1rem; }
+  #home .home-sub, #home-ln .home-sub, #home-en .home-sub { margin-bottom: .6rem; font-size: .7rem; }
+  #home .stats-bar, #home-ln .stats-bar, #home-en .stats-bar { margin: 0 auto .3rem; padding-top: .45rem; padding-bottom: .45rem; }
+  #home.active, #home-ln.active, #home-en.active { justify-content: flex-start; padding-top: 1.2rem; }
+  #home .games-grid, #home-ln .games-grid, #home-en .games-grid { margin-top: 0 !important; }
