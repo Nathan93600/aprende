@@ -1647,3 +1647,73 @@
   .srs-btn { transition: transform .1s ease, box-shadow .1s ease; }
   .srs-btn:active { transform: scale(.93); }
   .nav-item:active { transform: scale(.9); }
+
+/* ═══════════════════════════════════════════════
+   UX — fluidité et animations (passe du 10/11/2026)
+   Uniquement transform / opacity, pour rester fluide sur téléphone.
+   ═══════════════════════════════════════════════ */
+  html { -webkit-tap-highlight-color: transparent; }
+  button, .hub-card, .story-card, .opt, .node, .chip { touch-action: manipulation; }
+  #story-play-body, .cm-box { scroll-behavior: smooth; }
+
+  @keyframes ux-rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+  @keyframes ux-pop { 0% { opacity: 0; transform: scale(.92); } 60% { opacity: 1; transform: scale(1.03); } 100% { transform: none; } }
+  @keyframes ux-sheet { from { transform: translateY(40px); opacity: 0; } to { transform: none; opacity: 1; } }
+  @keyframes ux-fade { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes ux-foot { from { transform: translateY(100%); } to { transform: none; } }
+  @keyframes ux-shake { 0%,100% { transform: none; } 20% { transform: translateX(-7px); } 40% { transform: translateX(6px); } 60% { transform: translateX(-4px); } 80% { transform: translateX(3px); } }
+  @keyframes ux-bar { from { transform: scaleX(0); } to { transform: none; } }
+
+  /* Fenêtres (guide, fiche, bilan) : le fond apparaît en fondu, la feuille monte */
+  #crs-modal.show { animation: ux-fade .2s ease backwards; }
+  #crs-modal.show .cm-box { animation: ux-sheet .32s cubic-bezier(.2,.9,.3,1.15) backwards; }
+  .cm-box .gw { animation: ux-rise .3s ease backwards; }
+  .cm-box .gw:nth-child(n+2) { animation-delay: .03s; } .cm-box .gw:nth-child(n+4) { animation-delay: .06s; }
+  .cm-box .gw:nth-child(n+6) { animation-delay: .09s; } .cm-box .gw:nth-child(n+8) { animation-delay: .12s; }
+  .cm-box .tipbox { animation: ux-pop .35s ease backwards; }
+
+  /* Accueil : les cartes arrivent l'une après l'autre */
+  #lang-select.active .hub-hero, #lang-select.active .hub-chips, #lang-select.active .hub-card,
+  #lang-select.active #bilan-card, #lang-select.active #genere-banner { animation: ux-rise .4s cubic-bezier(.2,.8,.3,1) backwards; }
+  #lang-select.active .hub-chips { animation-delay: .05s; }
+  #lang-select.active #genere-banner, #lang-select.active #bilan-card { animation-delay: .1s; }
+  #lang-select.active .hub-card.es { animation-delay: .14s; }
+  #lang-select.active .hub-card.ln { animation-delay: .2s; }
+  #lang-select.active .hub-card.en { animation-delay: .26s; }
+
+  /* Listes : Stories, sections et unités du parcours */
+  .story-card { animation: ux-rise .35s ease backwards; }
+  .story-card:nth-child(3) { animation-delay: .05s; } .story-card:nth-child(4) { animation-delay: .1s; }
+  .story-card:nth-child(5) { animation-delay: .15s; } .story-card:nth-child(n+6) { animation-delay: .2s; }
+  .sec-card, .unit-ban { animation: ux-rise .35s ease backwards; }
+
+  /* Leçon : options en cascade, pied de page qui monte, secousse si faux */
+  .opts .opt:not(.good):not(.bad) { animation: ux-rise .28s ease backwards; }
+  .opts .opt:nth-child(2):not(.good):not(.bad) { animation-delay: .05s; } .opts .opt:nth-child(3):not(.good):not(.bad) { animation-delay: .1s; } .opts .opt:nth-child(n+4):not(.good):not(.bad) { animation-delay: .15s; }
+  .ls-foot.ok, .ls-foot.ko { animation: ux-foot .28s cubic-bezier(.2,.9,.3,1.1) backwards; }
+  .ls-foot.ok .ft { animation: ux-pop .4s ease .1s backwards; }
+  .ls-foot.ko .ft { animation: ux-shake .4s ease .1s backwards; }
+  input.ko, textarea.ko { animation: ux-shake .4s ease; }
+  input.ok, textarea.ok { animation: ux-pop .35s ease; }
+  .almost-msg { display: inline-block; animation: ux-rise .3s ease .15s backwards; }
+
+  /* Stories : question et retour sur ton choix */
+  .story-q { animation: ux-rise .3s ease backwards; }
+  .story-play .tipbox, #story-play-body .tipbox { animation: ux-pop .35s ease backwards; }
+  #story-next-btn { transition: transform .12s ease, opacity .2s ease; }
+
+  /* Barres de progression : elles se remplissent au lieu d'apparaître d'un coup */
+  .hc-bar i { transform-origin: left center; animation: ux-bar .7s cubic-bezier(.2,.8,.3,1) .3s backwards; }
+
+  /* Retour tactile : tout ce qui se touche réagit */
+  .story-card:active, .spk:active, #bilan-card button:active, #genere-banner button:active, .chip:active, .sec-card .sbtn:active { transform: scale(.96); }
+  .spk, #bilan-card button, #genere-banner button, .chip { transition: transform .12s ease, background .15s ease; }
+  .hub-card:active { transform: translateY(3px) scale(.985); }
+
+  @media (prefers-reduced-motion: reduce) {
+    #crs-modal.show, #crs-modal.show .cm-box, .cm-box .gw, .cm-box .tipbox, #lang-select.active .hub-hero, #lang-select.active .hub-chips,
+    #lang-select.active .hub-card, #lang-select.active #bilan-card, #lang-select.active #genere-banner, .story-card, .sec-card, .unit-ban,
+    .opts .opt, .ls-foot.ok, .ls-foot.ko, .ls-foot.ok .ft, .ls-foot.ko .ft, input.ko, textarea.ko, input.ok, textarea.ok, .almost-msg,
+    .story-q, #story-play-body .tipbox, .hc-bar i { animation: none !important; }
+    #story-play-body, .cm-box { scroll-behavior: auto; }
+  }

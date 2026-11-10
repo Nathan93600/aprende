@@ -6831,6 +6831,14 @@ function bilanDelta(v, unit) {
   if(v === null || !isFinite(v) || v === 0) return '';
   return `<span style="font-size:.72rem;font-weight:800;color:var(--muted)"> ${v > 0 ? '▲ +' : '▼ −'}${Math.abs(v)}${unit || ''}</span>`;
 }
+function uxCountUp(root) {
+  if(!root || (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)) return;
+  root.querySelectorAll('[data-count]').forEach(el => {
+    const to = +el.dataset.count, suf = el.dataset.suf || '', t0 = performance.now(), d = 650;
+    const tick = t => { const k = Math.min(1, (t - t0) / d), e = 1 - Math.pow(1 - k, 3); el.textContent = Math.round(to * e) + suf; if(k < 1) requestAnimationFrame(tick); };
+    el.textContent = '0' + suf; requestAnimationFrame(tick);
+  });
+}
 function openBilan() {
   const d = bilanData(), FL = { es: '🇪🇸', en: '🇬🇧', ln: '🇨🇩' }, DN = ['D', 'L', 'M', 'M', 'J', 'V', 'S'];
   const tile = (label, val, extra) => `<div style="flex:1 1 42%;background:rgba(255,255,255,.05);border:1.5px solid var(--border);border-radius:14px;padding:.7rem .8rem"><div style="font-size:.68rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)">${label}</div><div style="font-size:1.5rem;font-weight:900;line-height:1.2">${val}${extra || ''}</div></div>`;
@@ -6840,10 +6848,10 @@ function openBilan() {
     <div class="cm-s">Les 7 derniers jours, comparés aux 7 précédents.</div>
     <div class="tipbox" style="margin-bottom:.8rem">${crsEsc(bilanVerdict(d))}</div>
     <div style="display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:.8rem">
-      ${tile('Révisions', d.w.n, d.p.n ? bilanDelta(d.w.n - d.p.n) : '')}
-      ${tile('Réussite', d.pct === null ? '—' : d.pct + ' %', d.pct !== null && d.ppct !== null ? bilanDelta(d.pct - d.ppct, ' pts') : '')}
-      ${tile('Temps', Math.round(d.w.ms / 60000) + ' min')}
-      ${tile('Nouveaux mots', d.fresh)}
+      ${tile('Révisions', `<span data-count="${d.w.n}">${d.w.n}</span>`, d.p.n ? bilanDelta(d.w.n - d.p.n) : '')}
+      ${tile('Réussite', d.pct === null ? '—' : `<span data-count="${d.pct}" data-suf=" %">${d.pct} %</span>`, d.pct !== null && d.ppct !== null ? bilanDelta(d.pct - d.ppct, ' pts') : '')}
+      ${tile('Temps', `<span data-count="${Math.round(d.w.ms / 60000)}" data-suf=" min">${Math.round(d.w.ms / 60000)} min</span>`)}
+      ${tile('Nouveaux mots', `<span data-count="${d.fresh}">${d.fresh}</span>`)}
     </div>
     <div style="display:flex;justify-content:space-between;gap:.3rem;margin-bottom:.3rem" aria-label="${active} jours actifs sur 7">
       ${d.days.map(x => `<div style="flex:1;text-align:center" title="${x.n} révision${x.n > 1 ? 's' : ''}"><div style="height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.78rem;${x.n ? 'background:#58cc02;color:#0b2400' : 'border:2px dashed var(--border);color:var(--muted)'}">${x.n || '·'}</div><div style="font-size:.66rem;font-weight:800;color:var(--muted);margin-top:.15rem">${DN[new Date(x.t).getDay()]}</div></div>`).join('')}
@@ -6856,6 +6864,7 @@ function openBilan() {
       ${d.worst.map((x, i) => `<div class="gw">${CRS_META[x.lang] && CRS_META[x.lang].tts ? `<button class="spk" onclick="crsSpeak('${x.lang}', bilanData().worst[${i}].word)">🔊</button>` : ''}<div style="flex:1"><div class="gw-w">${FL[x.lang] || ''} ${crsEsc(x.word)}</div><div class="gw-f">${crsEsc(x.fr)}</div></div><div style="font-weight:900;white-space:nowrap">${x.n}× raté</div>${ficheHas(x.lang, x.word) ? `<button class="spk" title="Fiche" onclick="openFiche('${x.lang}', bilanData().worst[${i}].word, openBilan)">＋</button>` : ''}</div>`).join('')}` : (d.w.n ? '<div class="tipbox">Aucune carte ratée cette semaine 👏</div>' : '')}
     ${week && week.notes && week.notes.length ? `<div style="font-weight:900;margin:1rem 0 .4rem">Le mot de Claude <span style="font-weight:700;color:var(--muted);font-size:.78rem">· ${crsEsc(week.date)}</span></div><div class="tipbox">${week.notes.map(n => '• ' + crsEsc(n)).join('<br>')}</div>` : ''}
     <button class="gbtn ghost" onclick="crsCloseModal()">Fermer</button>`);
+  uxCountUp(document.getElementById('crs-modal-box'));
 }
 function bilanRenderCard() {
   const el = document.getElementById('bilan-card'); if(!el) return;
@@ -10136,28 +10145,28 @@ function storyShowStep() {
   if(s.type === 'line') {
     const ch = story.data.chars[s.who];
     const isRight = s.who === Object.keys(story.data.chars)[1] || Object.keys(story.data.chars).length === 1;
-    body.innerHTML += `<div class="story-bubble${isRight ? '' : ' right'}">
+    body.insertAdjacentHTML('beforeend', `<div class="story-bubble${isRight ? '' : ' right'}">
       <div class="story-ava">${ch[0]}</div>
       <div class="story-msg"><b>${ch[1]}</b><br>${crsEsc(s.text)}<br><small style="color:var(--muted)">${crsEsc(s.tr)}</small></div>
-    </div>`;
+    </div>`);
     if(CRS_META[story.lang].tts) crsSpeak(story.lang, s.text);
     btn.textContent = 'Continuer';
     btn.disabled = false;
     btn.style.display = '';
     body.scrollTop = body.scrollHeight;
   } else if(s.type === 'q') {
-    body.innerHTML += `<div class="story-q" id="sq-${story.step}">
+    body.insertAdjacentHTML('beforeend', `<div class="story-q" id="sq-${story.step}">
       <div class="sq-prompt">${crsEsc(s.prompt)}</div>
       <div class="opts">${s.opts.map((o, i) => `<button class="opt" onclick="storyAnswer(${story.step},${i})">${crsEsc(o)}</button>`).join('')}</div>
-    </div>`;
+    </div>`);
     btn.style.display = 'none';
     body.scrollTop = body.scrollHeight;
   } else if(s.type === 'choice') {
     // Embranchement : tu choisis ta réplique, l'histoire continue selon ton choix
-    body.innerHTML += `<div class="story-q" id="sq-${story.step}">
+    body.insertAdjacentHTML('beforeend', `<div class="story-q" id="sq-${story.step}">
       <div class="sq-prompt">💬 ${crsEsc(s.prompt || 'Que réponds-tu ?')}</div>
       <div class="opts">${s.opts.map((o, i) => `<button class="opt" style="text-align:left" onclick="storyChoose(${story.step},${i})">${crsEsc(o.text)}</button>`).join('')}</div>
-    </div>`;
+    </div>`);
     btn.style.display = 'none';
     body.scrollTop = body.scrollHeight;
   }
@@ -10172,11 +10181,11 @@ function storyChoose(step, idx) {
   const ch = story.data.chars[s.who] || ['🧑', 'Toi'];
   const isRight = s.who === Object.keys(story.data.chars)[1] || Object.keys(story.data.chars).length === 1;
   const tag = o.best ? '✅ Le plus naturel' : good ? '👍 Correct' : '⚠️ À éviter';
-  body.innerHTML += `<div class="story-bubble${isRight ? '' : ' right'}">
+  body.insertAdjacentHTML('beforeend', `<div class="story-bubble${isRight ? '' : ' right'}">
       <div class="story-ava">${ch[0]}</div>
       <div class="story-msg"><b>${ch[1]}</b><br>${crsEsc(o.text)}<br><small style="color:var(--muted)">${crsEsc(o.tr || '')}</small></div>
     </div>
-    <div class="tipbox" style="margin:.4rem 0 .8rem"><b>${tag}</b>${o.note ? ' · ' + crsEsc(o.note) : ''}</div>`;
+    <div class="tipbox" style="margin:.4rem 0 .8rem"><b>${tag}</b>${o.note ? ' · ' + crsEsc(o.note) : ''}</div>`);
   if(CRS_META[story.lang].tts && good) crsSpeak(story.lang, o.text); // on ne fait pas prononcer une réplique fautive
   if(o.then && o.then.length) story.steps.splice(step + 1, 0, ...o.then);
   const btn = document.getElementById('story-next-btn');
@@ -10208,13 +10217,13 @@ function storyEnd() {
   const done = crsJ('stories_done', []);
   const key = story.lang + '_' + story.id;
   if(!done.includes(key)) { done.push(key); crsSetJ('stories_done', done); }
-  document.getElementById('story-play-body').innerHTML += `<div class="res" style="margin-top:1rem">
+  document.getElementById('story-play-body').insertAdjacentHTML('beforeend', `<div class="res" style="margin-top:1rem">
     <div style="font-size:3rem">📖</div><div class="rt">Story terminée !</div>
     <div class="res-tiles">
       <div class="res-tile" style="border-color:#58cc02"><div class="rh" style="background:#58cc02">Score</div><div class="rv">${story.correct}/${story.total}</div></div>
       <div class="res-tile" style="border-color:#ffc800"><div class="rh" style="background:#ffc800">XP</div><div class="rv">+${xp}</div></div>
     </div>
-  </div>`;
+  </div>`);
   document.getElementById('story-next-btn').textContent = 'Retour aux stories';
   document.getElementById('story-next-btn').onclick = () => openStories(story.lang);
   document.getElementById('story-next-btn').style.display = '';
