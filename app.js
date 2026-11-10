@@ -8654,7 +8654,10 @@ function crsFbCheck(lang, w, val) {
   const fb = (typeof CRS_FB !== 'undefined' && CRS_FB[lang] && CRS_FB[lang][w[0]]) || null;
   const v = crsFbNorm(val);
   const alts = fb && fb.alt ? fb.alt : [];
-  const others = alts.length ? `<span class="almost-msg">Se dit aussi : ${alts.slice(0, 4).map(a => `<b>${crsEsc(a[0])}</b>`).join(' · ')}</span>` : '';
+  // variantes à montrer : pas celles qui ne diffèrent de la réponse attendue que par la ponctuation
+  const tn = crsFbNorm(w[0]);
+  const shown = alts.filter(a => crsFbNorm(a[0]) !== tn).slice(0, 4);
+  const others = shown.length ? `<span class="almost-msg">Se dit aussi : ${shown.map(a => `<b>${crsEsc(a[0])}</b>`).join(' · ')}</span>` : '';
   // 1. réponse attendue (chaque variante séparée par « / » compte)
   const bare = String(w[0]).replace(/\s*[(\[][^)\]]*[)\]]/g, '').trim();
   const targets = [w[0], bare, ...bare.split(/\s+\/\s+/)].filter(Boolean);
