@@ -140,8 +140,89 @@ const CRS_FB = {
     "as it turns out": {
       alt: [["it turns out"], ["turns out", "oral, très naturel : « Turns out she was right. »"], ["it turned out"], ["as it turned out"], ["as it happens", "= il se trouve que"], ["actually", "= en fait"], ["in fact"]],
       err: [["it proves that", "« Prove » = prouver. Il s'avère que = it turns out (that)."], ["it reveals that", "Calque de « il se révèle que ». Dis : it turns out."], ["it appears that", "= il semble que (apparence, pas encore confirmé). « It turns out » = on a découvert que c'est vrai."], ["it avers that", "Calque de « il s'avère »."]]
+    },
+    // ── Sur mesure — Tes faux pas (erreurs réelles relevées dans tes messages) ──
+    "for the first hour": {
+      alt: [["during the first hour", "correct, insiste sur « au cours de »"], ["in the first hour", "= à un moment à l'intérieur de la première heure"], ["for the first hour or so", "= à peu près"]],
+      err: [["at the first hour", "Ton erreur du 10/11. AT désigne un moment précis (at 5 pm, at the start). Pour une durée : FOR the first hour."], ["since the first hour", "Since = depuis (un point de départ jusqu'à maintenant)."], ["the first hour", "Il manque la préposition : FOR the first hour."], ["during one hour", "« Pendant une heure » = for an hour. Ici : for the first hour."]]
+    },
+    "get to": {
+      alt: [["reach", "un peu plus soutenu, sans préposition : reach Hyrule"], ["arrive in", "pour une ville, un pays, une région"], ["arrive at", "pour un lieu précis (gare, bâtiment)"], ["make it to", "= réussir à arriver"]],
+      err: [["arrive to", "Erreur classique : on dit arrive AT ou arrive IN, jamais « arrive to »."], ["come to", "Ta version du 10/11. Pas faux, mais come = venir vers l'endroit où se trouve celui qui parle. Pour « arriver à un endroit » dans un récit, le réflexe natif est get to."], ["arrive", "Il manque la préposition : arrive AT / IN, ou get TO."], ["go to", "Go to = aller à (le trajet). Get to = arriver à (le moment où on y est)."]]
+    },
+    "performance": {
+      alt: [["the performance"]],
+      err: [["performances", "Ton erreur du 10/11. Pour un jeu ou une machine, performance est indénombrable : the performance IS decent. « Performances » = des prestations (acteurs, sportifs)."], ["the performances", "Pour un jeu ou une machine, performance est indénombrable : the performance IS decent."]]
+    },
+    "drop": {
+      alt: [["dip", "baisse légère et passagère"], ["tank", "familier : s'effondrer"], ["fall", "neutre"], ["plummet", "chute brutale, soutenu"], ["decrease", "formel"], ["go down", "ta version du 10/11 : correcte mais plate. Un joueur dit « the FPS drops »"]],
+      err: [["fall down", "Fall down = tomber par terre (une personne, un objet). Pour un chiffre : drop / fall."], ["chute", "Faux-ami : a chute = une goulotte, un toboggan."]]
+    },
+    "I had issues": {
+      alt: [["I had problems"], ["I had some issues"], ["I was having issues", "insiste sur la durée"], ["I ran into issues", "= je suis tombé sur des problèmes"], ["I had trouble"]],
+      err: [["I got issues", "Ton erreur du 10/11. « I got issues » = (familier) j'ai des problèmes, au présent. Pour un problème passé et réglé : I HAD issues."], ["I have had issues", "Present perfect = encore d'actualité. Ici c'est réglé : prétérit, I had issues."], ["I have issues", "Présent. Ici c'est du passé : I had issues."]]
+    },
+    "handed them the win": {
+      alt: [["handed them the victory"], ["he handed them the win"], ["he handed them the victory"], ["gifted them the win", "très courant dans le commentaire sportif, souvent pour une erreur"], ["gifted them the victory"], ["gave them the win", "plus plat"], ["gave them the victory", "plus plat"]],
+      err: [["offered them the victory", "Faux-ami relevé le 09/11 : offer = proposer (on peut refuser). Offrir au sens de donner : hand / gift / give."], ["offered them the win", "Faux-ami : offer = proposer (on peut refuser). Offrir au sens de donner : hand / gift / give."], ["he offered them the victory", "Faux-ami : offer = proposer (on peut refuser). Offrir au sens de donner : hand / gift / give."], ["he offered them the win", "Faux-ami : offer = proposer (on peut refuser). Offrir au sens de donner : hand / gift / give."]]
+    },
+
+    // ── Sur mesure — Tes bêtes noires (cartes SRS les plus ratées) ──
+    "Quench": {
+      alt: [["quench your thirst"], ["slake", "littéraire"]],
+      err: [["refresh", "Refresh = rafraîchir (une page, la mémoire). Étancher la soif = quench."], ["hydrate", "Hydrate = hydrater. Désaltérer, étancher = quench."]]
+    },
+    "Conceited": {
+      alt: [["arrogant"], ["full of himself", "oral, très courant"], ["full of yourself"], ["cocky", "familier : trop sûr de lui, plus que vaniteux"], ["vain", "= vaniteux, surtout sur l'apparence"], ["pretentious", "= prétentieux, qui se donne un genre"], ["proud", "nuance : proud est neutre ou positif (fier) ; conceited est toujours un reproche"]],
+      err: [["concerned", "Confusion fréquente : concerned = inquiet / concerné. Orgueilleux = conceited."], ["orgulous", "Calque du français : ce mot ne s'emploie pas."]]
+    },
+    "to bestow (sth on sb)": {
+      alt: [["grant", "accorder (un droit, une demande)"], ["award", "décerner (un prix)"], ["confer", "très soutenu, pour un titre ou un diplôme"], ["give", "juste, mais perd tout le côté solennel"]],
+      err: [["offer", "Offer = proposer. Pour un octroi solennel : bestow / grant / award."], ["bestow to", "La préposition est ON : bestow something ON someone."]]
+    },
+    "Crooked": {
+      alt: [["bent", "plié, courbé"], ["twisted", "vrillé"], ["lopsided", "de travers, asymétrique"], ["wonky", "familier UK"]],
+      err: [["crocked", "Crocked = (argot) bourré ou blessé. Tordu = crooked, avec deux o."], ["curved", "Curved = courbe, arrondi (c'est voulu). Crooked = tordu, de travers (c'est un défaut)."], ["torded", "Calque du français."]]
+    },
+    "Dwell": {
+      alt: [["dwell on", "s'attarder sur"], ["linger", "s'attarder (dans un lieu)"], ["reside", "demeurer, soutenu"], ["live", "demeurer, neutre"]],
+      err: [["delay", "Delay = retarder. S'attarder sur = dwell on."], ["stay late", "Stay late = rester tard. S'attarder sur un sujet = dwell on."]]
     }
   },
-  es: {},
+  es: {
+    // ── Sur mesure — Tus bestias negras (cartes SRS les plus ratées) ──
+    "agacharse": {
+      alt: [["ponerse en cuclillas", "s'accroupir précisément, sur les talons"], ["acuclillarse", "plus rare"], ["inclinarse", "se pencher (le buste seulement)"]],
+      err: [["bajarse", "Bajarse = descendre (d'un bus, d'un vélo). Se baisser = agacharse."], ["bajar", "Bajar = descendre, ou baisser quelque chose. Se baisser = agacharse."], ["agachar", "Verbe pronominal : agacharSE."]]
+    },
+    "subir": {
+      alt: [["montar", "monter sur ou dans (un cheval, un vélo), ou assembler"], ["ascender", "soutenu : ascension, promotion"]],
+      err: [["levantar", "Levantar = lever, soulever. Monter = subir."], ["sufrir", "Sufrir = subir (au sens français). Le verbe espagnol subir veut dire monter."]]
+    },
+    "agarrar": {
+      alt: [["coger", "Espagne (vulgaire en Amérique latine)"], ["tomar", "prendre, neutre, partout"], ["atrapar", "attraper ce qui s'échappe"], ["pillar", "familier, Espagne"]],
+      err: [["prender", "Faux-ami : prender = allumer, accrocher. Prendre = coger, tomar, agarrar."], ["agarar", "Deux r : agarrar."]]
+    },
+    "plantilla": {
+      alt: [["la plantilla"], ["modelo", "modèle, au sens général"], ["equipo", "l'équipe"], ["patrón", "patron (couture)"], ["plantel", "effectif d'une équipe, Amérique latine"]],
+      err: [["efectivo", "Faux-ami : efectivo = argent liquide (pagar en efectivo). L'effectif d'une équipe = la plantilla."], ["plantillo", "Féminin : la plantilla."], ["planta", "Planta = plante, ou étage."]]
+    },
+    "sacar": {
+      alt: [["obtener", "obtenir, plus soutenu"], ["conseguir", "obtenir en y arrivant"], ["extraer", "extraire"]],
+      err: [["salir", "Salir = sortir soi-même (intransitif). Sortir quelque chose = sacar."], ["tirar", "Faux-ami : tirar = jeter, lancer. Tirer quelque chose de = sacar."], ["sortir", "Mot français. En espagnol : salir (soi-même), sacar (quelque chose)."]]
+    },
+    "sino que": {
+      alt: [],
+      err: [["pero", "Après une négation qu'on corrige (« non pas A mais B »), l'espagnol exige sino / sino que, pas pero."], ["sino", "Sino seul va devant un nom, un adjectif ou un infinitif. Devant un verbe conjugué : sino QUE."], ["pero que", "La forme est sino que."], ["mas", "Mas = mais, littéraire et vieilli."]]
+    },
+    "maletero": {
+      alt: [["el maletero"], ["baúl", "Argentine, Colombie"], ["cajuela", "Mexique"], ["maletera", "Pérou, Chili"]],
+      err: [["cofre", "Faux-ami : cofre = coffre au trésor, coffret. Coffre de voiture = maletero."], ["maleta", "Maleta = la valise. Le coffre = el maletero."], ["caja", "Caja = boîte, caisse."]]
+    },
+    "coger": {
+      alt: [["tomar", "neutre, partout"], ["agarrar", "Amérique latine"], ["pillar", "familier, Espagne"], ["atrapar", "attraper"]],
+      err: [["prender", "Faux-ami : prender = allumer, accrocher."], ["cojer", "Avec un g : coger (mais yo cojo)."]]
+    }
+  },
   ln: {}
 };

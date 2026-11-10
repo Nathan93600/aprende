@@ -8291,7 +8291,7 @@ function crsDone(lang, u) { const p = crsJ('crs_prog', {}); return (p[lang] && p
 function crsSetDone(lang, u, n) { const p = crsJ('crs_prog', {}); p[lang] = p[lang] || {}; if((p[lang][u] || 0) < n) p[lang][u] = n; crsSetJ('crs_prog', p); }
 function crsCurrent(lang) {
   const U = COURSES[lang].units;
-  for(let u = 0; u < U.length; u++) { const d = crsDone(lang, u); if(d < CRS_NODES) return { u, n: d }; }
+  for(let u = 0; u < U.length; u++) { if(U[u].free) continue; const d = crsDone(lang, u); if(d < CRS_NODES) return { u, n: d }; }
   return { u: U.length, n: 0 };
 }
 function crsStats(lang) {
@@ -8610,7 +8610,8 @@ function crsFbCheck(lang, w, val) {
   const alts = fb && fb.alt ? fb.alt : [];
   const others = alts.length ? `<span class="almost-msg">Se dit aussi : ${alts.slice(0, 4).map(a => `<b>${crsEsc(a[0])}</b>`).join(' · ')}</span>` : '';
   // 1. réponse attendue (chaque variante séparée par « / » compte)
-  const targets = [w[0], ...String(w[0]).split(/\s+\/\s+/)];
+  const bare = String(w[0]).replace(/\s*[(\[][^)\]]*[)\]]/g, '').trim();
+  const targets = [w[0], bare, ...bare.split(/\s+\/\s+/)].filter(Boolean);
   let almost = false;
   for(const t of targets) {
     const m = fuzzyMatch(v, crsFbNorm(t));
@@ -8897,7 +8898,7 @@ function crsCloseModal() { document.getElementById('crs-modal').classList.remove
 function crsNode(lang, u, n) {
   const d = crsDone(lang, u), cur = crsCurrent(lang);
   const unit = COURSES[lang].units[u];
-  const open = n < d || (u === cur.u && n === cur.n);
+  const open = n < d || (u === cur.u && n === cur.n) || (unit.free && n === d);
   if(!open) { showToast('🔒 Termine d\'abord les étapes précédentes', 'wrong-toast'); return; }
   if(n === 5) { if(n < d) showToast('Ce coffre est déjà ouvert 🎁'); else crsOpenChest(lang, u); return; }
   const done = n < d;
@@ -8938,16 +8939,19 @@ function openPath(lang) {
 function renderPath(lang) {
   const C = COURSES[lang], cur = crsCurrent(lang);
   let h = '', z = 0;
-  C.sections.forEach((s, si) => {
+  // sections « sur mesure » (4e champ = 'top') affichées en premier ; leurs unités sont en accès libre
+  const secOrder = C.sections.map((s, i) => i).sort((a, b) => (C.sections[b][3] ? 1 : 0) - (C.sections[a][3] ? 1 : 0));
+  secOrder.forEach(si => {
+    const s = C.sections[si];
     const units = C.units.map((x, i) => [x, i]).filter(([x]) => x.s === si);
     const allDone = units.every(([x, i]) => crsDone(lang, i) >= 5);
-    h += `<div class="sec-card"><div class="sk">Section ${si + 1} · ${s[0]}${allDone ? ' · ✅' : ''}</div><div class="sn">${crsEsc(s[1])}</div><div class="sd">${crsEsc(s[2])}</div>
-      ${!allDone ? `<div class="sbtn"><button class="gbtn ghost" onclick="crsAskTest('${lang}',${si})">⏩ Je connais déjà : passer le test</button></div>` : ''}</div>`;
+    h += `<div class="sec-card"><div class="sk">${s[3] ? '🎯 ' + s[0] : 'Section ' + (si + 1) + ' · ' + s[0]}${allDone ? ' · ✅' : ''}</div><div class="sn">${crsEsc(s[1])}</div><div class="sd">${crsEsc(s[2])}</div>
+      ${!allDone && !s[3] ? `<div class="sbtn"><button class="gbtn ghost" onclick="crsAskTest('${lang}',${si})">⏩ Je connais déjà : passer le test</button></div>` : ''}</div>`;
     units.forEach(([x, ui]) => {
-      const d = crsDone(lang, ui), locked = ui > cur.u && d === 0;
-      h += `<div class="unit-ban${locked ? ' locked' : ''}"><span class="ue">${x.e}</span><div><div class="uk">Unité ${ui + 1}</div><div class="ut">${crsEsc(x.t)}</div></div><button class="ug" onclick="crsGuide('${lang}',${ui})">📘 Guide</button></div><div class="nodes">`;
+      const d = crsDone(lang, ui), locked = !x.free && ui > cur.u && d === 0;
+      h += `<div class="unit-ban${locked ? ' locked' : ''}"><span class="ue">${x.e}</span><div><div class="uk">${x.free ? 'Accès libre' : 'Unité ' + (ui + 1)}</div><div class="ut">${crsEsc(x.t)}</div></div><button class="ug" onclick="crsGuide('${lang}',${ui})">📘 Guide</button></div><div class="nodes">`;
       for(let n = 0; n < CRS_NODES; n++) {
-        const st = n < d ? 'done' : (ui === cur.u && n === cur.n) ? 'cur' : 'lock';
+        const st = n < d ? 'done' : ((ui === cur.u && n === cur.n) || (x.free && n === d)) ? 'cur' : 'lock';
         const off = CRS_ZIG[z++ % CRS_ZIG.length];
         const bub = st === 'cur' ? `<span class="bub">${n === 5 ? 'OUVRIR' : n === 4 ? 'COMBAT !' : d === 0 && n === 0 ? 'COMMENCER' : 'C\'EST PARTI'}</span>` : '';
         const icon = st === 'done' && n < 4 ? '✓' : CRS_NODE_ICON[n];
