@@ -6764,6 +6764,77 @@ function exportProgress(forGenere) {
   }
 }
 
+/* ── Bilan de la semaine : calculé sur l'appareil à partir de l'historique des révisions (srs_revlog).
+   Le « mot de Claude » (CRS_WEEK, dans courses/feedback.js) est la seule partie écrite à la main, à chaque « génère ». ── */
+function bilanData() {
+  const day = 86400000, end = srsStartOfToday() + day, wStart = end - 7 * day, pStart = end - 14 * day;
+  const log = srsRevlogLoad(), cards = srsLoad();
+  const sum = rows => ({ n: rows.length, ok: rows.filter(r => r[2] > 0).length, ms: rows.reduce((a, r) => a + (r[5] || 0), 0) });
+  const wk = log.filter(r => r[1] >= wStart && r[1] < end), pv = log.filter(r => r[1] >= pStart && r[1] < wStart);
+  const w = sum(wk), p = sum(pv);
+  const days = []; // du plus ancien au plus récent
+  for(let i = 6; i >= 0; i--) { const a = end - (i + 1) * day; days.push({ t: a, n: wk.filter(r => r[1] >= a && r[1] < a + day).length }); }
+  const langs = ['es', 'en', 'ln'].map(l => Object.assign({ l }, sum(wk.filter(r => r[0].startsWith(l + ':')))));
+  const miss = {};
+  for(const r of wk) if(r[2] === 0) miss[r[0]] = (miss[r[0]] || 0) + 1;
+  const worst = Object.entries(miss).sort((a, b) => b[1] - a[1]).slice(0, 6).map(([k, n]) => {
+    const c = cards[k] || {}, i = k.indexOf(':');
+    return { k, n, lang: k.slice(0, i), word: c.word || k.slice(i + 1), fr: c.fr || '' };
+  });
+  // nouveaux mots = cartes vues pour la toute première fois cette semaine (type 0 dans l'historique)
+  const fresh = new Set(wk.filter(r => r[3] === 0).map(r => r[0])).size;
+  return { w, p, days, langs, worst, fresh, pct: w.n ? Math.round(100 * w.ok / w.n) : null, ppct: p.n ? Math.round(100 * p.ok / p.n) : null };
+}
+function bilanVerdict(d) {
+  const active = d.days.filter(x => x.n).length;
+  if(!d.w.n) return "Aucune révision sur les 7 derniers jours. Une session de 5 minutes suffit pour relancer la machine.";
+  const parts = [];
+  if(d.p.n) {
+    const dv = d.w.n - d.p.n;
+    parts.push(Math.abs(dv) < Math.max(5, d.p.n * .1) ? 'Volume stable par rapport à la semaine précédente' : dv > 0 ? `Tu as révisé plus que la semaine précédente (+${dv})` : `Tu as moins révisé que la semaine précédente (${dv})`);
+    if(d.ppct !== null) { const dp = d.pct - d.ppct; parts.push(Math.abs(dp) < 2 ? 'réussite stable' : dp > 0 ? `réussite en hausse de ${dp} points` : `réussite en baisse de ${-dp} points`); }
+  } else parts.push('Première semaine mesurée');
+  let s = parts.join(', ') + '.';
+  if(active <= 3) s += ` Seulement ${active} jour${active > 1 ? 's' : ''} sur 7 : la régularité compte plus que le volume.`;
+  else if(active === 7) s += ' 7 jours sur 7, rien à dire.';
+  return s;
+}
+function bilanDelta(v, unit) {
+  if(v === null || !isFinite(v) || v === 0) return '';
+  return `<span style="font-size:.72rem;font-weight:800;color:var(--muted)"> ${v > 0 ? '▲ +' : '▼ −'}${Math.abs(v)}${unit || ''}</span>`;
+}
+function openBilan() {
+  const d = bilanData(), FL = { es: '🇪🇸', en: '🇬🇧', ln: '🇨🇩' }, DN = ['D', 'L', 'M', 'M', 'J', 'V', 'S'];
+  const tile = (label, val, extra) => `<div style="flex:1 1 42%;background:rgba(255,255,255,.05);border:1.5px solid var(--border);border-radius:14px;padding:.7rem .8rem"><div style="font-size:.68rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)">${label}</div><div style="font-size:1.5rem;font-weight:900;line-height:1.2">${val}${extra || ''}</div></div>`;
+  const active = d.days.filter(x => x.n).length;
+  const week = (typeof CRS_WEEK !== 'undefined' && CRS_WEEK) || null;
+  crsModal(`<div class="cm-t">📈 Bilan de la semaine</div>
+    <div class="cm-s">Les 7 derniers jours, comparés aux 7 précédents.</div>
+    <div class="tipbox" style="margin-bottom:.8rem">${crsEsc(bilanVerdict(d))}</div>
+    <div style="display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:.8rem">
+      ${tile('Révisions', d.w.n, d.p.n ? bilanDelta(d.w.n - d.p.n) : '')}
+      ${tile('Réussite', d.pct === null ? '—' : d.pct + ' %', d.pct !== null && d.ppct !== null ? bilanDelta(d.pct - d.ppct, ' pts') : '')}
+      ${tile('Temps', Math.round(d.w.ms / 60000) + ' min')}
+      ${tile('Nouveaux mots', d.fresh)}
+    </div>
+    <div style="display:flex;justify-content:space-between;gap:.3rem;margin-bottom:.3rem" aria-label="${active} jours actifs sur 7">
+      ${d.days.map(x => `<div style="flex:1;text-align:center" title="${x.n} révision${x.n > 1 ? 's' : ''}"><div style="height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.78rem;${x.n ? 'background:#58cc02;color:#0b2400' : 'border:2px dashed var(--border);color:var(--muted)'}">${x.n || '·'}</div><div style="font-size:.66rem;font-weight:800;color:var(--muted);margin-top:.15rem">${DN[new Date(x.t).getDay()]}</div></div>`).join('')}
+    </div>
+    <div style="font-size:.78rem;font-weight:800;color:var(--muted);margin-bottom:.9rem">${active} jour${active > 1 ? 's' : ''} actif${active > 1 ? 's' : ''} sur 7 · révisions par jour</div>
+    <div style="display:flex;gap:.5rem;margin-bottom:1rem">
+      ${d.langs.map(x => `<div style="flex:1;text-align:center;border:1.5px solid var(--border);border-radius:12px;padding:.5rem .3rem"><div style="font-size:1.2rem">${FL[x.l]}</div><div style="font-weight:900">${x.n}</div><div style="font-size:.72rem;font-weight:800;color:var(--muted)">${x.n ? Math.round(100 * x.ok / x.n) + ' % réussis' : 'rien cette semaine'}</div></div>`).join('')}
+    </div>
+    ${d.worst.length ? `<div style="font-weight:900;margin-bottom:.4rem">Tes mots les plus ratés</div>
+      ${d.worst.map((x, i) => `<div class="gw">${CRS_META[x.lang] && CRS_META[x.lang].tts ? `<button class="spk" onclick="crsSpeak('${x.lang}', bilanData().worst[${i}].word)">🔊</button>` : ''}<div style="flex:1"><div class="gw-w">${FL[x.lang] || ''} ${crsEsc(x.word)}</div><div class="gw-f">${crsEsc(x.fr)}</div></div><div style="font-weight:900;white-space:nowrap">${x.n}× raté</div></div>`).join('')}` : (d.w.n ? '<div class="tipbox">Aucune carte ratée cette semaine 👏</div>' : '')}
+    ${week && week.notes && week.notes.length ? `<div style="font-weight:900;margin:1rem 0 .4rem">Le mot de Claude <span style="font-weight:700;color:var(--muted);font-size:.78rem">· ${crsEsc(week.date)}</span></div><div class="tipbox">${week.notes.map(n => '• ' + crsEsc(n)).join('<br>')}</div>` : ''}
+    <button class="gbtn ghost" onclick="crsCloseModal()">Fermer</button>`);
+}
+function bilanRenderCard() {
+  const el = document.getElementById('bilan-card'); if(!el) return;
+  const d = bilanData();
+  el.innerHTML = `<button onclick="openBilan()" style="width:100%;margin:.2rem 0 .8rem;padding:.75rem 1rem;border:1.5px solid var(--border);border-radius:14px;cursor:pointer;background:rgba(255,255,255,.04);color:var(--text);font-weight:800;font-size:.88rem;display:flex;justify-content:space-between;align-items:center;gap:.6rem;text-align:left"><span>📈 Bilan de la semaine</span><span style="color:var(--muted);font-size:.8rem;white-space:nowrap">${d.w.n ? d.w.n + ' révisions · ' + d.pct + ' %' : 'rien encore'} ›</span></button>`;
+}
+
 /* ── Rappel du vendredi : un bouton pour envoyer la sauvegarde à Claude avec « génère » ── */
 function genereWeekKey(d) {
   // clé = date du vendredi de la semaine en cours (la semaine « génère » va du vendredi au jeudi)
@@ -9379,7 +9450,7 @@ function rpgDailiesHTML() {
   return html;
 }
 function renderHub() {
-  try { genereRenderBanner(); } catch(e) {}
+  try { genereRenderBanner(); bilanRenderCard(); } catch(e) {}
   if(!rpg) return;
   const b = RPG_BOSSES[rpg.boss.i];
   document.getElementById('hub-hero').innerHTML = `<div class="hub-ava">${rpgAvatar()}<b>${rpg.lvl}</b></div><div class="hub-bars"><div class="hub-name"><span>Niveau ${rpg.lvl}${rpg.cls ? ' · ' + RPG_CLASSES[rpg.cls].n : ''}</span><small>Héros ›</small></div>${rpgBars()}</div>`;

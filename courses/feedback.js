@@ -4,6 +4,17 @@
 //   err : [[erreur typique de francophone, explication], ...]    -> compté faux, avec explication ciblée
 //         (préfixe "*" = l'erreur est détectée n'importe où dans la réponse)
 // Rempli à chaque « génère » du vendredi pour les mots de la semaine.
+// Le mot de la semaine, affiché dans le bilan. Réécrit à chaque « génère ».
+const CRS_WEEK = {
+  date: "10/11/2026",
+  notes: [
+    "Ton erreur du moment : les prépositions de temps. « at the first hour » → for the first hour (FOR + durée).",
+    "Faux-ami à surveiller : offrir ≠ offer. « Il leur a offert la victoire » = he handed them the win.",
+    "Performance d'un jeu ou d'une machine : toujours au singulier (the performance is decent).",
+    "Tu m'as envoyé beaucoup d'expressions orales cette semaine (run by, nod off, get an earful) : entraîne-les à voix haute avec les nouvelles voix."
+  ]
+};
+
 const CRS_FB = {
   en: {
     // ── Adverbial phrases — Opinion ──
