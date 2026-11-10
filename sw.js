@@ -1,5 +1,5 @@
 // ¡Aprende! Service Worker v15 — stale-while-revalidate for instant updates
-const CACHE_NAME = 'aprende-v18';
+const CACHE_NAME = 'aprende-v19';
 const ASSETS = [
   './',
   'index.html',
@@ -10,6 +10,7 @@ const ASSETS = [
   'courses/ln.js',
   'courses/en.js',
   'courses/feedback.js',
+  'audio/manifest.js',
   'manifest.json'
 ];
 
@@ -23,6 +24,8 @@ self.addEventListener('activate', e => {
 
 self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
+  // Audio : laissé au réseau (Safari le demande par morceaux, ce que le cache ne sait pas servir)
+  if (/\/audio\/.+\.mp3$/.test(new URL(e.request.url).pathname)) return;
 
   // Stale-while-revalidate: serve from cache immediately, fetch fresh in background
   e.respondWith(

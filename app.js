@@ -687,8 +687,28 @@ function enExtrasHTML(card) {
   if(ex) h += `<div style="margin-top:.35rem;font-size:.78rem;color:#7dd3fc;font-style:italic">🗣️ « ${ex} »</div>`;
   return h;
 }
-function speakEN(text, rate) {
+/* Voix pré-enregistrées (audio/<lang>/<id>.mp3, index dans audio/manifest.js).
+   Si le texte n'a pas d'enregistrement ou si la lecture échoue (hors ligne), on retombe sur la voix du téléphone. */
+let _recAudio = null;
+function playRecorded(lang, text, rate, fallback) {
   try {
+    const m = (typeof AUDIO_MAP !== 'undefined' && AUDIO_MAP[lang]) || null; if(!m || !text) return false;
+    const id = m[String(text).replace(/\(.*?\)/g, '').trim()]; if(!id) return false;
+    try { speechSynthesis.cancel(); } catch(e) {}
+    if(_recAudio) { try { _recAudio.pause(); } catch(e) {} }
+    const a = new Audio('audio/' + lang + '/' + id + '.mp3'); _recAudio = a;
+    if(rate) a.playbackRate = Math.min(1.5, Math.max(.5, rate / 0.95));
+    let failed = false;
+    const fb = () => { if(failed) return; failed = true; if(_recAudio === a) _recAudio = null; fallback(); };
+    a.onerror = fb;
+    const p = a.play(); if(p && p.catch) p.catch(fb);
+    return true;
+  } catch(e) { return false; }
+}
+function speakEN(text, rate, noRec) {
+  try {
+    if(!noRec && playRecorded('en', text, rate, () => speakEN(text, rate, true))) return;
+    if(_recAudio) { try { _recAudio.pause(); } catch(e) {} _recAudio = null; }
     if(!('speechSynthesis' in window) || !text) return;
     speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(text.replace(/\(.*?\)/g,''));
@@ -8325,10 +8345,12 @@ function crsLearnWords(lang, words) {
 }
 
 // ── Utilitaires d'exercices ──
-function crsSpeak(lang, text) {
+function crsSpeak(lang, text, noRec) {
   if(!CRS_META[lang].tts || !text) return;
   if(lang === 'en') return speakEN(text);
+  if(!noRec && playRecorded(lang, text, 0, () => crsSpeak(lang, text, true))) return;
   try {
+    if(_recAudio) { try { _recAudio.pause(); } catch(e) {} _recAudio = null; }
     speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(text); u.lang = 'es-ES'; u.rate = .95;
     const v = speechSynthesis.getVoices().find(v => v.lang && v.lang.startsWith('es')); if(v) u.voice = v;
