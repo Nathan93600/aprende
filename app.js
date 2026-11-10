@@ -6698,7 +6698,7 @@ function startByday() {
 // ═══════════════════════════════════════════════
 // EXPORT / IMPORT — backup & restore progress
 // ═══════════════════════════════════════════════
-function exportProgress() {
+function exportProgress(forGenere) {
   const now = new Date();
   const pad = n => String(n).padStart(2, '0');
   const stamp = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}`;
@@ -6742,10 +6742,11 @@ function exportProgress() {
   if(navigator.canShare && navigator.canShare({ files: [file] })) {
     navigator.share({
       files: [file],
-      title: 'Mes progrès ¡Aprende!',
-      text: 'Sauvegarde ¡Aprende! du ' + stamp
+      title: forGenere ? 'génère' : 'Mes progrès ¡Aprende!',
+      text: forGenere ? 'génère' : 'Sauvegarde ¡Aprende! du ' + stamp
     }).then(() => {
-      showToast('✅ Sauvegarde envoyée', 'correct-toast');
+      if(forGenere) genereMarkSent();
+      showToast(forGenere ? '✅ Envoyé — à vendredi prochain !' : '✅ Sauvegarde envoyée', 'correct-toast');
       haptic('success');
       confetti('small');
     }).catch(err => {
@@ -6755,7 +6756,28 @@ function exportProgress() {
   } else {
     // Desktop or browsers without Web Share API — direct download
     downloadJSON(blob, filename);
+    if(forGenere) {
+      genereMarkSent();
+      try { navigator.clipboard.writeText('génère'); } catch(e) {}
+      setTimeout(() => showToast('📎 Glisse le fichier dans Claude — « génère » est copié', 'correct-toast'), 1200);
+    }
   }
+}
+
+/* ── Rappel du vendredi : un bouton pour envoyer la sauvegarde à Claude avec « génère » ── */
+function genereWeekKey(d) {
+  // clé = date du vendredi de la semaine en cours (la semaine « génère » va du vendredi au jeudi)
+  const x = new Date(d || Date.now()); x.setHours(12, 0, 0, 0);
+  x.setDate(x.getDate() - ((x.getDay() + 2) % 7));
+  return x.getFullYear() + '-' + String(x.getMonth() + 1).padStart(2, '0') + '-' + String(x.getDate()).padStart(2, '0');
+}
+function genereMarkSent() { try { localStorage.setItem('genere_sent', genereWeekKey()); } catch(e) {} genereRenderBanner(); }
+function genereRenderBanner() {
+  const el = document.getElementById('genere-banner'); if(!el) return;
+  const day = new Date().getDay(); // 5 = vendredi, 6 = samedi, 0 = dimanche
+  let sent = ''; try { sent = localStorage.getItem('genere_sent') || ''; } catch(e) {}
+  const show = (day === 5 || day === 6 || day === 0) && sent !== genereWeekKey();
+  el.innerHTML = show ? `<button onclick="exportProgress(true)" style="width:100%;margin:.2rem 0 .8rem;padding:.9rem 1rem;border:none;border-radius:14px;cursor:pointer;background:linear-gradient(135deg,#ffc800,#ff9600);color:#1a0610;font-weight:800;font-size:.95rem;box-shadow:0 4px 14px rgba(255,150,0,.35)">📅 ${day === 5 ? "C'est vendredi" : 'Pas encore fait cette semaine'} : envoyer ma progression à Claude</button>` : '';
 }
 
 function downloadJSON(blob, filename) {
@@ -9354,6 +9376,7 @@ function rpgDailiesHTML() {
   return html;
 }
 function renderHub() {
+  try { genereRenderBanner(); } catch(e) {}
   if(!rpg) return;
   const b = RPG_BOSSES[rpg.boss.i];
   document.getElementById('hub-hero').innerHTML = `<div class="hub-ava">${rpgAvatar()}<b>${rpg.lvl}</b></div><div class="hub-bars"><div class="hub-name"><span>Niveau ${rpg.lvl}${rpg.cls ? ' · ' + RPG_CLASSES[rpg.cls].n : ''}</span><small>Héros ›</small></div>${rpgBars()}</div>`;
