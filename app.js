@@ -6783,7 +6783,12 @@ function openFiche(lang, word, back) {
   const FL = { es: '🇪🇸', en: '🇬🇧', ln: '🇨🇩' }, spk = !!(CRS_META[lang] && CRS_META[lang].tts), tn = crsFbNorm(f.key);
   const alts = (f.fb.alt || []).filter(a => crsFbNorm(a[0]) !== tn), errs = f.fb.err || [];
   const sec = t => `<div style="font-weight:900;margin:1rem 0 .4rem">${t}</div>`;
+  // variété de langue : castellano / Amérique latine pour l'espagnol, Kinshasa / standard pour le lingala
+  const REG = { es: { es: '🇪🇸 Espagne (castellano)', latam: '🌎 Amérique latine', gen: '🌐 Espagne et Amérique latine' }, ln: { kin: '🇨🇩 Forme de Kinshasa', std: '🇨🇩 Lingala standard (RDC)', check: '⚠️ À vérifier : non confirmé par le dictionnaire' } };
+  const regLabel = (REG[lang] || {})[f.fb.reg] || '';
+  const regHtml = regLabel ? `<div style="display:inline-block;margin:0 0 .6rem;padding:.25rem .7rem;border-radius:999px;border:1.5px solid var(--border);font-size:.74rem;font-weight:800;color:var(--muted)">${regLabel}</div>` : '';
   crsModal(`<div class="cm-t">${FL[lang] || ''} ${crsEsc(f.key)} ${spk ? `<button class="spk" onclick="crsSpeak('${lang}', ficheFind('${lang}', decodeURIComponent('${encodeURIComponent(f.key)}')).key)">🔊</button>` : ''}</div>
+    ${regHtml}
     ${w ? `<div class="cm-s">${crsEsc(w[1])}</div>${w[2] ? `<div class="gw"><div><div class="gw-e">« ${crsEsc(w[2])} »<br>${crsEsc(w[3])}</div></div>${spk ? `<button class="spk" onclick="crsSpeak('${lang}', decodeURIComponent('${encodeURIComponent(w[2])}'))">🔊</button>` : ''}</div>` : ''}` : ''}
     ${f.fb.tip ? `${sec('💡 Pour retenir')}<div class="tipbox">${crsEsc(f.fb.tip)}</div>` : ''}
     ${alts.length ? sec('Se dit aussi') + alts.map(a => `<div class="gw"><div><div class="gw-w">${crsEsc(a[0])}</div>${a[1] ? `<div class="gw-f">${crsEsc(a[1])}</div>` : ''}</div></div>`).join('') : ''}
@@ -8776,6 +8781,9 @@ function crsFbCheck(lang, w, val) {
     if(m.exact) return { kind: 'exact', others };
     if(m.almost) almost = true;
   }
+  // 1 bis. lingala : l'impératif (yamba) donné à la place de l'infinitif (koyamba)
+  if(lang === 'ln' && /^ko/i.test(bare) && !/\s/.test(bare) && v && v === crsFbNorm(bare).slice(2) && !alts.some(a => crsFbNorm(a[0]) === v))
+    return { kind: 'err', msg: `« ${v} » est l'impératif. L'infinitif prend le préfixe ko- : ${bare.toLowerCase()}.` };
   // 2. erreurs typiques — testées avant la tolérance aux fautes de frappe,
   //    sinon « at the time being » passerait pour une coquille de « for the time being »
   if(fb && fb.err) for(const e of fb.err) {
