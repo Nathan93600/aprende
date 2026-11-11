@@ -6780,6 +6780,13 @@ function openFiche(lang, word, back) {
   _ficheBack = typeof back === 'function' ? back : null;
   let w = null;
   for(const u of ((COURSES[lang] || {}).units || [])) { w = u.w.find(x => x[0] === f.key); if(w) break; }
+  if(!w) { // mot du journal (hors cours) : traduction et exemple pris sur la carte du paquet
+    const c = getDeckForLang(lang).find(x => x && x[lang] === f.key);
+    if(c) {
+      const e = lang === 'es' ? (ES_EXAMPLES[f.key] || []) : lang === 'ln' ? [c.ex_ln, c.ex_fr] : [c.say || (typeof PRON_DATA !== 'undefined' && PRON_DATA[c.en] ? PRON_DATA[c.en][0] : ''), ''];
+      w = [f.key, c.fr, e[0] || '', e[1] || ''];
+    }
+  }
   const FL = { es: '🇪🇸', en: '🇬🇧', ln: '🇨🇩' }, spk = !!(CRS_META[lang] && CRS_META[lang].tts), tn = crsFbNorm(f.key);
   const alts = (f.fb.alt || []).filter(a => crsFbNorm(a[0]) !== tn), errs = f.fb.err || [];
   const sec = t => `<div style="font-weight:900;margin:1rem 0 .4rem">${t}</div>`;
@@ -6789,7 +6796,7 @@ function openFiche(lang, word, back) {
   const regHtml = regLabel ? `<div style="display:inline-block;margin:0 0 .6rem;padding:.25rem .7rem;border-radius:999px;border:1.5px solid var(--border);font-size:.74rem;font-weight:800;color:var(--muted)">${regLabel}</div>` : '';
   crsModal(`<div class="cm-t">${FL[lang] || ''} ${crsEsc(f.key)} ${spk ? `<button class="spk" onclick="crsSpeak('${lang}', ficheFind('${lang}', decodeURIComponent('${encodeURIComponent(f.key)}')).key)">🔊</button>` : ''}</div>
     ${regHtml}
-    ${w ? `<div class="cm-s">${crsEsc(w[1])}</div>${w[2] ? `<div class="gw"><div><div class="gw-e">« ${crsEsc(w[2])} »<br>${crsEsc(w[3])}</div></div>${spk ? `<button class="spk" onclick="crsSpeak('${lang}', decodeURIComponent('${encodeURIComponent(w[2])}'))">🔊</button>` : ''}</div>` : ''}` : ''}
+    ${w ? `<div class="cm-s">${crsEsc(w[1])}</div>${w[2] ? `<div class="gw"><div><div class="gw-e">« ${crsEsc(w[2])} »${w[3] ? '<br>' + crsEsc(w[3]) : ''}</div></div>${spk ? `<button class="spk" onclick="crsSpeak('${lang}', decodeURIComponent('${encodeURIComponent(w[2])}'))">🔊</button>` : ''}</div>` : ''}` : ''}
     ${f.fb.tip ? `${sec('💡 Pour retenir')}<div class="tipbox">${crsEsc(f.fb.tip)}</div>` : ''}
     ${alts.length ? sec('Se dit aussi') + alts.map(a => `<div class="gw"><div><div class="gw-w">${crsEsc(a[0])}</div>${a[1] ? `<div class="gw-f">${crsEsc(a[1])}</div>` : ''}</div></div>`).join('') : ''}
     ${errs.length ? sec('⚠️ Pièges') + errs.map(e => `<div class="gw"><div><div class="gw-w" style="text-decoration:line-through;opacity:.75">${crsEsc(e[0].replace(/^\*/, ''))}</div><div class="gw-f">${crsEsc(e[1])}</div></div></div>`).join('') : ''}

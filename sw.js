@@ -1,5 +1,5 @@
 // ¡Aprende! Service Worker v15 — stale-while-revalidate for instant updates
-const CACHE_NAME = 'aprende-v31';
+const CACHE_NAME = 'aprende-v32';
 const ASSETS = [
   './',
   'index.html',
@@ -13,6 +13,12 @@ const ASSETS = [
   'courses/feedback_es.js',
   'courses/feedback_es2.js',
   'courses/feedback_ln.js',
+  'courses/feedback_en_deck.js',
+  'courses/feedback_en_deck2.js',
+  'courses/feedback_es_deck.js',
+  'courses/feedback_es_deck2.js',
+  'courses/feedback_es_deck3.js',
+  'courses/feedback_ln_deck.js',
   'audio/manifest.js',
   'manifest.json'
 ];
