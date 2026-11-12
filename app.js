@@ -570,7 +570,7 @@ const ENGLISH = [
   {en:"scorched earth",fr:"Terre brûlée (stratégie)"},
   {en:"scorching hot",fr:"Torride / Brûlant"},
   // ── Session 5 octobre 2026 — mots + équivalents C1 ──
-  {"en": "cork", "fr": "Bouchon de liège / Boucher", "lvl": "B2", "c1": "bottle sth up · put a lid on it", "say": "Don't bottle it up, just tell me."},
+  {"en": "cork", "fr": "Bouchon de liège / Boucher · (fig.) cork up your feelings = tout garder pour soi", "lvl": "B2", "c1": "bottle sth up · put a lid on it", "say": "Don't bottle it up, just tell me."},
   {"en": "to snoop", "fr": "Fouiner / Espionner (péj.)", "lvl": "C1", "c1": "pry into · nosy · poke your nose into", "say": "Stop poking your nose into my business."},
   {"en": "to squat", "fr": "S'accroupir / Squatter · (argot) not know squat = n'y rien connaître", "lvl": "B2", "c1": "crouch down · not know the first thing about", "say": "He doesn't know the first thing about football."},
   {"en": "to cauterise", "fr": "Cautériser · (fig.) endurcir, rendre insensible", "lvl": "C2", "c1": "become desensitised to", "say": "You become desensitised to it after a while."},
