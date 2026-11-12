@@ -12,6 +12,8 @@ const SYNC_LOCAL_MODE = (() => {
   const forceLocal = new URLSearchParams(location.search).get('local') === '1';
   // Force cloud mode via URL param: ?cloud=1 (for testing sync on mobile)
   const forceCloud = new URLSearchParams(location.search).get('cloud') === '1';
+  // config.js : firebase: false → toujours local
+  if (typeof APRENDE_CONFIG !== 'undefined' && APRENDE_CONFIG.firebase === false) return true;
   if (forceCloud) return false;
   return forceLocal || (standalone && mobile);
 })();

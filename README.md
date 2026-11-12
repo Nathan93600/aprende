@@ -6,6 +6,20 @@
 
 ---
 
+## Documentation
+
+| Document | Pour qui |
+|---|---|
+| [docs/FONCTIONNEL.md](docs/FONCTIONNEL.md) | ce que fait l'appli, écran par écran |
+| [docs/TECHNIQUE.md](docs/TECHNIQUE.md) | le code, les formats de données, les voix, le « génère » |
+| [docs/PERSONNALISER.md](docs/PERSONNALISER.md) | reprendre l'appli pour soi : ses mots, ses langues |
+| [docs/prompts/](docs/prompts/) | 3 prompts Claude : recréer l'appli sur son GitHub, la personnaliser, la conversation de tous les jours |
+
+**Tu veux ta propre ¡Aprende! ?** Commence par [docs/PERSONNALISER.md](docs/PERSONNALISER.md) :
+tu peux garder les mots existants ou repartir de zéro, sans Firebase ni serveur.
+
+---
+
 ## Langues
 
 | Langue | Drapeau | Objectif |
@@ -48,7 +62,7 @@
 
 ## Stack technique
 
-- **Frontend** : HTML / CSS / JavaScript vanilla (fichier unique `app.js`)
+- **Frontend** : HTML / CSS / JavaScript vanilla, sans étape de compilation
 - **PWA** : Service Worker + manifest.json, installable sur mobile
 - **Auth** : Firebase Authentication (Google Sign-In)
 - **Base de données** : Firestore avec persistance offline
@@ -59,13 +73,17 @@
 ## Structure
 
 ```
-├── index.html        # Point d'entrée HTML
-├── app.js            # Logique complète (~10 000+ lignes)
-├── style.css         # Styles et animations
-├── sync.js           # Shim localStorage ↔ Firestore
-├── sw.js             # Service Worker (cache offline)
-├── manifest.json     # Manifest PWA
-└── README.md
+├── index.html        # tous les écrans
+├── config.js         # réglages : Firebase oui/non, progression embarquée oui/non
+├── sync.js           # stockage : localStorage (mode local) ou synchronisation Firebase
+├── app.js            # logique, paquets de mots, journal, histoires
+├── style.css         # styles et animations
+├── courses/          # cours (es, en, ln) et fiches de mots
+├── audio/            # voix pré-enregistrées et leur index
+├── tools/            # scripts de génération des voix
+├── sw.js             # service worker (cache hors connexion)
+├── manifest.json     # manifeste PWA
+└── docs/             # documentation et prompts
 ```
 
 ## Développement

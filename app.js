@@ -91,6 +91,8 @@ function updateSidebarBadges() {
 // ═══════════════════════════════════════════════
 // LINGALA DATA
 // ═══════════════════════════════════════════════
+// Paquet vide (copie de l'appli repartie de zéro) : les jeux prennent les mots des cours.
+function deckFromCourse(course, f) { const out = [], seen = new Set(); ((course || {}).units || []).forEach(u => (u.w || []).forEach(w => { const k = String(w[0]).toLowerCase(); if(seen.has(k)) return; seen.add(k); out.push(f(w)); })); return out; }
 const LINGALA = [
   {ln:"Yoka", fr:"Écouter / Entendre", ex_ln:"Yoka nanu motuna na ngai liboso ya koyanola ngai.", ex_fr:"Écoute d'abord ma question avant de me répondre."},
   {ln:"Mobimba", fr:"Tout entier, complet", ex_ln:"Mboka mobimba ezali na kimia.", ex_fr:"Tout le pays est en paix."},
@@ -250,6 +252,7 @@ const LINGALA = [
   {ln:"Ezali na / Ezana", fr:"Qui sont dans / Qui existent dans", ex_ln:"Biloko ezana mokili.", ex_fr:"Les choses qui existent dans le monde."},
   {ln:"Mokili", fr:"Monde / Terre", ex_ln:"Biloko nyonso ya mokili.", ex_fr:"Toutes les choses du monde."},
 ];
+if(!LINGALA.length && typeof COURSE_LN !== 'undefined') LINGALA.push(...deckFromCourse(COURSE_LN, w => ({ ln: w[0], fr: w[1], ex_ln: w[2] || '', ex_fr: w[3] || '' })));
 
 const LN_EXTRA_EXAMPLES = {"Kokuta": ["Nakuti mbongo na nzela.", "J'ai trouvé de l'argent sur le chemin."], "Kolakisa": ["Lakisa ngai nzela.", "Montre-moi le chemin."], "Sukali": ["Tia sukali moke na kafe.", "Mets un peu de sucre dans le café."], "Kokoka": ["Nakoki kosala yango.", "Je peux le faire."], "Kokutana": ["Tokokutana lobi.", "On se retrouvera demain."], "Kofinga": ["Kofinga ngai te !", "Ne m'insulte pas !"], "Kobimisa ye pa na ye": ["Tata abimisaki ye na ndako.", "Le père l'a mis à la porte de la maison."], "Kobenda nzoto": ["Nabendi nzoto liboso ya kopota mbangu.", "Je m'étire avant de courir."], "Nandimi te": ["Nandimi likambo yango te.", "Je ne suis pas d'accord avec ça."], "Kondimisa": ["Amekaki kondimisa ngai.", "Il a essayé de me convaincre."], "Bondimi": ["Bondimi na ye ezali makasi.", "Sa foi est forte."], "Kolengela": ["Mama azali kolengela bilei.", "Maman prépare le repas."], "Libala": ["Libala na bango ekozala lobi.", "Leur mariage aura lieu demain."], "Tolemba te": ["Ata ezali pasi, tolemba te !", "Même si c'est dur, on n'abandonne pas !"], "Kolembisa": ["Mosala oyo elembisi ngai.", "Ce travail m'a épuisé."], "Mokomi": ["Alingi kozala mokomi.", "Il veut devenir écrivain."], "Kobaka": ["Ndeke ebaki na nzete.", "L'oiseau s'est perché sur l'arbre."], "Kobáka": ["Monganga abaki ngai mangwele.", "Le médecin m'a fait une piqûre."], "Ebandeli": ["Na ebandeli, ezalaki pasi.", "Au début, c'était difficile."], "Mabína": ["Nalingaka mabina.", "J'aime (toujours) la danse."], "Na libanda": ["Bana bazali kosakana na libanda.", "Les enfants jouent dehors."], "Libanda ya mpepo": ["Tokokutana na libanda ya mpepo.", "On se retrouvera à l'aéroport."]};
 LINGALA.forEach(c => { if(!(c.ex_ln && c.ex_ln.trim()) && LN_EXTRA_EXAMPLES[c.ln]) { c.ex_ln = LN_EXTRA_EXAMPLES[c.ln][0]; c.ex_fr = LN_EXTRA_EXAMPLES[c.ln][1]; } });
@@ -655,6 +658,7 @@ const ENGLISH = [
   {en:"to fill to capacity",fr:"Remplir à pleine capacité"},
   {en:"to max out",fr:"Atteindre le maximum / Remplir au max"}
 ];
+if(!ENGLISH.length && typeof COURSE_EN !== 'undefined') ENGLISH.push(...deckFromCourse(COURSE_EN, w => ({ en: w[0], fr: w[1], say: w[2] || '' })));
 
 let enGameState = {};
 
@@ -1729,6 +1733,7 @@ const VOCAB = [
   {es:"mercancía",fr:"Marchandise"},
   {es:"carga",fr:"Charge / Cargaison"}
 ];
+if(!VOCAB.length && typeof COURSE_ES !== 'undefined') VOCAB.push(...deckFromCourse(COURSE_ES, w => ({ es: w[0], fr: w[1] })));
 // Remove duplicates
 const seen = new Set();
 const DATA = VOCAB.filter(w => { const k = w.es.toLowerCase(); if(seen.has(k)) return false; seen.add(k); return true; });
@@ -10647,7 +10652,8 @@ function initApp() {
 
   // Hydrate from embedded backup ONLY if Firestore has no SRS data
   const existingSrs = localStorage.getItem('srs_data');
-  if (!existingSrs || existingSrs === '{}' || existingSrs === 'undefined') {
+  const embeddedOk = typeof APRENDE_CONFIG === 'undefined' || APRENDE_CONFIG.embeddedProgress !== false;
+  if (embeddedOk && (!existingSrs || existingSrs === '{}' || existingSrs === 'undefined')) {
     console.log('[Aprende] No SRS data in Firestore — hydrating from embedded backup');
     hydrateFromBackup();
   } else {
