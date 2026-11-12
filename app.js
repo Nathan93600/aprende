@@ -7515,18 +7515,46 @@ function srsMigrateKeys() {
     const f = lang === 'es' ? 'es' : lang === 'ln' ? 'ln' : 'en';
     const deck = getDeckForLang(lang);
     if(deck.find(c => c && c[f] === word)) continue;
-    const card = srsGetCardData(lang, word);
+    // même mot à la casse près dans le paquet (Kasi / kasi) : une seule carte, celle du paquet
+    let card = deck.find(c => c && typeof c[f] === 'string' && c[f].toLowerCase() === word.toLowerCase());
+    if(!card) {
+      // mot du journal ou d'un cours écrit exactement ainsi : orthographe actuelle, rien à migrer
+      const cur = _srsSearchArraySources(lang, word, '\u0000');
+      if(cur && cur[f] === word) continue;
+      card = srsGetCardData(lang, word);
+    }
     if(!card) continue;
     const newKey = `${lang}:${card[f]}`;
+    if(newKey === key) continue;
     if(data[newKey]) { if((data[key].reps || 0) > (data[newKey].reps || 0)) data[newKey] = data[key]; }
     else data[newKey] = data[key];
     delete data[key]; changed++;
   }
   if(changed) { srsSave(data); console.log('[Aprende] SRS keys migrated:', changed); }
 }
+// Réparation : une ancienne version de srsMigrateKeys supprimait à chaque démarrage les cartes des mots
+// du journal et des cours, qui revenaient alors comme nouvelles. On rejoue l'historique des révisions
+// (srs_revlog) pour retrouver l'état de toute carte « neuve » qui a pourtant déjà été notée.
+function srsRepairFromRevlog() {
+  const data = srsLoad(), by = {};
+  for(const r of srsRevlogLoad()) { if(Array.isArray(r) && data[r[0]] && !data[r[0]].reps) (by[r[0]] = by[r[0]] || []).push(r); }
+  let fixed = 0;
+  for(const k in by) {
+    const rs = by[k].filter(r => r[2] >= 0 && r[2] <= 3 && r[1] > 0).sort((a, b) => a[1] - b[1]);
+    if(!rs.length) continue;
+    let i = rs.length - 1; while(i > 0 && rs[i][3] !== 0) i--;   // dernière fois où la carte a démarré comme nouvelle
+    const c = data[k];
+    let st = { ef: c.ef || 2.5, interval: 0, reps: 0, due: rs[i][1], lang: c.lang, word: c.word, fr: c.fr, st: 'new' };
+    for(const r of rs.slice(i)) st = srsNextState(st, r[2], k, r[1]);
+    data[k] = st; fixed++;
+  }
+  if(fixed) { srsSave(data); console.log('[Aprende] SRS cards repaired from revlog:', fixed); }
+}
 // ── Auto-enqueue: at boot, add any VOCAB/JOURNAL/COURSE words not yet in SRS ──
 function srsAutoEnqueueNew() {
   const data = srsLoad(); let added = 0; let patched = 0;
+  // un mot du journal ou d'un cours déjà présent à la casse près (Kasi / kasi) ne crée pas de deuxième carte
+  const lower = new Set(Object.keys(data).map(k => k.toLowerCase()));
   ['es', 'ln', 'en'].forEach(lang => {
     const f = lang;
     // 1) Words from VOCAB decks (DATA / LINGALA / ENGLISH)
@@ -7545,7 +7573,8 @@ function srsAutoEnqueueNew() {
         for(const entry of arr) {
           if(!Array.isArray(entry) || !entry[0]) continue;
           const k = srsKey(lang, entry[0]);
-          if(!data[k]) { data[k] = { ef: 2.5, interval: 0, reps: 0, due: Date.now(), lang, word: entry[0], fr: entry[1] || '' }; added++; }
+          if(!data[k] && lower.has(k.toLowerCase())) continue;
+          if(!data[k]) { lower.add(k.toLowerCase()); data[k] = { ef: 2.5, interval: 0, reps: 0, due: Date.now(), lang, word: entry[0], fr: entry[1] || '' }; added++; }
           else if(!data[k].fr && entry[1]) { data[k].fr = entry[1]; data[k].word = data[k].word || entry[0]; patched++; }
           else if(!data[k].word) { data[k].word = entry[0]; patched++; }
         }
@@ -7557,7 +7586,8 @@ function srsAutoEnqueueNew() {
         for(const w of unit.w || []) {
           if(!Array.isArray(w) || !w[0]) continue;
           const k = srsKey(lang, w[0]);
-          if(!data[k]) { data[k] = { ef: 2.5, interval: 0, reps: 0, due: Date.now(), lang, word: w[0], fr: w[1] || '' }; added++; }
+          if(!data[k] && lower.has(k.toLowerCase())) continue;
+          if(!data[k]) { lower.add(k.toLowerCase()); data[k] = { ef: 2.5, interval: 0, reps: 0, due: Date.now(), lang, word: w[0], fr: w[1] || '' }; added++; }
           else if(!data[k].fr && w[1]) { data[k].fr = w[1]; data[k].word = data[k].word || w[0]; patched++; }
           else if(!data[k].word) { data[k].word = w[0]; patched++; }
         }
@@ -10614,6 +10644,7 @@ function initApp() {
   try { srsMigrateAllToFsrs(); } catch(e) { console.error('[Aprende] srsMigrateAllToFsrs error:', e); }
   try { srsMigrateKeys(); } catch(e) { console.error('[Aprende] srsMigrateKeys error:', e); }
   try { srsAutoEnqueueNew(); } catch(e) { console.error('[Aprende] srsAutoEnqueueNew error:', e); }
+  try { srsRepairFromRevlog(); } catch(e) { console.error('[Aprende] srsRepairFromRevlog error:', e); }
   try { updateSRSDueBadges(); } catch(e) { console.error('[Aprende] updateSRSDueBadges error:', e); }
 
   // RPG init
