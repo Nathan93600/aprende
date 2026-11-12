@@ -125,3 +125,72 @@ Object.assign(CRS_FB.en, {
   "staggering": { alt: [["astonishing", "B2"], ["mind-blowing", "oral"], ["astounding", "C1"], ["jaw-dropping", "oral"], ["eye-watering", "pour un prix, une somme"]], err: [["a staggering = un titubant", "To stagger = tituber, mais staggering = ahurissant."], ["stagering", "Deux g : staggering."]], tip: "C1. A staggering amount / number : a staggering $2 billion. To stagger = tituber, ou stupéfier, ou échelonner (staggered shifts = horaires décalés)." },
   "upheaval": { alt: [["turmoil", "C1 : tumulte, agitation"], ["disruption", "B2 : perturbation"], ["shake-up", "oral : grand remaniement"], ["chaos", "B1"]], err: [["an upheavel", "Upheaval, avec -al."], ["upheavals of", "Political / social / emotional upheaval : souvent indénombrable."]], tip: "C1. Up + heave (soulever). « ap-HI-vel ». Political upheaval, a period of upheaval. Moving house is a big upheaval = un vrai chamboulement." },
 });
+
+// ── Génère du 13/11/2026 : factories & putting a stop to things ──
+Object.assign(CRS_FB.en, {
+  "factory": {
+    alt: [["plant", "grand site, énergie"], ["facility", "registre pro"], ["works", "surtout UK"], ["mill", "textile, papier, acier"]],
+    err: [["usine", "Mot français. En anglais : factory."], ["fabric", "Faux-ami : fabric = tissu."]],
+    tip: "Factory vient de « factor » (agent) : là où l'on fait. Prononcé « FAK-tuh-ree », le o disparaît presque."
+  },
+  "plant": {
+    alt: [["factory"], ["power plant", "centrale électrique"], ["facility"]],
+    err: [["plantation", "Une plantation agricole, pas une usine."]],
+    tip: "Plant = la plante et l'usine, comme en espagnol (la planta). Power plant = centrale."
+  },
+  "facility": {
+    alt: [["site", "site"], ["premises", "locaux"], ["plant", "usine"]],
+    err: [["facility = facilité", "Faux-ami : la facilité = ease. Facility = installation, site."], ["a facilities", "Au singulier : a facility ; au pluriel : facilities (équipements)."]],
+    tip: "Facility = un endroit équipé pour faire quelque chose : a research facility, sports facilities."
+  },
+  "mill": {
+    alt: [["steel mill", "aciérie"], ["paper mill", "papeterie"], ["windmill", "moulin à vent"]],
+    err: [["mile", "Mile = mille (distance), prononcé « maïl ». Mill = « mil »."]],
+    tip: "Au départ un moulin (to mill = moudre), puis toute usine qui transforme une matière : run-of-the-mill = banal, ordinaire."
+  },
+  "sweatshop": {
+    alt: [["exploitative factory"], ["slave labor", "travail forcé"]],
+    err: [["sweat shop = boutique de sport", "Rien à voir : sweat = sueur. Un sweatshop exploite les ouvriers."]],
+    tip: "Sweat (sueur) + shop (atelier) : l'atelier où l'on sue pour un salaire de misère."
+  },
+  "works": {
+    alt: [["plant"], ["factory"], ["gasworks", "usine à gaz"]],
+    err: [["a work", "Une usine se dit « a works » (même forme au singulier), pas « a work »."]],
+    tip: "Surtout britannique et dans des noms : the gas works, the steel works. Aux États-Unis, on dit plutôt plant."
+  },
+  "stop sb from doing": {
+    alt: [["stop sb doing", "UK, sans from"], ["prevent sb from doing", "plus formel"], ["keep sb from doing"]],
+    err: [["stop sb to do", "Stop to do = s'arrêter POUR faire. Empêcher = stop sb from doing."], ["stop doing", "Sans complément, c'est « arrêter de faire » : stop smoking."]],
+    tip: "From = éloigner de : on tient quelqu'un loin de l'action. Stop me from going."
+  },
+  "prevent sb from doing": {
+    alt: [["stop sb from doing", "plus oral"], ["hinder", "freiner"], ["preclude", "soutenu"]],
+    err: [["prevent sb to do", "Faute très fréquente : prevent sb FROM doing."], ["prevent sb of doing", "La préposition est from."], ["prévenir = prevent", "Faux-ami : prévenir quelqu'un = warn sb. Prevent = empêcher."]],
+    tip: "Prevent = empêcher, pas prévenir. Mieux vaut prévenir que guérir = prevention is better than cure."
+  },
+  "keep sb from doing": {
+    alt: [["stop sb from doing"], ["hold sb back", "retenir"], ["keep sb from sth", "empêcher de faire qqch (keep you from your work)"]],
+    err: [["keep sb to do", "La structure est keep sb FROM doing."], ["keep doing", "Sans « from », c'est continuer : keep going."]],
+    tip: "Keep going = continue ; keep sb FROM going = empêche-le d'y aller. Tout est dans le « from »."
+  },
+  "hinder": {
+    alt: [["hamper", "entraver"], ["impede", "soutenu"], ["slow down", "ralentir, plus simple"]],
+    err: [["hinter", "Le mot s'écrit hinder, prononcé « HIN-dur »."], ["hinder = empêcher totalement", "Hinder freine, il n'empêche pas tout à fait. Pour empêcher : prevent."]],
+    tip: "Hinder comme « behind » : ça te retient en arrière, ça te ralentit."
+  },
+  "deter": {
+    alt: [["discourage"], ["dissuade", "plus formel"], ["put off", "familier"]],
+    err: [["deter to do", "deter sb FROM doing."], ["defer", "Defer = reporter. Deter = dissuader."]],
+    tip: "Deter = faire peur (terror) pour dissuader. Le nom : a deterrent, un moyen de dissuasion."
+  },
+  "thwart": {
+    alt: [["foil", "déjouer"], ["frustrate", "faire échouer"], ["stymie", "soutenu"]],
+    err: [["thwart sb to do", "On contrecarre un plan ou quelqu'un : thwart a plan, thwart sb."]],
+    tip: "Le th se fait langue entre les dents : « THWORT ». Fréquent dans les infos : police thwarted a plot."
+  },
+  "preclude": {
+    alt: [["rule out", "exclure"], ["prevent", "plus courant"], ["make impossible"]],
+    err: [["preclude to do", "preclude sb FROM doing, ou preclude sth."], ["prelude", "Prelude = prélude (musique). Preclude = rendre impossible."]],
+    tip: "Pre (avant) + clude (fermer) : fermer la porte d'avance. Soutenu, fréquent à l'écrit."
+  },
+});

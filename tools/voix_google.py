@@ -61,12 +61,17 @@ def err_text(e):
 
 
 def load_jobs():
-    p = os.path.join(HERE, "voix_textes.json")
-    if os.path.exists(p):
-        with open(p, encoding="utf-8") as f:
-            return json.load(f)
-    print("Téléchargement de la liste des textes…")
-    return json.loads(http(LIST_URL).decode("utf-8"))
+    # la liste en ligne d'abord (elle change à chaque « génère »), sinon une copie locale
+    try:
+        print("Téléchargement de la liste des textes…")
+        return json.loads(http(LIST_URL).decode("utf-8"))
+    except Exception as e:
+        p = os.path.join(HERE, "voix_textes.json")
+        if os.path.exists(p):
+            print(f"Liste en ligne indisponible ({e}) : copie locale utilisée.")
+            with open(p, encoding="utf-8") as f:
+                return json.load(f)
+        raise
 
 
 def synth(key, job):
@@ -178,9 +183,10 @@ def finish(jobs, path):
     missing = [j for j in jobs if not os.path.exists(path(j))]
     if missing:
         print(f"Il manque encore {len(missing)} fichiers : relance le script."); return
-    z = os.path.join(HERE, "aprende-voix.zip")
+    new = [j for j in jobs if j.get("n")]   # textes pas encore dans l'appli : archive légère
+    z = os.path.join(HERE, "aprende-voix-nouvelles.zip" if new else "aprende-voix.zip")
     with zipfile.ZipFile(z, "w", zipfile.ZIP_STORED) as zf:
-        for j in jobs:
+        for j in (new or jobs):
             zf.write(path(j), j["l"] + "/" + j["id"] + ".mp3")
         zf.write(STATE, "etat.json")
     print(f"Terminé : {len(jobs)} fichiers dans {OUT}")

@@ -196,3 +196,163 @@ Object.assign(CRS_FB.es, {
   "mientras ganemos": { reg: "gen", alt: [["siempre que ganemos", "= à condition qu'on gagne"], ["con tal de que ganemos", "= pourvu qu'on gagne"], ["mientras ganamos", "indicatif : pendant qu'on gagne (simultanéité)"]], err: [["mientras ganamos = tant qu'on gagne", "La condition demande le subjonctif : mientras ganemos."], ["mientras que ganemos", "Mientras que marque l'opposition (tandis que), pas la condition."]], tip: "Mientras + subjonctif = tant que, du moment que (condition tournée vers l'avenir). Mientras + indicatif = pendant que. Mientras tanto = pendant ce temps. Ganemos : subjonctif présent de ganar, nosotros." },
   "apenas mirar": { reg: "gen", alt: [["casi no mirar", "= presque pas"], ["mirar de reojo", "= regarder du coin de l'œil"], ["echar un vistazo", "= jeter un coup d'œil"], ["ni siquiera mirar", "= ne même pas regarder"]], err: [["a penas", "En un seul mot : apenas."], ["no apenas miró", "Devant le verbe, pas de no : apenas me miró. Après le verbe : no me miró apenas."]], tip: "Apenas = à peine. Apenas me miró = il m'a à peine regardé. Apenas + verbe = dès que, surtout en Amérique latine : apenas llegue, te llamo. Apenas si = c'est tout juste si." },
 });
+
+// ── Génère du 13/11/2026 : el niño que no para quieto · salud, fábricas y lo que se impide ──
+Object.assign(CRS_FB.es, {
+  "no parar quieto": {
+    reg: "gen",
+    alt: [["no estarse quieto", "même sens"], ["ser un culo inquieto", "Espagne, familier"], ["no poder estar sentado", "ne pas tenir assis"]],
+    err: [["no parar tranquilo", "On dit « quieto » : tranquilo = calme, quieto = immobile."], ["no quedar quieto", "Le verbe est parar : no parar quieto."]],
+    tip: "Parar = s'arrêter. « No para quieto » : il ne s'arrête jamais immobile, donc il bouge tout le temps."
+  },
+  "estate quieto": {
+    reg: "es",
+    alt: [["quédate quieto", "partout, surtout en Amérique latine"], ["no te muevas", "ne bouge pas"], ["estate quieta", "au féminin"]],
+    err: [["está quieto", "Sans « te », c'est « il est immobile ». L'ordre se dit estate (estar + te)."], ["sé quieto", "Ser ne marche pas : être immobile est un état, donc estar."]],
+    tip: "Estate = está + te, l'impératif de estarse. Les parents espagnols le disent cent fois par jour."
+  },
+  "quédate quieto": {
+    reg: "gen",
+    alt: [["estate quieto", "Espagne"], ["no te muevas"], ["quédate quieta", "au féminin"]],
+    err: [["quédate tranquilo", "Correct, mais veut dire « reste calme, ne t'inquiète pas », pas « ne bouge pas »."], ["queda quieto", "Il manque le pronom : quéda-te."]],
+    tip: "Quedarse = rester. « Reste immobile », comme une statue."
+  },
+  "no te muevas": {
+    reg: "gen",
+    alt: [["quédate quieto"], ["estate quieto", "Espagne"], ["no os mováis", "à plusieurs, Espagne"], ["no se muevan", "à plusieurs, Amérique latine"]],
+    err: [["no te mueves", "L'ordre négatif prend le subjonctif : no te muevas."], ["no muévete", "Le pronom va avant le verbe à la forme négative : no te muevas."]],
+    tip: "Impératif négatif = no + subjonctif : no te muevas, no te vayas, no te preocupes."
+  },
+  "para ya": {
+    reg: "es",
+    alt: [["ya párale", "Mexique, familier"], ["¡basta ya!", "ça suffit ! partout"], ["¡déjalo ya!", "arrête ça"]],
+    err: [["para ahora", "« Ya » renforce l'ordre (tout de suite, ça suffit) ; « ahora » ne s'emploie pas ici."], ["arrésta", "Faux-ami : arrestar = arrêter quelqu'un (la police)."]],
+    tip: "Para (de parar) + ya (déjà, maintenant) : « arrête, là, maintenant ! »."
+  },
+  "ser un culo inquieto": {
+    reg: "es",
+    alt: [["no parar quieto"], ["ser muy inquieto", "neutre"], ["tener hormigas en el culo", "familier, plus rare"]],
+    err: [["tener un culo inquieto", "L'expression se construit avec ser : es un culo inquieto."], ["tener la bougeotte", "Le mot n'existe pas en espagnol."]],
+    tip: "Image : un derrière qui ne tient pas sur la chaise. Familier mais pas vulgaire en Espagne."
+  },
+  "prestar atención": {
+    reg: "gen",
+    alt: [["poner atención", "Amérique latine"], ["atender", "suivre, être attentif (en classe)"], ["fijarse", "faire attention à un détail"]],
+    err: [["hacer atención", "Calque : on « prête » l'attention : prestar atención."], ["tener atención", "Calque. Tener cuidado = faire attention (danger) ; prestar atención = être attentif."]],
+    tip: "Comme en anglais « pay attention » : l'attention se prête (prestar), elle ne se fait pas."
+  },
+  "aburrirse": {
+    reg: "gen",
+    alt: [["estar aburrido", "s'ennuyer (état)"], ["aburrirse como una ostra", "s'ennuyer comme un rat mort"]],
+    err: [["ser aburrido", "Ser aburrido = être ennuyeux. S'ennuyer = estar aburrido ou aburrirse."], ["enojarse", "Faux-ami : enojarse = se fâcher (Amérique latine)."]],
+    tip: "Une huître (ostra) qui s'ennuie au fond de l'eau : me aburro como una ostra."
+  },
+  "estar sentado": {
+    reg: "gen",
+    alt: [["sentarse", "s'asseoir (l'action)"], ["llevar sentado", "être assis depuis (lleva dos horas sentado)"]],
+    err: [["estar sentándose", "C'est « être en train de s'asseoir ». Assis = sentado."], ["ser sentado", "Être assis est un état : estar."]],
+    tip: "Siéntate (action) → ya estoy sentado (résultat). Pareil : estar de pie = être debout."
+  },
+  "pedir": {
+    reg: "gen",
+    alt: [["solicitar", "demander officiellement"], ["encargar", "commander (un objet, à l'avance)"]],
+    err: [["preguntar ayuda", "Preguntar = poser une question. Demander une chose = pedir ayuda."], ["demandar", "Faux-ami : demandar = porter plainte, poursuivre en justice."]],
+    tip: "Pedir = demander pour obtenir (une chose, un plat). Preguntar = demander pour savoir (une question)."
+  },
+  "el aula": {
+    reg: "gen",
+    alt: [["la clase", "la classe, aussi la salle"], ["el salón de clases", "Amérique latine"]],
+    err: [["la aula", "Mot féminin qui commence par un a tonique : el aula, comme el agua."], ["los aulas", "Au pluriel, il redevient féminin : las aulas."]],
+    tip: "El aula vacía, las aulas llenas : « el » au singulier, mais le mot reste féminin (vacía, llenas)."
+  },
+  "el encaje": {
+    reg: "gen",
+    alt: [["encajar", "s'intégrer, s'emboîter (le verbe)"], ["su sitio", "sa place"], ["la puntilla", "dentelle fine"]],
+    err: [["el encajo", "Le nom est encaje (de encajar)."], ["encaje = encaissement", "Non : encaisser de l'argent = cobrar."]],
+    tip: "Encajar = s'emboîter comme une pièce de puzzle ; el encaje = trouver sa place dans le puzzle (ou la dentelle, qui s'emboîte en motifs)."
+  },
+  "quieto": {
+    reg: "gen",
+    alt: [["inmóvil", "plus formel"], ["tranquilo", "calme, serein (une personne)"], ["en calma", "le temps, la mer"]],
+    err: [["quieto = calme (personne)", "Pour une personne calme, on dit tranquilo. Quieto = qui ne bouge pas."], ["quietud", "Le nom existe mais il est littéraire. À l'oral : tranquilidad."]],
+    tip: "Quieto vient du latin quietus, comme « quiet » en anglais, mais en espagnol c'est le mouvement qui s'arrête, pas le bruit."
+  },
+  "la fábrica": {
+    reg: "gen",
+    alt: [["la planta", "grand site industriel"], ["el taller", "l'atelier"], ["la usina", "Argentine, Uruguay"]],
+    err: [["la fabricación", "C'est la fabrication (l'action), pas le bâtiment."], ["la usina", "Ne s'emploie pas en Espagne."]],
+    tip: "Fábrica → on y fabrique. Attention : pas d'accent sur fabricar, accent sur fábrica."
+  },
+  "la planta": {
+    reg: "gen",
+    alt: [["la fábrica"], ["la central", "centrale électrique (central nuclear)"], ["la planta baja", "le rez-de-chaussée (autre sens)"]],
+    err: [["la plante (usine)", "En français, « plante » ne veut pas dire usine. En espagnol, si : la planta de Valladolid."]],
+    tip: "Comme « plant » en anglais : la planta = l'usine, la plante, et aussi l'étage (la segunda planta)."
+  },
+  "la usina": {
+    reg: "latam",
+    alt: [["la fábrica", "partout"], ["la central eléctrica", "centrale électrique, partout"]],
+    err: [["la usina (en Espagne)", "En Espagne on ne l'emploie pas : fábrica ou planta."]],
+    tip: "Usina ressemble au français « usine » : c'est le mot du Río de la Plata (Argentine, Uruguay), souvent pour une centrale électrique."
+  },
+  "impedir": {
+    reg: "gen",
+    alt: [["evitar que", "empêcher qu'une chose arrive"], ["no dejar", "familier"], ["prohibir", "interdire"]],
+    err: [["impedir de salir", "Pas de préposition : impedir salir, ou impedir que salgas."], ["impedir que sales", "Après impedir que, subjonctif : que salgas."]],
+    tip: "Se conjugue comme pedir : impido, impides, impidió. Et toujours sans « de »."
+  },
+  "evitar que": {
+    reg: "gen",
+    alt: [["impedir que"], ["prevenir", "prévenir, éviter en anticipant"]],
+    err: [["evitar que entra", "Après evitar que, subjonctif : que entre."], ["evitar de hacer", "Evitar + infinitif sans « de » : evita hablar."]],
+    tip: "Evitar que + subjonctif, comme tout ce qu'on veut empêcher : que no entre, que no se caiga."
+  },
+  "no dejar": {
+    reg: "gen",
+    alt: [["impedir", "plus neutre"], ["no permitir", "ne pas autoriser"]],
+    err: [["no dejar de dormir", "No dejar de + infinitif = ne pas arrêter de. Empêcher = no dejar + infinitif : no me dejan dormir."]],
+    tip: "Dejar = laisser. « Ils ne me laissent pas dormir » = ils m'empêchent de dormir."
+  },
+  "habría que": {
+    reg: "gen",
+    alt: [["hay que", "il faut"], ["haría falta", "il faudrait (+ nom ou infinitif)"], ["deberíamos", "on devrait"]],
+    err: [["se debería", "Possible mais lourd. À l'oral : habría que."], ["habría de", "Haber de = devoir, plus littéraire. « Il faudrait » = habría que."]],
+    tip: "Hay que = il faut ; habría que = il faudrait. Impersonnel : on ne dit pas qui doit le faire."
+  },
+  "recetar": {
+    reg: "gen",
+    alt: [["prescribir", "plus formel, médical"], ["mandar", "familier : el médico me mandó reposo"]],
+    err: [["receptar", "N'existe pas dans ce sens. Le verbe est recetar."], ["ordenar", "Ordenar = ordonner, ranger. Une ordonnance médicale = una receta."]],
+    tip: "La receta = l'ordonnance ET la recette de cuisine : le médecin te donne la « recette » pour guérir."
+  },
+  "la iatrogenia": {
+    reg: "gen",
+    alt: [["la iatrogénesis", "synonyme"], ["iatrogénico", "l'adjectif"], ["efecto adverso", "effet indésirable, plus courant"]],
+    err: [["la iatrogenía", "Pas d'accent : iatrogenia."]],
+    tip: "Iatros = médecin en grec, genia = qui naît de : le mal qui naît du traitement."
+  },
+  "cotidiano": {
+    reg: "gen",
+    alt: [["diario", "quotidien, de tous les jours"], ["de todos los días", "plus oral"], ["habitual", "habituel"]],
+    err: [["cuotidiano", "Pas de u : cotidiano."], ["el cotidiano", "Le quotidien (journal) = el diario ou el periódico."]],
+    tip: "Cotidiano pour la vie (la vida cotidiana), diario pour la routine (mi rutina diaria)."
+  },
+  "se creó con": {
+    reg: "gen",
+    alt: [["fue creado con", "passif écrit"], ["se fundó con", "a été fondé avec"], ["nació con", "est né avec (une idée)"]],
+    err: [["se ha creado con", "Possible, mais pour un fait daté et terminé, le passé simple est plus naturel : se creó."], ["se creyó con", "Se creyó = il s'est cru (creer). Créer = crear → se creó."]],
+    tip: "Crear (créer) → creó ; creer (croire) → creyó. Une lettre de différence."
+  },
+  "el trastorno": {
+    reg: "gen",
+    alt: [["la enfermedad", "la maladie"], ["el TDAH", "trastorno por déficit de atención e hiperactividad"], ["el desorden", "le désordre, plus rare en médecine"]],
+    err: [["el trastorno = le désordre", "Pour le désordre d'une pièce : el desorden. El trastorno est surtout médical."], ["la trastorna", "Le nom est masculin : el trastorno."]],
+    tip: "Trastornar = bouleverser : un trastorno bouleverse le fonctionnement normal."
+  },
+  "la pastilla": {
+    reg: "gen",
+    alt: [["el comprimido", "plus formel"], ["la píldora", "la pilule (contraceptive)"], ["la tableta", "Amérique latine"]],
+    err: [["la pastilla = la pastille", "Correct pour une pastille à sucer (pastilla para la garganta), mais en général c'est le comprimé."]],
+    tip: "Tómate una pastilla : prends un cachet. Et « una pastilla de jabón » = une savonnette."
+  },
+});
