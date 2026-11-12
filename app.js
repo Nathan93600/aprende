@@ -9652,6 +9652,7 @@ function renderShop() {
 }
 
 // ── Branchement sur la navigation existante ──
+const FX_DARK_SCREENS = ['lang-select', 'screen-path', 'screen-lesson', 'screen-hero', 'screen-shop', 'screen-badges', 'screen-stories', 'screen-story-play'];
 const crsOrigShowScreen = showScreen;
 const crsOrigSelectLang = selectLang;
 const crsOrigGoHome = goHome;
@@ -9664,6 +9665,8 @@ showScreen = function(id) {
     tb.querySelectorAll('.tb-btn').forEach(b => b.classList.toggle('on', b.dataset.tab === CRS_TAB_SCREENS[id]));
   }
   crsTheme(id === 'lang-select' ? 'hub' : currentLang);
+  // thème « pop » (crème teinté par langue, contours épais) : Réviser, Jeux et tous les jeux
+  document.body.classList.toggle('pop', !FX_DARK_SCREENS.includes(id));
   document.body.classList.toggle('t-sky', ['screen-path', 'screen-lesson', 'home-ln', 'screen-hero', 'screen-shop'].includes(id));
   if(rpg) rpgSyncThrottled(id === 'screen-lesson');
   if(id === 'lang-select') renderHub();
