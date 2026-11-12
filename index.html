@@ -15,7 +15,7 @@
 <meta name="description" content="Apprends l'espagnol, le lingala et l'anglais — exercices, SRS, RPG">
 
 <title>¡Aprende! — Langues Interactives</title>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&family=Unbounded:wght@400;700;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&family=Poppins:wght@500;600;700;800&family=Unbounded:wght@400;700;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -505,15 +505,13 @@
 
 <!-- ═══════════ RÉPÉTITION ESPACÉE (SRS) ═══════════ -->
 <div class="screen with-tabbar" id="screen-srs">
-  <div class="game-header">
-    <button class="back-btn" onclick="goHome()">← Retour</button>
-    <div class="game-title-bar"><h2 id="srs-title">🧠 Révision SRS</h2></div>
-    <div style="display:flex;gap:.5rem;align-items:center">
-      <button id="srs-undo-btn" onclick="srsUndo()" style="display:none;align-items:center;gap:.3rem;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.2);color:var(--text);padding:.4rem .7rem;border-radius:10px;font-size:.72rem;cursor:pointer;font-family:'Unbounded',sans-serif" title="Annuler la dernière réponse (Z)">↶</button>
-      <button onclick="openStats(srsState.lang)" style="background:linear-gradient(135deg,rgba(0,229,255,.18),rgba(56,189,248,.1));border:1.5px solid rgba(0,229,255,.4);color:var(--text);padding:.4rem .7rem;border-radius:10px;font-size:.72rem;cursor:pointer;font-family:'Unbounded',sans-serif" title="Statistiques">📊</button>
-      <button onclick="showSRSCalendar()" style="background:linear-gradient(135deg,rgba(213,0,249,.2),rgba(0,229,255,.15));border:1.5px solid rgba(213,0,249,.4);color:var(--text);padding:.4rem .7rem;border-radius:10px;font-size:.72rem;cursor:pointer;font-family:'Unbounded',sans-serif" title="Voir le calendrier des révisions">📅</button>
-      <button onclick="showDirectory()" style="background:linear-gradient(135deg,rgba(76,175,80,.2),rgba(0,229,255,.15));border:1.5px solid rgba(76,175,80,.4);color:var(--text);padding:.4rem .7rem;border-radius:10px;font-size:.72rem;cursor:pointer;font-family:'Unbounded',sans-serif" title="Annuaire des mots">📖</button>
-      <span style="font-size:.72rem;color:var(--accent2);font-family:'Unbounded',sans-serif" id="srs-counter">0/0</span>
+  <div class="game-header fx-head">
+    <button class="back-btn fx-round" onclick="goHome()" aria-label="Retour">←</button>
+    <div class="fx-seg">
+      <button id="srs-undo-btn" onclick="srsUndo()" style="display:none" title="Annuler la dernière réponse (Z)">↶</button>
+      <button onclick="openStats(srsState.lang)" title="Statistiques">📊</button>
+      <button onclick="showSRSCalendar()" title="Voir le calendrier des révisions">📅</button>
+      <button onclick="showDirectory()" title="Annuaire des mots">📖</button>
     </div>
   </div>
 
@@ -542,63 +540,55 @@
   </div>
 
   <!-- Empty state -->
-  <div id="srs-empty" style="display:none;width:100%;max-width:500px;text-align:center;padding:2rem">
-    <div style="font-size:3.5rem;margin-bottom:.8rem">✨</div>
-    <div style="font-family:'Unbounded',sans-serif;font-size:1.2rem;margin-bottom:.6rem" id="srs-empty-title">Aucune carte à réviser !</div>
-    <div style="color:var(--muted);font-size:.9rem;line-height:1.6;margin-bottom:1.5rem" id="srs-empty-desc">Tu es à jour. Reviens plus tard ou ajoute de nouveaux mots à ta pile de révision.</div>
-    <button class="btn btn-primary" onclick="srsAddNew()" style="margin-bottom:.6rem;width:100%;max-width:280px" id="srs-empty-add">+ Ajouter 10 mots</button>
-    <button class="btn btn-ghost" onclick="goHome()" style="width:100%;max-width:280px">Accueil</button>
+  <div class="fx-titlebar">
+    <h2 id="srs-title">🧠 Révision SRS</h2>
+    <span class="fx-count" id="srs-counter">0/0</span>
+  </div>
+
+  <div id="srs-empty" class="fx-panel fx-empty" style="display:none">
+    <svg class="fx-spark fx-spark-big" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1c1 6 4 9 11 11-7 2-10 5-11 11-1-6-4-9-11-11 7-2 10-5 11-11z"/></svg>
+    <div class="fx-empty-title" id="srs-empty-title">Aucune carte à réviser !</div>
+    <div class="fx-empty-desc" id="srs-empty-desc">Tu es à jour. Reviens plus tard ou ajoute de nouveaux mots à ta pile de révision.</div>
+    <button class="btn btn-primary fx-btn fx-btn-yellow" onclick="srsAddNew()" id="srs-empty-add">+ Ajouter 10 mots</button>
+    <button class="btn btn-ghost fx-btn" onclick="goHome()">Accueil</button>
   </div>
 
   <!-- Active SRS -->
-  <div id="srs-active" style="display:none;width:100%;max-width:500px">
-    <!-- Session filter badge -->
-    <div id="srs-filter-badge" style="display:none;background:linear-gradient(135deg,rgba(213,0,249,.15),rgba(255,23,68,.08));border:1.5px solid rgba(213,0,249,.4);border-radius:12px;padding:.6rem 1rem;margin-bottom:1rem;align-items:center;justify-content:space-between;gap:.5rem">
-      <div style="font-size:.78rem;color:var(--text)">
-        📆 Filtré sur <strong id="srs-filter-label" style="color:var(--neon-purple)"></strong>
+  <div id="srs-active" class="fx-panel" style="display:none">
+    <div class="fx-tools">
+      <div id="srs-filter-badge" class="fx-filter" style="display:none">
+        <div>📆 Filtré sur <strong id="srs-filter-label"></strong></div>
+        <button onclick="srsClearFilter()" title="Retirer le filtre">✕</button>
       </div>
-      <button onclick="srsClearFilter()" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:1rem;padding:.2rem .4rem" title="Retirer le filtre">✕</button>
-    </div>
-    <div style="display:flex;justify-content:center;gap:.8rem;margin-bottom:1.2rem;flex-wrap:wrap">
-      <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:.4rem .8rem;font-size:.75rem">
-        <span style="color:var(--muted)">🆕 Nouvelles</span> <strong id="srs-new-count" style="color:var(--accent)">0</strong>
+      <div class="fx-chips">
+        <div class="fx-pill">🆕 Nouvelles <strong id="srs-new-count">0</strong></div>
+        <div class="fx-pill">🔄 À revoir <strong id="srs-due-count">0</strong></div>
+        <div class="fx-pill">✨ Acquis <strong id="srs-mastered-count">0</strong></div>
       </div>
-      <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:.4rem .8rem;font-size:.75rem">
-        <span style="color:var(--muted)">🔄 À revoir</span> <strong id="srs-due-count" style="color:#fb923c">0</strong>
+      <div class="fx-row">
+        <label class="fx-check">
+          <input type="checkbox" id="srs-sim-toggle" onchange="toggleSRSSim()">
+          <span title="Mode simulation : 1 jour = 3 secondes">Simulation</span>
+        </label>
+        <span class="fx-npd">Nouvelles / jour</span>
+        <button class="fx-step" onclick="srsSetNewPerDay(-5)" aria-label="Moins">−</button>
+        <strong id="srs-npd-value">20</strong>
+        <button class="fx-step" onclick="srsSetNewPerDay(5)" aria-label="Plus">+</button>
       </div>
-      <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:.4rem .8rem;font-size:.75rem">
-        <span style="color:var(--muted)">✨ Acquis</span> <strong id="srs-mastered-count" style="color:var(--success)">0</strong>
-      </div>
-    </div>
-
-    <!-- Daily new-card limit (like Anki) -->
-    <div style="display:flex;justify-content:center;align-items:center;gap:.5rem;margin:-.4rem 0 1rem;font-size:.75rem;color:var(--muted);flex-wrap:wrap">
-      <span>Nouvelles cartes / jour</span>
-      <button onclick="srsSetNewPerDay(-5)" style="width:26px;height:26px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--text);cursor:pointer">−</button>
-      <strong id="srs-npd-value" style="color:var(--accent);min-width:1.6rem;text-align:center">20</strong>
-      <button onclick="srsSetNewPerDay(5)" style="width:26px;height:26px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--text);cursor:pointer">+</button>
-      <span id="srs-npd-hint" style="width:100%;text-align:center;font-size:.68rem;opacity:.8"></span>
-    </div>
-    <div style="text-align:center;font-size:.66rem;color:var(--muted);opacity:.7;margin:-.5rem 0 .9rem" class="srs-kbd-hint">⌨️ Espace = révéler · 1-4 = noter · Z = annuler</div>
-
-    <!-- Simulation mode toggle -->
-    <div style="display:flex;justify-content:center;align-items:center;gap:.6rem;margin-bottom:1rem;background:linear-gradient(135deg,rgba(213,0,249,.1),rgba(255,23,68,.05));border:1.5px dashed rgba(213,0,249,.35);border-radius:12px;padding:.6rem 1rem">
-      <span style="font-size:1.1rem">⏩</span>
-      <label style="display:flex;align-items:center;gap:.5rem;cursor:pointer;font-size:.78rem;color:var(--text)">
-        <input type="checkbox" id="srs-sim-toggle" onchange="toggleSRSSim()" style="width:16px;height:16px;accent-color:var(--neon-purple);cursor:pointer">
-        <span>Mode <strong style="color:var(--neon-purple)">simulation</strong> (1 jour = 3 sec)</span>
-      </label>
+      <div id="srs-npd-hint" class="fx-hint"></div>
+      <div class="fx-hint srs-kbd-hint">⌨️ Espace = révéler · 1-4 = noter · Z = annuler</div>
     </div>
 
-    <div class="srs-stack" id="srs-stack"></div>
+    <div class="fx-play">
+      <div class="srs-stack" id="srs-stack"></div>
 
-    <div id="srs-grade-area" style="display:none">
-      <div style="text-align:center;font-size:.7rem;color:var(--muted);margin-bottom:.6rem;letter-spacing:.1em;text-transform:uppercase">Comment c'était ?</div>
-      <div style="display:flex;gap:.5rem">
-        <button class="srs-grade-btn srs-grade-again" onclick="srsGrade(0)">Encore<small id="srs-int-0">&lt;10min</small></button>
-        <button class="srs-grade-btn srs-grade-hard" onclick="srsGrade(1)">Difficile<small id="srs-int-1">1j</small></button>
-        <button class="srs-grade-btn srs-grade-good" onclick="srsGrade(2)">Bien<small id="srs-int-2">3j</small></button>
-        <button class="srs-grade-btn srs-grade-easy" onclick="srsGrade(3)">Facile<small id="srs-int-3">7j</small></button>
+      <div id="srs-grade-area" style="display:none">
+        <div class="fx-grades">
+          <button class="srs-grade-btn srs-grade-again" onclick="srsGrade(0)">Encore<small id="srs-int-0">&lt;10min</small></button>
+          <button class="srs-grade-btn srs-grade-hard" onclick="srsGrade(1)">Difficile<small id="srs-int-1">1j</small></button>
+          <button class="srs-grade-btn srs-grade-good" onclick="srsGrade(2)">Bien<small id="srs-int-2">3j</small></button>
+          <button class="srs-grade-btn srs-grade-easy" onclick="srsGrade(3)">Facile<small id="srs-int-3">7j</small></button>
+        </div>
       </div>
     </div>
   </div>

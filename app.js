@@ -7255,9 +7255,10 @@ function toggleSRSSim() {
 function openSRS(lang) {
   srsState.lang = lang;
   currentLang = lang;
+  srsState.sessionDone = 0; srsState.fxPrevPct = null; srsState.fxRise = false;
   srsState.sessionFilter = null; // reset — global SRS mode
   srsState.sessionFilterLabel = null;
-  const titles = { es: '🧠 Révision SRS — 🇪🇸', ln: '🧠 Révision SRS — 🇨🇩', en: '🧠 Révision SRS — 🇬🇧' };
+  const titles = { es: 'Révision 🇪🇸', ln: 'Révision 🇨🇩', en: 'Révision 🇬🇧' };
   document.getElementById('srs-title').textContent = titles[lang];
   // Sync UI checkbox with state
   const toggle = document.getElementById('srs-sim-toggle');
@@ -7271,7 +7272,7 @@ function openSRS(lang) {
 function srsClearFilter() {
   srsState.sessionFilter = null;
   srsState.sessionFilterLabel = null;
-  const titles = { es: '🧠 Révision SRS — 🇪🇸', ln: '🧠 Révision SRS — 🇨🇩', en: '🧠 Révision SRS — 🇬🇧' };
+  const titles = { es: 'Révision 🇪🇸', ln: 'Révision 🇨🇩', en: 'Révision 🇬🇧' };
   document.getElementById('srs-title').textContent = titles[srsState.lang];
   srsRefresh();
 }
@@ -7616,6 +7617,7 @@ function srsAutoEnqueueNew() {
   if(added || patched) { srsSave(data); console.log('[Aprende] SRS auto-enqueue:', added, 'new,', patched, 'patched (fr/word backfill)'); }
 }
 
+const FX_SPARK = cls => `<svg class="${cls}" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1c1 6 4 9 11 11-7 2-10 5-11 11-1-6-4-9-11-11 7-2 10-5 11-11z"/></svg>`;
 function srsRenderStack() {
   try {
   const stack = document.getElementById('srs-stack');
@@ -7643,45 +7645,37 @@ function srsRenderStack() {
     const front = (card.lang === 'es' ? data.es : card.lang === 'ln' ? data.ln : data.en) || card.word || '?';
     const flag = (typeof SHUF_FLAGS !== 'undefined' && SHUF_FLAGS[card.lang]) || '';
 
-    // Per-language gradients (as requested)
-    const langBg = {
-      es: 'linear-gradient(135deg, #ff6b1a 0%, #d10a2e 100%)',   // orange → rouge
-      ln: 'linear-gradient(135deg, #007FFF 0%, #FFDE00 100%)',   // bleu ciel → jaune (drapeau RDC)
-      en: 'linear-gradient(135deg, #012169 0%, #C8102E 100%)',   // bleu → rouge (drapeau UK)
-    };
-    const langBorder = {
-      es: 'rgba(255,235,59,.6)',
-      ln: 'rgba(255,255,255,.5)',
-      en: 'rgba(255,255,255,.5)',
-    };
-
     const el = document.createElement('div');
     el.className = 'srs-card ' + (i === 0 ? 'top' : i === 1 ? 'below-1' : 'below-2');
-    // Solid dark overlay + colored gradient underneath — cards remain opaque
-    el.style.background = `linear-gradient(135deg, rgba(0,0,0,.72), rgba(0,0,0,.88)), ${langBg[card.lang] || langBg.es}`;
-    el.style.border = `2px solid ${langBorder[card.lang] || langBorder.es}`;
 
     if(i === 0) {
-      // Top card only: full content + click handler
+      // Carte du dessus : contenu complet + clic pour révéler
+      el.classList.add(srsState.fxRise ? 'fx-rise' : 'fx-pop');
       let extraBadges = '';
       try { if(card.lang === 'en') extraBadges += enLevelBadge(enLevelOf(data)); } catch(e) { console.warn('[SRS] enLevelBadge error:', e); }
-      try { if(card.leech) extraBadges += '<span title="Sangsue : oubliée 8 fois ou plus" style="margin-left:.4rem;padding:.12rem .45rem;border-radius:6px;font-size:.62rem;font-weight:800;letter-spacing:.05em;background:rgba(255,23,68,.2);color:#ff6b81;border:1px solid rgba(255,23,68,.6)">🩸 SANGSUE</span>'; } catch(e) {}
-      try { if(srsIsIntraday(card)) extraBadges += '<span style="margin-left:.4rem;padding:.12rem .45rem;border-radius:6px;font-size:.62rem;font-weight:800;background:rgba(255,235,59,.15);color:#ffeb3b;border:1px solid rgba(255,235,59,.5)">⏳ APPRENTISSAGE</span>'; } catch(e) {}
+      try { if(card.leech) extraBadges += '<span class="fx-tag" title="Sangsue : oubliée 8 fois ou plus">🩸 Sangsue</span>'; } catch(e) {}
+      try { if(srsIsIntraday(card)) extraBadges += '<span class="fx-tag">⏳ Apprentissage</span>'; } catch(e) {}
       let exampleHtml = '';
       try { exampleHtml = cardExampleHTML(card.lang, data); } catch(e) { console.warn('[SRS] cardExampleHTML error:', e); }
+      const done = srsState.sessionDone || 0, total = done + srsState.queue.length + srsState.learnLater.length;
+      const pct = total ? Math.round(100 * done / total) : 0, prevPct = srsState.fxPrevPct == null ? pct : srsState.fxPrevPct;
+      srsState.fxPrevPct = pct;
       el.innerHTML = `
-        <div style="font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.6)">${flag}${extraBadges}</div>
-        <div class="question-word srs-front-text" style="font-size:clamp(1.6rem,5.5vw,2.4rem);color:#fff;text-align:center;line-height:1.2;text-shadow:0 2px 12px rgba(0,0,0,.5)">${front}</div>
-        <div class="srs-back-text" style="display:none;border-top:1px solid rgba(255,255,255,.2);padding-top:.8rem;width:100%;text-align:center;animation:fadeIn .3s ease">
-          <div style="font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:var(--accent2);margin-bottom:.4rem">🇫🇷 Traduction</div>
-          <div style="font-size:1.3rem;font-weight:700;color:#fff">${data.fr || '?'}</div>${exampleHtml}
-          ${ficheHas(card.lang, card.word) ? `<button onclick="event.stopPropagation();openFiche(srsState.currentCard.lang, srsState.currentCard.word)" style="margin-top:.8rem;padding:.45rem .9rem;border-radius:999px;border:1.5px solid rgba(255,255,255,.45);background:rgba(255,255,255,.1);color:#fff;font-weight:800;font-size:.8rem;cursor:pointer">＋ Fiche : variantes et pièges</button>` : ''}
+        <div class="fx-chip">${flag}${extraBadges}</div>
+        <div class="fx-body">
+          <div class="question-word srs-front-text fx-word">${front}</div>
+          <div class="srs-back-text fx-back" style="display:none">
+            <div class="fx-back-label">🇫🇷 Traduction</div>
+            <div class="fx-tr">${data.fr || '?'}</div>
+            <div class="fx-extras">${exampleHtml}</div>
+            ${ficheHas(card.lang, card.word) ? `<button class="fx-fiche" onclick="event.stopPropagation();openFiche(srsState.currentCard.lang, srsState.currentCard.word)">＋ Fiche : variantes et pièges</button>` : ''}
+          </div>
+          <div class="srs-tap-text fx-tap">Touche pour révéler</div>
         </div>
-        <div class="srs-tap-text" style="font-size:.75rem;color:rgba(255,255,255,.55);opacity:.9">↓ Tap pour révéler</div>`;
+        <div class="fx-prog"><span class="fx-prog-bar"><i style="width:${prevPct}%"></i></span><b>${done}/${total}</b></div>
+        ${FX_SPARK('fx-spark fx-spark-a')}${FX_SPARK('fx-spark fx-spark-b')}`;
       el.onclick = () => srsReveal();
-    } else {
-      // Below cards: empty (just the colored background — no bleeding text)
-      el.innerHTML = '';
+      if(prevPct !== pct) requestAnimationFrame(() => requestAnimationFrame(() => { const bar = el.querySelector('.fx-prog-bar i'); if(bar) bar.style.width = pct + '%'; }));
     }
     stack.appendChild(el);
     } catch(cardErr) {
@@ -7689,22 +7683,23 @@ function srsRenderStack() {
       // Render a fallback card so user can still grade and move on
       const el = document.createElement('div');
       el.className = 'srs-card ' + (i === 0 ? 'top' : i === 1 ? 'below-1' : 'below-2');
-      el.style.background = 'linear-gradient(135deg, rgba(0,0,0,.72), rgba(0,0,0,.88)), linear-gradient(135deg, #ff6b1a, #d10a2e)';
-      el.style.border = '2px solid rgba(255,107,26,.6)';
       if(i === 0) {
-        el.innerHTML = `<div style="color:rgba(255,255,255,.6);font-size:.7rem;letter-spacing:.18em;text-transform:uppercase">⚠️ ERREUR</div>
-          <div class="question-word srs-front-text" style="font-size:1.2rem;color:#fff;text-align:center">${card.word || '?'}</div>
-          <div class="srs-back-text" style="display:none;padding-top:.8rem;text-align:center;color:#ffa">
-            <div style="font-size:.85rem">Erreur de rendu</div>
-            <div style="font-size:.7rem;margin-top:.3rem;opacity:.7">${(cardErr.message || '').substring(0, 80)}</div>
-          </div>
-          <div class="srs-tap-text" style="font-size:.75rem;color:rgba(255,255,255,.55)">↓ Tap pour révéler</div>`;
+        el.innerHTML = `<div class="fx-chip">⚠️ Erreur</div>
+          <div class="fx-body">
+            <div class="question-word srs-front-text fx-word">${card.word || '?'}</div>
+            <div class="srs-back-text fx-back" style="display:none">
+              <div class="fx-tr">Erreur de rendu</div>
+              <div class="fx-extras">${(cardErr.message || '').substring(0, 80)}</div>
+            </div>
+            <div class="srs-tap-text fx-tap">Touche pour révéler</div>
+          </div>`;
         el.onclick = () => srsReveal();
       }
       stack.appendChild(el);
     }
   });
 
+  srsState.fxRise = false;
   srsState.currentCard = visible[0];
   srsState.shownAt = Date.now();
   // Update interval previews
@@ -7728,8 +7723,19 @@ function srsReveal() {
   srsState.revealed = true;
   const top = document.querySelector('.srs-card.top');
   if(!top) return;
-  top.querySelector('.srs-back-text').style.display = 'block';
-  top.querySelector('.srs-tap-text').style.display = 'none';
+  const show = () => {
+    top.classList.add('revealed');
+    top.querySelector('.srs-back-text').style.display = 'block';
+    top.querySelector('.srs-tap-text').style.display = 'none';
+  };
+  const calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(calm) show();
+  else {
+    // retournement : le contenu change quand la carte est de profil
+    top.classList.remove('fx-pop', 'fx-rise');
+    top.classList.add('fx-flip');
+    setTimeout(show, 190);
+  }
   document.getElementById('srs-grade-area').style.display = 'block';
 }
 
@@ -8179,9 +8185,7 @@ function srsRefresh() {
             btn20 = document.createElement('button');
             btn20.id = 'srs-empty-add20';
             btn20.className = addBtn.className;
-            btn20.style.marginTop = '8px';
-            btn20.style.background = 'var(--surface2, #2a2a4a)';
-            btn20.style.color = 'var(--text, #fff)';
+            btn20.className = 'btn fx-btn';
             addBtn.parentNode.insertBefore(btn20, addBtn.nextSibling);
           }
           btn20.style.display = '';
@@ -8237,9 +8241,12 @@ function srsGrade(grade) {
   }
   srsState.justGraded = true;
   const top = document.querySelector('.srs-card.top');
-  if(top) top.classList.add('swipe-out');
+  if(top) { top.classList.remove('fx-flip', 'fx-pop', 'fx-rise'); top.classList.add('swipe-out', grade === 0 ? 'swipe-left' : 'swipe-right'); }
+  document.getElementById('srs-grade-area').classList.add('fx-leave');
+  srsState.sessionDone = (srsState.sessionDone || 0) + 1;
+  srsState.fxRise = true;
   addXP(grade === 0 ? 2 : grade * 5);
-  setTimeout(() => srsRefresh(), 350);
+  setTimeout(() => { document.getElementById('srs-grade-area').classList.remove('fx-leave'); srsRefresh(); }, 320);
 }
 
 // ── Annuler la dernière réponse (Ctrl+Z / Z, comme Anki) ──
@@ -8252,6 +8259,7 @@ function srsUndo() {
   const log = srsRevlogLoad();
   if(log.length > u.logLen) { log.length = u.logLen; srsRevlogSave(log); }
   srsState.forceKey = u.key;
+  srsState.sessionDone = Math.max(0, (srsState.sessionDone || 0) - 1);
   showToast('↶ Dernière réponse annulée', 'correct-toast');
   haptic('light');
   srsRefresh();
