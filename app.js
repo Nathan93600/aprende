@@ -6771,8 +6771,18 @@ function ficheFind(lang, word) {
   if(typeof CRS_FB === 'undefined' || !CRS_FB[lang] || !word) return null;
   if(CRS_FB[lang][word]) return { key: word, fb: CRS_FB[lang][word] };
   if(!_ficheIdx) { _ficheIdx = {}; for(const l in CRS_FB) { _ficheIdx[l] = {}; for(const k in CRS_FB[l]) _ficheIdx[l][crsFbNorm(k)] = k; } }
-  const k = _ficheIdx[lang][crsFbNorm(word)];
+  const idx = _ficheIdx[lang];
+  let k = idx[crsFbNorm(word)];
+  if(!k) {
+    // entrée du journal à plusieurs formes (« pillar / pillado », « fathom [sth] », « to ship sb ») : on essaie chaque forme
+    if(!idx.__loose) { idx.__loose = {}; for(const key in CRS_FB[lang]) { const n = ficheLoose(key); if(n && !idx.__loose[n]) idx.__loose[n] = key; }
+      for(const key in CRS_FB[lang]) { if(key.indexOf(' / ') > 0) key.split(' / ').forEach(part => { const n = ficheLoose(part); if(n && !idx.__loose[n]) idx.__loose[n] = key; }); } }
+    for(const part of [word].concat(String(word).split(/\s+\/\s+|\/(?=\S)/))) { const n = ficheLoose(part); if(n && idx.__loose[n]) { k = idx.__loose[n]; break; } }
+  }
   return k ? { key: k, fb: CRS_FB[lang][k] } : null;
+}
+function ficheLoose(s) {
+  return crsFbNorm(String(s).replace(/\(.*?\)|\[.*?\]/g, ' ').replace(/[¡!¿?]/g, ' ').replace(/\b(sb|sth|smb|smth|someone|something)\b/gi, ' ')).replace(/^(a|an|the)\s+(?=\S)/, '');
 }
 function ficheHas(lang, word) { const f = ficheFind(lang, word); return !!(f && ((f.fb.alt && f.fb.alt.length) || (f.fb.err && f.fb.err.length) || f.fb.tip)); }
 function openFiche(lang, word, back) {
