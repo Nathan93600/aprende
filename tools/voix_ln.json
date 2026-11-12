@@ -1,0 +1,2455 @@
+[
+{
+"l": "ln",
+"k": "Mbote",
+"s": "Mbote",
+"id": "d586d78dc9",
+"v": 1,
+"essai": 1
+},
+{
+"l": "ln",
+"k": "Mbote tata, sango nini ?",
+"s": "Mbote tata, sango nini ?",
+"id": "1d61be8c82",
+"v": 0,
+"essai": 1
+},
+{
+"l": "ln",
+"k": "Sango nini ?",
+"s": "Sango nini ?",
+"id": "d5da39558c",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Mbote ndeko, sango nini ?",
+"s": "Mbote ndeko, sango nini ?",
+"id": "b163499ab7",
+"v": 1,
+"essai": 1
+},
+{
+"l": "ln",
+"k": "Malamu",
+"s": "Malamu",
+"id": "9470336ce2",
+"v": 0,
+"essai": 1
+},
+{
+"l": "ln",
+"k": "Nazali malamu, matondo.",
+"s": "Nazali malamu, matondo.",
+"id": "d4b17811c4",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Matondo",
+"s": "Matondo",
+"id": "faaa969bc0",
+"v": 0,
+"essai": 1
+},
+{
+"l": "ln",
+"k": "Matondo mingi mpo na lisalisi.",
+"s": "Matondo mingi mpo na lisalisi.",
+"id": "b15c037eed",
+"v": 1,
+"essai": 1
+},
+{
+"l": "ln",
+"k": "Nkombo na yo nani ?",
+"s": "Nkombo na yo nani ?",
+"id": "3193830779",
+"v": 1,
+"essai": 1
+},
+{
+"l": "ln",
+"k": "Nkombo na yo nani ? Nkombo na ngai Nathan.",
+"s": "Nkombo na yo nani ? Nkombo na ngai Nathan.",
+"id": "d1c94dcd16",
+"v": 0,
+"essai": 1
+},
+{
+"l": "ln",
+"k": "Yambi",
+"s": "Yambi",
+"id": "fdd958ba92",
+"v": 0,
+"essai": 1
+},
+{
+"l": "ln",
+"k": "Yambi !",
+"s": "Yambi !",
+"id": "731a5f8418",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Koyamba",
+"s": "Koyamba",
+"id": "bd15ef1718",
+"v": 0,
+"essai": 1
+},
+{
+"l": "ln",
+"k": "Kende koyamba ye, azozela yo.",
+"s": "Kende koyamba ye, azozela yo.",
+"id": "f0d550125b",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Biso",
+"s": "Biso",
+"id": "ee2577a1f9",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Biso tozali awa.",
+"s": "Biso tozali awa.",
+"id": "e7cf5c31a5",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Bango",
+"s": "Bango",
+"id": "9af1b036f2",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Bango nde balobaki maloba oyo.",
+"s": "Bango nde balobaki maloba oyo.",
+"id": "ecfd2e8333",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Ee / Te",
+"s": "Ee / Te",
+"id": "6d363a4049",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Olingi kolia ? Ee, nalingi.",
+"s": "Olingi kolia ? Ee, nalingi.",
+"id": "674e177eca",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Libota",
+"s": "Libota",
+"id": "adc203a3e6",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Libota na ngai ezali motuya mingi pona ngai.",
+"s": "Libota na ngai ezali motuya mingi pona ngai.",
+"id": "7bb5919ad1",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Tata",
+"s": "Tata",
+"id": "83409d0670",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Tata na ngai azali na mosala.",
+"s": "Tata na ngai azali na mosala.",
+"id": "4b88c00f6c",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Mama",
+"s": "Mama",
+"id": "58957fa2d5",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Mama alambi madesu.",
+"s": "Mama alambi madesu.",
+"id": "ee9b86b819",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Ndeko",
+"s": "Ndeko",
+"id": "11ca1e0645",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Ndeko na ngai ya mwasi afandaka na Paris.",
+"s": "Ndeko na ngai ya mwasi afandaka na Paris.",
+"id": "ad16e05bff",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Mwana / Bana",
+"s": "Mwana / Bana",
+"id": "ba11254a70",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Bana bazali kobeta masano.",
+"s": "Bana bazali kobeta masano.",
+"id": "6a40fe301d",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Muninga",
+"s": "Muninga",
+"id": "686ace402d",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Lelo ya yo, lobi ya moninga.",
+"s": "Lelo ya yo, lobi ya moninga.",
+"id": "4d5c686703",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Batu / Motu",
+"s": "Batu / Motu",
+"id": "f5ccfbfd2b",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Ngomba na ngomba ekutanaka te kasi batu na batu bakutanaka.",
+"s": "Ngomba na ngomba ekutanaka te kasi batu na batu bakutanaka.",
+"id": "029aa29766",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Mokolo",
+"s": "Mokolo",
+"id": "5c056584a3",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Lelo ezali mokolo ya suka.",
+"s": "Lelo ezali mokolo ya suka.",
+"id": "af67f689f6",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Kobala",
+"s": "Kobala",
+"id": "511abdefef",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Djo azalaki na likoki te ya kobala.",
+"s": "Djo azalaki na likoki te ya kobala.",
+"id": "d04a216fac",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Libala",
+"s": "Libala",
+"id": "f9775591fd",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Libala na bango ekozala lobi.",
+"s": "Libala na bango ekozala lobi.",
+"id": "f44434e4fe",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Moko",
+"s": "Moko",
+"id": "b276070ba5",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Moto moko te.",
+"s": "Moto moko te.",
+"id": "6047c9c9f2",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Mibale",
+"s": "Mibale",
+"id": "ce5870a9c3",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Bolingo na biso mibale ekosila te.",
+"s": "Bolingo na biso mibale ekosila te.",
+"id": "0aed7024e3",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Misato",
+"s": "Misato",
+"id": "867b6e2017",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Nazali na bandeko misato.",
+"s": "Nazali na bandeko misato.",
+"id": "f281c0fb37",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Minei",
+"s": "Minei",
+"id": "d13d5cef5c",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Tokozonga na mikolo minei.",
+"s": "Tokozonga na mikolo minei.",
+"id": "28a7d1d16f",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Mitano",
+"s": "Mitano",
+"id": "75d26f9e5f",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Mbongo ya mitano ekoki te.",
+"s": "Mbongo ya mitano ekoki te.",
+"id": "90697fd378",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Zomi",
+"s": "Zomi",
+"id": "c5897b19ac",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Nazali na dolare zomi.",
+"s": "Nazali na dolare zomi.",
+"id": "50830ab4d6",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Boni ?",
+"s": "Boni ?",
+"id": "67cd1349b4",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Ntalo na yango boni ?",
+"s": "Ntalo na yango boni ?",
+"id": "b69731c274",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Mbongo",
+"s": "Mbongo",
+"id": "e25c8972ed",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Nazali na mbongo te lelo.",
+"s": "Nazali na mbongo te lelo.",
+"id": "b6bc797a60",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Kofuta",
+"s": "Kofuta",
+"id": "1c8e8c7109",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Kofuta ngai te, nasali yango ofele.",
+"s": "Kofuta ngai te, nasali yango ofele.",
+"id": "9619f3b3f0",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Ndako",
+"s": "Ndako",
+"id": "bfa028ad08",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Ndako na biso ezali mosika te.",
+"s": "Ndako na biso ezali mosika te.",
+"id": "adf15eab55",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Pa",
+"s": "Pa",
+"id": "a1597ca3f9",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Kende pa ngai.",
+"s": "Kende pa ngai.",
+"id": "5f3455a93a",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Kati / Katikati",
+"s": "Kati / Katikati",
+"id": "b4c4764a27",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Na kati ezalaki molili.",
+"s": "Na kati ezalaki molili.",
+"id": "95d4fb6102",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Kuna",
+"s": "Kuna",
+"id": "195ccaec9b",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Biso tozali awa, bango bazali kuna.",
+"s": "Biso tozali awa, bango bazali kuna.",
+"id": "bac12811ca",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Libándá",
+"s": "Libándá",
+"id": "65de4ec46d",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Malili eza makasi libanda.",
+"s": "Malili eza makasi libanda.",
+"id": "f84f7a6b3c",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Balabala",
+"s": "Balabala",
+"id": "d0e4cc6218",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Bakuluna basundoli ye na balabala.",
+"s": "Bakuluna basundoli ye na balabala.",
+"id": "bbbb33c3d9",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Musika / Mosika",
+"s": "Musika / Mosika",
+"id": "6ced647b38",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Ndako na ye ezali musika mingi.",
+"s": "Ndako na ye ezali musika mingi.",
+"id": "39b946fe60",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Kovanda",
+"s": "Kovanda",
+"id": "ce2a8fc877",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Bana bavandaki na mabele mpo na bakiti ezalaki te.",
+"s": "Bana bavandaki na mabele mpo na bakiti ezalaki te.",
+"id": "f5e2eb0c68",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Na",
+"s": "Na",
+"id": "17d83aa100",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Na kati ya zamba.",
+"s": "Na kati ya zamba.",
+"id": "d382c5c163",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Ya",
+"s": "Ya",
+"id": "79603dc8f0",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Ndako ya bandeko ezali na etando monene.",
+"s": "Ndako ya bandeko ezali na etando monene.",
+"id": "9246008a32",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Kolia",
+"s": "Kolia",
+"id": "36d7b180f3",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Nalingi kolia fufu na pondu.",
+"s": "Nalingi kolia fufu na pondu.",
+"id": "46d07d1d3f",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Komela",
+"s": "Komela",
+"id": "0caf84fe59",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Ozali komela mai ?",
+"s": "Ozali komela mai ?",
+"id": "3a324199b7",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Mai",
+"s": "Mai",
+"id": "e5d9850eb0",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Pesa ngai mai, nayoki mposa.",
+"s": "Pesa ngai mai, nayoki mposa.",
+"id": "dd0b314486",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Kolinga",
+"s": "Kolinga",
+"id": "4d86f02e46",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Nalingi yo mingi.",
+"s": "Nalingi yo mingi.",
+"id": "f254f514d1",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Sukali",
+"s": "Sukali",
+"id": "469332c1c1",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Tia sukali moke na kafe.",
+"s": "Tia sukali moke na kafe.",
+"id": "d524462a73",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Kosomba",
+"s": "Kosomba",
+"id": "2a261c33e6",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Nalingi kosomba ndako na ngonga ya sima.",
+"s": "Nalingi kosomba ndako na ngonga ya sima.",
+"id": "8503766085",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Komeka",
+"s": "Komeka",
+"id": "b398d5ad18",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Meka nanu kotanga oyo.",
+"s": "Meka nanu kotanga oyo.",
+"id": "db64b5c3c5",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Kozua / Kozwa",
+"s": "Kozua / Kozwa",
+"id": "71a34ada5f",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Nazui diplôme.",
+"s": "Nazui diplôme.",
+"id": "0064e77c36",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Nzala",
+"s": "Nzala",
+"id": "7cf8281158",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Nazali na nzala makasi.",
+"s": "Nazali na nzala makasi.",
+"id": "e5972e9d88",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Tango",
+"s": "Tango",
+"id": "a217633afc",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Tango akitaka, akitaka na nkembo.",
+"s": "Tango akitaka, akitaka na nkembo.",
+"id": "3fb084f796",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Mikolo",
+"s": "Mikolo",
+"id": "1761cb1e67",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Mikolo ezali koleka noki mingi.",
+"s": "Mikolo ezali koleka noki mingi.",
+"id": "a592bbfed0",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Sikoyo",
+"s": "Sikoyo",
+"id": "7b74781de3",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Tozali koya epayi na bino sikoyo.",
+"s": "Tozali koya epayi na bino sikoyo.",
+"id": "b3de85c323",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Kala",
+"s": "Kala",
+"id": "ce2abcdde5",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Nakozonga kala mingi te.",
+"s": "Nakozonga kala mingi te.",
+"id": "93440ba481",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Liboso",
+"s": "Liboso",
+"id": "17a7493220",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Eloko ya liboso.",
+"s": "Eloko ya liboso.",
+"id": "7718cef4cb",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Nanu",
+"s": "Nanu",
+"id": "c811ba3009",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Meka nanu kotanga.",
+"s": "Meka nanu kotanga.",
+"id": "5d10815cb0",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Lelo",
+"s": "Lelo",
+"id": "4be0d978ac",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Lelo nazali na mosala mingi.",
+"s": "Lelo nazali na mosala mingi.",
+"id": "62012322e0",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Lobi",
+"s": "Lobi",
+"id": "60bd2a193e",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Lobi nakokende na zando.",
+"s": "Lobi nakokende na zando.",
+"id": "e02baf4b20",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Ntongo",
+"s": "Ntongo",
+"id": "046aa85a58",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Natelemaka ntongo makasi.",
+"s": "Natelemaka ntongo makasi.",
+"id": "8e7822c0f2",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Butu",
+"s": "Butu",
+"id": "a29aee798d",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Butu malamu !",
+"s": "Butu malamu !",
+"id": "7ccec60c20",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Kotambola",
+"s": "Kotambola",
+"id": "e0a76ce174",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Tambola na mokili, bongo omona makambo.",
+"s": "Tambola na mokili, bongo omona makambo.",
+"id": "527e6c40ca",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Kobemba",
+"s": "Kobemba",
+"id": "8d42254893",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Ethan na Gaby bakei mobembo.",
+"s": "Ethan na Gaby bakei mobembo.",
+"id": "c7e527d547",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Kokita",
+"s": "Kokita",
+"id": "80da4bf35b",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Mpepo ekiti.",
+"s": "Mpepo ekiti.",
+"id": "480707ccd6",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Libanda ya mpepo",
+"s": "Libanda ya mpepo",
+"id": "8c8170744b",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Tokokutana na libanda ya mpepo.",
+"s": "Tokokutana na libanda ya mpepo.",
+"id": "e2b0f43b5c",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Mbangu",
+"s": "Mbangu",
+"id": "fbd1d640e5",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Sala mbangu !",
+"s": "Sala mbangu !",
+"id": "4759eec272",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Kolanda",
+"s": "Kolanda",
+"id": "180f0a2b91",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Landá ngai na nzela ya ndenge malamu.",
+"s": "Landá ngai na nzela ya ndenge malamu.",
+"id": "3db81f8b53",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Kokenda",
+"s": "Kokenda",
+"id": "6e2b2f359d",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Kende kozua bisaka na yo.",
+"s": "Kende kozua bisaka na yo.",
+"id": "2885b6c331",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Kozonga",
+"s": "Kozonga",
+"id": "60b3d6c434",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Akozonga lisusu ? - Te, akei libela.",
+"s": "Akozonga lisusu ? - Te, akei libela.",
+"id": "b9fed44a60",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Yoka",
+"s": "Yoka",
+"id": "c803eed0d5",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Yoka nanu motuna na ngai liboso ya koyanola ngai.",
+"s": "Yoka nanu motuna na ngai liboso ya koyanola ngai.",
+"id": "d10aa88016",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Bosana",
+"s": "Bosana",
+"id": "36e4dfce98",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Bosana yango !",
+"s": "Bosana yango !",
+"id": "d415f3d7eb",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Nzoto",
+"s": "Nzoto",
+"id": "d9257498ee",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Mbote, boni nzoto ?",
+"s": "Mbote, boni nzoto ?",
+"id": "16ed01e880",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Kosola",
+"s": "Kosola",
+"id": "019eb79436",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Azali kosola makasi banda na ntongo.",
+"s": "Azali kosola makasi banda na ntongo.",
+"id": "3b85bad6f6",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Kobika",
+"s": "Kobika",
+"id": "1b2212041a",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Osengeli komela mino po obika.",
+"s": "Osengeli komela mino po obika.",
+"id": "df0f96e95c",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Kolemba",
+"s": "Kolemba",
+"id": "07cfbfa141",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Nalembi mosala.",
+"s": "Nalembi mosala.",
+"id": "7903480edc",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Kolenga",
+"s": "Kolenga",
+"id": "c2f21e3b88",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Azolenga likolo ya kobanga.",
+"s": "Azolenga likolo ya kobanga.",
+"id": "b7b1cdaf3d",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Zemi",
+"s": "Zemi",
+"id": "2e1eef6862",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Aza na zemi ya sanza misatu.",
+"s": "Aza na zemi ya sanza misatu.",
+"id": "4db58fd0a7",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Kobota",
+"s": "Kobota",
+"id": "ad7b7f7c2c",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Ndeko na ngai ya mwasi awuti kobota.",
+"s": "Ndeko na ngai ya mwasi awuti kobota.",
+"id": "df97a1278a",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Kobotama",
+"s": "Kobotama",
+"id": "c2556fcbf3",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Nabotamaki na Kin.",
+"s": "Nabotamaki na Kin.",
+"id": "e4d1cac034",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Na-ko-",
+"s": "Na-ko-",
+"id": "627ebbda5c",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Nakolia.",
+"s": "Nakolia.",
+"id": "86682572f0",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Kobela",
+"s": "Kobela",
+"id": "66179b845a",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Mwana azali kobela banda lobi.",
+"s": "Mwana azali kobela banda lobi.",
+"id": "8dd4abb0ba",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Kokutana",
+"s": "Kokutana",
+"id": "cf276a71a4",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Tokokutana lobi.",
+"s": "Tokokutana lobi.",
+"id": "78223c677f",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Kokuta",
+"s": "Kokuta",
+"id": "d7d683ba0d",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Nakuti mbongo na nzela.",
+"s": "Nakuti mbongo na nzela.",
+"id": "71c67508a6",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Elongo",
+"s": "Elongo",
+"id": "e65bad1ccc",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Tokende elongo.",
+"s": "Tokende elongo.",
+"id": "cf3586796b",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Kobína / Bina",
+"s": "Kobína / Bina",
+"id": "6c739fc429",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Nazobina.",
+"s": "Nazobina.",
+"id": "c8d8b3f316",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Mabína",
+"s": "Mabína",
+"id": "87dd8ed9e4",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Nalingaka mabina.",
+"s": "Nalingaka mabina.",
+"id": "cc95daa068",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Kofinga",
+"s": "Kofinga",
+"id": "68795ac494",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Kofinga ngai te !",
+"s": "Kofinga ngai te !",
+"id": "7fb6c0bb03",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Kosaka",
+"s": "Kosaka",
+"id": "30b5f662d0",
+"v": 0
+},
+{
+"l": "ln",
+"k": "A kosaki ye.",
+"s": "A kosaki ye.",
+"id": "45bc6064a3",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Kosolola",
+"s": "Kosolola",
+"id": "ed66d952ca",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Tosololaki tii na butu.",
+"s": "Tosololaki tii na butu.",
+"id": "23f4814029",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Koteka / Teki",
+"s": "Koteka / Teki",
+"id": "72c7d49387",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Akomi koteka nguba na zando.",
+"s": "Akomi koteka nguba na zando.",
+"id": "874c9729f6",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Biloko / Eloko",
+"s": "Biloko / Eloko",
+"id": "3f8fd4a4ce",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Biloko na yo ezali kilo mingi.",
+"s": "Biloko na yo ezali kilo mingi.",
+"id": "340dccc5a2",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Liputa / Maputa",
+"s": "Liputa / Maputa",
+"id": "ea3a809fbd",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Alati liputa.",
+"s": "Alati liputa.",
+"id": "66375da669",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Kotonga / Tonga",
+"s": "Kotonga / Tonga",
+"id": "72dd0d1cd3",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Batongaka mboka na maloba te.",
+"s": "Batongaka mboka na maloba te.",
+"id": "1d79a33886",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Tonga / Ntonga",
+"s": "Tonga / Ntonga",
+"id": "884b292db3",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Batubi ye tonga na misisa.",
+"s": "Batubi ye tonga na misisa.",
+"id": "111058fb97",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Kobakisa",
+"s": "Kobakisa",
+"id": "32d141458e",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Bakisa matabisi.",
+"s": "Bakisa matabisi.",
+"id": "d8766959d1",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Kolembisa",
+"s": "Kolembisa",
+"id": "d457794946",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Mosala oyo elembisi ngai.",
+"s": "Mosala oyo elembisi ngai.",
+"id": "4bbf0fa335",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Kondimisa",
+"s": "Kondimisa",
+"id": "81639b1b98",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Amekaki kondimisa ngai.",
+"s": "Amekaki kondimisa ngai.",
+"id": "554872c0c5",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Zando",
+"s": "Zando",
+"id": "11c2681ad0",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Mama akei na zando.",
+"s": "Mama akei na zando.",
+"id": "3a71853bde",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Ntalo",
+"s": "Ntalo",
+"id": "b5452400f3",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Ntalo ya liputa oyo ezali makasi.",
+"s": "Ntalo ya liputa oyo ezali makasi.",
+"id": "642ad63129",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Kobanza",
+"s": "Kobanza",
+"id": "1254bdb86a",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Nabanzi na yo.",
+"s": "Nabanzi na yo.",
+"id": "b6d96678ce",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Kondima / Dima",
+"s": "Kondima / Dima",
+"id": "216c3f34b7",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Nandimi na yo.",
+"s": "Nandimi na yo.",
+"id": "de3a9238ae",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Nandimi te",
+"s": "Nandimi te",
+"id": "c2d91a3998",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Nandimi likambo yango te.",
+"s": "Nandimi likambo yango te.",
+"id": "1dcbd25c0e",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Bondimi",
+"s": "Bondimi",
+"id": "41bbf8ff15",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Bondimi na ye ezali makasi.",
+"s": "Bondimi na ye ezali makasi.",
+"id": "5c86dac586",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Mpo / Po",
+"s": "Mpo / Po",
+"id": "efe9a86f96",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Nalingi po yo kelela ngai.",
+"s": "Nalingi po yo kelela ngai.",
+"id": "569dcab7f6",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Kasi",
+"s": "Kasi",
+"id": "6d34cd958e",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Nalingi kokende, kasi mbula ezali.",
+"s": "Nalingi kokende, kasi mbula ezali.",
+"id": "5f07b1f821",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Yango wana",
+"s": "Yango wana",
+"id": "28a31437ec",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Yango wana sikoyo oza awa na biso.",
+"s": "Yango wana sikoyo oza awa na biso.",
+"id": "0c2e522364",
+"v": 0
+},
+{
+"l": "ln",
+"k": "-aka",
+"s": "-aka",
+"id": "5ba8aa43ef",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Nalingaka Nzambe.",
+"s": "Nalingaka Nzambe.",
+"id": "ed6490bb82",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Nalingaka",
+"s": "Nalingaka",
+"id": "34376b2721",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Nalingaka yo.",
+"s": "Nalingaka yo.",
+"id": "a81a2a4ece",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Motema / Mitema",
+"s": "Motema / Mitema",
+"id": "0d034e4711",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Nabombi yango na kati ya motema na ngai.",
+"s": "Nabombi yango na kati ya motema na ngai.",
+"id": "13bba71db1",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Kosepela / Sepela",
+"s": "Kosepela / Sepela",
+"id": "a850efcf07",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Nasepeli koyeba yo.",
+"s": "Nasepeli koyeba yo.",
+"id": "9776b71862",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Nasepeli",
+"s": "Nasepeli",
+"id": "c8d2e2d929",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Nasepeli makasi.",
+"s": "Nasepeli makasi.",
+"id": "e710a4ecb7",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Kobanga",
+"s": "Kobanga",
+"id": "481c92bab3",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Tina ya kobanga ezali te.",
+"s": "Tina ya kobanga ezali te.",
+"id": "0bdf60b95a",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Somo",
+"s": "Somo",
+"id": "a1c48893a0",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Somo ekoti ngai.",
+"s": "Somo ekoti ngai.",
+"id": "7dad040c7b",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Kolimbisa",
+"s": "Kolimbisa",
+"id": "2ef4e71b79",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Alimbisi ngai.",
+"s": "Alimbisi ngai.",
+"id": "9c30e71378",
+"v": 0
+},
+{
+"l": "ln",
+"k": "-zo-",
+"s": "-zo-",
+"id": "c0e042778e",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Kolengela",
+"s": "Kolengela",
+"id": "28cfc7dabf",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Mama azali kolengela bilei.",
+"s": "Mama azali kolengela bilei.",
+"id": "2843a8918c",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Likambo / Makambo",
+"s": "Likambo / Makambo",
+"id": "8e9cf63d0e",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Likambo nini mwasi na ngai ?",
+"s": "Likambo nini mwasi na ngai ?",
+"id": "9c260fb2d8",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Makambu",
+"s": "Makambu",
+"id": "507d65ad12",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Makambu nyonso ezali kosilama malamu.",
+"s": "Makambu nyonso ezali kosilama malamu.",
+"id": "f84a6b95d0",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Bissembo",
+"s": "Bissembo",
+"id": "662837bfb2",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Basali bissembo na mokili ekozala na kimia.",
+"s": "Basali bissembo na mokili ekozala na kimia.",
+"id": "2f2d13a6ce",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Kobwaka",
+"s": "Kobwaka",
+"id": "1448695094",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Kobwaka bosoto na nzela te.",
+"s": "Kobwaka bosoto na nzela te.",
+"id": "cd5861b822",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Kobimisa ye pa na ye",
+"s": "Kobimisa ye pa na ye",
+"id": "67f07b2df9",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Tata abimisaki ye na ndako.",
+"s": "Tata abimisaki ye na ndako.",
+"id": "669e8e1dce",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Kosenga / Senga",
+"s": "Kosenga / Senga",
+"id": "9d1e0aba00",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Nasengi bolimbisi.",
+"s": "Nasengi bolimbisi.",
+"id": "f8366779e9",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Kosengela",
+"s": "Kosengela",
+"id": "a1d2c2dd60",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Esengeli osala mosala.",
+"s": "Esengeli osala mosala.",
+"id": "f21ec18f9e",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Pamba",
+"s": "Pamba",
+"id": "9b19ab5d9a",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Abeti ngai pamba te.",
+"s": "Abeti ngai pamba te.",
+"id": "f41db4db1b",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Kobanda / Banda",
+"s": "Kobanda / Banda",
+"id": "32bdccc402",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Nabandi kotanga buku oyo.",
+"s": "Nabandi kotanga buku oyo.",
+"id": "482205bc7c",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Ebandeli",
+"s": "Ebandeli",
+"id": "45f5dedce9",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Na ebandeli, ezalaki pasi.",
+"s": "Na ebandeli, ezalaki pasi.",
+"id": "8f05cb21a2",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Bandá",
+"s": "Bandá",
+"id": "0cba60f541",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Bandá kala.",
+"s": "Bandá kala.",
+"id": "8e12bb0f5f",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Suka / Nsuka",
+"s": "Suka / Nsuka",
+"id": "6cd8abd4f1",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Kozongela",
+"s": "Kozongela",
+"id": "8b87e2a026",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Zongela ngai.",
+"s": "Zongela ngai.",
+"id": "e68452feb6",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Kokoka",
+"s": "Kokoka",
+"id": "fe1421e87b",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Nakoki kosala yango.",
+"s": "Nakoki kosala yango.",
+"id": "891d646cfd",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Kotia",
+"s": "Kotia",
+"id": "72069e39e2",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Atia pilipili na liso na ngai.",
+"s": "Atia pilipili na liso na ngai.",
+"id": "28f9e26214",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Komesana",
+"s": "Komesana",
+"id": "c067a3ff28",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Komesana na bomoi ya sika ezali mpasi te.",
+"s": "Komesana na bomoi ya sika ezali mpasi te.",
+"id": "c982ce16fa",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Pe",
+"s": "Pe",
+"id": "b139eb87c7",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Yo pe, motema na ngai.",
+"s": "Yo pe, motema na ngai.",
+"id": "a7875bc5b7",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Kutu",
+"s": "Kutu",
+"id": "d1f743a01a",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Kutu ye azalaki te.",
+"s": "Kutu ye azalaki te.",
+"id": "2a6ee8aee3",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Lokola",
+"s": "Lokola",
+"id": "eb13a9ead5",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Bazali lokola mai na moto.",
+"s": "Bazali lokola mai na moto.",
+"id": "03cbd61387",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Kaka boye",
+"s": "Kaka boye",
+"id": "ada96c000e",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Osundola mwasi na yo na bana kaka boye.",
+"s": "Osundola mwasi na yo na bana kaka boye.",
+"id": "6db0ba0166",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Mususu / Basusu",
+"s": "Mususu / Basusu",
+"id": "fc25af0c9f",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Basusu kokufa, basusu kobotama, mokili ezalaka boye.",
+"s": "Basusu kokufa, basusu kobotama, mokili ezalaka boye.",
+"id": "c5d51aa549",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Misusu",
+"s": "Misusu",
+"id": "02b783fbad",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Bazali kobatela mino malamu te, mosusu esila ngala.",
+"s": "Bazali kobatela mino malamu te, mosusu esila ngala.",
+"id": "525cce40df",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Mobimba",
+"s": "Mobimba",
+"id": "f313b9ab66",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Mboka mobimba ezali na kimia.",
+"s": "Mboka mobimba ezali na kimia.",
+"id": "3153630d96",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Yango",
+"s": "Yango",
+"id": "340db49b5e",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Nalingi ata kokanisa yango te.",
+"s": "Nalingi ata kokanisa yango te.",
+"id": "91e5de8d9a",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Ezali te / Ezape",
+"s": "Ezali te / Ezape",
+"id": "31bd022ad1",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Ezali te eloko.",
+"s": "Ezali te eloko.",
+"id": "9ec20d3bd8",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Yo muta / Yo nde",
+"s": "Yo muta / Yo nde",
+"id": "fafe62b691",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Yo muta kelela biso.",
+"s": "Yo muta kelela biso.",
+"id": "c599091987",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Tolemba te",
+"s": "Tolemba te",
+"id": "12d0ba3bd5",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Ata ezali pasi, tolemba te !",
+"s": "Ata ezali pasi, tolemba te !",
+"id": "5f757b7e8b",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Kobaka pardon",
+"s": "Kobaka pardon",
+"id": "4377236fa4",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Nabaki pardon.",
+"s": "Nabaki pardon.",
+"id": "5457ec6696",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Ngunda",
+"s": "Ngunda",
+"id": "fdf19f55e9",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Baboti na ye babwakaki ngunda na Poto.",
+"s": "Baboti na ye babwakaki ngunda na Poto.",
+"id": "7fbb941706",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Zua",
+"s": "Zua",
+"id": "bbf4f91854",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Zua nga foto ya kitoko.",
+"s": "Zua nga foto ya kitoko.",
+"id": "f8cf14ce2b",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Kobosana te",
+"s": "Kobosana te",
+"id": "ff16493d75",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Kobosana ngai te !",
+"s": "Kobosana ngai te !",
+"id": "41f3bebbd4",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Nabosani",
+"s": "Nabosani",
+"id": "cf4bca2983",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Nabosani nzela.",
+"s": "Nabosani nzela.",
+"id": "d80f2c88ea",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Kokóma",
+"s": "Kokóma",
+"id": "39d9164d1b",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Ndaku oyo ekomi kitoko.",
+"s": "Ndaku oyo ekomi kitoko.",
+"id": "bbcb8977a9",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Kokòma",
+"s": "Kokòma",
+"id": "4e5c2e1dbe",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Koma kombo na yo.",
+"s": "Koma kombo na yo.",
+"id": "99a451ed35",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Mokomi",
+"s": "Mokomi",
+"id": "5797362c39",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Alingi kozala mokomi.",
+"s": "Alingi kozala mokomi.",
+"id": "7e2b25a0f5",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Kobaka",
+"s": "Kobaka",
+"id": "605dbacf52",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Ndeke ebaki na nzete.",
+"s": "Ndeke ebaki na nzete.",
+"id": "7eb5815b88",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Kobáka",
+"s": "Kobáka",
+"id": "9267dc15ca",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Monganga abaki ngai mangwele.",
+"s": "Monganga abaki ngai mangwele.",
+"id": "9bda54d97f",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Koganga / Ganga",
+"s": "Koganga / Ganga",
+"id": "0b4f9e23ed",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Tika koganga makasi.",
+"s": "Tika koganga makasi.",
+"id": "2f913a835f",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Kokata / Kata",
+"s": "Kokata / Kata",
+"id": "8677c41c1e",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Nakati lipa.",
+"s": "Nakati lipa.",
+"id": "5f11e55ae5",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Kobenda",
+"s": "Kobenda",
+"id": "69ae538a3e",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Mbisi abendi ndobo.",
+"s": "Mbisi abendi ndobo.",
+"id": "9c8493dde0",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Mokili",
+"s": "Mokili",
+"id": "755d8227e4",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Biloko nyonso ya mokili.",
+"s": "Biloko nyonso ya mokili.",
+"id": "b3bb8f169e",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Nzambe",
+"s": "Nzambe",
+"id": "02cb75797e",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Kokelela / Kelela",
+"s": "Kokelela / Kelela",
+"id": "f6890e8f20",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Nzambe akeleli biso.",
+"s": "Nzambe akeleli biso.",
+"id": "5b36af5275",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Ezali na / Ezana",
+"s": "Ezali na / Ezana",
+"id": "a1affe5798",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Biloko ezana mokili.",
+"s": "Biloko ezana mokili.",
+"id": "12061a1f51",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Kopanza / Panza",
+"s": "Kopanza / Panza",
+"id": "b30ab4ffa2",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Basi oyo bazopanza basango ya lokuta.",
+"s": "Basi oyo bazopanza basango ya lokuta.",
+"id": "fa3253cbd2",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Kolona",
+"s": "Kolona",
+"id": "9e209c9d78",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Nakolona madesu.",
+"s": "Nakolona madesu.",
+"id": "af26c09310",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Eloko",
+"s": "Eloko",
+"id": "1443658e59",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Pesa ngai eloko ya kolia.",
+"s": "Pesa ngai eloko ya kolia.",
+"id": "9b1c6188ce",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Kowuta",
+"s": "Kowuta",
+"id": "ffb4681dcd",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Tobandi kozwa masano kowuta lelo na butu.",
+"s": "Tobandi kozwa masano kowuta lelo na butu.",
+"id": "acd98e6a5b",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Makasi",
+"s": "Makasi",
+"id": "f375781d49",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Nalela yo makasi.",
+"s": "Nalela yo makasi.",
+"id": "87daf7ea50",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Kobeba",
+"s": "Kobeba",
+"id": "da723abb9f",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Mbuma oyo ekozali kobeba noki.",
+"s": "Mbuma oyo ekozali kobeba noki.",
+"id": "ad65888655",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Kosimba",
+"s": "Kosimba",
+"id": "73019dceef",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Esimbi te.",
+"s": "Esimbi te.",
+"id": "8b3fb91fe6",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Kobeta",
+"s": "Kobeta",
+"id": "bf85f7a01f",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Bazali kobeta ndembo na libanda.",
+"s": "Bazali kobeta ndembo na libanda.",
+"id": "ed30827632",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Kobenda miso",
+"s": "Kobenda miso",
+"id": "2e9c79011d",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Mwasi wana azali kobenda miso ya batu nyonso.",
+"s": "Mwasi wana azali kobenda miso ya batu nyonso.",
+"id": "fd53ecf30a",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Kobenda nzoto",
+"s": "Kobenda nzoto",
+"id": "04c15517dc",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Nabendi nzoto liboso ya kopota mbangu.",
+"s": "Nabendi nzoto liboso ya kopota mbangu.",
+"id": "8f57417a6b",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Liloba / Maloba",
+"s": "Liloba / Maloba",
+"id": "c47038c92d",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Koloba / Loba",
+"s": "Koloba / Loba",
+"id": "86cbf305f1",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Nayebi koloba lingala.",
+"s": "Nayebi koloba lingala.",
+"id": "7b067a1c3f",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Kotanga",
+"s": "Kotanga",
+"id": "dae73f5b27",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Mwana na yo alingi kotanga mingi.",
+"s": "Mwana na yo alingi kotanga mingi.",
+"id": "46733ac233",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Kolakisa",
+"s": "Kolakisa",
+"id": "ffacfb5d67",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Lakisa ngai nzela.",
+"s": "Lakisa ngai nzela.",
+"id": "7316b22cbc",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Kosepela",
+"s": "Kosepela",
+"id": "46fb06ef51",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Nasepeli mingi na makambo oyo.",
+"s": "Nasepeli mingi na makambo oyo.",
+"id": "f71545eb0d",
+"v": 1
+},
+{
+"l": "ln",
+"k": "A kutaki ye.",
+"s": "A kutaki ye.",
+"id": "c93e2e28cc",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Bakuteni mibale.",
+"s": "Bakuteni mibale.",
+"id": "c54158d79f",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Mama na ngai nde alakisa ngai kolamba.",
+"s": "Mama na ngai nde alakisa ngai kolamba.",
+"id": "95f1bcd450",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Koganga",
+"s": "Koganga",
+"id": "229c2fbbd9",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Na libanda",
+"s": "Na libanda",
+"id": "65f0b1ceee",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Bana bazali kosakana na libanda.",
+"s": "Bana bazali kosakana na libanda.",
+"id": "d60bdaf4bd",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Kobosana",
+"s": "Kobosana",
+"id": "f5b5fcdf6a",
+"v": 0
+},
+{
+"l": "ln",
+"k": "Nazoluka nabosana, kasi nazokoka te.",
+"s": "Nazoluka nabosana, kasi nazokoka te.",
+"id": "e5b27f1243",
+"v": 1
+},
+{
+"l": "ln",
+"k": "Eloko aliboso nalingaka.",
+"s": "Eloko aliboso nalingaka.",
+"id": "721803146e",
+"v": 0
+}
+]
