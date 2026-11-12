@@ -4,16 +4,14 @@
 "k": "Mbote",
 "s": "Mbote",
 "id": "d586d78dc9",
-"v": 1,
-"essai": 1
+"v": 1
 },
 {
 "l": "ln",
 "k": "Mbote tata, sango nini ?",
 "s": "Mbote tata, sango nini ?",
 "id": "1d61be8c82",
-"v": 0,
-"essai": 1
+"v": 0
 },
 {
 "l": "ln",
@@ -27,16 +25,14 @@
 "k": "Mbote ndeko, sango nini ?",
 "s": "Mbote ndeko, sango nini ?",
 "id": "b163499ab7",
-"v": 1,
-"essai": 1
+"v": 1
 },
 {
 "l": "ln",
 "k": "Malamu",
 "s": "Malamu",
 "id": "9470336ce2",
-"v": 0,
-"essai": 1
+"v": 0
 },
 {
 "l": "ln",
@@ -50,40 +46,35 @@
 "k": "Matondo",
 "s": "Matondo",
 "id": "faaa969bc0",
-"v": 0,
-"essai": 1
+"v": 0
 },
 {
 "l": "ln",
 "k": "Matondo mingi mpo na lisalisi.",
 "s": "Matondo mingi mpo na lisalisi.",
 "id": "b15c037eed",
-"v": 1,
-"essai": 1
+"v": 1
 },
 {
 "l": "ln",
 "k": "Nkombo na yo nani ?",
 "s": "Nkombo na yo nani ?",
 "id": "3193830779",
-"v": 1,
-"essai": 1
+"v": 1
 },
 {
 "l": "ln",
 "k": "Nkombo na yo nani ? Nkombo na ngai Nathan.",
 "s": "Nkombo na yo nani ? Nkombo na ngai Nathan.",
 "id": "d1c94dcd16",
-"v": 0,
-"essai": 1
+"v": 0
 },
 {
 "l": "ln",
 "k": "Yambi",
 "s": "Yambi",
 "id": "fdd958ba92",
-"v": 0,
-"essai": 1
+"v": 0
 },
 {
 "l": "ln",
@@ -97,8 +88,7 @@
 "k": "Koyamba",
 "s": "Koyamba",
 "id": "bd15ef1718",
-"v": 0,
-"essai": 1
+"v": 0
 },
 {
 "l": "ln",
@@ -133,7 +123,8 @@
 "k": "Bango nde balobaki maloba oyo.",
 "s": "Bango nde balobaki maloba oyo.",
 "id": "ecfd2e8333",
-"v": 1
+"v": 1,
+"essai": 1
 },
 {
 "l": "ln",
@@ -175,7 +166,8 @@
 "k": "Tata na ngai azali na mosala.",
 "s": "Tata na ngai azali na mosala.",
 "id": "4b88c00f6c",
-"v": 0
+"v": 0,
+"essai": 1
 },
 {
 "l": "ln",
@@ -245,7 +237,8 @@
 "k": "Ngomba na ngomba ekutanaka te kasi batu na batu bakutanaka.",
 "s": "Ngomba na ngomba ekutanaka te kasi batu na batu bakutanaka.",
 "id": "029aa29766",
-"v": 0
+"v": 0,
+"essai": 1
 },
 {
 "l": "ln",
@@ -399,7 +392,8 @@
 "k": "Nazali na mbongo te lelo.",
 "s": "Nazali na mbongo te lelo.",
 "id": "b6bc797a60",
-"v": 0
+"v": 0,
+"essai": 1
 },
 {
 "l": "ln",
@@ -945,7 +939,8 @@
 "k": "Yoka nanu motuna na ngai liboso ya koyanola ngai.",
 "s": "Yoka nanu motuna na ngai liboso ya koyanola ngai.",
 "id": "d10aa88016",
-"v": 0
+"v": 0,
+"essai": 1
 },
 {
 "l": "ln",
@@ -1099,7 +1094,8 @@
 "k": "Mwana azali kobela banda lobi.",
 "s": "Mwana azali kobela banda lobi.",
 "id": "8dd4abb0ba",
-"v": 0
+"v": 0,
+"essai": 1
 },
 {
 "l": "ln",
@@ -1281,7 +1277,8 @@
 "k": "Batubi ye tonga na misisa.",
 "s": "Batubi ye tonga na misisa.",
 "id": "111058fb97",
-"v": 1
+"v": 1,
+"essai": 1
 },
 {
 "l": "ln",
@@ -1869,7 +1866,8 @@
 "k": "Basusu kokufa, basusu kobotama, mokili ezalaka boye.",
 "s": "Basusu kokufa, basusu kobotama, mokili ezalaka boye.",
 "id": "c5d51aa549",
-"v": 1
+"v": 1,
+"essai": 1
 },
 {
 "l": "ln",
@@ -1995,7 +1993,8 @@
 "k": "Zua nga foto ya kitoko.",
 "s": "Zua nga foto ya kitoko.",
 "id": "f8cf14ce2b",
-"v": 1
+"v": 1,
+"essai": 1
 },
 {
 "l": "ln",
@@ -2387,7 +2386,8 @@
 "k": "Nasepeli mingi na makambo oyo.",
 "s": "Nasepeli mingi na makambo oyo.",
 "id": "f71545eb0d",
-"v": 1
+"v": 1,
+"essai": 1
 },
 {
 "l": "ln",

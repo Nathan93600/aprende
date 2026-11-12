@@ -4,7 +4,7 @@ Voix lingala de ¡Aprende! avec l'API Gemini (Google AI Studio), qui lit le ling
 
 Voix : homme = Achird, femme = Aoede (les mêmes que pour l'espagnol).
 
-1) Échantillon de 10 textes, à écouter avant tout :   python voix_lingala.py essai
+1) Échantillon de 10 phrases, à écouter avant tout :   python voix_lingala.py essai
 2) Tout générer (349 textes) :                          python voix_lingala.py
 
 La clé API AI Studio est demandée au lancement, ne s'affiche pas et n'est enregistrée nulle part
@@ -23,7 +23,6 @@ except Exception:
 VOICES = ["Achird", "Aoede"]          # 0 = homme, 1 = femme
 MODELS = ["gemini-3.8-flash-tts", "gemini-3.8-flash-lite-tts",
           "gemini-3.1-flash-tts-preview", "gemini-2.5-flash-preview-tts"]
-PROMPT = "Read the following Lingala text aloud, as spoken in Kinshasa (DR Congo), clearly and naturally, at a calm pace:\n"
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(HERE, "aprende-voix-ln")
@@ -58,7 +57,7 @@ def to_wav(raw, mime):
 
 def synth(key, model, text, voice):
     body = {
-        "contents": [{"parts": [{"text": PROMPT + text}]}],
+        "contents": [{"parts": [{"text": text}]}],   # le texte seul : aucune consigne, sinon elle serait lue
         "generationConfig": {
             "responseModalities": ["AUDIO"],
             "speechConfig": {"voiceConfig": {"prebuiltVoiceConfig": {"voiceName": voice}}},
@@ -142,6 +141,9 @@ def main():
         if essai:
             sample = [j for j in jobs if j.get("essai")]
             folder = os.path.join(OUT, "essai")
+            if os.path.isdir(folder):   # on repart d'un dossier vide à chaque essai
+                for f in os.listdir(folder):
+                    os.remove(os.path.join(folder, f))
             safe = lambda j: "".join(c if c.isalnum() or c in " -" else "_" for c in j["s"])[:40].strip() + f" ({VOICES[j['v']]}).wav"
             run(key, sample, folder, safe)
             print(f"\nÉchantillon prêt dans : {folder}\nÉcoute-les et dis à Claude si l'accent te va.")
