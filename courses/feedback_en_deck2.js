@@ -1,196 +1,225 @@
-// ¡Aprende! — Fiches des mots du journal anglais (hors cours), partie 2
-Object.assign(CRS_FB.en, {
-  "scorched": { alt: [["burnt", "brûlé, neutre"], ["charred", "C1 : carbonisé"], ["singed", "C1 : roussi en surface"], ["seared", "saisi à feu vif"]], err: [["scorshed", "Scorched."], ["scratched", "Scratched = rayé, griffé."]], tip: "C1. « skortcht », une syllabe. Scorched = brûlé en surface par une chaleur sèche." },
-  "to scorch": { alt: [["burn", "A2"], ["singe", "C1 : roussir"], ["char", "C1 : carboniser"], ["sear", "cuisine : saisir"]], err: [["to scotch", "Scotch = étouffer une rumeur (ou le whisky)."]], tip: "C1. The sun scorched the grass. A scorcher = une journée caniculaire." },
-  "scorched rice": { alt: [["crispy rice", "dans les menus américains"], ["burnt rice"], ["socarrat", "le mot espagnol, pour la paella"]], err: [["burned rice crust", "On dit scorched rice ou crispy rice."]], tip: "Vocabulaire de cuisine. Chaque culture a son nom : tahdig (Iran), nurungji (Corée), socarrat (Espagne), pegao (Porto Rico)." },
-  "scorched earth": { alt: [["take no prisoners", "sans pitié"], ["all-out", "total"], ["no holds barred", "C1 : tous les coups sont permis"]], err: [["burned earth", "L'expression figée est scorched earth."], ["scorched ground", "Earth."]], tip: "C1. A scorched-earth policy / campaign. Aussi au figuré : he went scorched earth on his ex." },
-  "scorching hot": { alt: [["boiling", "oral"], ["sweltering", "C1 : étouffant"], ["blazing hot", "oral US"], ["sizzling"]], err: [["scorching heat hot", "Scorching hot ou scorching heat."], ["very scorching", "Déjà extrême : absolutely scorching."]], tip: "B2. It's scorching out there. On peut dire scorching tout seul." },
-  "cork": { alt: [["stopper", "bouchon en général"], ["plug", "bonde, bouchon"], ["cap", "capsule, bouchon vissé"]], err: [["cock", "Attention au r : cock est un mot vulgaire."], ["corck", "Cork."]], tip: "B2. Pop the cork = faire sauter le bouchon. A corkscrew = un tire-bouchon. Corked wine = vin bouchonné. R bien prononcé en américain." },
-  "to snoop": { alt: [["pry", "C1"], ["poke around", "oral"], ["nose around", "oral"], ["spy on", "B1"]], err: [["to snoop sb", "Snoop ON sb, snoop AROUND a place."], ["to snob", "Snob = snober."]], tip: "C1, péjoratif. Were you snooping through my phone? A snoop = un fouineur." },
-  "to squat": { alt: [["crouch", "s'accroupir, neutre"], ["hunker down", "US : s'accroupir, se retrancher"], ["occupy illegally", "squatter"]], err: [["to squad", "Squad = équipe."], ["to squatt", "Un seul t à l'infinitif (squatted au passé)."]], tip: "B2. Squats = les flexions à la salle. Argot US : I don't know squat = je n'y connais rien. « skouât »." },
-  "to cauterise": { alt: [["cauterize", "orthographe américaine, à privilégier"], ["sear", "brûler en surface"], ["seal", "refermer"]], err: [["to cauterate", "Cauterize."], ["to cautarize", "Cauterize."]], tip: "C2, médical. En américain : cauterize, avec z. Cauterize a wound. « KO-deu-raïz »." },
-  "pull toward": { alt: [["draw toward", "C1"], ["attract to", "B2"], ["gravitate toward", "C1"]], err: [["pull towards to", "Pas de double préposition."], ["pull forward", "Forward = vers l'avant."]], tip: "B2. Toward (US), towards (GB). I feel pulled toward teaching. Prononciation US en une syllabe : « tord »." },
-  "to bottle sth up": { alt: [["hold in", "B2"], ["suppress", "C1"], ["keep inside", "neutre"], ["repress", "C1, psychologie"]], err: [["to bottle sth in", "Particule : UP."], ["to bottle up with", "Transitif direct : bottle up your feelings."]], tip: "C1. Don't bottle it up, talk to someone. Le tt se prononce d : « BÂ-deul »." },
-  "put a lid on it": { alt: [["zip it", "oral : la ferme"], ["pipe down", "moins fort !"], ["keep a lid on", "C1 : contenir (dépenses, infos)"], ["knock it off", "arrête ça"]], err: [["put a lead on it", "Lid = couvercle."], ["put the lid on it", "L'ordre figé est put A lid on it."]], tip: "C1, familier. Keep a lid on costs = contenir les coûts. Flip your lid = péter un câble." },
-  "to pry into": { alt: [["snoop into", "familier"], ["dig into", "creuser"], ["meddle in", "s'ingérer"], ["nose into", "familier"]], err: [["to pry in", "Pry INTO."], ["to pray into", "Pray = prier. Pry se prononce « praï »."]], tip: "C1. I don't mean to pry, but… = sans vouloir être indiscret. US : pry open = forcer avec un levier. Prying eyes = regards indiscrets." },
-  "nosy": { alt: [["curious", "neutre, sans jugement"], ["prying", "C1"], ["snoopy", "familier"], ["inquisitive", "C1, plutôt positif"]], err: [["nosey", "Nosey existe mais nosy est la forme américaine."], ["noisy", "Noisy = bruyant."]], tip: "B2, péjoratif. Don't be so nosy. A nosy neighbor. « NO-zi »." },
-  "poke your nose into": { alt: [["stick your nose into", "variante très courante"], ["butt into", "oral US"], ["meddle in", "C1"]], err: [["poke your nose in to", "Into, en un mot."], ["put your nose into", "Poke ou stick."]], tip: "C1. Stop poking your nose into other people's business." },
-  "to crouch down": { alt: [["squat down", "plus bas, genoux pliés"], ["duck", "baisser la tête d'un coup"], ["kneel", "s'agenouiller"], ["hunker down", "US"]], err: [["to crotch down", "Crotch = entrejambe. Crouch rime avec ouch."], ["to couch down", "Crouch."]], tip: "B2. He crouched down behind the car. « kraoutch »." },
-  "not know the first thing about": { alt: [["have no clue about", "oral"], ["know nothing about", "neutre"], ["be clueless about", "oral"], ["not know squat about", "argot US"]], err: [["not know the first thing of", "ABOUT."], ["not know the one thing about", "The FIRST thing."]], tip: "C1. I don't know the first thing about cars." },
-  "become desensitised to": { alt: [["become desensitized to", "orthographe américaine"], ["become numb to", "C1"], ["get used to", "B1"], ["grow immune to", "C1"]], err: [["become desensitized of", "TO."], ["become insensible to", "Faux ami : insensible = inconscient, évanoui."]], tip: "C1. En américain : desensitized, avec z. We've become desensitized to violence." },
-  "be drawn to": { alt: [["be attracted to", "B2"], ["gravitate toward", "C1"], ["have a thing for", "oral : avoir un faible pour"], ["be into", "oral"]], err: [["be drawed to", "Irrégulier : draw, drew, drawn."], ["be drawn by", "Drawn TO pour l'attirance."]], tip: "C1. I've always been drawn to the ocean. « dron »." },
-  "gravitate toward": { alt: [["be drawn to", "C1"], ["lean toward", "pencher pour"], ["tend toward"], ["flock to", "affluer vers"]], err: [["gravitate to toward", "Une seule préposition."], ["gravitate around", "Calque du français graviter autour : revolve around."]], tip: "C1. Kids gravitate toward screens. « GRA-veu-téyt »." },
-  "to rip out": { alt: [["tear out", "moins violent"], ["yank out", "d'un coup sec"], ["pull out", "neutre"], ["rip off", "arracher en surface"]], err: [["to rip of", "Rip OFF (deux f) = arnaquer."], ["to reap out", "Reap = récolter."]], tip: "B2. Rip out a page, the carpet. It ripped my heart out = ça m'a brisé le cœur." },
-  "to tear out": { alt: [["rip out", "plus brutal"], ["pull out"], ["remove", "neutre"]], err: [["to teared out", "Irrégulier : tear, tore, torn."], ["to tier out", "Tear."]], tip: "B2. Ici tear se prononce « tèr » (déchirer), pas « tir » (larme). Tear your hair out = s'arracher les cheveux." },
-  "to yank out": { alt: [["rip out"], ["jerk out", "d'un coup sec"], ["pull out hard"], ["wrench out", "C1"]], err: [["to yunk out", "Yank."], ["to yank of", "Yank OUT / OFF."]], tip: "C1, familier. He yanked the plug out. Yank my chain = se payer ma tête. « yank » comme dans thank." },
-  "to gut": { alt: [["strip", "dépouiller"], ["hollow out", "C1 : vider de sa substance"], ["clean out"], ["eviscerate", "C2"]], err: [["to cut", "Cut = couper."], ["to gutt", "Un seul t (gutted au passé)."]], tip: "C1. Gut a fish, gut a house (tout casser à l'intérieur), the bill was gutted. Guts = les tripes, le cran. A gut feeling = une intuition." },
-  "to wrest": { alt: [["seize", "C1"], ["snatch", "arracher d'un geste"], ["wrestle away", "oral"], ["take by force", "neutre"]], err: [["to rest", "Même prononciation (w muet), sens différent."], ["to wrest of", "Wrest sth FROM sb."]], tip: "C2, soutenu, style journalistique. Wrest control / power from. « rèst »." },
-  "a rip-off": { alt: [["a scam", "arnaque organisée"], ["a con", "escroquerie"], ["highway robbery", "idiome : du vol pur et simple"], ["overpriced", "adjectif : trop cher"]], err: [["a rip-of", "Deux f."], ["a ripe-off", "Rip."]], tip: "B2, familier. $15 for a beer? What a rip-off! Verbe : I got ripped off. Aussi : une copie, un plagiat." },
-  "belly button": { alt: [["navel", "neutre, écrit"], ["umbilicus", "médical"], ["tummy button", "enfantin, britannique"]], err: [["belly bottom", "Button (bouton), pas bottom."], ["bellybotton", "Belly button."]], tip: "A2, le mot de tous les jours. A belly button piercing. Le tt de button est avalé en américain : « BÂ'n »." },
-  "navel": { alt: [["belly button", "courant"], ["umbilicus", "médical"]], err: [["naval", "Naval = de la marine. Même prononciation."], ["navle", "Navel."]], tip: "C1. Navel orange = orange à nombril. « NÉY-veul »." },
-  "navel-gazing": { alt: [["self-absorption", "C1"], ["self-indulgence", "complaisance"], ["introspection", "neutre, sans jugement"]], err: [["naval-gazing", "Navel."], ["belly-gazing", "L'expression figée est navel-gazing."]], tip: "C2, péjoratif. Enough navel-gazing, let's get to work." },
-  "umbilicus": { alt: [["navel"], ["belly button", "courant"]], err: [["ombilicus", "Avec u."], ["umbilical", "Umbilical = l'adjectif : umbilical cord, cordon ombilical."]], tip: "Terme médical, rare hors contexte clinique. À connaître surtout : the umbilical cord." },
-  "innie / outie": { alt: [["an innie", "nombril rentré"], ["an outie", "nombril sorti"]], err: [["inny / outy", "Innie, outie."]], tip: "Familier, souvent enfantin. Do you have an innie or an outie? Repris dans la série Severance." },
-  "to pull strings": { alt: [["use your connections", "neutre"], ["call in a favor", "se faire rendre un service"], ["pull some strings", "forme la plus courante"], ["work your contacts"]], err: [["to pull the strings", "Pull THE strings = tirer les ficelles, diriger en coulisses. Sans the = faire jouer ses relations."], ["to push strings", "Pull."]], tip: "C1. I pulled some strings to get you an interview." },
-  "to call in a favor": { alt: [["cash in a favor", "variante"], ["pull strings"], ["collect on a favor"]], err: [["to call a favor", "Call IN."], ["to call for a favor", "Call IN a favor."]], tip: "C1. Orthographe US : favor (GB : favour). He owes me one : I'll call in a favor." },
-  "friends in high places": { alt: [["connections", "le mot simple"], ["be well-connected", "C1"], ["clout", "C1 : poids, influence"], ["an in", "oral US : I have an in at the company"]], err: [["friends in top places", "High."], ["friends at high places", "IN."]], tip: "C1. It helps to have friends in high places." },
-  "parole board": { alt: [["parole commission", "variante officielle"], ["parole hearing", "l'audience elle-même"]], err: [["parol board", "Parole."], ["probation board", "Probation ≠ parole."]], tip: "Vocabulaire judiciaire américain. Faux ami : parole n'a rien à voir avec la parole (speech, word). « peu-ROL »." },
-  "on parole": { alt: [["out on parole", "forme courante"], ["released early", "explication"], ["paroled", "participe"]], err: [["in parole", "ON parole."], ["on probation", "Probation = peine à la place de la prison. Parole = sortie anticipée après la prison."]], tip: "C1. He's out on parole. Violate parole. A parole officer." },
-  "probation": { alt: [["suspended sentence", "sursis"], ["supervised release"], ["trial period", "période d'essai au travail"]], err: [["probatory", "Probation."], ["approbation", "Approbation = approbation."]], tip: "C1. He got two years' probation. On probation = en sursis, ou en période d'essai. A probation officer." },
-  "inquiry": { alt: [["investigation", "B2"], ["probe", "style des médias"], ["question", "demande"], ["enquiry", "orthographe britannique pour une simple demande"]], err: [["inquire", "Inquire = le verbe."], ["inquery", "Inquiry."]], tip: "B2. Launch an inquiry into. US : « INN-kweu-ri », accent au début." },
-  "a probe": { alt: [["an investigation", "neutre"], ["an inquiry", "officiel"], ["an audit", "comptes"], ["a space probe", "une sonde spatiale"]], err: [["a prob", "Avec e."], ["a prove", "Prove = prouver."]], tip: "C1, langage des titres de presse. Verbe : probe into. « prob » avec un o long." },
-  "an inquest": { alt: [["a coroner's inquest", "forme complète"], ["an autopsy", "l'examen du corps"], ["a postmortem", "aussi : bilan après un échec"]], err: [["an inquiry", "Inquiry = enquête en général. Inquest = uniquement sur un décès."], ["an enquest", "Inquest."]], tip: "C2, juridique. Surtout britannique. Aux USA on parle de medical examiner et d'autopsy." },
-  "to behead": { alt: [["decapitate", "C1, clinique"], ["execute", "exécuter"], ["guillotine"]], err: [["to dehead", "Behead."], ["to behead off", "Sans particule."]], tip: "C1. He was beheaded in 1793. Préfixe be- comme dans belittle, befriend. Off with his head! = qu'on lui coupe la tête !" },
-  "to be cleared": { alt: [["be exonerated", "C1"], ["be acquitted", "C1 : acquitté au procès"], ["be vindicated", "C2 : les faits lui donnent raison"], ["be found not guilty"]], err: [["to be cleaned", "Cleaned = nettoyé."], ["to be cleared from", "Cleared OF all charges."]], tip: "C1. He was cleared of all charges. Aussi : cleared for takeoff, cleared to play (feu vert médical)." },
-  "to overlook": { alt: [["miss", "rater"], ["neglect", "négliger"], ["turn a blind eye to", "fermer les yeux sur"], ["look out over", "donner sur"]], err: [["to oversee", "Oversee = superviser."], ["to look over", "Look over = jeter un œil."]], tip: "B2. Trois sens : ne pas voir, fermer les yeux, donner sur (a room overlooking the park). Nom US : an overlook = un point de vue." },
-  "to despise": { alt: [["hate", "A2"], ["loathe", "C1"], ["detest", "B2"], ["can't stand", "oral"]], err: [["to dispise", "Despise."], ["to despise of", "Transitif direct."]], tip: "C1. Plus fort que hate : avec du mépris. I despise liars. « di-SPAÏZ »." },
-  "to burn bridges": { alt: [["cut ties", "couper les liens"], ["sever ties", "C1"], ["burn your boats", "variante britannique"]], err: [["to cut bridges", "Calque du français : BURN bridges."], ["to burn the bridge", "Pluriel, sans the."]], tip: "C1. Don't burn bridges when you quit a job." },
-  "to weigh down": { alt: [["burden", "C1"], ["drag down", "tirer vers le bas"], ["bog down", "C1 : enliser"], ["weigh on", "peser sur le moral"]], err: [["to weight down", "Le verbe est weigh. Weight = le nom."], ["to way down", "Weigh."]], tip: "C1. Weighed down by debt. It's been weighing on me. « wéy »." },
-  "to predate": { alt: [["precede", "C1"], ["come before", "A2"], ["antedate", "C2"], ["go back further than"]], err: [["to pre-date", "Peut se confondre avec donner un rendez-vous avant. Écrire predate."], ["to predict", "Predict = prédire."]], tip: "C1. The tradition predates Christianity. « pri-DÉYT »." },
-  "breeding ground": { alt: [["hotbed", "C1 : a hotbed of crime"], ["incubator"], ["fertile ground for", "C1"], ["petri dish", "image scientifique"]], err: [["breading ground", "Bread = pain. Breed = se reproduire."], ["breeding field", "Ground."]], tip: "C1. A breeding ground for bacteria, for extremism. Presque toujours négatif au figuré." },
-  "to get off": { alt: [["exit", "formel"], ["step off", "descendre d'un pas"], ["hop off", "oral"], ["get out of", "pour une voiture"]], err: [["to get down", "Get down = se baisser. Descendre d'un bus = get OFF."], ["to get off of", "Get off the bus (off of est très oral)."]], tip: "A2. Règle : get on / off pour bus, train, avion, vélo. Get in / out of pour voiture, taxi. Get off work = finir le boulot." },
-  "to catch up (score)": { alt: [["close the gap", "réduire l'écart"], ["tie it up", "US : égaliser"], ["come from behind", "remonter"], ["rally", "US : revenir au score"]], err: [["to catch up the score", "Catch up, ou catch up TO them."], ["to ketchup", "Catch up."]], tip: "B2. They're down by ten but catching up. Autres sens : catch up on work, let's catch up (prendre des nouvelles)." },
-  "scoreboard": { alt: [["the score", "le score"], ["jumbotron", "US : écran géant"], ["leaderboard", "classement"]], err: [["score board", "En un mot."], ["scoreboarding", "Scoreboard."]], tip: "B1. Check the scoreboard. Réplique de trash-talk : Scoreboard! = regarde le score." },
-  "as long as we win": { alt: [["so long as we win", "plus soutenu"], ["provided we win", "formel"], ["a win's a win", "oral : peu importe la manière"]], err: [["as long as we will win", "Pas de will après as long as : présent."], ["as far as we win", "As far as = d'après ce que. Condition = as long as."]], tip: "B2. As long as + présent, même pour le futur. Dit vite : « ez-LONG-ez »." },
-  "who do they think they are": { alt: [["who does he think he is", "au singulier"], ["the nerve of them", "quel culot"], ["how dare they", "comment osent-ils"]], err: [["who do they think are they", "Ordre : who do they think THEY ARE."], ["who they think they are", "Il faut do."]], tip: "B2, indignation. Accent sur think et are. Pas d'inversion dans la seconde partie." },
-  "the audacity": { alt: [["the nerve", "plus courant"], ["the gall", "C1"], ["the cheek", "britannique"], ["the balls", "vulgaire"]], err: [["the audace", "Audacity."], ["the audaciousness", "Lourd : audacity."]], tip: "C1. The audacity of this guy! Très employé seul et ironiquement en américain : The audacity." },
-  "the nerve": { alt: [["the audacity", "plus soutenu"], ["the gall", "C1"], ["some nerve", "you've got some nerve"]], err: [["the nerves", "Nerves (pluriel) = le trac. The nerve (singulier) = le culot."], ["the nerf", "Nerve."]], tip: "B2. You've got a lot of nerve showing up here. Get on my nerves = me taper sur les nerfs. Hit a nerve = toucher un point sensible." },
-  "to get too big for one's boots": { alt: [["get too big for your britches", "forme américaine"], ["get a big head", "prendre la grosse tête"], ["be full of yourself", "oral"], ["get cocky", "oral US"]], err: [["to get too big for one's shoes", "Boots (GB), britches (US)."], ["to have swelling ankles", "Calque du français."]], tip: "C1. Boots est la version britannique : un Américain dit too big for his britches. He's getting a big head." },
-  "alimony": { alt: [["spousal support", "terme juridique actuel aux USA"], ["maintenance", "britannique"]], err: [["alimentary pension", "Calque du français : alimony."], ["alimoney", "Alimony."]], tip: "C1. Pay alimony to your ex. Pour l'ex-conjoint. Pour les enfants : child support. « A-leu-mo-ni »." },
-  "child support": { alt: [["child maintenance", "britannique"], ["support payments"]], err: [["children support", "Child, au singulier."], ["child pension", "Support."]], tip: "B2. He's behind on child support. A deadbeat dad = un père qui ne paie pas." },
-  "to default on": { alt: [["fail to pay", "neutre"], ["fall behind on", "prendre du retard"], ["miss payments on"], ["renege on", "C2 : revenir sur un engagement"]], err: [["to default of", "Default ON."], ["to default a loan", "Il faut on : default ON a loan."]], tip: "C1. Default on a loan, a mortgage. By default = par défaut. « di-FOLT »." },
-  "to be all over someone": { alt: [["be in sb's face", "coller, presser"], ["smother", "étouffer"], ["blanket", "sport : coller un adversaire"], ["mark tightly", "foot"]], err: [["to be all on someone", "All OVER."], ["to be over all someone", "All over."]], tip: "C1. Sport : the defense was all over him. Dans une soirée : they were all over each other = ils se sautaient dessus. Be all over it = gérer à fond." },
-  "to close someone down": { alt: [["shut down", "US : neutraliser un joueur"], ["press", "presser"], ["cut off his options"], ["deny space"]], err: [["to close down to someone", "Transitif : close him down."]], tip: "Vocabulaire du foot, plutôt britannique. Aux USA : shut him down. Close down a business = fermer une entreprise." },
-  "to swarm": { alt: [["flock to", "affluer"], ["crowd around", "s'attrouper"], ["mob", "assaillir"], ["overrun", "envahir"]], err: [["to swam", "Swam = passé de swim."], ["to swarm of", "Swarm AROUND / INTO. Be swarming WITH = grouiller de."]], tip: "C1. Fans swarmed the field. The place was swarming with cops. A swarm of bees. « sworm »." },
-  "to brush off": { alt: [["dismiss", "C1"], ["shrug off", "ne pas se laisser atteindre"], ["blow off", "US : snober, sécher"], ["wave off", "écarter d'un geste"]], err: [["to brush out", "OFF."], ["to brush up", "Brush up on = se remettre à niveau."]], tip: "C1. She brushed off the criticism. Nom : give sb the brush-off = envoyer balader." },
-  "to shrug off": { alt: [["brush off"], ["laugh off", "prendre à la rigolade"], ["let it roll off your back", "idiome US"], ["play down", "minimiser"]], err: [["to shrug of", "Deux f."], ["to shrug up", "OFF. Shrug seul = hausser les épaules."]], tip: "C1. He shrugged off the injury. « chrâg »." },
-  "to not give sth the time of day": { alt: [["ignore", "B1"], ["snub", "C1"], ["give the cold shoulder", "battre froid"], ["blow off", "US"]], err: [["to not give sth time of the day", "THE time OF day."], ["to not give the hour", "Calque."]], tip: "C1, surtout pour une personne : She wouldn't give me the time of day." },
-  "to rough it": { alt: [["live without comforts", "explication"], ["camp out", "camper"], ["go off-grid", "vivre hors réseau"], ["slum it", "s'encanailler, humoristique"]], err: [["to rough", "Il faut it."], ["to ruff it", "Rough."]], tip: "C1. We roughed it in the mountains for a week. « râf »." },
-  "to slum it": { alt: [["rough it", "vie à la dure"], ["downgrade", "descendre en gamme"], ["go budget", "oral"]], err: [["to slam it", "Slam = claquer."], ["to slum", "Il faut it."]], tip: "C1, humoristique et un peu condescendant. We're slumming it in economy. A slum = un bidonville." },
-  "to make do": { alt: [["get by", "s'en sortir"], ["manage", "B1"], ["improvise", "B2"], ["make the best of it", "C1"]], err: [["to do with", "Make do WITH."], ["to make it do", "Make do."]], tip: "C1. We'll have to make do with what we have. Passé : made do." },
-  "mattress": { alt: [["bed", "par extension"], ["futon"], ["air mattress", "matelas gonflable"]], err: [["matress", "Deux t, deux s."], ["matelas", "Mattress."]], tip: "A2. A king-size mattress. Accent sur la 1re syllabe : « MA-treus »." },
-  "memory foam": { alt: [["foam mattress", "matelas en mousse"], ["latex", "alternative"]], err: [["memory form", "Foam (mousse), pas form."], ["foam memory", "Memory foam."]], tip: "Vocabulaire du commerce. A memory foam pillow. « fom » avec un o long." },
-  "mattress topper": { alt: [["mattress pad", "US : plus fin, protège-matelas"], ["pillow top", "matelas à dessus rembourré"]], err: [["over-mattress", "Calque : mattress topper."], ["mattress toper", "Deux p."]], tip: "Vocabulaire du commerce. Topper = ce qu'on pose dessus." },
-  "chartered": { alt: [["licensed", "US : agréé"], ["certified", "US : diplômé officiellement"], ["hired", "affrété, loué"]], err: [["charted", "Charted = cartographié, classé dans les charts."], ["charterd", "Chartered."]], tip: "C1. A chartered flight. Chartered accountant est britannique : l'équivalent américain est CPA." },
-  "chartered accountant": { alt: [["CPA (certified public accountant)", "l'équivalent américain"], ["accountant", "comptable"]], err: [["expert accountant", "Calque du français."], ["charted accountant", "Chartered."]], tip: "Titre britannique. Aux USA on dit : I'm a CPA (« si-pi-éy »)." },
-  "to charter": { alt: [["hire", "louer avec équipage"], ["rent", "louer"], ["lease", "louer à long terme"]], err: [["to chart", "Chart = cartographier."], ["to affret", "Calque : charter."]], tip: "C1. Charter a plane, a boat, a bus. A charter school (US) = école publique autonome." },
-  "cargo plane": { alt: [["freighter", "avion ou navire cargo"], ["freight aircraft", "technique"]], err: [["cargo airplane", "Se dit, mais cargo plane est la forme courante."], ["plane cargo", "Cargo plane."]], tip: "B2. « KAR-go », r prononcé." },
-  "freight": { alt: [["cargo", "la marchandise transportée"], ["shipment", "un envoi"], ["goods", "les biens"], ["shipping", "l'expédition, les frais"]], err: [["fret", "Faux ami d'orthographe : fret en anglais = se tracasser."], ["fright", "Fright = frayeur."]], tip: "B2. Se prononce « fréyt », comme eight. A freight train (US) = train de marchandises." },
-  "payload": { alt: [["cargo", "chargement"], ["load", "charge"], ["capacity", "capacité"]], err: [["pay load", "En un mot."], ["paidload", "Payload."]], tip: "C1. La charge qui rapporte (pay) par opposition au poids de l'appareil. Aussi en informatique : le contenu utile d'un message, et la charge d'une fusée." },
-  "belly": { alt: [["stomach", "neutre"], ["tummy", "enfantin"], ["gut", "bide, tripes"], ["abdomen", "médical"]], err: [["bely", "Deux l."], ["bell", "Bell = cloche."]], tip: "B1. Go with your gut (pas belly) = suis ton instinct. Fire in the belly = la niaque. A belly laugh = un rire franc." },
-  "beer belly": { alt: [["beer gut", "plus familier"], ["potbelly", "bedaine"], ["dad bod", "argot : corps de papa"], ["paunch", "C1"]], err: [["beer stomach", "Belly ou gut."], ["bear belly", "Beer (bière), pas bear (ours)."]], tip: "B2, familier. He's working on a beer belly." },
-  "to go belly up": { alt: [["go bankrupt", "neutre"], ["go under", "couler"], ["fold", "mettre la clé sous la porte"], ["go bust", "oral"], ["tank", "oral US : s'effondrer"]], err: [["to go belly down", "Belly UP : comme un poisson mort."], ["to go up belly", "Belly up."]], tip: "C1, familier. The company went belly up in 2008." },
-  "belly flop": { alt: [["flop", "un bide"], ["faceplant", "se manger le sol"]], err: [["belly flap", "Flop."], ["flat dive", "Calque."]], tip: "B2. He did a belly flop off the diving board. Au figuré : un échec retentissant." },
-  "belly of the beast": { alt: [["the lion's den", "la fosse aux lions"], ["the heart of enemy territory"], ["the thick of it", "au cœur de l'action"]], err: [["stomach of the beast", "Belly."], ["mouth of the wolf", "Calque du français."]], tip: "C1. Into the belly of the beast. Référence biblique à Jonas." },
-  "belly cargo": { alt: [["belly freight", "variante"], ["lower-deck cargo", "technique"]], err: [["cargo belly", "Belly cargo."]], tip: "Jargon du fret aérien : marchandises transportées dans la soute des avions de passagers." },
-  "belly hold": { alt: [["cargo hold", "soute, terme général"], ["lower hold", "technique"], ["the hold", "la soute"]], err: [["belly hole", "Hold (soute), pas hole (trou)."]], tip: "Jargon aérien. Hold = soute : your bag goes in the hold." },
-  "tariff": { alt: [["duty", "customs duties"], ["levy", "C1 : prélèvement"], ["import tax", "explication simple"]], err: [["tarif", "Un r, deux f."], ["tarrif", "Tariff."], ["fare", "Faux ami : tarif d'un billet = fare, tarif d'un service = rate."]], tip: "C1, mot d'actualité. Impose / slap tariffs on. En anglais américain tariff = droit de douane, pas un prix. « TÈ-rif »." },
-  "to fill to capacity": { alt: [["fill up", "A2"], ["pack", "bonder"], ["max out", "oral"], ["be at full capacity", "tourner à plein"]], err: [["to fill at capacity", "Fill TO capacity ; be AT capacity."], ["to fill to the capacity", "Sans the."]], tip: "C1. The stadium was filled to capacity. A capacity crowd = salle comble." },
-  "to max out": { alt: [["hit the limit", "neutre"], ["top out", "plafonner"], ["peak", "culminer"], ["cap out", "oral"]], err: [["to max up", "OUT."], ["to maximize out", "Max out."]], tip: "B2, oral US. I maxed out my credit card. The car maxes out at 120." },
-});
 
-// Fiches des mots du bundle du 12/11 (cours « Perso »)
-Object.assign(CRS_FB.en, {
-  "go down": { alt: [["happen", "A2, neutre"], ["take place", "B1, plus formel"], ["occur", "C1"], ["transpire", "C1, soutenu"], ["unfold", "C2 : se dérouler peu à peu"]], err: [["what went down the meeting", "What went down AT the meeting."], ["go down = uniquement descendre", "À l'oral US, what went down = ce qui s'est passé."]], tip: "B2, oral US. What went down? = Qu'est-ce qui s'est passé ? Aussi : prices went down (baisser), the server went down (tomber en panne), that didn't go down well (être mal reçu)." },
-  "sniffing": { alt: [["sniffling", "renifler parce qu'on est enrhumé ou qu'on pleure"], ["smelling", "sentir, neutre"], ["scenting", "C1 : flairer (animal)"], ["nosing around", "fouiner"]], err: [["snifing", "Deux f : sniffing."], ["sniffing = snorting", "Snort = renifler bruyamment, ou sniffer une drogue."]], tip: "B2. To sniff = renifler, flairer. Stop sniffing! To sniff out = dénicher (the dog sniffed out the drugs). Sniffle = le petit reniflement du rhume." },
-  "grub": { alt: [["food", "A1, neutre"], ["chow", "oral US, même registre"], ["eats", "oral US"], ["fare", "C1 : la cuisine d'un lieu"], ["sustenance", "C2, soutenu"]], err: [["a grub", "Indénombrable pour la nourriture : some grub. A grub = une larve."], ["grab", "Grab = attraper. Let's grab some grub."]], tip: "Familier. Rime avec pub. Pub grub = la cuisine de pub. To grub around = fouiller. Grubby = crasseux." },
-  "make one's way": { alt: [["head to", "oral, très courant"], ["go", "A1"], ["proceed", "C1, formel"], ["navigate", "C1 : se frayer un chemin"], ["wend one's way", "C2, littéraire"]], err: [["make the way", "Avec le possessif : make MY / HER way."], ["make one's way = make way", "Make way = laisser passer, s'écarter."]], tip: "B2. She made her way through the crowd. Le possessif s'accorde : I made my way, they made their way. Make your way in the world = faire son chemin dans la vie." },
-  "wander off": { alt: [["walk away", "s'éloigner, neutre"], ["stray", "C1 : s'écarter du groupe, du sujet"], ["drift away", "C1 : s'éloigner peu à peu"], ["meander off", "C2"]], err: [["wonder off", "Wonder = se demander. WANder (son « ouone ») = errer."], ["wander out", "Wander OFF."]], tip: "B2. « ouonneder ». The kids wandered off. My mind wandered off = j'ai décroché. Wander = errer sans but ; wonder (« ouanneder ») = se demander." },
-  "budge": { alt: [["move", "A1"], ["shift", "B2"], ["give way", "céder"], ["yield", "C1"], ["give an inch", "C2 : not give an inch = ne rien lâcher"]], err: [["budget", "Budget = le budget."], ["I budge", "Presque toujours à la négative : it won't budge, he wouldn't budge."]], tip: "B2. « badj ». It won't budge = ça ne bouge pas d'un pouce. He refused to budge on the price = il n'a rien cédé sur le prix. Budge up! (UK) = pousse-toi." },
-  "drop off": { alt: [["drop", "I'll drop you at the station"], ["give a ride", "US : emmener en voiture"], ["nod off", "sens 2 : s'assoupir"], ["decline", "sens 3, C1 : baisser"], ["deliver", "C1 : livrer"]], err: [["drop off me", "Pronom au milieu : drop ME off."], ["drop out", "Drop out = abandonner (ses études)."]], tip: "B2. Trois sens : déposer (drop me off at the station), s'endormir (I dropped off during the movie), baisser (sales dropped off). Le contraire de déposer : pick up. A drop-off = un point de dépôt, ou une chute." },
-  "nod off": { alt: [["doze off", "même sens, très courant"], ["fall asleep", "A2, neutre"], ["drift off", "s'endormir doucement"], ["drowse", "C1 : somnoler"], ["conk out", "familier : s'écrouler de sommeil"]], err: [["nod out", "Nod OFF."], ["nodded of", "Off, deux f."]], tip: "B2. Nod = hocher la tête : la tête tombe, on s'assoupit sans le vouloir. I nodded off during the meeting. To nod = acquiescer ; give someone the nod = donner son feu vert." },
-  "toothpick": { alt: [["cocktail stick", "UK : pique à apéritif"], ["skewer", "brochette, pique plus long"], ["floss", "fil dentaire"]], err: [["teethpick", "Singulier dans le mot composé : toothpick."], ["tooth pick", "En un seul mot."]], tip: "B1. Pluriel : toothpicks. Insert a toothpick: if it comes out clean, the cake is done. Familier : toothpick legs = des jambes toutes fines." },
-  "run by": { alt: [["check with", "vérifier auprès de"], ["bounce off", "oral US : bounce an idea off someone"], ["pitch", "C1 : présenter pour convaincre"], ["float", "C2 : lancer une idée pour voir"], ["put forward", "C2, formel"]], err: [["run by my manager this", "Run THIS by my manager : la chose au milieu."], ["run over", "Run over = écraser, ou revoir rapidement."]], tip: "B2, oral pro. Let me run this by my manager = je soumets ça à mon manager avant. Run that by me again = redis-moi ça. Sens 2 : faire un saut, I'll run by the store." },
-  "quote": { alt: [["estimate", "devis approximatif"], ["cite", "C1 : citer une source"], ["quotation", "forme longue, plus formelle"], ["tender", "C2 : offre dans un appel d'offres"]], err: [["a devis", "Un devis = a quote ou an estimate."], ["quote = quota", "Quota = un quota."]], tip: "B2. Nom : a quote = une citation ou un devis. Verbe : citer (don't quote me on that = ne me cite pas là-dessus) ou chiffrer (they quoted me $500). Quote… unquote = je cite. En US le t s'entend à peine." },
-  "leverage": { alt: [["use", "A1 : souvent le meilleur choix"], ["take advantage of", "B2"], ["capitalize on", "C1"], ["harness", "C2 : exploiter une force, une énergie"], ["exploit", "C1 : parfois péjoratif"]], err: [["« liveridge »", "En US : « lèveridj ». En UK : « liiveridj »."], ["leverage on", "Verbe transitif : leverage THE data, sans on."]], tip: "C1, jargon business. Nom : l'effet de levier, un moyen de pression (we have no leverage). Verbe US : tirer parti de. Très courant en conseil, à doser : use suffit souvent." },
-  "have the upper hand": { alt: [["have the edge", "avoir un léger avantage"], ["be in control", "neutre"], ["prevail", "C1 : l'emporter"], ["hold sway", "C2 : dominer"], ["call the shots", "oral : décider"]], err: [["have the high hand", "UPPER hand. High-handed = autoritaire."], ["have upper hand", "Avec the : THE upper hand."]], tip: "B2. Have, get ou gain the upper hand (over someone). She got the upper hand in the negotiation. Le contraire : be on the back foot." },
-  "get an earful": { alt: [["get told off", "se faire gronder"], ["get chewed out", "oral US, fort"], ["get yelled at", "se faire crier dessus"], ["be reprimanded", "C1, formel"], ["be upbraided", "C2, littéraire"]], err: [["get a earful", "AN earful (voyelle)."], ["get an ear full", "En un seul mot : earful."]], tip: "Familier. Earful = plein les oreilles. I got an earful from my boss. Give someone an earful = passer un savon. Même construction : a mouthful, a handful." },
-  "be under the impression": { alt: [["think", "A1"], ["assume", "B2 : supposer"], ["presume", "C1"], ["be led to believe", "C1 : on m'a laissé croire"], ["labor under the assumption", "C2"]], err: [["be under impression", "Avec the : under THE impression."], ["be on the impression", "UNDER the impression."]], tip: "C1. I was under the impression (that) we had agreed = je croyais que… Presque toujours au passé : sous-entend qu'on se trompait. Très utile pour contredire poliment en réunion." },
-  "get tricky": { alt: [["get complicated", "neutre"], ["get hairy", "oral US : devenir tendu"], ["get messy", "devenir le bazar"], ["grow complicated", "C1"], ["grow convoluted", "C2 : alambiqué"]], err: [["get trick", "Tricky, l'adjectif."], ["tricky = truqué", "Tricky = délicat, épineux. Truqué = rigged."]], tip: "B2, oral. That's where it gets tricky = c'est là que ça se complique. A tricky question = une question piège. Tricky to + verbe : it's tricky to explain." },
-  "hatch": { alt: [["come up with", "B2 : trouver une idée"], ["devise", "C1 : concevoir"], ["concoct", "C2 : mijoter, monter de toutes pièces"], ["cook up", "oral : manigancer"], ["incubate", "C2 : couver"]], err: [["hutch", "A hutch = un clapier."], ["hatch a plan = réussir", "Hatch a plan = le monter, en secret."]], tip: "B2. The eggs hatched = les œufs ont éclos. Hatch a plan / a plot = tramer. A hatch = une trappe, une écoutille. Don't count your chickens before they hatch = ne vends pas la peau de l'ours." },
-  "help out": { alt: [["help", "A1"], ["give a hand", "oral"], ["lend a hand", "B2"], ["assist", "C1, formel"], ["pitch in", "C2, oral : mettre la main à la pâte"]], err: [["help out to someone", "Help someone out, ou help out WITH something."], ["help off", "Help OUT."]], tip: "B1. Help out = dépanner, donner un coup de main ponctuel. Can you help me out? Help out with the dishes. Plus décontracté que help." },
-});
 
-// Fiches des mots du journal qui n'étaient pas dans le paquet
+// ── Corrections de la conversation avec Gemini (13/11/2026) ──
 Object.assign(CRS_FB.en, {
-  "daunting": { alt: [["intimidating", "B2"], ["overwhelming", "B2 : écrasant"], ["formidable", "C1 : redoutable (faux ami)"], ["scary", "A2, oral"]], err: [["dauting", "Avec n : daunting."], ["I am daunting", "C'est la tâche qui est daunting ; moi, je suis daunted."]], tip: "C1. « donn-ting », en US le t s'efface presque. A daunting task / prospect / challenge. Nothing daunted = sans se laisser démonter. Undaunted = nullement découragé." },
-  "disheartening": { alt: [["discouraging", "B2"], ["demoralizing", "C1"], ["dispiriting", "C2"], ["a letdown", "oral : une déception"]], err: [["dishearting", "Disheartening, avec -en-."], ["I am disheartening", "Moi, je suis disheartened ; la nouvelle est disheartening."]], tip: "C1. Dis + heart : qui ôte le cœur à l'ouvrage. « dis-HAR-te-ning ». It's disheartening to see so little progress. Le contraire : heartening, encouraging." },
-  "gut-wrenching": { alt: [["heartbreaking", "B2 : qui brise le cœur"], ["harrowing", "C2 : éprouvant"], ["agonizing", "C1"], ["devastating", "B2"]], err: [["gut-wrenching = dégoûtant", "Dégoûtant = gross, disgusting. Gut-wrenching = déchirant."], ["gut wrenching", "Avec trait d'union devant un nom."]], tip: "C1, oral US. Gut = les tripes, wrench = tordre. « gat-rentching » : le w est muet. A gut-wrenching decision / story. Même famille : heart-wrenching, a gut feeling (une intuition)." },
-  "hefty": { alt: [["substantial", "C1 : conséquent"], ["sizable", "C1"], ["steep", "pour un prix : salé"], ["heavy", "A2"], ["burly", "C1 : costaud (personne)"]], err: [["hefty = lourd seulement", "Surtout : important, salé. A hefty fine, a hefty price tag."], ["heafty", "Hefty."]], tip: "B2-C1. A hefty fine = une amende salée. A hefty sum, a hefty bill, a hefty raise. Pour une personne : costaud. To heft = soupeser." },
-  "looming": { alt: [["imminent", "C1"], ["impending", "C1 : qui menace d'arriver"], ["approaching", "B2, neutre"], ["around the corner", "oral"]], err: [["looming = brillant", "Gleaming = brillant. Looming = qui se profile, menaçant."], ["blooming", "Blooming = en fleurs."]], tip: "C1. To loom = se dresser, se profiler de façon inquiétante. A looming deadline / crisis / recession. To loom large = peser lourd dans les esprits. A loom = un métier à tisser." },
-  "outspoken": { alt: [["blunt", "B2 : direct, sans détour"], ["forthright", "C1 : franc"], ["candid", "C1 : sincère"], ["vocal", "C1 : qui se fait entendre"]], err: [["outspoken = bavard", "Bavard = talkative. Outspoken = qui dit tout haut ce qu'il pense."], ["spoken out", "To speak out = prendre la parole publiquement ; outspoken = l'adjectif."]], tip: "C1. An outspoken critic of the government. Accent sur spo : out-SPO-ken. Plutôt positif ou neutre. Soft-spoken = qui parle doucement ; well-spoken = qui s'exprime bien." },
-  "reckoning": { alt: [["day of reckoning", "= l'heure des comptes"], ["comeuppance", "C2 : la monnaie de sa pièce"], ["estimate", "sens 2 : estimation"], ["wake-up call", "oral : électrochoc"]], err: [["reckonning", "Un seul n au milieu : reckoning."], ["by my reckon", "By my reckoning = d'après mes calculs."]], tip: "C1. A reckoning = le moment où il faut rendre des comptes. A racial reckoning, a day of reckoning. To reckon = estimer, penser (I reckon so, plutôt UK et sud des US). A force to be reckoned with = quelqu'un avec qui il faut compter." },
-  "rehab": { alt: [["rehabilitation", "forme complète, formelle"], ["physical therapy", "US : kinésithérapie"], ["PT", "US, oral : la kiné"], ["detox", "= désintox, le sevrage lui-même"]], err: [["in the rehab", "Sans article : he's IN rehab, go TO rehab."], ["rehab = réhabiliter un bâtiment ?", "Oui aussi, en US : to rehab a house = rénover."]], tip: "B2, oral. « RI-hab ». He's in rehab = il est en cure de désintox, ou en rééducation après une blessure. To check into rehab. To rehab an injury = rééduquer." },
-  "relentless": { alt: [["unrelenting", "C1, même sens"], ["persistent", "B2"], ["tireless", "C1 : infatigable, positif"], ["ruthless", "C1 : impitoyable"], ["nonstop", "oral"]], err: [["relentness", "Relentless ; le nom : relentlessness."], ["relentless = sans regret", "To relent = céder, se radoucir. Relentless = qui ne lâche jamais."]], tip: "C1. Relentless pressure / heat / pursuit. Positif pour l'effort (a relentless work ethic), négatif pour ce qu'on subit (relentless rain). Adverbe : relentlessly." },
-  "staggering": { alt: [["astonishing", "B2"], ["mind-blowing", "oral"], ["astounding", "C1"], ["jaw-dropping", "oral"], ["eye-watering", "pour un prix, une somme"]], err: [["a staggering = un titubant", "To stagger = tituber, mais staggering = ahurissant."], ["stagering", "Deux g : staggering."]], tip: "C1. A staggering amount / number : a staggering $2 billion. To stagger = tituber, ou stupéfier, ou échelonner (staggered shifts = horaires décalés)." },
-  "upheaval": { alt: [["turmoil", "C1 : tumulte, agitation"], ["disruption", "B2 : perturbation"], ["shake-up", "oral : grand remaniement"], ["chaos", "B1"]], err: [["an upheavel", "Upheaval, avec -al."], ["upheavals of", "Political / social / emotional upheaval : souvent indénombrable."]], tip: "C1. Up + heave (soulever). « ap-HI-vel ». Political upheaval, a period of upheaval. Moving house is a big upheaval = un vrai chamboulement." },
-});
-
-// ── Génère du 13/11/2026 : factories & putting a stop to things ──
-Object.assign(CRS_FB.en, {
-  "factory": {
-    alt: [["plant", "grand site, énergie"], ["facility", "registre pro"], ["works", "surtout UK"], ["mill", "textile, papier, acier"]],
-    err: [["usine", "Mot français. En anglais : factory."], ["fabric", "Faux-ami : fabric = tissu."]],
-    tip: "Factory vient de « factor » (agent) : là où l'on fait. Prononcé « FAK-tuh-ree », le o disparaît presque."
-  },
-  "plant": {
-    alt: [["factory"], ["power plant", "centrale électrique"], ["facility"]],
-    err: [["plantation", "Une plantation agricole, pas une usine."]],
-    tip: "Plant = la plante et l'usine, comme en espagnol (la planta). Power plant = centrale."
-  },
-  "facility": {
-    alt: [["site", "site"], ["premises", "locaux"], ["plant", "usine"]],
-    err: [["facility = facilité", "Faux-ami : la facilité = ease. Facility = installation, site."], ["a facilities", "Au singulier : a facility ; au pluriel : facilities (équipements)."]],
-    tip: "Facility = un endroit équipé pour faire quelque chose : a research facility, sports facilities."
-  },
-  "mill": {
-    alt: [["steel mill", "aciérie"], ["paper mill", "papeterie"], ["windmill", "moulin à vent"]],
-    err: [["mile", "Mile = mille (distance), prononcé « maïl ». Mill = « mil »."]],
-    tip: "Au départ un moulin (to mill = moudre), puis toute usine qui transforme une matière : run-of-the-mill = banal, ordinaire."
-  },
-  "sweatshop": {
-    alt: [["exploitative factory"], ["slave labor", "travail forcé"]],
-    err: [["sweat shop = boutique de sport", "Rien à voir : sweat = sueur. Un sweatshop exploite les ouvriers."]],
-    tip: "Sweat (sueur) + shop (atelier) : l'atelier où l'on sue pour un salaire de misère."
-  },
-  "works": {
-    alt: [["plant"], ["factory"], ["gasworks", "usine à gaz"]],
-    err: [["a work", "Une usine se dit « a works » (même forme au singulier), pas « a work »."]],
-    tip: "Surtout britannique et dans des noms : the gas works, the steel works. Aux États-Unis, on dit plutôt plant."
-  },
-  "stop sb from doing": {
-    alt: [["stop sb doing", "UK, sans from"], ["prevent sb from doing", "plus formel"], ["keep sb from doing"]],
-    err: [["stop sb to do", "Stop to do = s'arrêter POUR faire. Empêcher = stop sb from doing."], ["stop doing", "Sans complément, c'est « arrêter de faire » : stop smoking."]],
-    tip: "From = éloigner de : on tient quelqu'un loin de l'action. Stop me from going."
-  },
-  "prevent sb from doing": {
-    alt: [["stop sb from doing", "plus oral"], ["hinder", "freiner"], ["preclude", "soutenu"]],
-    err: [["prevent sb to do", "Faute très fréquente : prevent sb FROM doing."], ["prevent sb of doing", "La préposition est from."], ["prévenir = prevent", "Faux-ami : prévenir quelqu'un = warn sb. Prevent = empêcher."]],
-    tip: "Prevent = empêcher, pas prévenir. Mieux vaut prévenir que guérir = prevention is better than cure."
-  },
-  "keep sb from doing": {
-    alt: [["stop sb from doing"], ["hold sb back", "retenir"], ["keep sb from sth", "empêcher de faire qqch (keep you from your work)"]],
-    err: [["keep sb to do", "La structure est keep sb FROM doing."], ["keep doing", "Sans « from », c'est continuer : keep going."]],
-    tip: "Keep going = continue ; keep sb FROM going = empêche-le d'y aller. Tout est dans le « from »."
-  },
-  "hinder": {
-    alt: [["hamper", "entraver"], ["impede", "soutenu"], ["slow down", "ralentir, plus simple"]],
-    err: [["hinter", "Le mot s'écrit hinder, prononcé « HIN-dur »."], ["hinder = empêcher totalement", "Hinder freine, il n'empêche pas tout à fait. Pour empêcher : prevent."]],
-    tip: "Hinder comme « behind » : ça te retient en arrière, ça te ralentit."
-  },
-  "deter": {
-    alt: [["discourage"], ["dissuade", "plus formel"], ["put off", "familier"]],
-    err: [["deter to do", "deter sb FROM doing."], ["defer", "Defer = reporter. Deter = dissuader."]],
-    tip: "Deter = faire peur (terror) pour dissuader. Le nom : a deterrent, un moyen de dissuasion."
-  },
-  "thwart": {
-    alt: [["foil", "déjouer"], ["frustrate", "faire échouer"], ["stymie", "soutenu"]],
-    err: [["thwart sb to do", "On contrecarre un plan ou quelqu'un : thwart a plan, thwart sb."]],
-    tip: "Le th se fait langue entre les dents : « THWORT ». Fréquent dans les infos : police thwarted a plot."
-  },
-  "preclude": {
-    alt: [["rule out", "exclure"], ["prevent", "plus courant"], ["make impossible"]],
-    err: [["preclude to do", "preclude sb FROM doing, ou preclude sth."], ["prelude", "Prelude = prélude (musique). Preclude = rendre impossible."]],
-    tip: "Pre (avant) + clude (fermer) : fermer la porte d'avance. Soutenu, fréquent à l'écrit."
-  },
+ "even though": {
+  "alt": [
+   [
+    "although",
+    "plus écrit"
+   ],
+   [
+    "even if",
+    "même si (hypothèse)"
+   ]
+  ],
+  "err": [
+   [
+    "*even that",
+    "Calque de « même que » : on dit even though."
+   ],
+   [
+    "even if",
+    "Even if = même si (hypothétique). Pour un fait réel : even though."
+   ]
+  ],
+  "tip": "Even though = « bien que » pour un fait vrai ; even if = « même si » pour une hypothèse. Prononcé « ee-vun THOH », le though est léger."
+ },
+ "by and large": {
+  "alt": [
+   [
+    "overall"
+   ],
+   [
+    "on the whole"
+   ],
+   [
+    "generally speaking"
+   ]
+  ],
+  "err": [
+   [
+    "*by long and large",
+    "L'expression est figée : by and large."
+   ],
+   [
+    "*by and big",
+    "C'est « by and large », sans variante."
+   ]
+  ],
+  "tip": "Vient de la marine à voile (naviguer « by » et « large »). Mot à mot, trois mots seulement : by-and-large."
+ },
+ "half-cousins": {
+  "alt": [
+   [
+    "half-brother / half-sister",
+    "demi-frère / demi-sœur"
+   ]
+  ],
+  "err": [
+   [
+    "*semi-cousins",
+    "On ne dit pas semi : half-cousins, comme half-brother."
+   ]
+  ],
+  "tip": "En anglais, « demi » de famille = half : half-brother, half-sister, half-cousin."
+ },
+ "full cousins": {
+  "alt": [
+   [
+    "first cousins",
+    "le plus courant"
+   ],
+   [
+    "cousins",
+    "tout court"
+   ]
+  ],
+  "err": [
+   [
+    "*german cousins",
+    "Germain se dit first cousin ou full cousin, jamais german."
+   ]
+  ],
+  "tip": "First cousins (ou full cousins) : mêmes grands-parents des deux côtés. Second cousins : arrière-grands-parents en commun."
+ },
+ "at the very least": {
+  "alt": [
+   [
+    "at least",
+    "au moins"
+   ],
+   [
+    "at a minimum",
+    "au minimum"
+   ]
+  ],
+  "err": [
+   [
+    "*on very least",
+    "La préposition est at : at the very least."
+   ],
+   [
+    "*at the very less",
+    "Least, pas less."
+   ]
+  ],
+  "tip": "At least + very pour insister : at the VERY least, comme the very best."
+ },
+ "the Worlds final": {
+  "alt": [
+   [
+    "the World Championship final"
+   ],
+   [
+    "the finals",
+    "aux États-Unis, souvent au pluriel"
+   ]
+  ],
+  "err": [
+   [
+    "*the world final",
+    "Le tournoi s'appelle « Worlds » : the Worlds final."
+   ]
+  ],
+  "tip": "Worlds est le nom du tournoi, donc il garde son s, comme the Olympics."
+ },
+ "sixteen of them": {
+  "alt": [
+   [
+    "most of them"
+   ],
+   [
+    "some of them"
+   ],
+   [
+    "all of them"
+   ]
+  ],
+  "err": [
+   [
+    "*sixteen from them",
+    "« D'entre eux » = of them, pas from them."
+   ],
+   [
+    "*sixteen of they",
+    "Après of : them, pas they."
+   ]
+  ],
+  "tip": "Nombre + of them : two of them, sixteen of them, none of them."
+ },
+ "ask sb": {
+  "alt": [
+   [
+    "ask sb for sth",
+    "demander qqch à qqn"
+   ],
+   [
+    "ask sb to do sth",
+    "demander à qqn de faire"
+   ]
+  ],
+  "err": [
+   [
+    "*ask to my parents",
+    "Ask est direct : ask my parents, sans to."
+   ],
+   [
+    "*ask a question to sb",
+    "On dit ask sb a question."
+   ]
+  ],
+  "tip": "Demander À quelqu'un = ask somebody, sans préposition. Le « to » vient seulement avant un verbe : ask him to come."
+ },
+ "I was scared we'd lose": {
+  "alt": [
+   [
+    "I was afraid we'd lose"
+   ],
+   [
+    "I was worried we might lose"
+   ]
+  ],
+  "err": [
+   [
+    "*scared we lose",
+    "Il manque le conditionnel : we'd lose (we would lose)."
+   ]
+  ],
+  "tip": "Peur d'un futur vu depuis le passé → would : I was scared we'd lose. Le 'd se prononce, très court : « weed »."
+ },
+ "the same grandma and granddad": {
+  "alt": [
+   [
+    "the same grandparents",
+    "plus simple"
+   ]
+  ],
+  "err": [
+   [
+    "*same grandma and same granddad",
+    "Same prend toujours the : the same grandma."
+   ]
+  ],
+  "tip": "Toujours THE same, comme en français « le même »."
+ },
+ "the last time I… was": {
+  "alt": [
+   [
+    "I haven't lost my connection in over six years",
+    "autre tournure"
+   ]
+  ],
+  "err": [
+   [
+    "*I just lost internet more than six years ago",
+    "Just (= à l'instant) et six years ago se contredisent."
+   ],
+   [
+    "*the last time I have lost",
+    "Fait daté → prétérit : the last time I lost."
+   ]
+  ],
+  "tip": "The last time + prétérit + was + date : the last time I saw him was in 2019."
+ }
 });
