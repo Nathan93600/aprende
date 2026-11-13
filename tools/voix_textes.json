@@ -4855,304 +4855,266 @@
 "k": "go down",
 "s": "go down",
 "id": "49403154d4",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "What went down at the meeting yesterday?",
 "s": "What went down at the meeting yesterday?",
 "id": "c54d9a621c",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "For some reason, the pipeline broke overnight.",
 "s": "For some reason, the pipeline broke overnight.",
 "id": "7cfdd37633",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "en",
 "k": "sniffing",
 "s": "sniffing",
 "id": "9703a23a7a",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "Stop sniffing, just blow your nose!",
 "s": "Stop sniffing, just blow your nose!",
 "id": "b8fb164341",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "en",
 "k": "grub",
 "s": "grub",
 "id": "5978faea0a",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "I'm starving — let's grab some grub.",
 "s": "I'm starving — let's grab some grub.",
 "id": "7b36c8690d",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "en",
 "k": "make one's way",
 "s": "make one's way",
 "id": "68126c888d",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "en",
 "k": "She made her way through the crowded subway.",
 "s": "She made her way through the crowded subway.",
 "id": "936dba7112",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "wander off",
 "s": "wander off",
 "id": "3c3a40dd42",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "Don't let the kids wander off at the park.",
 "s": "Don't let the kids wander off at the park.",
 "id": "49bdd454c8",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "budge",
 "s": "budge",
 "id": "10cbd6c753",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "en",
 "k": "I tried to move the desk but it won't budge.",
 "s": "I tried to move the desk but it won't budge.",
 "id": "269a41ff69",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "en",
 "k": "drop off",
 "s": "drop off",
 "id": "e1009019a2",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "Can you drop me off at the station?",
 "s": "Can you drop me off at the station?",
 "id": "c2fdf5745e",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "nod off",
 "s": "nod off",
 "id": "891f1021c1",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "en",
 "k": "I nodded off during the last episode.",
 "s": "I nodded off during the last episode.",
 "id": "48a66e4964",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "toothpick",
 "s": "toothpick",
 "id": "29ab25afcc",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "He was chewing on a toothpick like a cowboy.",
 "s": "He was chewing on a toothpick like a cowboy.",
 "id": "315da1c6f6",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "run by",
 "s": "run by",
 "id": "9159c41946",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "Let me run this by my manager first.",
 "s": "Let me run this by my manager first.",
 "id": "e51a360454",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "quote",
 "s": "quote",
 "id": "943a11c9ba",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "Can you get me a quote for the repair?",
 "s": "Can you get me a quote for the repair?",
 "id": "4801d7d637",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "en",
 "k": "leverage",
 "s": "leverage",
 "id": "9cf683654a",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "We should leverage this dataset for the audit.",
 "s": "We should leverage this dataset for the audit.",
 "id": "083fe8cdbf",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "en",
 "k": "have the upper hand",
 "s": "have the upper hand",
 "id": "0ff6ec7d8f",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "en",
 "k": "After that reveal, she had the upper hand.",
 "s": "After that reveal, she had the upper hand.",
 "id": "65e9d3fed1",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "en",
 "k": "get an earful",
 "s": "get an earful",
 "id": "4f1febac31",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "en",
 "k": "I got an earful from my manager about the deadline.",
 "s": "I got an earful from my manager about the deadline.",
 "id": "bd1820d58c",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "be under the impression",
 "s": "be under the impression",
 "id": "9cc13042ba",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "I was under the impression we had agreed on Friday.",
 "s": "I was under the impression we had agreed on Friday.",
 "id": "560c5e66ba",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "get tricky",
 "s": "get tricky",
 "id": "05e2552ea9",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "en",
 "k": "Things get tricky when you add edge cases.",
 "s": "Things get tricky when you add edge cases.",
 "id": "67e604eb68",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "hatch",
 "s": "hatch",
 "id": "8ef3b454d7",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "en",
 "k": "They hatched a plan to sneak out early.",
 "s": "They hatched a plan to sneak out early.",
 "id": "6d3f8ec482",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "Hold on, let me pull up the file.",
 "s": "Hold on, let me pull up the file.",
 "id": "1e5693fe9a",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "help out",
 "s": "help out",
 "id": "5b32863005",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "en",
 "k": "Can you help out with the migration script?",
 "s": "Can you help out with the migration script?",
 "id": "39b6c4dd5d",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "en",
@@ -15512,88 +15474,77 @@
 "k": "No gastes tanto, que no llegamos a fin de mes.",
 "s": "No gastes tanto, que no llegamos a fin de mes.",
 "id": "249dc712e3",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "es",
 "k": "alquileres",
 "s": "alquileres",
 "id": "5a3d1b9529",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "es",
 "k": "Los alquileres en Madrid no paran de subir.",
 "s": "Los alquileres en Madrid no paran de subir.",
 "id": "c624bedeb8",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "es",
 "k": "palillo",
 "s": "palillo",
 "id": "794173ced1",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "es",
 "k": "¿Me pasas un palillo? Tengo algo entre los dientes.",
 "s": "¿Me pasas un palillo? Tengo algo entre los dientes.",
 "id": "e1f6c43e19",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "es",
 "k": "estancarse",
 "s": "estancarse",
 "id": "b69b7a709a",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "es",
 "k": "Siento que mi carrera se ha estancado.",
 "s": "Siento que mi carrera se ha estancado.",
 "id": "5bb00aa4b4",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "es",
 "k": "mudarse",
 "s": "mudarse",
 "id": "10abde866e",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "es",
 "k": "Nos mudamos a un piso más grande el mes que viene.",
 "s": "Nos mudamos a un piso más grande el mes que viene.",
 "id": "e568778550",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "es",
 "k": "tenerlo grabado en la mente",
 "s": "tenerlo grabado en la mente",
 "id": "6f284dc372",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "es",
 "k": "Esa melodía la tengo grabada en la mente.",
 "s": "Esa melodía la tengo grabada en la mente.",
 "id": "19ba328661",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "es",
@@ -15845,1231 +15796,1077 @@
 "k": "no parar quieto",
 "s": "no parar quieto",
 "id": "1e3e41e748",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "es",
 "k": "Este niño no para quieto ni un segundo.",
 "s": "Este niño no para quieto ni un segundo.",
 "id": "6b600e3bb1",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "es",
 "k": "estate quieto",
 "s": "estate quieto",
 "id": "1c36cf6865",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "es",
 "k": "¡Estate quieto, que te voy a peinar!",
 "s": "¡Estate quieto, que te voy a peinar!",
 "id": "be252e9c1a",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "es",
 "k": "quédate quieto",
 "s": "quédate quieto",
 "id": "a422db9296",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "es",
 "k": "Quédate quieto, que no puedo sacarte la foto.",
 "s": "Quédate quieto, que no puedo sacarte la foto.",
 "id": "ec39d0eda3",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "es",
 "k": "no te muevas",
 "s": "no te muevas",
 "id": "17bbe1001e",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "es",
 "k": "No te muevas, tienes una abeja en el hombro.",
 "s": "No te muevas, tienes una abeja en el hombro.",
 "id": "03595ef300",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "es",
 "k": "para ya",
 "s": "para ya",
 "id": "a6e6d3fced",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "es",
 "k": "¡Para ya de tocar todo!",
 "s": "¡Para ya de tocar todo!",
 "id": "5e7e51b9dd",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "es",
 "k": "ser un culo inquieto",
 "s": "ser un culo inquieto",
 "id": "da46e30769",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "es",
 "k": "Mi hermano es un culo inquieto, no puede estar sentado.",
 "s": "Mi hermano es un culo inquieto, no puede estar sentado.",
 "id": "89792e3eb9",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "es",
 "k": "prestar atención",
 "s": "prestar atención",
 "id": "031150c69e",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "es",
 "k": "No presta atención en clase.",
 "s": "No presta atención en clase.",
 "id": "76bac30f04",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "es",
 "k": "aburrirse",
 "s": "aburrirse",
 "id": "187c367731",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "es",
 "k": "El niño se aburre en clase.",
 "s": "El niño se aburre en clase.",
 "id": "e0ff26456b",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "es",
 "k": "estar sentado",
 "s": "estar sentado",
 "id": "d5c3bbed99",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "es",
 "k": "Lleva dos horas sentado.",
 "s": "Lleva dos horas sentado.",
 "id": "bb42319ad7",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "es",
 "k": "pedir",
 "s": "pedir",
 "id": "03e2f54b56",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "es",
 "k": "Pide ayuda cuando la necesita.",
 "s": "Pide ayuda cuando la necesita.",
 "id": "2a9b18103d",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "es",
 "k": "el aula",
 "s": "el aula",
 "id": "96e9c2402f",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "es",
 "k": "Las aulas están llenas.",
 "s": "Las aulas están llenas.",
 "id": "283cfea0f4",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "es",
 "k": "el encaje",
 "s": "el encaje",
 "id": "a9dddbf225",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "es",
 "k": "Le cuesta encontrar su encaje en el colegio.",
 "s": "Le cuesta encontrar su encaje en el colegio.",
 "id": "2910ad1ee4",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "es",
 "k": "quieto",
 "s": "quieto",
 "id": "7088a1c227",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "es",
 "k": "El mar está quieto hoy.",
 "s": "El mar está quieto hoy.",
 "id": "667ac69f0b",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "es",
 "k": "la fábrica",
 "s": "la fábrica",
 "id": "7f10c71dce",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "es",
 "k": "Mi tío trabaja en una fábrica de coches.",
 "s": "Mi tío trabaja en una fábrica de coches.",
 "id": "df0e317340",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "es",
 "k": "la planta",
 "s": "la planta",
 "id": "900e1fdaf5",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "es",
 "k": "Van a cerrar la planta de Valladolid.",
 "s": "Van a cerrar la planta de Valladolid.",
 "id": "b794875dc2",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "es",
 "k": "la usina",
 "s": "la usina",
 "id": "224f4919e5",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "es",
 "k": "La usina eléctrica abastece a toda la ciudad.",
 "s": "La usina eléctrica abastece a toda la ciudad.",
 "id": "5e28859678",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "es",
 "k": "impedir",
 "s": "impedir",
 "id": "a2d5157f60",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "es",
 "k": "La lluvia nos impidió salir.",
 "s": "La lluvia nos impidió salir.",
 "id": "c131a07214",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "es",
 "k": "evitar que",
 "s": "evitar que",
 "id": "017a651b41",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "es",
 "k": "Cierra la ventana para evitar que entre el frío.",
 "s": "Cierra la ventana para evitar que entre el frío.",
 "id": "67d709d8e8",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "es",
 "k": "no dejar",
 "s": "no dejar",
 "id": "b36f8106ad",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "es",
 "k": "Los vecinos no me dejan dormir.",
 "s": "Los vecinos no me dejan dormir.",
 "id": "ff150072ed",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "es",
 "k": "habría que",
 "s": "habría que",
 "id": "9683572d02",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "es",
 "k": "Este niño no para quieto, habría que recetarle algo.",
 "s": "Este niño no para quieto, habría que recetarle algo.",
 "id": "e798392f0e",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "es",
 "k": "recetar",
 "s": "recetar",
 "id": "a6b5520978",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "es",
 "k": "El médico me recetó antibióticos.",
 "s": "El médico me recetó antibióticos.",
 "id": "1ef5104ba5",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "es",
 "k": "la iatrogenia",
 "s": "la iatrogenia",
 "id": "ac40b55b9a",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "es",
 "k": "La iatrogenia es más frecuente en las personas mayores.",
 "s": "La iatrogenia es más frecuente en las personas mayores.",
 "id": "ca68251dc3",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "es",
 "k": "cotidiano",
 "s": "cotidiano",
 "id": "7c59ed4b3f",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "es",
 "k": "La vida cotidiana en el pueblo es tranquila.",
 "s": "La vida cotidiana en el pueblo es tranquila.",
 "id": "2eb1279462",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "es",
 "k": "se creó con",
 "s": "se creó con",
 "id": "5073d6cc3b",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "es",
 "k": "La escuela se creó con la idea de ayudar a los niños.",
 "s": "La escuela se creó con la idea de ayudar a los niños.",
 "id": "20129644f1",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "es",
 "k": "el trastorno",
 "s": "el trastorno",
 "id": "f35e819a0a",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "es",
 "k": "Tiene un trastorno del sueño.",
 "s": "Tiene un trastorno del sueño.",
 "id": "510d6835f4",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "es",
 "k": "la pastilla",
 "s": "la pastilla",
 "id": "5d9e295093",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "es",
 "k": "Tómate una pastilla para el dolor de cabeza.",
 "s": "Tómate una pastilla para el dolor de cabeza.",
 "id": "67e78c573e",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "es",
 "k": "Sí, todo está en el cofre. Solo debo prender las entradas.",
 "s": "Sí, todo está en el cofre. Solo debo prender las entradas.",
 "id": "fe52c70ac6",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "es",
 "k": "El problema no es la plantilla, pero el entrenador.",
 "s": "El problema no es la plantilla, pero el entrenador.",
 "id": "a9c22cb872",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "es",
 "k": "Gracias por venir. Te lo digo claro: Leo no para quieto. En el aula se levanta cada cinco minutos.",
 "s": "Gracias por venir. Te lo digo claro: Leo no para quieto. En el aula se levanta cada cinco minutos.",
 "id": "fe5a0166b6",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "es",
 "k": "Le digo «estate quieto» cien veces al día, pero nada. Y luego se aburre y deja de prestar atención.",
 "s": "Le digo «estate quieto» cien veces al día, pero nada. Y luego se aburre y deja de prestar atención.",
 "id": "fc1e2af52d",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "es",
 "k": "En casa es igual: no presta atención y no aguanta ni diez minutos sentado.",
 "s": "En casa es igual: no presta atención y no aguanta ni diez minutos sentado.",
 "id": "7a5d7beb77",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "es",
 "k": "Lo sé. Es un culo inquieto, como decimos aquí.",
 "s": "Lo sé. Es un culo inquieto, como decimos aquí.",
 "id": "7e01c72b39",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "es",
 "k": "En casa es igual: no hace atención y no puede ser sentado.",
 "s": "En casa es igual: no hace atención y no puede ser sentado.",
 "id": "2fa4cc47bb",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "es",
 "k": "¿«No hace atención»? Querrás decir que no presta atención. Y que no puede estar sentado, sí.",
 "s": "¿«No hace atención»? Querrás decir que no presta atención. Y que no puede estar sentado, sí.",
 "id": "289124f49c",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "es",
 "k": "En casa también se mueve mucho y no escucha.",
 "s": "En casa también se mueve mucho y no escucha.",
 "id": "af47906b84",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "es",
 "k": "Ya. Es lo que veo cada día.",
 "s": "Ya. Es lo que veo cada día.",
 "id": "941a75560b",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "es",
 "k": "El otro día un padre me dijo: «Habría que recetarle algo, una pastilla para que se calme».",
 "s": "El otro día un padre me dijo: «Habría que recetarle algo, una pastilla para que se calme».",
 "id": "4c81241637",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "es",
 "k": "Antes de recetarle nada, habría que ver si de verdad tiene un trastorno.",
 "s": "Antes de recetarle nada, habría que ver si de verdad tiene un trastorno.",
 "id": "0e52f41ca8",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "es",
 "k": "Totalmente. Una pastilla puede tener efectos secundarios. Eso se llama iatrogenia.",
 "s": "Totalmente. Una pastilla puede tener efectos secundarios. Eso se llama iatrogenia.",
 "id": "f0d440325a",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "es",
 "k": "Antes de ordenarle nada, se debe ver si tiene un desorden.",
 "s": "Antes de ordenarle nada, se debe ver si tiene un desorden.",
 "id": "7f365094d0",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "es",
 "k": "¿Ordenarle? Recetarle, dirás. Y no es un desorden, es un trastorno, si lo hay.",
 "s": "¿Ordenarle? Recetarle, dirás. Y no es un desorden, es un trastorno, si lo hay.",
 "id": "53e2b2b0b0",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "es",
 "k": "No sé si es buena idea darle medicinas.",
 "s": "No sé si es buena idea darle medicinas.",
 "id": "05bbf9cecc",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "es",
 "k": "Yo tampoco. Primero hay que entender qué le pasa.",
 "s": "Yo tampoco. Primero hay que entender qué le pasa.",
 "id": "6c3f4ed809",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "es",
 "k": "Además, el colegio se creó con una idea: que cada niño encuentre su encaje. Nuestro trabajo es evitar que Leo se sienta fuera de lugar.",
 "s": "Además, el colegio se creó con una idea: que cada niño encuentre su encaje. Nuestro trabajo es evitar que Leo se sienta fuera de lugar.",
 "id": "133910f76c",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "es",
 "k": "En la vida cotidiana, ¿qué le impide concentrarse? ¿Duerme bien?",
 "s": "En la vida cotidiana, ¿qué le impide concentrarse? ¿Duerme bien?",
 "id": "98a3086c04",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "es",
 "k": "No mucho. Los vecinos no le dejan dormir: ponen la música hasta las doce.",
 "s": "No mucho. Los vecinos no le dejan dormir: ponen la música hasta las doce.",
 "id": "125e161a63",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "es",
 "k": "Eso lo explica todo. Un niño cansado no puede estar quieto.",
 "s": "Eso lo explica todo. Un niño cansado no puede estar quieto.",
 "id": "c71d1f65c8",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "es",
 "k": "No mucho. Los vecinos le impiden de dormir con la música.",
 "s": "No mucho. Los vecinos le impiden de dormir con la música.",
 "id": "2a45affda0",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "es",
 "k": "Le impiden dormir, sin «de». Pero entiendo: eso lo explica todo.",
 "s": "Le impiden dormir, sin «de». Pero entiendo: eso lo explica todo.",
 "id": "f2ac1abf89",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "es",
 "k": "No mucho, hay mucho ruido por la noche.",
 "s": "No mucho, hay mucho ruido por la noche.",
 "id": "5ef5c2795d",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "es",
 "k": "Pues eso influye mucho.",
 "s": "Pues eso influye mucho.",
 "id": "3098693565",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "es",
 "k": "Encima, sus padres se mudan el mes que viene: con lo que han subido los alquileres, se van a un piso más pequeño.",
 "s": "Encima, sus padres se mudan el mes que viene: con lo que han subido los alquileres, se van a un piso más pequeño.",
 "id": "355cb1c048",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "es",
 "k": "Muchos cambios a la vez. Le pediré a la orientadora que hable con él. Y tú, dile que cuando se pone nervioso, me pida salir un momento.",
 "s": "Muchos cambios a la vez. Le pediré a la orientadora que hable con él. Y tú, dile que cuando se pone nervioso, me pida salir un momento.",
 "id": "4930adc51d",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "es",
 "k": "Y una última cosa: ¡que no gaste toda la paga en chuches! Ayer se comió una bolsa entera en el recreo.",
 "s": "Y una última cosa: ¡que no gaste toda la paga en chuches! Ayer se comió una bolsa entera en el recreo.",
 "id": "c7d11348f1",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "es",
 "k": "Ja, ja. Eso lo tengo grabado en la mente. Gracias, Marta.",
 "s": "Ja, ja. Eso lo tengo grabado en la mente. Gracias, Marta.",
 "id": "ae5ee0867d",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "factory",
 "s": "factory",
 "id": "9a272e4b56",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "She got a job at a car factory.",
 "s": "She got a job at a car factory.",
 "id": "eb0900b6b2",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "plant",
 "s": "plant",
 "id": "89c6eca87e",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "They're shutting down the plant next year.",
 "s": "They're shutting down the plant next year.",
 "id": "001d113150",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "facility",
 "s": "facility",
 "id": "3f13496bfe",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "The company is opening a new facility in Texas.",
 "s": "The company is opening a new facility in Texas.",
 "id": "9f1e8b729d",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "en",
 "k": "mill",
 "s": "mill",
 "id": "4048ce9957",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "en",
 "k": "The town grew up around the old steel mill.",
 "s": "The town grew up around the old steel mill.",
 "id": "574fd6a0e4",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "sweatshop",
 "s": "sweatshop",
 "id": "e89ad0f6db",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "en",
 "k": "Those cheap clothes were made in sweatshops.",
 "s": "Those cheap clothes were made in sweatshops.",
 "id": "54e6cc2bf1",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "en",
 "k": "works",
 "s": "works",
 "id": "7043930906",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "He spent forty years at the gas works.",
 "s": "He spent forty years at the gas works.",
 "id": "129e0f4ecc",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "stop sb from doing",
 "s": "stop somebody from doing",
 "id": "cf48c0c0ef",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "en",
 "k": "Nothing's gonna stop me from going.",
 "s": "Nothing's gonna stop me from going.",
 "id": "17d07cd1dc",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "prevent sb from doing",
 "s": "prevent somebody from doing",
 "id": "1aa90aa675",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "en",
 "k": "The fog prevented the plane from landing.",
 "s": "The fog prevented the plane from landing.",
 "id": "0547b862ae",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "keep sb from doing",
 "s": "keep somebody from doing",
 "id": "13e2713241",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "en",
 "k": "Don't let me keep you from your work.",
 "s": "Don't let me keep you from your work.",
 "id": "da6592ce12",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "hinder",
 "s": "hinder",
 "id": "3b009a9e63",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "en",
 "k": "The bad weather hindered the rescue efforts.",
 "s": "The bad weather hindered the rescue efforts.",
 "id": "d9d71ac1f4",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "deter",
 "s": "deter",
 "id": "784bb12de4",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "High prices deter people from buying.",
 "s": "High prices deter people from buying.",
 "id": "e9125f27ad",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "en",
 "k": "thwart",
 "s": "thwart",
 "id": "e191281bfe",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "Police thwarted the attack.",
 "s": "Police thwarted the attack.",
 "id": "434bbf825c",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "preclude",
 "s": "preclude",
 "id": "08539052ac",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "His injury precludes him from playing.",
 "s": "His injury precludes him from playing.",
 "id": "0b50718d5d",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "en",
 "k": "Yes, internet fell since ten minutes.",
 "s": "Yes, internet fell since ten minutes.",
 "id": "9d985c978a",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "Wait, I have an idea. We pass by the coffee and we take food.",
 "s": "Wait, I have an idea. We pass by the coffee and we take food.",
 "id": "b66b5d8ced",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "I am agree, but you must me one.",
 "s": "I am agree, but you must me one.",
 "id": "e8c3c378a3",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "So, here's the deal: corporate wants to shut down the Dayton plant by next year.",
 "s": "So, here's the deal: corporate wants to shut down the Dayton plant by next year.",
 "id": "439f246f5c",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "They say the facility is too old. Half the machines date back to when it was still a steel mill.",
 "s": "They say the facility is too old. Half the machines date back to when it was still a steel mill.",
 "id": "084e386228",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "Well, nothing's gonna stop me from fighting for that factory.",
 "s": "Well, nothing's gonna stop me from fighting for that factory.",
 "id": "aa0c5f47dc",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "I figured you'd say that.",
 "s": "I figured you'd say that.",
 "id": "6d50489a60",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "Well, nothing will prevent me to fight for this usine.",
 "s": "Well, nothing will prevent me to fight for this usine.",
 "id": "03ed42e67d",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "Prevent you FROM fighting, you mean. And it's a factory, not a \"usine\".",
 "s": "Prevent you FROM fighting, you mean. And it's a factory, not a \"usine\".",
 "id": "eb054451ff",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "I really want to keep the factory open.",
 "s": "I really want to keep the factory open.",
 "id": "200721d7c4",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "Yeah, me too.",
 "s": "Yeah, me too.",
 "id": "b6daa5952d",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "The problem is the competition. Their products are made in sweatshops overseas, so they're dirt cheap.",
 "s": "The problem is the competition. Their products are made in sweatshops overseas, so they're dirt cheap.",
 "id": "5dda75601b",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "For some reason, nobody talks about that. Low wages don't deter big brands from buying there.",
 "s": "For some reason, nobody talks about that. Low wages don't deter big brands from buying there.",
 "id": "95b451a413",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "And now there's a strike. Honestly, it's gonna hinder production for weeks.",
 "s": "And now there's a strike. Honestly, it's gonna hinder production for weeks.",
 "id": "bc283fa80d",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "Let me run something by you before we talk to the boss.",
 "s": "Let me run something by you before we talk to the boss.",
 "id": "26b6b5ee00",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "Sure, shoot.",
 "s": "Sure, shoot.",
 "id": "81e9a26f49",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "Let me run into you an idea before the boss.",
 "s": "Let me run into you an idea before the boss.",
 "id": "1b510fbfc8",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "Run it BY me, you mean? Run into is when you bump into someone. Go ahead.",
 "s": "Run it BY me, you mean? Run into is when you bump into someone. Go ahead.",
 "id": "c720da2352",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "I have an idea. Can I tell you?",
 "s": "I have an idea. Can I tell you?",
 "id": "b5aab452af",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "Go for it.",
 "s": "Go for it.",
 "id": "0374750c90",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "We could leverage the old gas works next door. Turn it into a training center. That way, we'd have the upper hand in the negotiation.",
 "s": "We could leverage the old gas works next door. Turn it into a training center. That way, we'd have the upper hand in the negotiation.",
 "id": "f5b5aadf4d",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "Hold on. I was under the impression the land had been sold. Doesn't that preclude any expansion?",
 "s": "Hold on. I was under the impression the land had been sold. Doesn't that preclude any expansion?",
 "id": "e07b8ac7d3",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "That's where it gets tricky. The sale fell through last month, but corporate tried to keep us from finding out.",
 "s": "That's where it gets tricky. The sale fell through last month, but corporate tried to keep us from finding out.",
 "id": "c02f2fef19",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "No way. So they hatched a plan to close us down quietly… and we can thwart it.",
 "s": "No way. So they hatched a plan to close us down quietly… and we can thwart it.",
 "id": "9372397489",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "The boss is gonna be mad. I'll probably get an earful. But if he won't budge, we go to the union.",
 "s": "The boss is gonna be mad. I'll probably get an earful. But if he won't budge, we go to the union.",
 "id": "3413ad9bf6",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "Deal. Can you help out with the numbers tonight? I'll grab some grub for both of us.",
 "s": "Deal. Can you help out with the numbers tonight? I'll grab some grub for both of us.",
 "id": "65e1c4bcc3",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "Wake up! You nodded off for like twenty minutes. Some co-pilot you are.",
 "s": "Wake up! You nodded off for like twenty minutes. Some co-pilot you are.",
 "id": "5de4d7e668",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "en",
 "k": "Sorry! What went down while I was out?",
 "s": "Sorry! What went down while I was out?",
 "id": "68ba060c0a",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "Oh, not much. Just a dog wandering off in the middle of the highway.",
 "s": "Oh, not much. Just a dog wandering off in the middle of the highway.",
 "id": "a8ff8bd032",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "en",
 "k": "Sorry! What did go down when I slept?",
 "s": "Sorry! What did go down when I slept?",
 "id": "4752d90f01",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "What went down, you mean? A dog wandering off in the middle of the highway.",
 "s": "What went down, you mean? A dog wandering off in the middle of the highway.",
 "id": "1bcbe16d70",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "en",
 "k": "Sorry! What happened?",
 "s": "Sorry! What happened?",
 "id": "6157bd46f7",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "A dog wandering off in the middle of the highway.",
 "s": "A dog wandering off in the middle of the highway.",
 "id": "a875605159",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "en",
 "k": "It wouldn't budge. I had to honk like crazy. For some reason, it just sat there sniffing the asphalt.",
 "s": "It wouldn't budge. I had to honk like crazy. For some reason, it just sat there sniffing the asphalt.",
 "id": "ee9f5c0bdf",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "en",
 "k": "Hold on, is that smoke coming out of the hood?",
 "s": "Hold on, is that smoke coming out of the hood?",
 "id": "2aa6c07e0c",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "Great. I was under the impression this car had just been serviced.",
 "s": "Great. I was under the impression this car had just been serviced.",
 "id": "4d11265420",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "en",
 "k": "Let's pull over and get a quote from the next garage.",
 "s": "Let's pull over and get a quote from the next garage.",
 "id": "8a7e3cfad4",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "Good call. There's one at the next exit.",
 "s": "Good call. There's one at the next exit.",
 "id": "6ee936e5ce",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "en",
 "k": "Let's stop and ask a devis to the next garage.",
 "s": "Let's stop and ask a devis to the next garage.",
 "id": "89d13641ad",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "A quote, you mean? Yeah, there's a garage at the next exit.",
 "s": "A quote, you mean? Yeah, there's a garage at the next exit.",
 "id": "7055069a4a",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "en",
 "k": "Let's find a mechanic.",
 "s": "Let's find a mechanic.",
 "id": "47429d1783",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "Yeah, next exit.",
 "s": "Yeah, next exit.",
 "id": "635bbdfbbf",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "en",
 "k": "The mechanic says it'll take two hours. Things just got tricky.",
 "s": "The mechanic says it'll take two hours. Things just got tricky.",
 "id": "5650c16b0b",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "en",
 "k": "Let's make our way to that diner across the street. I'm starving. I need some grub.",
 "s": "Let's make our way to that diner across the street. I'm starving. I need some grub.",
 "id": "9a2c678539",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "Look at that guy at the counter, chewing on a toothpick like a cowboy. He's been staring at us.",
 "s": "Look at that guy at the counter, chewing on a toothpick like a cowboy. He's been staring at us.",
 "id": "b4ef406f4f",
-"v": 1,
-"n": 1
+"v": 1
 },
 {
 "l": "en",
 "k": "Relax. He's probably just the owner. Hey, can you drop me off at my place when we get back? I'll help out with the gas money.",
 "s": "Relax. He's probably just the owner. Hey, can you drop me off at my place when we get back? I'll help out with the gas money.",
 "id": "639776ba46",
-"v": 0,
-"n": 1
+"v": 0
 },
 {
 "l": "en",
 "k": "Deal. But next time, you drive. You can't nod off at the wheel.",
 "s": "Deal. But next time, you drive. You can't nod off at the wheel.",
 "id": "6ddf67fff8",
-"v": 1,
-"n": 1
+"v": 1
 }
 ]
