@@ -34,6 +34,11 @@ WORKERS = 4
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(HERE, "aprende-voix")
 STATE = os.path.join(OUT, "etat.json")
+# Ta clé API Google Cloud (commence par AIza…), entre les guillemets. Ne pousse jamais ce fichier
+# modifié sur GitHub. Autre solution, qui survit aux mises à jour du script : un fichier
+# cle_google.txt à côté du script, contenant seulement la clé.
+CLE_API = ""
+
 LIST_URL = "https://nathan93600.github.io/aprende/tools/voix_textes.json"
 BASE = os.environ.get("VOIX_BASE", "https://texttospeech.googleapis.com/v1/")
 
@@ -126,7 +131,10 @@ def main():
     if not todo:
         return finish(jobs, path)
 
-    key = os.environ.get("GOOGLE_TTS_KEY") or getpass.getpass("Clé API Google (Text-to-Speech) : ").strip()
+    fichier = os.path.join(HERE, "cle_google.txt")
+    key = (CLE_API.strip() or os.environ.get("GOOGLE_TTS_KEY")
+           or (open(fichier, encoding="utf-8").read().strip() if os.path.exists(fichier) else "")
+           or getpass.getpass("Clé API Google (Text-to-Speech) : ").strip())
     if not key:
         print("Pas de clé, arrêt."); return
 
