@@ -7,7 +7,7 @@ const C1_PLAN = {
   daily: [                        // tâches du jour (id, libellé, minutes) — auto : cochées par l'appli
     { id: "rev",   label: "Réviser l'anglais jusqu'à 0 carte à revoir", min: 20, auto: true },
     { id: "unit",  label: "Parcours anglais : 3 étapes d'unité (Perso d'abord)", min: 15, auto: true },
-    { id: "talk",  label: "Conversation avec Gemini sur le thème de la semaine", min: 25 },
+    { id: "talk",  label: "Conversation (ChatGPT ou Gemini) sur le thème de la semaine", min: 25 },
     { id: "listen", label: "Écoute active : 15 min de série ou podcast US, en répétant 5 répliques", min: 15 },
   ],
   phases: [
@@ -44,5 +44,5 @@ const C1_PLAN = {
     { focus: "Révision générale des points faibles relevés par Gemini", topic: "a free conversation: ask Gemini to push you on your weak spots", mature: 660 },
     { focus: "Semaine du test", topic: "a mock C1 speaking exam", mature: 690, milestone: "Test final EF SET : vise 61 ou plus (C1)" },
   ],
-  geminiPrompt: "Let's have a 20-minute conversation in American English about {topic}. Ask me follow-up questions and keep your turns short so I talk most of the time. This week I'm working on: {focus}. At the end, give me a report in French: my grammar mistakes, unnatural phrasings with more idiomatic alternatives, and pronunciation notes.",
+  geminiPrompt: "Let's have a 20-minute conversation in American English about {topic}. My level: conversational, but I struggle with fluency and spontaneous phrasing. This week I'm working on: {focus}. Make me talk as much as possible: ask open questions and follow-up questions, and keep your turns short. If I don't know a word, I may say it in French: keep going, and write down every French expression I use. My priorities: the final S (plurals and possessives), American English stress timing, fewer hesitations and repetitions, more active vocabulary, and paraphrasing naturally when I'm missing a word. At the end, give me a report in French with today's date: grammar mistakes, unnatural phrasings with idiomatic alternatives, the French words I used and how to say them in English, hesitations, pronunciation and stress-timing notes. Clearly separate what you actually observed from what you could not check.",
 };

@@ -11564,7 +11564,7 @@ function c1Render() {
       <div class="c1-focus">${W.focus}</div>
       ${W.milestone ? `<div class="c1-mile">⭐ ${W.milestone}</div>` : ''}
       <div class="c1-tasks">${tasks}</div>
-      <div class="c1-row"><button class="c1-btn" onclick="c1CopyPrompt()">📋 Copier le sujet pour Gemini</button><button class="c1-btn ghost" onclick="c1OpenPlan()">📅 Programme</button></div>
+      <div class="c1-row"><button class="c1-btn" onclick="c1CopyPrompt()">📋 Copier le sujet de conversation</button><button class="c1-btn ghost" onclick="c1OpenPlan()">📅 Programme</button></div>
       <div class="c1-row c1-meta"><span class="c1-days">${days}</span><span class="c1-mat"><span class="c1-bar"><b style="width:${pct}%"></b></span>${st.mature}/${W.mature} mots acquis</span></div>
       ${npdWarn}
     </div>`;
@@ -11576,7 +11576,7 @@ function c1SetNpd() { localStorage.setItem('srs_new_per_day', String(C1_PLAN.new
 function c1CopyPrompt() {
   const W = C1_PLAN.weeks[Math.min(C1_PLAN.weeks.length - 1, Math.max(0, c1WeekIndex()))];
   const txt = C1_PLAN.geminiPrompt.replace('{topic}', W.topic).replace('{focus}', W.focus);
-  const done = () => { try { showToast('📋 Copié : colle-le dans Gemini'); } catch(e) {} };
+  const done = () => { try { showToast('📋 Copié : colle-le dans ChatGPT ou Gemini'); } catch(e) {} };
   if(navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(done, () => prompt('Copie ce texte :', txt));
   else prompt('Copie ce texte :', txt);
 }
