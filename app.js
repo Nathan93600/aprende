@@ -7579,7 +7579,7 @@ function srsAutoEnqueueNew() {
       if(!card) return;
       const word = card[f]; if(!word) return;
       const k = srsKey(lang, word);
-      if(!data[k]) { data[k] = { ef: 2.5, interval: 0, reps: 0, due: Date.now(), lang, word, fr: card.fr || '' }; added++; }
+      if(!data[k]) { lower.add(k.toLowerCase()); data[k] = { ef: 2.5, interval: 0, reps: 0, due: Date.now(), lang, word, fr: card.fr || '' }; added++; }
       else if(!data[k].fr && card.fr) { data[k].fr = card.fr; data[k].word = data[k].word || word; patched++; }
       else if(!data[k].word) { data[k].word = word; patched++; }
     });
