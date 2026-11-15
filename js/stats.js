@@ -354,7 +354,8 @@ function srsBuildQueue(lang) {
     if(fams.has(f)) { buried++; continue; }
     fams.add(f); picked.push(e);
   }
-  if(cj) { reviews.push(...cj.reviews); picked.push(...cj.news); }
+  // les nouvelles cartes de conjugaison passent en tête, pour arriver dès le début de la séance
+  if(cj) { reviews.push(...cj.reviews); picked.unshift(...cj.news); }
   // Nouvelles cartes réparties régulièrement entre les révisions
   const rev = shuffle(reviews), mixed = [], total = rev.length + picked.length;
   const step = picked.length ? total / picked.length : Infinity;
@@ -368,6 +369,8 @@ function srsBuildQueue(lang) {
   let queue = [...learnNow, ...mixed];
   // Rien d'autre à faire : on peut avancer une carte en apprentissage (≤ 20 min, comme Anki)
   if(!queue.length && learnLater.length && learnLater[0].due <= now + srsMinMs(SRS_CFG.learnAheadMin)) queue = [learnLater.shift()];
+  // Conjugaison : la prochaine carte arrive dans les trois premières, pas au bout de la séance
+  if(cj) { const ci = queue.findIndex(e => e.conj); if(ci > 2) queue.splice(2, 0, queue.splice(ci, 1)[0]); }
   // Carte à garder en tête : après une annulation, ou carte affichée pendant un rafraîchissement
   const keep = srsState.forceKey || (!srsState.justGraded && srsState.currentCard && srsState.currentCard.key);
   if(keep) {
