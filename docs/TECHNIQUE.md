@@ -172,6 +172,8 @@ Chaque unité a 6 nœuds (`CRS_NODES`) : 3 leçons, révision, boss, coffre. Les
 
 `courses/feedback.js` déclare `CRS_FB = { es: {}, ln: {}, en: {} }` et `CRS_WEEK` (bilan de la semaine) ;
 les autres fichiers complètent avec `Object.assign(CRS_FB.<lang>, { … })`.
+`courses/feedback_tips.js`, chargé en dernier, ajoute l'astuce `tip` aux fiches qui n'en ont pas, sans
+toucher au reste. Le test `fiches` vérifie que chaque fiche a son astuce.
 
 ```js
 "mot": {

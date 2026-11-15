@@ -217,6 +217,8 @@ const AUDIT = (min) => {
         return out;
       });
       for(const l of ['es', 'en', 'ln']) ok(`${l} : les ${r[l].n} mots ont une fiche`, r[l].missing.length === 0, 'sans fiche : ' + r[l].missing.slice(0, 12).join(', '));
+      const noTip = await p.evaluate(() => { const o = []; for(const l in CRS_FB) for(const w in CRS_FB[l]) if(!CRS_FB[l][w].tip) o.push(l + ':' + w); return o; });
+      ok('chaque fiche a son astuce « Pour retenir »', noTip.length === 0, noTip.slice(0, 12).join(', '));
       const shown = () => p.evaluate(() => document.getElementById('crs-modal').classList.contains('show') && document.getElementById('crs-modal-box').textContent.length > 20);
       await p.evaluate(() => { currentLang = 'en'; selectLang('en'); showScreen('screen-journal'); renderJournal('en'); const c = document.querySelector('#journal-content .journal-word-chip.has-fiche'); if(c) c.click(); });
       ok('un mot du journal ouvre sa fiche', await shown());
