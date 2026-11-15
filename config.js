@@ -5,7 +5,7 @@ const APRENDE_CONFIG = {
   // false : toujours en mode local, partout ; aucun compte, aucune donnée envoyée.
   firebase: true,
   // true  : au tout premier lancement (aucune révision enregistrée), restaure la progression
-  //         embarquée dans app.js (EMBEDDED_PROGRESS, celle de l'auteur).
+  //         embarquée dans js/progress-embedded.js (EMBEDDED_PROGRESS, celle de l'auteur).
   // false : un nouvel utilisateur démarre de zéro.
   embeddedProgress: true,
 };

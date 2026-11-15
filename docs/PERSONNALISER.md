@@ -65,10 +65,10 @@ Tu gardes l'appli, les cours de base (A1 → B2/C1) et les jeux, mais aucun mot 
 
 | Fichier | À faire |
 |---|---|
-| `app.js` | `const VOCAB = [];`, `const ENGLISH = [];`, `const LINGALA = [];`, `const JOURNAL_SESSIONS = [];` |
+| `js/data-es.js`, `js/data-en.js`, `js/data-ln.js`, `js/journal.js` | `const VOCAB = [];`, `const ENGLISH = [];`, `const LINGALA = [];`, `const JOURNAL_SESSIONS = [];` |
 | `courses/es.js`, `courses/en.js` | supprimer les unités dont `s` est l'index de la section « Perso » (garder la section elle-même, vide) |
 | `courses/feedback.js` | vider `CRS_WEEK.notes` |
-| `app.js` | `STORIES` : garder ou retirer les histoires (elles réemploient le vocabulaire de l'auteur) |
+| `js/stories.js` | `STORIES` : garder ou retirer les histoires (elles réemploient le vocabulaire de l'auteur) |
 
 Les paquets vides ne posent pas de problème : tant qu'un paquet est vide, les jeux utilisent les mots
 des cours de la langue. Les fiches, exemples et voix des mots retirés peuvent rester (ils sont
@@ -80,7 +80,7 @@ indexés par mot et ne s'affichent que si le mot existe).
 
 | Quoi | Où |
 |---|---|
-| Nom, niveau visé, voix d'une langue | `CRS_META` dans `app.js` (`target`, `tts`) |
+| Nom, niveau visé, voix d'une langue | `CRS_META` dans `js/course.js` (`target`, `tts`) |
 | Variante d'espagnol (Espagne ou Amérique latine) | les fiches (`reg`), les étiquettes des cartes ; voix `es-ES` ou `es-US` dans `tools/voix_google.py` |
 | Accent anglais (américain ou britannique) | voix `en-US` ou `en-GB` dans `tools/voix_google.py`, `CRS_META.en.tts`, contenus « US » des jeux natifs |
 | Couleurs par langue | fin de `style.css` : `body.pop.t-es`, `.t-en`, `.t-ln` (`--fx-paper`, `--fx-panel`) |
@@ -103,7 +103,7 @@ darija (arabe algérien) de l'appli, dans un dépôt séparé.
 Plus long : les trois langues sont codées en dur à plusieurs endroits. Liste de contrôle
 (exemple avec le code `it` pour l'italien) :
 
-1. **Données** : `const ITALIAN = [{it, fr, …}]` dans `app.js` ; `courses/it.js` (`const COURSE_IT`)
+1. **Données** : `const ITALIAN = [{it, fr, …}]` dans un nouveau `js/data-it.js` (à ajouter dans `index.html` et `sw.js`) ; `courses/it.js` (`const COURSE_IT`)
    chargé dans `index.html` ; `CRS_FB.it = {}` dans `courses/feedback.js` ; `STORIES.it = []`.
 2. **Câblage** : `COURSES`, `CRS_META`, `getDeckForLang`, `selectLang`, `JOURNAL_SESSIONS` (clé `it`),
    `AUDIO_MAP.it`, `playRecorded`/`crsSpeak` (voix du téléphone `it-IT`).
@@ -112,7 +112,7 @@ Plus long : les trois langues sont codées en dur à plusieurs endroits. Liste d
 4. **Progression** : clés `it_xp` et `it_mastered` dans `exportProgress`, la restauration et la liste des
    clés synchronisées de `sync.js` ; quêtes et objectifs du jour du RPG.
 5. **Voix** : ajouter la langue dans `VOICES` de `tools/voix_google.py`.
-6. **Vérifier** : chercher `'ln'` dans `app.js` et traiter chaque endroit ; tester toute l'appli.
+6. **Vérifier** : chercher `'ln'` dans `js/` (`grep -rn "'ln'" js/`) et traiter chaque endroit ; tester toute l'appli.
 
 Le plus sûr est de demander à Claude de le faire avec cette liste et de tester chaque écran.
 

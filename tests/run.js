@@ -89,6 +89,16 @@ const SCREENS = [
     }
 
     if(want('boot')) {
+      console.log('\nFichiers');
+      const jsFiles = fs.readdirSync(path.join(ROOT, 'js')).filter(f => f.endsWith('.js')).map(f => 'js/' + f);
+      const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8'), swTxt = fs.readFileSync(path.join(ROOT, 'sw.js'), 'utf8');
+      const noHtml = jsFiles.filter(f => !html.includes('<script src="' + f + '"></script>')), noSw = jsFiles.filter(f => !swTxt.includes("'" + f + "'"));
+      ok('chaque fichier de js/ est chargé par index.html', !noHtml.length, noHtml.join(', '));
+      ok('chaque fichier de js/ est dans le cache hors connexion (sw.js)', !noSw.length, noSw.join(', '));
+      const cached = [...swTxt.matchAll(/'([^'\s]+\.(?:js|css|html|json|jpg|png))'/g)].map(m => m[1]).filter(f => !fs.existsSync(path.join(ROOT, f)));
+      ok('chaque fichier du cache existe', !cached.length, cached.join(', '));
+    }
+    if(want('boot')) {
       console.log('\nDémarrage');
       const p = await open(browser, base);
       ok('l\'appli démarre sans erreur JavaScript', p.errs.length === 0, p.errs.join(' | '));

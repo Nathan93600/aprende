@@ -76,7 +76,8 @@ tu peux garder les mots existants ou repartir de zéro, sans Firebase ni serveur
 ├── index.html        # tous les écrans
 ├── config.js         # réglages : Firebase oui/non, progression embarquée oui/non
 ├── sync.js           # stockage : localStorage (mode local) ou synchronisation Firebase
-├── app.js            # logique, paquets de mots, journal, histoires
+├── js/               # logique découpée par domaine (paquets de mots, jeux, révision, histoires…)
+├── tests/run.js      # tests automatiques
 ├── style.css         # styles et animations
 ├── courses/          # cours (es, en, ln) et fiches de mots
 ├── audio/            # voix pré-enregistrées et leur index

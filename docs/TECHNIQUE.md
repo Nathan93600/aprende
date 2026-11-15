@@ -12,7 +12,7 @@ langues, voir [PERSONNALISER.md](PERSONNALISER.md).
   Elle se sert telle quelle (GitHub Pages, ou n'importe quel serveur de fichiers).
 - **Aucune IA à l'exécution** : tout le contenu (mots, exemples, fiches, leçons, histoires, voix)
   est produit à l'avance, pendant le « génère » hebdomadaire, puis poussé dans le dépôt.
-  *Exception héritée* : quelques anciennes fonctions de `app.js` appellent encore l'API Anthropic
+  *Exception héritée* : quelques anciennes fonctions de `js/` appellent encore l'API Anthropic
   (`loadConjugation`, `getAITip`, `startTD`, `getTDExplanation`, `generateStory`, `generateMnemonic`).
   Elles n'ont pas de clé et échouent sans bloquer l'appli. Ne pas s'en servir pour du nouveau contenu.
 - **Données de l'apprenant dans le navigateur** (`localStorage`), exportables dans un fichier JSON.
@@ -27,7 +27,25 @@ index.html              tous les écrans (un <div class="screen"> par écran) et
 style.css               styles ; thème sombre d'origine + thème « pop » (fin de fichier, body.pop)
 config.js               réglages de l'installation : Firebase oui/non, progression embarquée oui/non
 sync.js                 stockage : localStorage natif (mode local) ou synchronisation Firebase
-app.js                  toute la logique (≈ 11 000 lignes) + les paquets de mots, le journal, les histoires
+js/                     la logique, découpée par domaine (26 fichiers, chargés dans l'ordre de index.html) :
+  progress-embedded.js    progression embarquée de l'auteur (voir config.js)
+  lang.js                 langue courante
+  data-es.js, data-en.js, data-ln.js   paquets de mots (VOCAB, ENGLISH, LINGALA)
+  en-oral.js              anglais oral : niveaux, prononciation, accent
+  core.js                 état, navigation (showScreen), utilitaires
+  games-basic.js, games-memory.js, games-words.js, sessions.js   les jeux
+  conjugation.js, conj-trainer.js      conjugaison espagnole
+  journal.js              journal des mots (JOURNAL_SESSIONS) et règles de grammaire
+  backup.js               sauvegarde / restauration, bouton « génère »
+  srs.js                  révision espacée FSRS-6, écran Réviser, planning, fiches
+  stats.js                statistiques
+  course.js               parcours, moteur de leçons, thèmes clair / sombre / fond d'écran
+  rpg.js, features.js, fx.js, sfx.js   héros, objectifs, badges, effets, sons
+  stories.js              histoires (STORIES)
+  settings.js             réglages et notifications
+  plan-c1.js              programme C1 (rappels de l'accueil)
+  init.js                 démarrage (initApp)
+tests/run.js            tests automatiques (voir §10)
 courses/es.js, en.js, ln.js     cours structurés (sections, unités, mots, mini-grammaire)
 courses/feedback*.js    fiches de mots (variantes, pièges, astuce) + bilan de la semaine (CRS_WEEK)
 audio/manifest.js       index des voix : texte → fichier
@@ -39,7 +57,12 @@ es.js, en.js, ln.js     (racine) anciennes versions des cours, plus chargées : 
 ```
 
 Ordre de chargement (fin de `index.html`) : Firebase (CDN) → `config.js` → `sync.js` →
-`courses/*.js` → `courses/feedback*.js` → `audio/manifest.js` → `app.js`.
+`courses/*.js` → `courses/feedback*.js` → `audio/manifest.js` → `js/*.js` (dans l'ordre listé dans `index.html`).
+
+Les fichiers de `js/` sont des scripts classiques qui partagent la même portée globale (pas de
+`import`). L'ordre compte : une constante doit être déclarée avant le fichier qui s'en sert au
+chargement. Tout nouveau fichier doit être ajouté **à la fois** dans `index.html` et dans la liste
+du cache de `sw.js`.
 
 ---
 
@@ -48,7 +71,7 @@ Ordre de chargement (fin de `index.html`) : Firebase (CDN) → `config.js` → `
 ```js
 const APRENDE_CONFIG = {
   firebase: true,          // false : toujours en mode local, aucun compte
-  embeddedProgress: true,  // false : ne jamais restaurer la progression embarquée dans app.js
+  embeddedProgress: true,  // false : ne jamais restaurer la progression embarquée dans js/progress-embedded.js
 };
 ```
 
@@ -90,7 +113,7 @@ Une copie de l'appli n'en a pas besoin : mettre `firebase: false`.
 progression : révisions, historique, XP, mots maîtrisés, cours, RPG, prononciation, grammaire ;
 la restauration le relit (les réglages sons et notifications n'en font pas partie). Le même fichier sert au « génère » (§9).
 
-`app.js` contient en tête une progression embarquée (`EMBEDDED_PROGRESS`, celle de l'auteur),
+`js/progress-embedded.js` contient une progression embarquée (`EMBEDDED_PROGRESS`, celle de l'auteur),
 restaurée au premier lancement si aucune carte n'existe. `embeddedProgress: false` la désactive.
 
 ---
@@ -99,7 +122,7 @@ restaurée au premier lancement si aucune carte n'existe. `embeddedProgress: fal
 
 Trois langues, codées `es`, `en`, `ln`. Le français est la langue de l'interface et des traductions.
 
-### 5.1 Paquets de mots (dans `app.js`)
+### 5.1 Paquets de mots (dans `js/data-es.js`, `js/data-en.js`, `js/data-ln.js`)
 
 | Constante | Langue | Format d'une carte |
 |---|---|---|
@@ -112,7 +135,7 @@ Exemples complémentaires : `ES_EXAMPLES` (`{"mot": [exemple, traduction]}`), `L
 Si un paquet est vide (copie repartie de zéro), `deckFromCourse()` le remplit au chargement avec les
 mots des cours de la langue, pour que les jeux aient toujours des cartes.
 
-### 5.2 Journal (`JOURNAL_SESSIONS`, dans `app.js`)
+### 5.2 Journal (`JOURNAL_SESSIONS`, dans `js/journal.js`)
 
 Une entrée par session de mots notés :
 
@@ -163,7 +186,7 @@ les autres fichiers complètent avec `Object.assign(CRS_FB.<lang>, { … })`.
 `ficheFind(lang, mot)` retrouve la fiche (tolère casse, articles, `sb/sth`, formes « a / b »).
 **Règle : tout mot révisable doit avoir une fiche.**
 
-### 5.5 Histoires (`STORIES`, dans `app.js`)
+### 5.5 Histoires (`STORIES`, dans `js/stories.js`)
 
 ```js
 STORIES.es = [{ id, title, desc, level, chars: { T: ['🧑', 'Tú'], L: ['👩', 'Lucía'] },
@@ -177,7 +200,7 @@ STORIES.es = [{ id, title, desc, level, chars: { T: ['🧑', 'Tú'], L: ['👩',
 
 À la génération des voix, celle d'un personnage (homme ou femme) se déduit de son emoji.
 
-### 5.6 Anglais oral (dans `app.js`)
+### 5.6 Anglais oral (dans `js/en-oral.js`)
 
 `PRON_DATA` (`{"mot": [phrase, phonétique à la française, API, astuce]}`), `PRON_LESSONS`
 (leçons d'accent), `NAT_C1`, `NAT_DELATIN`, `NAT_CONNECTED`, `NAT_REACT`, `NAT_STRESS` (jeux « natif »).
@@ -256,8 +279,7 @@ entrées dans `AUDIO_MAP`. Coût Google Chirp 3 HD : 1 million de caractères gr
    - les voix (script lancé par l'apprenant), puis `AUDIO_MAP` ;
    - **la version du cache** : `CACHE_NAME` dans `sw.js` (`aprende-vNN`), à incrémenter à chaque
      mise en ligne, sinon les téléphones gardent l'ancienne version.
-4. Vérifications avant de pousser : `node --check app.js`, chargement de l'appli sans erreur dans un
-   navigateur, chaque nouveau mot a sa fiche, rien ne casse les cartes existantes (§6).
+4. Vérifications avant de pousser : `node tests/run.js` (§10), chaque nouveau mot a sa fiche, rien ne casse les cartes existantes (§6).
 
 ---
 
@@ -268,7 +290,20 @@ python3 -m http.server 8000      # à la racine du dépôt
 # puis http://localhost:8000/index.html?local=1
 ```
 
-- Pas de compilation. Vérifier la syntaxe : `node --check app.js`.
+- Pas de compilation.
+- **Tests automatiques** (Playwright ; le script lance son propre serveur) :
+
+  ```bash
+  npm i -g playwright && npx playwright install chromium     # une fois
+  NODE_PATH=$(npm root -g) node tests/run.js                  # tout
+  NODE_PATH=$(npm root -g) node tests/run.js fiches lecons    # seulement certains groupes
+  APRENDE_BACKUP=ma-sauvegarde.json node tests/run.js sauvegarde   # avec une vraie sauvegarde
+  ```
+
+  Groupes : `boot` (démarrage sans erreur), `srs` (calcul FSRS), `donnees` (format des cours),
+  `fiches` (chaque mot a sa fiche), `audio` (chaque voix de l'index existe), `progression`
+  (les cartes existantes ne bougent pas), `ecrans` (tous les écrans, clair et sombre), `lecons`,
+  `histoires`, `sauvegarde`. À lancer avant chaque mise en ligne.
 - Tester avec une sauvegarde réelle : la restaurer depuis Réglages, ou l'injecter dans
   `localStorage` avec un navigateur automatisé (Playwright).
 - Publier : pousser sur la branche servie par GitHub Pages, après avoir incrémenté `CACHE_NAME`.

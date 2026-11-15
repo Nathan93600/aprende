@@ -29,7 +29,7 @@ Fais ceci, dans l'ordre :
    sinon dis-moi exactement où cliquer : Settings → Pages → Deploy from a branch → master / root).
 
 4. Vérifie :
-   - node --check app.js et node --check sync.js ;
+   - node tests/run.js (tests automatiques, voir docs/TECHNIQUE.md §10) ;
    - si tu as un navigateur automatisé, charge index.html servi en local : aucune erreur JavaScript,
      pas d'écran de connexion, toutes les cartes de révision à l'état « nouvelle » ;
    - l'adresse https://<MON-COMPTE>.github.io/aprende/ répond (compte une à deux minutes après l'activation).

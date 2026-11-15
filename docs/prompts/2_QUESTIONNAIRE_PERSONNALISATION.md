@@ -54,7 +54,7 @@ Groupe 5 — Mon rythme
 Ensuite :
 A. Résume mes réponses en un tableau et liste précisément les fichiers que tu vas modifier.
 B. Après mon « ok », applique les changements :
-   - option « repartir de zéro » : vider VOCAB, ENGLISH, LINGALA et JOURNAL_SESSIONS dans app.js,
+   - option « repartir de zéro » : vider VOCAB, ENGLISH, LINGALA et JOURNAL_SESSIONS dans js/data-*.js et js/journal.js,
      retirer les unités de la section « Perso » des cours, vider CRS_WEEK.notes (PERSONNALISER.md §3) ;
    - option « garder les mots » : remplacer le prénom, les mentions personnelles de l'auteur, vider CRS_WEEK.notes ;
    - langues, variantes, niveaux visés (CRS_META), voix (tools/voix_google.py) ;

@@ -37,7 +37,7 @@ Réponses courtes : je lis souvent sur mon téléphone.
 ━━ 2. Le « génère » (chaque <VENDREDI>) ━━
 Je t'envoie ma sauvegarde (fichier aprende-progres-AAAA-MM-JJ.json) avec le mot « génère ».
 Tu travailles dans le dépôt et tu fais, pour tous les mots en attente :
-a. Les cartes : une session dans JOURNAL_SESSIONS (app.js) datée du jour, avec pour chaque mot
+a. Les cartes : une session dans JOURNAL_SESSIONS (js/journal.js) datée du jour, avec pour chaque mot
    [mot, traduction, exemple, traduction de l'exemple], ou le paquet de la langue (formats : TECHNIQUE.md §5).
 b. Une ou deux unités thématiques dans la section « Perso » de courses/<lang>.js : titre, emoji,
    mini-grammaire (g.t, g.tip, 2 questions g.q) sur un piège de la semaine, et les mots (w).
@@ -55,7 +55,7 @@ g. Les voix : ajoute les nouveaux textes dans tools/voix_textes.json (format : T
    tape moi-même dans le terminal : ne me la demande jamais. Quand je te dis « c'est fait », ajoute les
    MP3 dans audio/<lang>/ et les entrées dans audio/manifest.js.
 h. Incrémente CACHE_NAME dans sw.js, sinon mon téléphone garde l'ancienne version.
-Avant de pousser : node --check app.js ; si tu as un navigateur automatisé, charge l'appli avec ma
+Avant de pousser : node tests/run.js ; si tu as un navigateur automatisé, charge l'appli avec ma
 sauvegarde, sans erreur, et vérifie que chaque nouveau mot a sa fiche.
 Ne renomme jamais un mot existant (cela remettrait sa carte à zéro) ; corrige seulement sa traduction.
 Pousse, puis résume en quelques lignes : mots ajoutés, nouvelles unités, ce qui reste à faire.

@@ -1,6 +1,6 @@
 // ═══════════════════════════════════════════════════════════
 // ¡Aprende! — sync.js v3 · Firebase sync (desktop) / localStorage natif (mobile PWA)
-// Loaded BEFORE app.js
+// Loaded BEFORE js/*.js
 // ═══════════════════════════════════════════════════════════
 
 // ── MODE LOCAL : PWA standalone sur mobile → vrai localStorage, pas de Firebase ──
@@ -21,7 +21,7 @@ const SYNC_LOCAL_MODE = (() => {
 if (SYNC_LOCAL_MODE) {
   console.log('[Sync] 📱 Mode local (PWA mobile) — localStorage natif, pas de Firebase');
 
-  // Expose stubs on window so app.js doesn't crash on sync calls
+  // Expose stubs on window so js/*.js don't crash on sync calls
   window.SYNC = { uid: null, ready: true, cache: {}, _listeners: [], _unsubs: [], _writeTimer: null, _loadFailed: false, _appBooted: false };
   window.onSyncReady = function(cb) { try { cb(); } catch(e) { console.error('[Sync] onReady error:', e); } };
   window.isSyncReady = function() { return true; };

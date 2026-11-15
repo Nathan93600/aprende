@@ -4,7 +4,7 @@
 const { chromium } = require('playwright');const fs=require('fs');
 (async()=>{const b=await chromium.launch();const p=await b.newPage();
 await p.goto('http://localhost:8765/index.html?local=1',{waitUntil:'domcontentloaded'});await p.waitForTimeout(2000);
-const L0=fs.readFileSync('/home/claude/aprende-repo/app.js','utf8').split('\n')[8];const EP=JSON.parse(L0.slice(L0.indexOf('{'),L0.lastIndexOf('}')+1));
+const L0=fs.readFileSync(require('path').join(__dirname,'..','js','progress-embedded.js'),'utf8').split('\n').find(l=>l.includes('const EMBEDDED_PROGRESS'));const EP=JSON.parse(L0.slice(L0.indexOf('{'),L0.lastIndexOf('}')+1));
 const srsWords={en:[],es:[]};for(const c of Object.values(EP.srs_data))if(srsWords[c.lang])srsWords[c.lang].push(c.word);
 const r=await p.evaluate((srsWords)=>{const key=t=>String(t).replace(/\(.*?\)/g,'').trim();const out={en:[],es:[]},chars={};
  for(const l of ['en','es']){const add=(t,v)=>{if(!t)return;const k=key(t);if(!k||AUDIO_MAP[l][k]||out[l].some(x=>x.k===k))return;out[l].push({t,k,v})};
