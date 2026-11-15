@@ -1384,7 +1384,7 @@ function renderJournal(lang) {
   // Sessions as expandable gallery cards
   const sessionCards = sessions.reverse().map((s, idx) => {
     const motsHtml = s.mots.map(([w, t], i) => `
-      <div class="journal-word-chip" style="
+      <div class="journal-word-chip${ficheFind(lang, w) ? ' has-fiche' : ''}" ${ficheFind(lang, w) ? `role="button" tabindex="0" onclick="openFiche('${lang}', this.dataset.w)" data-w="${String(w).replace(/&/g, '&amp;').replace(/"/g, '&quot;')}"` : ''} style="
         background: rgba(${colorRgb},.08);
         border: 1px solid rgba(${colorRgb},.2);
         border-radius: 10px;

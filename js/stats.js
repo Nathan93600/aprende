@@ -39,6 +39,7 @@ function statsBindTips(root) {
 
 function renderStats() {
   const lang = statsLang, day = 86400000, today = srsStartOfToday(), now = Date.now();
+  try { crsTheme(lang); } catch(e) {}
   document.querySelectorAll('.stx-tab').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
   const log = srsRevlogLoad().filter(r => r[0].startsWith(lang + ':'));
   const cards = Object.entries(srsLoad()).filter(([k, c]) => c.lang === lang).map(([k, c]) => c);
@@ -64,71 +65,81 @@ function renderStats() {
     if(c.leech) cnt.leech++;
   });
 
-  const tile = (big, label, sub) => `<div class="stx-tile"><div class="stx-big">${big}</div><div class="stx-lbl">${label}</div>${sub ? `<div class="stx-sub">${sub}</div>` : ''}</div>`;
-  let html = `<div class="stx-tiles">
-    ${tile(todayLog.length, 'révisions aujourd\'hui', todayMin ? `${todayMin} min` : '')}
-    ${tile(retention === null ? '—' : retention + ' %', 'rétention réelle (30 j)', retention === null ? 'pas encore de données' : 'objectif FSRS : 90 %')}
-    ${tile(streak, streak > 1 ? 'jours d\'affilée' : 'jour d\'affilée', '')}
-  </div>
-  <div class="stx-tiles stx-tiles-5">
-    ${tile(cnt.new, 'nouvelles', '')}${tile(cnt.learn, 'en apprentissage', '')}${tile(cnt.young, 'jeunes', '< 21 j')}${tile(cnt.mature, 'matures', '≥ 21 j')}${tile(cnt.leech, 'sangsues', '🩸')}
+  // ── Tableau de bord ──
+  const esc = s => String(s).replace(/[&<>"]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[m]));
+  const dayKey = t => { const d = new Date(t); return new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime(); };
+  const perDay = {};
+  log.forEach(r => { const k = dayKey(r[1]); perDay[k] = (perDay[k] || 0) + 1; });
+  const dueNow = cards.filter(c => c.reps && c.due <= today + day - 1).length;
+  const studied = cards.length - cnt.new;
+
+  // Chiffres clés
+  const ring = retention === null ? 0 : retention, C = 2 * Math.PI * 26;
+  const kpi = (cls, icon, big, label, sub) => `<div class="dash-kpi ${cls}"><div class="dash-kpi-ic">${icon}</div><div class="dash-kpi-big">${big}</div><div class="dash-kpi-lbl">${label}</div>${sub ? `<div class="dash-kpi-sub">${sub}</div>` : ''}</div>`;
+  let html = `<div class="dash-grid">
+    ${kpi('k-sun', '🧠', dueNow, dueNow > 1 ? 'cartes à réviser' : 'carte à réviser', dueNow ? `<button class="dash-go" onclick="openSRS(statsLang)">Réviser →</button>` : 'tout est à jour')}
+    ${kpi('k-coral', '🔥', streak, streak > 1 ? 'jours d\'affilée' : 'jour d\'affilée', streak ? 'continue !' : 'révise aujourd\'hui pour démarrer')}
+    ${kpi('k-mint', '✅', todayLog.length, todayLog.length > 1 ? 'révisions aujourd\'hui' : 'révision aujourd\'hui', todayMin ? `${todayMin} min` : '')}
+    <div class="dash-kpi k-sky"><div class="dash-ring"><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="26" class="dash-ring-bg"/><circle cx="32" cy="32" r="26" class="dash-ring-fg" stroke-dasharray="${(C * ring / 100).toFixed(1)} ${C.toFixed(1)}" transform="rotate(-90 32 32)"/></svg><b>${retention === null ? '—' : retention + '<small>%</small>'}</b></div><div class="dash-kpi-lbl">rétention sur 30 jours</div><div class="dash-kpi-sub">${retention === null ? 'pas encore de données' : 'objectif : 90 %'}</div></div>
   </div>`;
 
-  // ── Calendrier d'activité (26 semaines)
-  const perDay = {};
-  log.forEach(r => { const d = new Date(r[1]); const k = new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime(); perDay[k] = (perDay[k] || 0) + 1; });
+  // Mon paquet : répartition des cartes
+  const segs = [['mature', 'Acquises', '≥ 21 jours', cnt.mature], ['young', 'Jeunes', '< 21 jours', cnt.young], ['learn', 'En apprentissage', 'vues récemment', cnt.learn], ['new', 'Nouvelles', 'pas encore vues', cnt.new]];
+  const totalC = Math.max(1, cards.length);
+  html += `<div class="stx-card"><div class="stx-h">Mon paquet <span class="stx-hsub">${studied} carte${studied > 1 ? 's' : ''} étudiée${studied > 1 ? 's' : ''} sur ${cards.length}</span></div>
+    <div class="dash-stack">${segs.map(s => s[3] ? `<i class="sg-${s[0]}" style="flex:${s[3]}" data-v="${s[3]} carte${s[3] > 1 ? 's' : ''}" data-l="${s[1]}" tabindex="0"></i>` : '').join('')}</div>
+    <div class="dash-legend">${segs.map(s => `<div class="dash-leg"><i class="sg-${s[0]}"></i><div><b>${s[1]}</b><span>${s[2]}</span></div><strong>${s[3]}<small>${Math.round(100 * s[3] / totalC)} %</small></strong></div>`).join('')}</div>
+    ${cnt.leech ? `<div class="dash-note">🩸 ${cnt.leech} carte${cnt.leech > 1 ? 's' : ''} difficile${cnt.leech > 1 ? 's' : ''} (ratée${cnt.leech > 1 ? 's' : ''} souvent)</div>` : ''}
+  </div>`;
+
+  // 7 derniers jours
+  const w7 = [], prev7 = [];
+  for(let i = 6; i >= 0; i--) { w7.push({ t: today - i * day, n: perDay[dayKey(today - i * day)] || 0 }); prev7.push(perDay[dayKey(today - (i + 7) * day)] || 0); }
+  const sum7 = w7.reduce((a, b) => a + b.n, 0), sumP = prev7.reduce((a, b) => a + b, 0), max7 = Math.max(1, ...w7.map(x => x.n));
+  const trend = sumP ? Math.round(100 * (sum7 - sumP) / sumP) : null;
+  html += `<div class="stx-card"><div class="stx-h">7 derniers jours <span class="stx-hsub">${sum7} révisions · ${Math.round(sum7 / 7)} par jour${trend === null ? '' : ` · <b class="${trend >= 0 ? 'up' : 'down'}">${trend >= 0 ? '▲ +' : '▼ '}${trend} %</b> par rapport à la semaine d'avant`}</span></div>
+    <div class="dash-week">${w7.map((x, i) => `<div class="dash-day${i === 6 ? ' today' : ''}"><span>${x.n || ''}</span><i style="height:${x.n ? Math.max(6, 100 * x.n / max7) : 0}%"></i><em>${new Date(x.t).toLocaleDateString('fr-FR', { weekday: 'short' }).replace('.', '')}</em></div>`).join('')}</div>
+  </div>`;
+
+  // Activité (26 semaines)
   const weeks = 26, startDow = (new Date(today).getDay() + 6) % 7; // lundi = 0
   const first = today - (weeks * 7 - 7 + startDow) * day;
   const maxDay = Math.max(1, ...Object.values(perDay));
-  let cells = '';
+  let cells = '', months = '', lastM = -1;
   for(let w = 0; w < weeks; w++) {
+    const m0 = new Date(first + w * 7 * day);
+    months += `<span>${m0.getMonth() !== lastM && w < weeks - 2 ? m0.toLocaleDateString('fr-FR', { month: 'short' }).replace('.', '') : ''}</span>`; lastM = m0.getMonth();
     cells += '<div class="stx-heat-col">';
     for(let d = 0; d < 7; d++) {
-      const t = first + (w * 7 + d) * day;
-      const dt = new Date(t); const k = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate()).getTime();
+      const k = dayKey(first + (w * 7 + d) * day), dt = new Date(k);
       if(k > today) { cells += '<div class="stx-heat-cell" style="visibility:hidden"></div>'; continue; }
-      const n = perDay[k] || 0;
-      const lvl = n === 0 ? 0 : Math.min(4, 1 + Math.floor(3 * n / maxDay));
-      const dateTxt = dt.toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short' });
-      cells += `<div class="stx-heat-cell" style="background:${STATS_HEAT[lvl]}${k === today ? ';outline:1.5px solid #fff5e1' : ''}" data-v="${n} révision${n > 1 ? 's' : ''}" data-l="${dateTxt}"></div>`;
+      const n = perDay[k] || 0, lvl = n === 0 ? 0 : Math.min(4, 1 + Math.floor(3 * n / maxDay));
+      cells += `<div class="stx-heat-cell hl-${lvl}${k === today ? ' today' : ''}" data-v="${n} révision${n > 1 ? 's' : ''}" data-l="${dt.toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short' })}"></div>`;
     }
     cells += '</div>';
   }
-  html += `<div class="stx-card"><div class="stx-h">Activité</div>
-    <div class="stx-heat">${cells}</div>
-    <div class="stx-legend"><span>Moins</span>${STATS_HEAT.map(c => `<i style="background:${c}"></i>`).join('')}<span>Plus</span></div>
-    ${log.length ? '' : '<div class="stx-empty">L\'historique démarre avec cette version : chaque réponse est désormais enregistrée.</div>'}
+  const activeDays = Object.keys(perDay).filter(k => +k >= first).length;
+  html += `<div class="stx-card"><div class="stx-h">Activité · 6 mois <span class="stx-hsub">${activeDays} jour${activeDays > 1 ? 's' : ''} de révision · record ${maxDay === 1 && !log.length ? 0 : maxDay} en un jour</span></div>
+    <div class="dash-heat-wrap"><div class="dash-months">${months}</div><div class="stx-heat">${cells}</div></div>
+    <div class="stx-legend"><span>Aucune révision</span>${[0, 1, 2, 3, 4].map(l => `<i class="hl-${l}"></i>`).join('')}<span>Beaucoup</span></div>
+    ${log.length ? '' : '<div class="stx-empty">L\'historique démarre avec ta première révision.</div>'}
   </div>`;
 
-  // ── Prévisions : cartes à réviser sur les 30 prochains jours
+  // Prévisions : cartes à réviser sur les 30 prochains jours
   const fut = Array(30).fill(0);
-  cards.forEach(c => {
-    if(!c.reps) return;
-    const d = new Date(c.due); const k = new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
-    const i = Math.max(0, Math.round((k - today) / day));
-    if(i < 30) fut[i]++;
-  });
-  const maxF = Math.max(1, ...fut);
-  const futBars = fut.map((n, i) => {
-    const label = i === 0 ? 'aujourd\'hui (+ retard)' : i === 1 ? 'demain' : `dans ${i} j`;
-    return `<div class="stx-bar-hit" tabindex="0" data-v="${n} carte${n > 1 ? 's' : ''}" data-l="${label}"><div class="stx-bar" style="height:${n ? Math.max(4, 100 * n / maxF) : 0}%"></div></div>`;
-  }).join('');
-  const totalWeek = fut.slice(0, 7).reduce((a, b) => a + b, 0);
-  html += `<div class="stx-card"><div class="stx-h">Prévisions · 30 jours <span class="stx-hsub">${totalWeek} révisions cette semaine · pic ${maxF}/jour</span></div>
-    <div class="stx-bars">${futBars}</div>
+  cards.forEach(c => { if(!c.reps) return; const i = Math.max(0, Math.round((dayKey(c.due) - today) / day)); if(i < 30) fut[i]++; });
+  const maxF = Math.max(1, ...fut), totalWeek = fut.slice(0, 7).reduce((a, b) => a + b, 0);
+  html += `<div class="stx-card"><div class="stx-h">À venir · 30 jours <span class="stx-hsub">${totalWeek} révisions dans les 7 jours · jusqu'à ${maxF} en un jour</span></div>
+    <div class="stx-bars">${fut.map((n, i) => `<div class="stx-bar-hit${i === 0 ? ' now' : ''}" tabindex="0" data-v="${n} carte${n > 1 ? 's' : ''}" data-l="${i === 0 ? 'aujourd\'hui (+ retard)' : i === 1 ? 'demain' : 'dans ' + i + ' j'}"><div class="stx-bar" style="height:${n ? Math.max(4, 100 * n / maxF) : 0}%"></div></div>`).join('')}</div>
     <div class="stx-axis"><span>Auj.</span><span>+7 j</span><span>+14 j</span><span>+21 j</span><span>+29 j</span></div>
-    <details class="stx-table"><summary>Voir les données</summary><table>${fut.map((n, i) => n ? `<tr><td>${i === 0 ? 'Aujourd\'hui' : i === 1 ? 'Demain' : 'J+' + i}</td><td>${n}</td></tr>` : '').join('') || '<tr><td>Aucune révision prévue</td></tr>'}</table></details>
   </div>`;
 
-  // ── Réponses (30 derniers jours, cartes en révision)
+  // Réponses (30 derniers jours, cartes en révision)
   const btn = [0, 0, 0, 0];
   last30.forEach(r => btn[r[2]]++);
-  const totB = btn.reduce((a, b) => a + b, 0), maxB = Math.max(1, ...btn);
-  const names = ['Encore', 'Difficile', 'Bien', 'Facile'];
-  html += `<div class="stx-card"><div class="stx-h">Tes réponses · 30 jours <span class="stx-hsub">cartes en révision</span></div>
-    <div class="stx-bars stx-bars-4">${btn.map((n, i) => `<div class="stx-bar-hit" tabindex="0" data-v="${n} (${totB ? Math.round(100 * n / totB) : 0} %)" data-l="${names[i]}"><div class="stx-bar-val">${totB ? Math.round(100 * n / totB) + ' %' : ''}</div><div class="stx-bar" style="height:${n ? Math.max(4, 100 * n / maxB) : 0}%"></div></div>`).join('')}</div>
-    <div class="stx-axis stx-axis-4">${names.map(n => `<span>${n}</span>`).join('')}</div>
-    ${totB ? '' : '<div class="stx-empty">Rien pour l\'instant : réponds à quelques cartes déjà apprises.</div>'}
+  const totB = btn.reduce((a, b) => a + b, 0), maxB = Math.max(1, ...btn), names = ['Encore', 'Difficile', 'Bien', 'Facile'];
+  html += `<div class="stx-card"><div class="stx-h">Tes réponses · 30 jours <span class="stx-hsub">sur les cartes déjà apprises</span></div>
+    ${totB ? `<div class="dash-ans">${btn.map((n, i) => `<div class="dash-an"><em>${names[i]}</em><div class="dash-an-track"><i class="g-${i}" style="width:${Math.max(n ? 3 : 0, 100 * n / maxB)}%"></i></div><strong>${Math.round(100 * n / totB)} %<small>${n}</small></strong></div>`).join('')}</div>` : '<div class="stx-empty">Rien pour l\'instant : réponds à quelques cartes déjà apprises.</div>'}
   </div>`;
 
   const box = document.getElementById('stats-content');
@@ -265,10 +276,13 @@ function filterDirectory() {
     return;
   }
   let html = `<div style="font-size:.72rem;color:var(--muted);margin-bottom:.6rem">${items.length} mot${items.length > 1 ? 's' : ''}</div>`;
-  items.forEach(w => {
-    html += `<div style="display:flex;justify-content:space-between;align-items:center;padding:.55rem .7rem;border-bottom:1px solid rgba(255,255,255,.05);gap:.5rem">`;
+  const dirLang = srsState.lang || currentLang || 'es';
+  window._dirItems = items;
+  items.forEach((w, wi) => {
+    const hasF = !!ficheFind(dirLang, w.word);
+    html += `<div ${hasF ? `class="dir-row has-fiche" role="button" tabindex="0" onclick="openFiche('${dirLang}', window._dirItems[${wi}].word)"` : 'class="dir-row"'} style="display:flex;justify-content:space-between;align-items:center;padding:.55rem .7rem;border-bottom:1px solid rgba(255,255,255,.05);gap:.5rem">`;
     html += `<div style="flex:1;min-width:0"><div style="font-size:.85rem;color:var(--accent2);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${w.word}</div><div style="font-size:.75rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${w.fr}</div></div>`;
-    html += `<div style="display:flex;align-items:center;gap:.5rem;flex-shrink:0"><span style="font-size:.75rem">${w.src}</span>${srsStatusLabel(w.srs)}</div>`;
+    html += `<div style="display:flex;align-items:center;gap:.5rem;flex-shrink:0"><span style="font-size:.75rem">${w.src}</span>${srsStatusLabel(w.srs)}${hasF ? '<span class="dir-chev" aria-hidden="true">›</span>' : ''}</div>`;
     html += `</div>`;
   });
   box.innerHTML = html;

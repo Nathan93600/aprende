@@ -259,7 +259,7 @@ entrées dans `AUDIO_MAP`. Coût Google Chirp 3 HD : 1 million de caractères gr
   le texte courant, `--fx-paper` / `--fx-panel` / `--fx-field` pour les fonds, une palette par langue.
 - Mode clair ou sombre : `body.dark`, réglage `aprende_theme` (`auto`, `light`, `dark` ; `auto` suit le système),
   appliqué par `fxApplyTheme()` et dès le chargement par un petit script dans `index.html` (pas de flash).
-- Fonds d'écran : `#fx-wall` (fixe, sous tout le contenu), `img/wall-en.jpg` et `img/wall-es.jpg` avec un voile de la
+- Fonds d'écran : `#fx-wall` (fixe, sous tout le contenu), `img/wall-en.jpg`, `img/wall-es.jpg` (sombre) et `img/wall-es-light.jpg` (clair) avec un voile de la
   couleur du thème ; réglage `aprende_wall` (`0` = désactivé). Pour une nouvelle langue : ajouter `img/wall-<lang>.jpg`
   et les deux règles `body.pop.wall.t-<lang> #fx-wall` (clair et sombre).
 
@@ -302,7 +302,8 @@ python3 -m http.server 8000      # à la racine du dépôt
 
   Groupes : `boot` (démarrage sans erreur), `srs` (calcul FSRS), `donnees` (format des cours),
   `fiches` (chaque mot a sa fiche), `audio` (chaque voix de l'index existe), `progression`
-  (les cartes existantes ne bougent pas), `ecrans` (tous les écrans, clair et sombre), `lecons`,
+  (les cartes existantes ne bougent pas), `ecrans` (tous les écrans, clair et sombre, et lisibilité
+  de chaque texte sur son fond ; détail avec `node tests/run.js ecrans --contraste`), `lecons`,
   `histoires`, `sauvegarde`. À lancer avant chaque mise en ligne.
 - Tester avec une sauvegarde réelle : la restaurer depuis Réglages, ou l'injecter dans
   `localStorage` avec un navigateur automatisé (Playwright).

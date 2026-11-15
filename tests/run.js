@@ -73,6 +73,44 @@ const SCREENS = [
   ['réglages', "openSettingsModal()"], ['programme C1', "closeModal('settings-modal'); c1OpenPlan()"],
 ];
 
+// Contraste : dans la page, liste les textes trop peu lisibles sur leur fond (rapport < min).
+const AUDIT = (min) => {
+  const parse = c => { const m = String(c).match(/rgba?\(([^)]+)\)/); if(!m) return null; const v = m[1].split(/[,\s\/]+/).filter(Boolean).map(parseFloat); return { r: v[0], g: v[1], b: v[2], a: v.length > 3 ? v[3] : 1 }; };
+  const lum = c => { const f = x => { x /= 255; return x <= .03928 ? x / 12.92 : Math.pow((x + .055) / 1.055, 2.4); }; return .2126 * f(c.r) + .7152 * f(c.g) + .0722 * f(c.b); };
+  const over = (top, under) => ({ r: top.r * top.a + under.r * (1 - top.a), g: top.g * top.a + under.g * (1 - top.a), b: top.b * top.a + under.b * (1 - top.a), a: 1 });
+  const probe = document.createElement('i'); probe.style.cssText = 'position:fixed;left:-99px;background:var(--fx-paper)'; document.body.appendChild(probe);
+  const paper = parse(getComputedStyle(probe).backgroundColor) || { r: 255, g: 255, b: 255, a: 1 }; probe.remove();
+  const bgOf = el => {
+    const layers = [];
+    for(let e = el; e && e.nodeType === 1; e = e.parentElement) {
+      const cs = getComputedStyle(e); let c = parse(cs.backgroundColor);
+      if(cs.backgroundImage && cs.backgroundImage.includes('gradient')) { const g = parse(cs.backgroundImage.slice(cs.backgroundImage.indexOf('gradient'))); if(g && g.a > .5) c = g; }
+      if(c && c.a > 0) { layers.push(c); if(c.a >= .98) break; }
+    }
+    let base = paper; for(let i = layers.length - 1; i >= 0; i--) base = over(layers[i], base); return base;
+  };
+  const roots = [document.querySelector('.screen.active'), ...document.querySelectorAll('.modal-overlay.show, .modal-overlay.active, .modal.show, #tabbar, .tabbar')].filter(Boolean);
+  const out = [], seen = new Set();
+  for(const root of roots) for(const el of root.querySelectorAll('*')) {
+    const txt = [...el.childNodes].filter(n => n.nodeType === 3).map(n => n.textContent).join('').trim();
+    if(!txt || !/[A-Za-zÀ-ÿ0-9]/.test(txt)) continue;
+    const r = el.getBoundingClientRect(); if(r.width < 2 || r.height < 2) continue;
+    const cs = getComputedStyle(el); if(cs.visibility === 'hidden' || cs.display === 'none') continue;
+    if(el.closest('.hub-card, .unit-ban') || parseFloat(cs.webkitTextStrokeWidth) > 0) continue;   // blanc sur couleur vive, texte à contour : voulus
+    let op = 1; for(let e = el; e && e.nodeType === 1; e = e.parentElement) op *= parseFloat(getComputedStyle(e).opacity); if(op < .3) continue;
+    if(cs.webkitTextFillColor === 'rgba(0, 0, 0, 0)' || cs.backgroundClip === 'text' || cs.webkitBackgroundClip === 'text') continue;
+    const bg = bgOf(el), fg0 = parse(cs.color); if(!fg0) continue; const fg = over(fg0, bg);
+    const a = lum(fg), b = lum(bg), ratio = (Math.max(a, b) + .05) / (Math.min(a, b) + .05);
+    if(ratio < min) {
+      const sel = (el.id ? '#' + el.id : el.tagName.toLowerCase() + (el.className && typeof el.className === 'string' ? '.' + el.className.trim().split(/\s+/).join('.') : ''));
+      const par = el.parentElement, psel = par ? (par.id ? '#' + par.id : par.tagName.toLowerCase() + (typeof par.className === 'string' && par.className ? '.' + par.className.trim().split(/\s+/)[0] : '')) : '';
+      const key = psel + ' > ' + sel; if(seen.has(key)) continue; seen.add(key);
+      out.push(key + ' « ' + txt.slice(0, 28) + ' » ' + ratio.toFixed(1) + ' fg ' + cs.color + ' bg rgb(' + [bg.r, bg.g, bg.b].map(Math.round) + ')');
+    }
+  }
+  return out;
+};
+
 (async () => {
   const srv = await serve(), base = 'http://127.0.0.1:' + srv.address().port;
   const browser = await chromium.launch();
@@ -179,6 +217,11 @@ const SCREENS = [
         return out;
       });
       for(const l of ['es', 'en', 'ln']) ok(`${l} : les ${r[l].n} mots ont une fiche`, r[l].missing.length === 0, 'sans fiche : ' + r[l].missing.slice(0, 12).join(', '));
+      const shown = () => p.evaluate(() => document.getElementById('crs-modal').classList.contains('show') && document.getElementById('crs-modal-box').textContent.length > 20);
+      await p.evaluate(() => { currentLang = 'en'; selectLang('en'); showScreen('screen-journal'); renderJournal('en'); const c = document.querySelector('#journal-content .journal-word-chip.has-fiche'); if(c) c.click(); });
+      ok('un mot du journal ouvre sa fiche', await shown());
+      await p.evaluate(() => { crsCloseModal(); openSRS('en'); showDirectory(); const r = document.querySelector('#dir-content .dir-row.has-fiche'); if(r) r.click(); });
+      ok("un mot de l'annuaire ouvre sa fiche, au-dessus de l'annuaire", await shown() && await p.evaluate(() => { const b = document.getElementById('crs-modal-box').getBoundingClientRect(); return document.elementFromPoint(b.left + b.width / 2, b.top + 30).closest('#crs-modal') !== null; }));
       await p.close();
     }
 
@@ -224,14 +267,17 @@ const SCREENS = [
       for(const theme of ['light', 'dark']) {
         console.log(`\nÉcrans (${theme === 'light' ? 'clair' : 'sombre'})`);
         const p = await open(browser, base, { fn: t => localStorage.setItem('aprende_theme', t), arg: theme });
-        const broken = [];
+        const broken = [], faint = [];
         for(const [name, code] of SCREENS) {
           const n = p.errs.length;
           try { await p.evaluate(code); } catch(e) { broken.push(name + ' : ' + e.message.split('\n')[0]); }
           await p.waitForTimeout(120);
           if(p.errs.length > n) broken.push(name + ' : ' + p.errs.slice(n).join(' | '));
+          { await p.waitForTimeout(200); for(const m of await p.evaluate(AUDIT, 2.1)) faint.push(name + ' : ' + m); }
         }
         ok(`${SCREENS.length} écrans s'ouvrent sans erreur`, broken.length === 0, broken.slice(0, 6).join('\n      '));
+        if(args.includes('--contraste')) console.log(faint.join('\n'));
+        else ok('tous les textes sont lisibles sur leur fond', faint.length === 0, faint.slice(0, 8).join('\n      '));
         ok('le thème demandé est appliqué', await p.evaluate(t => document.body.classList.contains('dark') === (t === 'dark'), theme));
         await p.close();
       }
