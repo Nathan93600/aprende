@@ -9204,10 +9204,25 @@ function crsRefreshBars() {
   const set = (id, v) => { const e = document.getElementById(id); if(e) e.textContent = v; };
   set('pth-streak', rpg.streak); set('pth-gold', Math.floor(rpg.gold)); set('pth-hp', Math.ceil(rpg.hp)); set('pth-lvl', rpg.lvl);
 }
+// ── Apparence : mode clair / sombre / auto, fond d'écran par langue ──
+function fxThemePref() { try { return localStorage.getItem('aprende_theme') || 'auto'; } catch(e) { return 'auto'; } }
+function fxWallPref() { try { return localStorage.getItem('aprende_wall') !== '0'; } catch(e) { return true; } }
+function fxApplyTheme() {
+  const p = fxThemePref(), dark = p === 'dark' || (p === 'auto' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  const b = document.body; b.classList.add('pop'); b.classList.toggle('dark', dark); b.classList.toggle('wall', fxWallPref());
+  const paper = getComputedStyle(b).getPropertyValue('--fx-paper').trim() || '#ffcf9f';
+  document.documentElement.style.background = paper; document.documentElement.classList.toggle('pre-dark', dark);
+  const m = document.querySelector('meta[name="theme-color"]'); if(m) m.setAttribute('content', paper);
+}
+function fxSetTheme(v) { try { localStorage.setItem('aprende_theme', v); } catch(e) {} fxApplyTheme(); try { openSettingsModal(); } catch(e) {} }
+function fxSetWall(on) { try { localStorage.setItem('aprende_wall', on ? '1' : '0'); } catch(e) {} fxApplyTheme(); }
+try { window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', fxApplyTheme); } catch(e) {}
+document.addEventListener('DOMContentLoaded', fxApplyTheme);
 function crsTheme(t) {
   const b = document.body;
   ['t-hub', 't-es', 't-ln', 't-en'].forEach(c => b.classList.remove(c));
   b.classList.add('t-' + (t || 'hub'));
+  try { fxApplyTheme(); } catch(e) {}
 }
 function tabGo(t) {
   const L = currentLang || 'es';
@@ -9658,7 +9673,7 @@ function renderShop() {
 }
 
 // ── Branchement sur la navigation existante ──
-const FX_DARK_SCREENS = ['lang-select', 'screen-path', 'screen-lesson', 'screen-hero', 'screen-shop', 'screen-badges', 'screen-stories', 'screen-story-play'];
+const FX_DARK_SCREENS = [];   // le thème pop couvre toute l'appli
 const crsOrigShowScreen = showScreen;
 const crsOrigSelectLang = selectLang;
 const crsOrigGoHome = goHome;
@@ -9673,6 +9688,7 @@ showScreen = function(id) {
   crsTheme(id === 'lang-select' ? 'hub' : currentLang);
   // thème « pop » (crème teinté par langue, contours épais) : Réviser, Jeux et tous les jeux
   document.body.classList.toggle('pop', !FX_DARK_SCREENS.includes(id));
+  { const el = document.getElementById(id); if(el) { el.classList.remove('fx-enter'); void el.offsetWidth; el.classList.add('fx-enter'); } }
   if(id === 'screen-path' || id === 'home-en') setTimeout(() => { try { c1Render(); } catch(e) { console.warn('[C1]', e); } }, 0);
   document.body.classList.toggle('t-sky', ['screen-path', 'screen-lesson', 'home-ln', 'screen-hero', 'screen-shop'].includes(id));
   if(rpg) rpgSyncThrottled(id === 'screen-lesson');
@@ -11144,6 +11160,13 @@ function openSettingsModal() {
   const html = `
     <div style="max-width:420px;margin:auto;max-height:80vh;overflow-y:auto;padding-right:4px">
       <h3 style="margin:0 0 1.2rem;text-align:center;font-size:1.2rem">⚙️ Réglages</h3>
+
+      <!-- APPARENCE -->
+      <div style="margin-bottom:1.2rem">
+        <div class="set-h">🎨 Apparence</div>
+        <div class="set-seg">${[['auto','Auto'],['light','☀️ Clair'],['dark','🌙 Sombre']].map(([v,l]) => `<button class="${fxThemePref() === v ? 'on' : ''}" onclick="fxSetTheme('${v}')">${l}</button>`).join('')}</div>
+        <label class="set-row"><span>🖼️ Fond d'écran (Times Square, Barcelone)</span><input type="checkbox" ${fxWallPref() ? 'checked' : ''} onchange="fxSetWall(this.checked)"></label>
+      </div>
 
       <!-- SONS & VIBRATIONS -->
       <div style="margin-bottom:1.2rem">

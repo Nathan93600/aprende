@@ -231,10 +231,14 @@ entrées dans `AUDIO_MAP`. Coût Google Chirp 3 HD : 1 million de caractères gr
 - Un écran = un `<div class="screen" id="…">` ; `showScreen(id)` l'affiche.
 - Accueil par langue : `home` (espagnol), `home-en`, `home-ln` ; `selectLang(lang)` choisit.
 - Barre d'onglets (`#crs-tabbar`, `tabGo()`) : Parcours, Réviser, Jeux, Héros, Boutique, Réglages.
-- Thèmes : classe `t-es`, `t-en`, `t-ln` sur `<body>` (`crsTheme`). Le thème « pop » (`body.pop`)
-  s'applique à Réviser, Jeux, tous les jeux, fiches et planning ; les écrans listés dans
-  `FX_DARK_SCREENS` gardent le thème sombre. Couleurs par langue en fin de `style.css`
-  (`--fx-paper`, `--fx-panel`).
+- Thèmes : classe `t-es`, `t-en`, `t-ln` sur `<body>` (`crsTheme`). Tout l'appli utilise le thème « pop »
+  (`body.pop`, fin de `style.css`) : `--ink` pour les contours, les ombres et le texte sur couleur vive, `--tx` pour
+  le texte courant, `--fx-paper` / `--fx-panel` / `--fx-field` pour les fonds, une palette par langue.
+- Mode clair ou sombre : `body.dark`, réglage `aprende_theme` (`auto`, `light`, `dark` ; `auto` suit le système),
+  appliqué par `fxApplyTheme()` et dès le chargement par un petit script dans `index.html` (pas de flash).
+- Fonds d'écran : `#fx-wall` (fixe, sous tout le contenu), `img/wall-en.jpg` et `img/wall-es.jpg` avec un voile de la
+  couleur du thème ; réglage `aprende_wall` (`0` = désactivé). Pour une nouvelle langue : ajouter `img/wall-<lang>.jpg`
+  et les deux règles `body.pop.wall.t-<lang> #fx-wall` (clair et sombre).
 
 ---
 

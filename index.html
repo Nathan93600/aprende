@@ -17,8 +17,11 @@
 <title>¡Aprende! — Langues Interactives</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&family=Poppins:wght@500;600;700;800&family=Unbounded:wght@400;700;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<script>try{var _t=localStorage.getItem("aprende_theme")||"auto";if(_t==="dark"||(_t==="auto"&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("pre-dark")}catch(e){}</script>
 </head>
-<body>
+<body class="pop">
+<div id="fx-wall" aria-hidden="true"></div>
+<script>try{if(document.documentElement.classList.contains("pre-dark"))document.body.classList.add("dark");if(localStorage.getItem("aprende_wall")!=="0")document.body.classList.add("wall")}catch(e){}</script>
 <button id="desktop-toggle" onclick="toggleDesktopMode()" title="Basculer entre mode mobile et desktop">
   <span id="desktop-toggle-icon">🖥️</span>
   <span id="desktop-toggle-label">Desktop</span>
