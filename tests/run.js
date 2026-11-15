@@ -195,6 +195,22 @@ const AUDIT = (min) => {
         } else o.bumped = 'aucune carte étudiée';
         o.lessonBump = conjBump('ser', 'subjuntivo') && conjLoad()['conj:ser|subjuntivo'].pri === 1;
         o.picks = [0, 8, 14, 20].map(u => conjLessonPicks(u, 3).map(x => CONJ_SENT[x.c][1]));
+        // Atelier conjugaison : une partie par mode, réponses justes sauf la première
+        o.atelier = {};
+        for(const mode of ['mix', 'fill', 'qcm', 'table']) {
+          selectLang('es'); initCT(mode); ctChooseTense(mode === 'mix' ? 'mix' : 'preterito'); ctSetDiff(0); ctStart();
+          let n = 0, first = true;
+          while(ct.phase === 'play' && n++ < 80) {
+            const ex = ct.exercises[ct.idx];
+            if(ex.type === 'qcm' || ex.type === 'identify') { const i = first ? ct.opts.findIndex(x => x !== ct.correctAnswer) : ct.opts.indexOf(ct.correctAnswer); document.querySelector(`#ct-body .opt[data-i="${i}"]`).click(); }
+            else if(ex.type === 'fill') document.getElementById('ct-input').value = first ? conjStrip(ct.correctAnswer) + 'x' : ct.correctAnswer;
+            else document.querySelectorAll('#ct-body .cw-cell:not([readonly])').forEach(c => { c.value = first ? 'x' : ex.forms[+c.dataset.idx]; });
+            first = false;
+            ctAction(); ctAction(); await wait(5);
+          }
+          o.atelier[mode] = ct.phase === 'done' && ct.errors === 1 && ct.correct >= 8 && !!document.querySelector('.cw-done') && ct.missed.length === 1;
+        }
+        o.atelierStars = (ctGetStars().preterito || 0) >= 2;
         return o;
       });
       ok('accents exigés : hablo ≠ habló', JSON.stringify(r.judge) === JSON.stringify(['ok', 'ok', 'accent', 'accent', 'ko', 'ok']), JSON.stringify(r.judge));
@@ -210,6 +226,7 @@ const AUDIT = (min) => {
       ok('une erreur en leçon fait revenir la carte demain, sans changer sa mémoire', r.bumped === true, String(r.bumped));
       ok('un verbe raté en leçon passe en tête des nouvelles cartes', r.lessonBump);
       ok('les leçons ne demandent que des temps déjà vus', r.picks[0].every(t => t === 'presente') && r.picks[1].every(t => ['presente', 'preterito'].includes(t)) && r.picks[1].includes('preterito') && r.picks.every(x => x.length === 3), JSON.stringify(r.picks));
+      ok('atelier conjugaison : une partie se joue jusqu\'au bout dans les 4 modes', Object.values(r.atelier).every(Boolean) && r.atelierStars && p.errs.length === 0, JSON.stringify(r.atelier) + ' ' + p.errs.join(' | '));
       await p.close();
     }
     if(want('srs')) {

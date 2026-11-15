@@ -68,9 +68,9 @@ function startGame(game) {
   else if(game === 'speed') initSpeed();
   else if(game === 'survival') initSurvival();
   else if(game === 'tempsdefi') initTD();
-  else if(game === 'conjtrainer') initCT();
-  else if(game === 'conjqcm') initCQ();
-  else if(game === 'conjfill') initCF();
+  else if(game === 'conjtrainer') initCT('mix');
+  else if(game === 'conjqcm') initCT('qcm');
+  else if(game === 'conjfill') initCT('table');
   else if(game === 'lecons') initLecons();
   else if(game === 'palette') initPalette();
   else if(game === 'mindmap') initMindMap();

@@ -115,7 +115,12 @@ un piège est compté faux avec son explication.
 ## 6. Jeux
 
 En espagnol, l'onglet montre d'abord les jeux où l'on produit le mot (Frappe le mot, Survie, Wordle,
-Blitz, Anagramme, Entraîneur de conjugaison, Leçons) ; les autres sont dans « Plus de jeux ».
+Blitz, Anagramme, Atelier conjugaison, Leçons) ; les autres sont dans « Plus de jeux ».
+
+**Atelier conjugaison** : on choisit un temps (ou « Mélange »), un type d'exercice (mixte, phrases à
+trou, QCM, tableau complet) et une longueur. Les accents comptent, chaque temps garde ses étoiles, et
+les verbes ratés sont listés à la fin puis reviennent dans Réviser. Il remplace l'ancien entraîneur,
+le QCM de conjugaison et le tableau à compléter.
 
 | 🇪🇸 Espagnol (19) | 🇬🇧 Anglais (11) | 🇨🇩 Lingala (3) |
 |---|---|---|
