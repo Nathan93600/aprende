@@ -147,6 +147,71 @@ const AUDIT = (min) => {
       await p.close();
     }
 
+    if(want('conjugaison')) {
+      console.log('\nConjugaison (cartes et leçons)');
+      const p = await open(browser, base);
+      const r = await p.evaluate(async () => {
+        const wait = ms => new Promise(r => setTimeout(r, ms)), o = {};
+        o.judge = [conjJudge('tuve', 'tuve'), conjJudge(' Tuve. ', 'tuve'), conjJudge('hablo', 'habló'), conjJudge('tuvé', 'tuve'), conjJudge('tengo', 'tuve'), conjJudge('me acuerdo', 'me acuerdo')];
+        o.badSent = CONJ_SENT.filter(s => !CONJ_DB[s[0]] || !CONJ_DB[s[0]][s[1]] || !CONJ_DB[s[0]][s[1]][s[2]] || s[3].split('___').length !== 2 || !s[3].includes(s[5]) || !s[4]).map(s => s[3]);
+        o.badDb = Object.keys(CONJ_DB).filter(v => CONJ_TENSES.some(t => !CONJ_DB[v][t] || CONJ_DB[v][t].length !== 6 || CONJ_DB[v][t].some(f => !f)));
+        localStorage.setItem('conj_srs', '{}'); conjInvalidateCache(); localStorage.setItem('conj_per_day', '10');
+        const vocab = Object.keys(srsLoad()).length;
+        srsState.sessionFilter = null;
+        o.es = srsBuildQueue('es').filter(c => c.conj).length; o.en = srsBuildQueue('en').filter(c => c.conj).length;
+        localStorage.setItem('conj_per_day', '0'); o.off = srsBuildQueue('es').filter(c => c.conj).length; localStorage.setItem('conj_per_day', '10');
+        // une carte : réponse fausse, puis juste
+        openSRS('es'); srsState.forceKey = 'conj:tener|preterito'; srsRefresh(); await wait(80);
+        o.shown = !!document.getElementById('conj-inp') && srsState.currentCard.key === 'conj:tener|preterito';
+        const expect = srsState.conjPrompt.answer;
+        document.getElementById('conj-inp').value = conjStrip(expect) === expect ? expect + 'x' : conjStrip(expect); conjCheck();
+        o.wrongBlocks = document.querySelector('#srs-grade-area .srs-grade-good').disabled && !document.querySelector('#srs-grade-area .srs-grade-again').disabled;
+        const logLen = srsRevlogLoad().length;
+        srsGrade(2); o.refused = srsRevlogLoad().length === logLen;
+        srsGrade(0); await wait(450);
+        const rec = conjLoad()['conj:tener|preterito'];
+        o.stored = !!rec && rec.reps > 0 && !('conj:tener|preterito' in srsLoad()) && Object.keys(srsLoad()).length === vocab;
+        o.logged = srsRevlogLoad().slice(-1)[0][0] === 'conj:tener|preterito';
+        o.samePerson = (rec.p || 0) === 0;
+        srsUndo(); await wait(80);
+        o.undone = !conjLoad()['conj:tener|preterito'] && srsRevlogLoad().length === logLen;
+        srsState.forceKey = 'conj:tener|preterito'; srsRefresh(); await wait(80);
+        document.getElementById('conj-inp').value = srsState.conjPrompt.answer; conjCheck();
+        o.rightAllows = !document.querySelector('#srs-grade-area .srs-grade-good').disabled;
+        srsGrade(2); await wait(450);
+        o.rotates = conjLoad()['conj:tener|preterito'].p === 1;
+        // sauvegarde
+        const b = buildProgressExport ? buildProgressExport() : null;
+        o.exported = !!(b && b.conj_srs && b.conj_srs['conj:tener|preterito']);
+        // une erreur en leçon rapproche la carte
+        const data = srsLoad(), k = Object.keys(data).find(x => x.startsWith('es:'));
+        if(k) {
+          Object.assign(data[k], srsNextState(srsNextState({ ...data[k], reps: 0, st: 'new' }, 3, k, Date.now() - 40 * 86400000), 2, k, Date.now() - 30 * 86400000));
+          data[k].due = Date.now() + 20 * 86400000; srsSave(data);
+          const mem = JSON.stringify([data[k].s, data[k].d, data[k].reps, data[k].interval]);
+          const word = k.slice(3);
+          const msg = crsMissToSrs('es', { t: 'ft', w: [word, 'x'] });
+          const c2 = srsLoad()[k]; o.bumped = (!!msg && c2.due <= srsStartOfToday() + 86400000 && JSON.stringify([c2.s, c2.d, c2.reps, c2.interval]) === mem) || ('état ' + data[k].st + ' ' + msg);
+        } else o.bumped = 'aucune carte étudiée';
+        o.lessonBump = conjBump('ser', 'subjuntivo') && conjLoad()['conj:ser|subjuntivo'].pri === 1;
+        o.picks = [0, 8, 14, 20].map(u => conjLessonPicks(u, 3).map(x => CONJ_SENT[x.c][1]));
+        return o;
+      });
+      ok('accents exigés : hablo ≠ habló', JSON.stringify(r.judge) === JSON.stringify(['ok', 'ok', 'accent', 'accent', 'ko', 'ok']), JSON.stringify(r.judge));
+      ok('chaque phrase a un blanc, un déclencheur et une forme connue', r.badSent.length === 0, r.badSent.slice(0, 4).join(' | '));
+      ok('chaque verbe a ses 6 temps complets', r.badDb.length === 0, r.badDb.join(', '));
+      ok('les cartes de conjugaison entrent dans Réviser en espagnol seulement, dans la limite du jour', r.es > 0 && r.es <= 10 && r.en === 0 && r.off === 0, `es ${r.es}, en ${r.en}, à 0 : ${r.off}`);
+      ok('la carte s\'affiche avec son champ de saisie', r.shown);
+      ok('réponse fausse : « Bien » et « Facile » sont bloqués', r.wrongBlocks && r.refused);
+      ok('la carte est rangée à part, sans toucher au vocabulaire', r.stored && r.logged && r.samePerson);
+      ok('annuler retire la carte et sa ligne d\'historique', r.undone);
+      ok('réponse juste : la personne demandée change au passage suivant', r.rightAllows && r.rotates);
+      ok('la sauvegarde contient les cartes de conjugaison', r.exported);
+      ok('une erreur en leçon fait revenir la carte demain, sans changer sa mémoire', r.bumped === true, String(r.bumped));
+      ok('un verbe raté en leçon passe en tête des nouvelles cartes', r.lessonBump);
+      ok('les leçons ne demandent que des temps déjà vus', r.picks[0].every(t => t === 'presente') && r.picks[1].every(t => ['presente', 'preterito'].includes(t)) && r.picks[1].includes('preterito') && r.picks.every(x => x.length === 3), JSON.stringify(r.picks));
+      await p.close();
+    }
     if(want('srs')) {
       console.log('\nRévision espacée (FSRS)');
       const p = await open(browser, base);
@@ -294,7 +359,7 @@ const AUDIT = (min) => {
           const u = COURSES[l].units.findIndex(x => x.free) >= 0 ? COURSES[l].units.findIndex(x => x.free) : 0;
           currentLang = l; crsStart(l, u, 0);
           const wait = ms => new Promise(r => setTimeout(r, ms)), scr = () => document.querySelector('.screen.active').id;
-          let i = 0, wrongDone = false;
+          let i = 0, wrongDone = false, wrongConj = false, sawConj = false;
           for(; i < 400 && crs && !crs.finished; i++) {
             const ex = crs.q[crs.i];
             if(!crs.checked && ['tf', 'ft', 'listen', 'fill', 'gq', 'readctx'].includes(ex.t)) {
@@ -302,6 +367,7 @@ const AUDIT = (min) => {
               if(!wrongDone && ex.opts.length > 1) { k = (k + 1) % ex.opts.length; wrongDone = true; }   // une erreur volontaire, pour tester ce chemin
               crsPick(k);
             } else if(!crs.checked && ex.t === 'dictee') { const el = document.getElementById('ls-dict-inp'); el.value = ex.w[0]; el.dispatchEvent(new Event('input', { bubbles: true })); }
+            else if(!crs.checked && ex.t === 'conj') { sawConj = true; const c = CONJ_SENT[ex.c], el = document.getElementById('ls-conj-inp'); el.value = wrongConj ? CONJ_DB[c[0]][c[1]][c[2]] : 'zzz'; wrongConj = true; }
             else if(!crs.checked && ex.t === 'freetr') { const el = document.getElementById('ls-freetr-inp'); el.value = ex.w[0]; el.dispatchEvent(new Event('input', { bubbles: true })); }
             else if(!crs.checked && ex.t === 'build') {
               const used = new Set();
@@ -312,9 +378,10 @@ const AUDIT = (min) => {
             }
             crsAction(); await wait(40);
           }
-          return { steps: i, finished: !!(crs && crs.finished), screen: scr(), done: (JSON.parse(localStorage.getItem('crs_prog') || '{}')[l] || {})[u] || 0 };
+          return { steps: i, finished: !!(crs && crs.finished), sawConj, screen: scr(), done: (JSON.parse(localStorage.getItem('crs_prog') || '{}')[l] || {})[u] || 0 };
         }, l);
         ok(`${l} : une leçon se joue jusqu'au bout sans erreur`, p.errs.length === 0 && res.finished, JSON.stringify(res) + ' ' + p.errs.join(' | '));
+        if(l === 'es') ok('es : la leçon contient de la conjugaison en contexte', res.sawConj === true);
         await p.close();
       }
     }

@@ -358,9 +358,10 @@ if('serviceWorker' in navigator) {
 if(window.navigator.standalone) document.body.classList.add('ios-pwa');
 /* ── Menus Jeux : pastilles de catégorie construites à partir des sections existantes ── */
 function gamesMenuInit() {
+  try { gamesTidy(); } catch(e) { console.warn('[Aprende] rangement des jeux', e); }
   ['home', 'home-ln', 'home-en'].forEach(id => {
     const scr = document.getElementById(id); if(!scr || scr.querySelector('.gm-chips')) return;
-    const grids = [...scr.querySelectorAll('.games-grid')]; if(!grids.length) return;
+    const grids = [...scr.querySelectorAll('.games-grid')].filter(g => !g.closest('.more-games')); if(!grids.length) return;
     const short = t => /conjug|gramm/i.test(t) ? '📋 Conjugaison' : /visuel|synesth/i.test(t) ? '🎨 Visuel' : /tap/i.test(t) ? '⚡ Tap' : /natif|pronon|accent|parler/i.test(t) ? '🗣️ Oral' : t.trim().slice(0, 16);
     const secs = grids.map((g, i) => {
       const wrap = g.parentElement === scr ? g : g.parentElement;

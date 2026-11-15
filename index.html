@@ -579,6 +579,12 @@
         <strong id="srs-npd-value">20</strong>
         <button class="fx-step" onclick="srsSetNewPerDay(5)" aria-label="Plus">+</button>
       </div>
+      <div class="fx-row" id="srs-conj-row" style="display:none">
+        <span class="fx-npd" style="margin-left:0;flex:1" title="Cartes de conjugaison (verbe + temps) mêlées à tes mots. 0 = aucune.">🔁 Conjugaison / jour</span>
+        <button class="fx-step" onclick="conjSetPerDay(-5)" aria-label="Moins de conjugaison">−</button>
+        <strong id="srs-conj-value">10</strong>
+        <button class="fx-step" onclick="conjSetPerDay(5)" aria-label="Plus de conjugaison">+</button>
+      </div>
       <div id="srs-npd-hint" class="fx-hint"></div>
       <div class="fx-hint srs-kbd-hint">⌨️ Espace = révéler · 1-4 = noter · Z = annuler</div>
     </div>
@@ -1608,6 +1614,7 @@
 <script src="js/features.js"></script>
 <script src="js/stories.js"></script>
 <script src="js/conj-trainer.js"></script>
+<script src="js/conj-cards.js"></script>
 <script src="js/init.js"></script>
 <script src="js/sfx.js"></script>
 <script src="js/settings.js"></script>

@@ -79,6 +79,16 @@ Autres éléments de l'écran :
 Les cartes oubliées 8 fois deviennent des **sangsues**. Les cartes en apprentissage reviennent
 dans la même séance (1 min, puis 10 min).
 
+### Conjugaison (espagnol)
+
+Des cartes « verbe + temps » se mêlent aux mots : une phrase à trou avec son déclencheur
+(« Ayer yo ___ un problema », *tener*), on tape la forme. Les accents comptent. Après la réponse,
+la carte montre pourquoi ce temps s'emploie et le tableau des six personnes. Le réglage
+« Conjugaison / jour » fixe leur nombre (10 par défaut, 0 pour les couper).
+
+Les leçons espagnoles contiennent aussi 2 ou 3 de ces phrases, limitées aux temps déjà vus dans
+le parcours. Un mot ou un verbe raté en leçon revient plus tôt dans Réviser.
+
 ### Statistiques
 
 Révisions du jour, rétention réelle sur 30 jours, série de jours, répartition des cartes
@@ -103,6 +113,9 @@ un piège est compté faux avec son explication.
 ---
 
 ## 6. Jeux
+
+En espagnol, l'onglet montre d'abord les jeux où l'on produit le mot (Frappe le mot, Survie, Wordle,
+Blitz, Anagramme, Entraîneur de conjugaison, Leçons) ; les autres sont dans « Plus de jeux ».
 
 | 🇪🇸 Espagnol (19) | 🇬🇧 Anglais (11) | 🇨🇩 Lingala (3) |
 |---|---|---|

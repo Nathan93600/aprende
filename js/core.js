@@ -129,3 +129,25 @@ function scoreRise(text, type = 'xp') {
 function setProgress(fillId, current, total) {
   document.getElementById(fillId).style.width = (current/total*100)+'%';
 }
+
+// ── Onglet Jeux (espagnol) : les jeux où l'on produit le mot restent visibles, les autres vont dans « Plus de jeux » ──
+const GAMES_KEEP = ['typing', 'survival', 'wordle', 'blitz', 'anagramme', 'conjtrainer', 'lecons'];
+function gamesTidy() {
+  const home = document.getElementById('home');
+  if(!home || home.dataset.tidy) return;
+  home.dataset.tidy = '1';
+  const first = home.querySelector('.games-grid'); if(!first) return;
+  const game = c => { const m = (c.getAttribute('onclick') || '').match(/startGame\('([a-z]+)'\)/); return m ? m[1] : ''; };
+  const cards = [...home.querySelectorAll('.game-card')];
+  const more = document.createElement('div'); more.className = 'games-grid';
+  cards.filter(c => !GAMES_KEEP.includes(game(c))).forEach(c => { c.style.gridColumn = ''; more.appendChild(c); });
+  GAMES_KEEP.forEach(g => { const c = cards.find(x => game(x) === g); if(c) { c.style.gridColumn = ''; first.appendChild(c); } });
+  // les anciennes sections, vidées de leurs jeux, disparaissent
+  [...home.children].forEach(el => { if(el !== first && el.querySelector && el.querySelector('.games-grid') && !el.querySelector('.game-card')) el.remove(); });
+  if(!more.children.length) return;
+  const det = document.createElement('details'); det.className = 'more-games';
+  det.innerHTML = `<summary>Plus de jeux <span>${more.children.length}</span></summary>`;
+  det.appendChild(more);
+  first.after(det);
+}
+document.addEventListener('DOMContentLoaded', () => { try { gamesTidy(); } catch(e) { console.warn('[Aprende] rangement des jeux', e); } });

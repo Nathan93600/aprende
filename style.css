@@ -2430,3 +2430,42 @@ body.pop.wall.noveil.t-en #fx-wall, body.pop.dark.wall.noveil.t-en #fx-wall { ba
 body.pop.wall.noveil.t-es #fx-wall { background-image: url('img/wall-es-light.jpg'); }
 body.pop.dark.wall.noveil.t-es #fx-wall { background-image: url('img/wall-es-dark.jpg'); }
 body.pop.wall.noveil .screen.active > :is(h1, h2, p, .pg-title, .home-sub), body.pop.wall.noveil .game-title-bar h2, body.pop.wall.noveil .fx-title { text-shadow: 0 0 10px var(--fx-paper), 0 0 4px var(--fx-paper), 0 1px 2px var(--fx-paper); }
+
+/* ── Cartes de conjugaison (Réviser) et exercice de conjugaison (leçons) ── */
+#screen-srs .srs-card.conj-card, #screen-srs .srs-card.conj-card.revealed { background-color: var(--sky, #bfe3ff); cursor: default; }
+#screen-srs .srs-stack.conj-mode { height: auto; }
+#screen-srs .srs-card.conj-card.top { position: relative; inset: auto; height: auto; min-height: clamp(270px, 41vh, 420px); }
+.conj-body { display: flex; flex-direction: column; align-items: center; gap: .55rem; width: 100%; }
+.conj-verb { font: 800 1.9rem/1.1 'Poppins', sans-serif; color: var(--ink); text-align: center; }
+.conj-verb small { display: block; font: 600 .82rem 'Poppins', sans-serif; opacity: .7; margin-top: .15rem; }
+.conj-sent { font: 700 1.08rem/1.5 'Poppins', sans-serif; color: var(--ink); text-align: center; }
+.conj-gap { display: inline-block; min-width: 3.2em; border-bottom: 3px solid var(--ink); margin: 0 .25em; padding: 0 .2em; text-align: center; font-weight: 800; }
+.conj-gap.ok { color: #0d6b2b; border-color: #0d6b2b; } .conj-gap.ko { color: #b3261e; border-color: #b3261e; }
+.conj-fr { font: 500 .8rem/1.4 'Poppins', sans-serif; color: var(--ink); opacity: .72; text-align: center; }
+.conj-entry { width: 100%; display: flex; flex-direction: column; align-items: center; gap: .5rem; margin-top: .3rem; }
+.conj-inp { width: 100%; max-width: 320px; font: 700 1.1rem 'Poppins', sans-serif; text-align: center; padding: .65rem .8rem; border: 2.5px solid var(--ink); border-radius: 16px; background: #fffdf6; color: #2b1408; box-shadow: 0 3px 0 var(--ink); outline: none; }
+.conj-inp:focus { box-shadow: 0 3px 0 var(--ink), 0 0 0 4px rgba(255, 255, 255, .7); }
+.conj-keys { display: flex; gap: .35rem; flex-wrap: wrap; justify-content: center; }
+.conj-keys button { min-width: 38px; height: 38px; border: 2px solid var(--ink); border-radius: 12px; background: #fffdf6; color: #2b1408; font: 700 1rem 'Poppins', sans-serif; cursor: pointer; box-shadow: 0 2px 0 var(--ink); }
+.conj-keys button:active { transform: translateY(2px); box-shadow: none; }
+.conj-result { width: 100%; text-align: center; color: var(--ink); animation: fxRise .35s var(--fx-spring) backwards; }
+.conj-result > b { display: block; font: 800 1rem 'Poppins', sans-serif; } .conj-result > b.ok { color: #0d6b2b; } .conj-result > b.ko { color: #b3261e; }
+.conj-result > span { display: block; font-size: .8rem; opacity: .8; margin-top: .1rem; }
+.conj-why { font: 600 .78rem/1.4 'Poppins', sans-serif; margin: .5rem 0; padding: .4rem .6rem; border: 2px dashed var(--ink); border-radius: 12px; }
+.conj-table { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .3rem; }
+.conj-table span { font: 700 .78rem 'Poppins', sans-serif; padding: .25rem .2rem; border-radius: 9px; background: rgba(255, 255, 255, .55); color: #2b1408; overflow-wrap: anywhere; }
+.conj-table span i { display: block; font: 500 .62rem 'Poppins', sans-serif; font-style: normal; opacity: .7; }
+.conj-table span.me { background: #fffdf6; outline: 2px solid var(--ink); }
+body.pop.dark .srs-card.conj-card { --ink: #06070d; }
+#screen-srs .srs-grade-btn:disabled { filter: grayscale(1) opacity(.32); pointer-events: none; }
+.conj-ls .conj-gap { border-color: currentColor; }
+#screen-lesson .conj-keys { margin: .6rem 0 .2rem; }
+.srs-back-note { display: inline-block; margin-top: .35rem; font-weight: 700; opacity: .9; }
+/* ── Jeux : tiroir « Plus de jeux » ── */
+.more-games { width: 100%; max-width: 960px; margin-top: 1.4rem; }
+.more-games > summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: .5rem; padding: .7rem 1rem; border: 2.5px solid var(--ink); border-radius: 999px; background: var(--fx-panel); color: var(--tx); font: 800 .9rem 'Poppins', sans-serif; box-shadow: 0 3px 0 var(--ink); }
+.more-games > summary::-webkit-details-marker { display: none; }
+.more-games > summary::after { content: '▾'; transition: transform .2s; } .more-games[open] > summary::after { transform: rotate(180deg); }
+.more-games > summary span { background: var(--sun); color: #2b1408; border: 2px solid var(--ink); border-radius: 999px; padding: 0 .5rem; font-size: .75rem; }
+.more-games > .games-grid { margin-top: 1rem; }
+#srs-grade-area { scroll-margin-bottom: 110px; }

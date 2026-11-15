@@ -2,10 +2,9 @@
 // ═══════════════════════════════════════════════
 // EXPORT / IMPORT — backup & restore progress
 // ═══════════════════════════════════════════════
-function exportProgress(forGenere) {
+// Contenu de la sauvegarde (séparé de l'envoi, pour pouvoir le tester)
+function buildProgressExport() {
   const now = new Date();
-  const pad = n => String(n).padStart(2, '0');
-  const stamp = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}`;
   const data = {
     version: 2,
     exported_at: now.toISOString(),
@@ -31,11 +30,20 @@ function exportProgress(forGenere) {
     srs_new_per_day: srsNewPerDay(),
     pron_srs: JSON.parse(localStorage.getItem('pron_srs') || '{}'),
     grammar_srs: JSON.parse(localStorage.getItem('grammar_srs') || '{}'),
+    conj_srs: JSON.parse(localStorage.getItem('conj_srs') || '{}'),
+    conj_per_day: conjPerDay(),
     srs_algo: 'fsrs6',
     crs_prog: JSON.parse(localStorage.getItem('crs_prog') || '{}'),
     crs_added: JSON.parse(localStorage.getItem('crs_added') || '{}'),
     rpg: JSON.parse(localStorage.getItem('rpg') || 'null'),
   };
+  return data;
+}
+function exportProgress(forGenere) {
+  const now = new Date();
+  const pad = n => String(n).padStart(2, '0');
+  const stamp = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}`;
+  const data = buildProgressExport();
   const jsonStr = JSON.stringify(data, null, 2);
   const filename = `aprende-progres-${stamp}.json`;
 
@@ -259,6 +267,8 @@ function importProgress(file) {
       if(data.srs_new_per_day !== undefined) localStorage.setItem('srs_new_per_day', String(data.srs_new_per_day));
       if(data.pron_srs) localStorage.setItem('pron_srs', JSON.stringify(data.pron_srs));
       if(data.grammar_srs) localStorage.setItem('grammar_srs', JSON.stringify(data.grammar_srs));
+      if(data.conj_srs) { localStorage.setItem('conj_srs', JSON.stringify(data.conj_srs)); conjInvalidateCache(); }
+      if(data.conj_per_day !== undefined) localStorage.setItem('conj_per_day', String(data.conj_per_day));
       if(data.crs_prog) localStorage.setItem('crs_prog', JSON.stringify(data.crs_prog));
       if(data.crs_added) localStorage.setItem('crs_added', JSON.stringify(data.crs_added));
       if(data.rpg) localStorage.setItem('rpg', JSON.stringify(data.rpg));

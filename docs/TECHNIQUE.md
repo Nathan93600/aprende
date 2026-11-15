@@ -34,7 +34,8 @@ js/                     la logique, découpée par domaine (26 fichiers, chargé
   en-oral.js              anglais oral : niveaux, prononciation, accent
   core.js                 état, navigation (showScreen), utilitaires
   games-basic.js, games-memory.js, games-words.js, sessions.js   les jeux
-  conjugation.js, conj-trainer.js      conjugaison espagnole
+  conjugation.js, conj-trainer.js      conjugaison espagnole (base CONJ_DB, jeux)
+  conj-cards.js           cartes de conjugaison dans Réviser, phrases à déclencheur (CONJ_SENT)
   journal.js              journal des mots (JOURNAL_SESSIONS) et règles de grammaire
   backup.js               sauvegarde / restauration, bouton « génère »
   srs.js                  révision espacée FSRS-6, écran Réviser, planning, fiches
@@ -103,6 +104,7 @@ Une copie de l'appli n'en a pas besoin : mettre `firebase: false`.
 | `es_mastered`, `en_mastered`, `ln_mastered`, `mastered` | mots maîtrisés dans les jeux |
 | `crs_prog`, `crs_resume`, `crs_added` | progression dans les cours |
 | `pron_srs`, `grammar_srs` | révision de la prononciation (anglais) et des règles de grammaire |
+| `conj_srs`, `conj_per_day` | cartes de conjugaison espagnole (`conj:verbe|temps`) et leur limite par jour |
 | `rpg` | héros, or, inventaire, quêtes |
 | `genere_sent` | semaine du dernier envoi « génère » |
 | `aprende_sfx`, `aprende_vibe`, `aprende_notif` | réglages sons, vibrations, notifications |
@@ -223,6 +225,21 @@ STORIES.es = [{ id, title, desc, level, chars: { T: ['🧑', 'Tú'], L: ['👩',
 **Conséquence importante** : renommer un mot dans les données crée une nouvelle carte. Corriger une
 orthographe est sans danger (la migration suit la casse), changer le mot lui-même repart de zéro.
 
+### Conjugaison espagnole (`js/conj-cards.js`)
+
+- Une carte = un verbe + un temps, clé `conj:tener|preterito`, rangée dans `conj_srs` (jamais dans
+  `srs_data`). Même algorithme FSRS, même historique (`srs_revlog`, clé préfixée `conj:`).
+- `srsBuildQueue('es')` y mêle les cartes renvoyées par `conjQueue()` : au plus `conj_per_day`
+  cartes par jour (révisions d'abord), dont au plus `CONJ_NEW_MAX` nouvelles.
+- La carte se tape. `conjJudge()` exige les accents (`hablo` ≠ `habló`) ; une réponse fausse ne peut
+  être notée que « Encore » ou « Difficile ». À chaque réussite, la personne demandée change (`p`).
+- `CONJ_SENT` : phrases à déclencheur `[verbe, temps, personne, phrase avec ___, traduction, déclencheur]`.
+  La forme attendue vient toujours de `CONJ_DB` ; le test `conjugaison` vérifie chaque phrase.
+- Leçons espagnoles : `conjLessonPicks(u, n)` ajoute 2 ou 3 exercices `{t:'conj', c}` limités aux
+  temps déjà vus (`conjTensesForUnit`). Pour ajouter un verbe : une entrée dans `CONJ_DB` suffit.
+- Une erreur en leçon (`crsMissToSrs`) avance la carte du mot au lendemain, sans toucher à sa
+  mémoire, et met le verbe raté en tête des nouvelles cartes de conjugaison (`conjBump`).
+
 ---
 
 ## 7. Voix
@@ -306,7 +323,7 @@ python3 -m http.server 8000      # à la racine du dépôt
   `fiches` (chaque mot a sa fiche), `audio` (chaque voix de l'index existe), `progression`
   (les cartes existantes ne bougent pas), `ecrans` (tous les écrans, clair et sombre, et lisibilité
   de chaque texte sur son fond ; détail avec `node tests/run.js ecrans --contraste`), `lecons`,
-  `histoires`, `sauvegarde`. À lancer avant chaque mise en ligne.
+  `histoires`, `conjugaison`, `sauvegarde`. À lancer avant chaque mise en ligne.
 - Tester avec une sauvegarde réelle : la restaurer depuis Réglages, ou l'injecter dans
   `localStorage` avec un navigateur automatisé (Playwright).
 - Publier : pousser sur la branche servie par GitHub Pages, après avoir incrémenté `CACHE_NAME`.

@@ -634,14 +634,34 @@ function srsRenderStack() {
   try {
   const stack = document.getElementById('srs-stack');
   stack.innerHTML = '';
-  srsState.revealed = false;
+  srsState.revealed = false; srsState.conjPrompt = null;
   document.getElementById('srs-grade-area').style.display = 'none';
+  document.querySelectorAll('#srs-grade-area .srs-grade-btn').forEach(b => { b.disabled = false; });
 
   const visible = srsState.queue.slice(0, 3);
+  stack.classList.toggle('conj-mode', !!(visible[0] && visible[0].conj));
   document.getElementById('srs-counter').textContent = `${srsState.queue.length} à réviser`;
 
   visible.forEach((card, i) => {
     try {
+    if(card.conj) {
+      // Carte de conjugaison : on tape la forme, pas de retournement
+      const el = document.createElement('div');
+      el.className = 'srs-card conj-card ' + (i === 0 ? 'top' : i === 1 ? 'below-1' : 'below-2');
+      if(i === 0) {
+        el.classList.add(srsState.fxRise ? 'fx-rise' : 'fx-pop');
+        const done = srsState.sessionDone || 0, total = done + srsState.queue.length + srsState.learnLater.length;
+        const pct = total ? Math.round(100 * done / total) : 0;
+        srsState.fxPrevPct = pct;
+        el.innerHTML = conjCardHTML(card, `<div class="fx-prog"><span class="fx-prog-bar"><i style="width:${pct}%"></i></span><b>${done}/${total}</b></div>`);
+      }
+      stack.appendChild(el);
+      if(i === 0) {
+        const inp = el.querySelector('#conj-inp');
+        if(inp) inp.addEventListener('keydown', e => { if(e.key === 'Enter') { e.preventDefault(); conjCheck(); } });
+      }
+      return;
+    }
     let data = srsGetCardData(card.lang, card.word);
     // Fallback: if card no longer in deck, use translation stored in SRS data
     if(!data) {
@@ -717,7 +737,8 @@ function srsRenderStack() {
   // Update interval previews
   try {
   if(srsState.currentCard) {
-    const data = srsLoad()[srsState.currentCard.key];
+    const ck = srsState.currentCard.key;
+    const data = srsState.currentCard.conj ? (conjLoad()[ck] || conjNewRec()) : srsLoad()[ck];
     [0,1,2,3].forEach(g => {
       document.getElementById(`srs-int-${g}`).textContent = srsFormatInterval(data, g, srsState.currentCard.key);
     });
@@ -732,6 +753,11 @@ function srsRenderStack() {
 
 function srsReveal() {
   if(srsState.revealed) return;
+  if(srsState.currentCard && srsState.currentCard.conj) {   // carte de conjugaison : on vérifie ce qui est tapé
+    const inp = document.getElementById('conj-inp');
+    if(inp && inp.value.trim()) conjCheck(); else if(inp) inp.focus();
+    return;
+  }
   srsState.revealed = true;
   const top = document.querySelector('.srs-card.top');
   if(!top) return;

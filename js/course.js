@@ -214,6 +214,7 @@ function crsMakeLesson(lang, u, n) {
   let picks = shuffle(pool).slice(0, target);
   const gq = n < 3 ? [unit.g.q[n % unit.g.q.length]] : unit.g.q;
   gq.forEach(g => picks.push({ t: 'gq', g }));
+  if(lang === 'es' && typeof conjLessonPicks === 'function') conjLessonPicks(u, n < 3 ? 2 : 3).forEach(x => picks.push(x));
   picks = shuffle(picks);
   const mw = n < 3 ? W.slice(0, Math.min(W.length, (n + 1) * k)) : W;
   if(mw.length >= 3) picks.splice(Math.floor(picks.length / 2), 0, { t: 'match', ws: shuffle(mw).slice(0, 5) });
@@ -366,6 +367,16 @@ function crsShow() {
         <div class="dict-hint">Écoute bien, puis écris le mot en ${CRS_META[L].name.toLowerCase()}</div>`;
       crsSetBtn(crsP('check'), true);
       setTimeout(() => { crsSpeak(L, w[0]); document.getElementById('ls-dict-inp')?.focus(); }, 300);
+    } else if(ex.t === 'conj') {
+      const s = CONJ_SENT[ex.c], parts = crsEsc(s[3]).split('___');
+      h = `<div class="ls-kind">🔁 Conjugación</div><div class="ls-h">Conjuga el verbo: <b>${crsEsc(s[0])}</b></div>
+        <div class="ls-prompt conj-ls"><span class="pw">${parts[0]}<span class="conj-gap" id="ls-conj-gap">${'&nbsp;'.repeat(6)}</span>${parts[1] || ''}</span></div>
+        <div style="color:var(--muted);font-weight:700;margin:.2rem 0 1rem">${crsEsc(s[4])}</div>
+        <input type="text" class="dict-input" id="ls-conj-inp" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="${crsEsc(s[0])} → …">
+        <div class="conj-keys">${['á', 'é', 'í', 'ó', 'ú', 'ñ'].map(ch => `<button type="button" onclick="const i=document.getElementById('ls-conj-inp');i.value+='${ch}';i.focus()">${ch}</button>`).join('')}</div>
+        <div class="dict-hint">Los acentos cuentan: hablo ≠ habló</div>`;
+      crsSetBtn(crsP('check'), true);
+      setTimeout(() => document.getElementById('ls-conj-inp')?.focus(), 200);
     } else if(ex.t === 'freetr') {
       const w = ex.w;
       h = `<div class="ls-kind">${crsP('freeTranslation')}</div><div class="ls-h">${crsP('freeHint', CRS_META[L].name.toLowerCase())}</div>
@@ -391,7 +402,7 @@ function crsShow() {
   body.innerHTML = h;
   window.scrollTo({ top: 0 });
   // Bind Enter key for dictée / traduction libre
-  const dictInp = document.getElementById('ls-dict-inp') || document.getElementById('ls-freetr-inp');
+  const dictInp = document.getElementById('ls-dict-inp') || document.getElementById('ls-freetr-inp') || document.getElementById('ls-conj-inp');
   if(dictInp) dictInp.addEventListener('keydown', e => { if(e.key === 'Enter') { e.preventDefault(); crsAction(); } });
 }
 function crsPick(i) {
@@ -479,6 +490,18 @@ function crsCheck() {
     else if(m.almost) { inp.classList.add('ok'); crsResult(true, ex.w[0], ex.w[2] ? `« ${ex.w[2]} » — ${ex.w[3]}` : '', `<span class="almost-msg">Presque ! La réponse exacte est : <b>${crsEsc(ex.w[0])}</b></span>`); }
     else { inp.classList.add('ko'); crsResult(false, ex.w[0], ex.w[2] ? `« ${ex.w[2]} » — ${ex.w[3]}` : ''); }
     crsSpeak(L, ex.w[0]); return;
+  }
+  // Conjugaison en contexte : accents exigés
+  if(ex.t === 'conj') {
+    const inp = document.getElementById('ls-conj-inp'); if(!inp) return;
+    const val = inp.value.trim(); if(!val) return;
+    const s = CONJ_SENT[ex.c], ans = CONJ_DB[s[0]][s[1]][s[2]], verdict = conjJudge(val, ans), full = s[3].replace('___', ans);
+    const why = `« ${crsEsc(s[5])} » → ${CONJ_WHY[s[1]]}`;
+    const gap = document.getElementById('ls-conj-gap'); if(gap) { gap.textContent = ans; gap.classList.add(verdict === 'ok' ? 'ok' : 'ko'); }
+    inp.classList.add(verdict === 'ok' ? 'ok' : 'ko'); inp.blur();
+    if(verdict === 'ok') crsResult(true, full, '', why);
+    else crsResult(false, full, '', (verdict === 'accent' ? `<span class="almost-msg">Presque : l'accent compte. <b>${crsEsc(val)}</b> → <b>${crsEsc(ans)}</b></span><br>` : '') + why);
+    crsSpeak(L, full); return;
   }
   // NEW: traduction libre
   if(ex.t === 'freetr') {
@@ -616,7 +639,9 @@ function crsResult(good, corr, extra, html) {
     heartBreak();
     comboBreak();
     try { haptic('error'); } catch(e) {}
-    if(ex.t !== 'match') crs.q.push({ t: ex.t, w: ex.w, g: ex.g, retry: true });
+    if(ex.t !== 'match') crs.q.push({ t: ex.t, w: ex.w, g: ex.g, c: ex.c, retry: true });
+    let back = ''; try { if(!ex.retry) back = crsMissToSrs(crs.lang, ex); } catch(e) { console.warn('[Aprende] report vers Réviser', e); }
+    if(back) html = (html ? html + '<br>' : '') + `<span class="srs-back-note">↩︎ ${back}</span>`;
     let ko = false;
     if(rpg && crs.mode !== 'test') ko = rpgDamage(crs.n === 4 ? 2 : 1, 'leçon');
     if(ko) crs.ko = true;
@@ -624,6 +649,20 @@ function crsResult(good, corr, extra, html) {
   }
   crsBar();
   crsSetBtn(crsP('cont'), true);
+}
+// Une erreur en leçon rapproche la carte : elle revient demain dans Réviser (au lieu d'attendre son échéance).
+// On ne touche pas à la mémoire de la carte (stabilité, difficulté) : seule la date avance.
+function crsMissToSrs(lang, ex) {
+  if(ex.t === 'conj') { const s = CONJ_SENT[ex.c]; return conjBump(s[0], s[1]) ? 'Ce verbe reviendra dans Réviser.' : ''; }
+  if(!ex.w || !ex.w[0]) return '';
+  const data = srsLoad(), cd = srsGetCardData(lang, ex.w[0]);
+  const key = srsKey(lang, cd ? cd[lang] : ex.w[0]), card = data[key];
+  if(!card || !card.reps || srsIsIntraday(card)) return '';
+  const tomorrow = srsStartOfToday() + 86400000;
+  if(card.due <= tomorrow) return '';
+  card.due = tomorrow; card.lm = Date.now();
+  srsSave(data);
+  return 'Cette carte reviendra demain dans Réviser.';
 }
 function crsAction() {
   if(!crs) return;
@@ -635,7 +674,7 @@ function crsAction() {
     if(crs.i >= crs.q.length) return crsFinish(false);
     return crsShow();
   }
-  if(ex.t === 'dictee' || ex.t === 'freetr') { crsCheck(); return; }
+  if(ex.t === 'dictee' || ex.t === 'freetr' || ex.t === 'conj') { crsCheck(); return; }
   crsCheck();
 }
 document.addEventListener('keydown', e => {
