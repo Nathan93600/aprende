@@ -815,9 +815,11 @@ function crsRefreshBars() {
 // ── Apparence : mode clair / sombre / auto, fond d'écran par langue ──
 function fxThemePref() { try { return localStorage.getItem('aprende_theme') || 'auto'; } catch(e) { return 'auto'; } }
 function fxWallPref() { try { return localStorage.getItem('aprende_wall') !== '0'; } catch(e) { return true; } }
+function fxVeilPref() { try { return localStorage.getItem('aprende_veil') !== '0'; } catch(e) { return true; } }
+function fxSetVeil(on) { try { localStorage.setItem('aprende_veil', on ? '1' : '0'); } catch(e) {} fxApplyTheme(); }
 function fxApplyTheme() {
   const p = fxThemePref(), dark = p === 'dark' || (p === 'auto' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
-  const b = document.body; b.classList.add('pop'); b.classList.toggle('dark', dark); b.classList.toggle('wall', fxWallPref());
+  const b = document.body; b.classList.add('pop'); b.classList.toggle('dark', dark); b.classList.toggle('wall', fxWallPref()); b.classList.toggle('noveil', !fxVeilPref());
   const paper = getComputedStyle(b).getPropertyValue('--fx-paper').trim() || '#ffcf9f';
   document.documentElement.style.background = paper; document.documentElement.classList.toggle('pre-dark', dark);
   const m = document.querySelector('meta[name="theme-color"]'); if(m) m.setAttribute('content', paper);

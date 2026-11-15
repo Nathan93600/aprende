@@ -15,6 +15,7 @@ function openSettingsModal() {
         <div class="set-h">🎨 Apparence</div>
         <div class="set-seg">${[['auto','Auto'],['light','☀️ Clair'],['dark','🌙 Sombre']].map(([v,l]) => `<button class="${fxThemePref() === v ? 'on' : ''}" onclick="fxSetTheme('${v}')">${l}</button>`).join('')}</div>
         <label class="set-row"><span>🖼️ Fond d'écran (Times Square, Barcelone)</span><input type="checkbox" ${fxWallPref() ? 'checked' : ''} onchange="fxSetWall(this.checked)"></label>
+        <label class="set-row"><span>🌫️ Voile sur le fond (texte plus lisible)</span><input type="checkbox" ${fxVeilPref() ? 'checked' : ''} onchange="fxSetVeil(this.checked)"></label>
       </div>
 
       <!-- SONS & VIBRATIONS -->

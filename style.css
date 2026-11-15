@@ -2424,3 +2424,9 @@ body.pop .stx-axis { color: var(--muted); }
 .journal-word-chip.has-fiche:active, .dir-row.has-fiche:active { transform: scale(.98); }
 .journal-word-chip.has-fiche > span:last-child::after { content: ' ›'; font-weight: 800; color: var(--tx); }
 .dir-chev { font: 800 1.05rem 'Poppins', sans-serif; color: var(--muted); }
+
+/* ── Fond d'écran sans voile (réglage) : l'image seule ; les textes posés dessus gardent un halo ── */
+body.pop.wall.noveil.t-en #fx-wall, body.pop.dark.wall.noveil.t-en #fx-wall { background-image: url('img/wall-en.jpg'); }
+body.pop.wall.noveil.t-es #fx-wall { background-image: url('img/wall-es-light.jpg'); }
+body.pop.dark.wall.noveil.t-es #fx-wall { background-image: url('img/wall-es-dark.jpg'); }
+body.pop.wall.noveil .screen.active > :is(h1, h2, p, .pg-title, .home-sub), body.pop.wall.noveil .game-title-bar h2, body.pop.wall.noveil .fx-title { text-shadow: 0 0 10px var(--fx-paper), 0 0 4px var(--fx-paper), 0 1px 2px var(--fx-paper); }
