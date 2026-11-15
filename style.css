@@ -2200,7 +2200,7 @@ body.pop.wall.t-en #fx-wall, body.pop.wall.t-es #fx-wall { background-size: cove
 body.pop.wall.t-en #fx-wall { background-image: linear-gradient(180deg, color-mix(in srgb, var(--fx-paper) 62%, transparent), color-mix(in srgb, var(--fx-paper) 80%, transparent) 55%, color-mix(in srgb, var(--fx-paper) 92%, transparent)), url('img/wall-en.jpg'); }
 body.pop.wall.t-es #fx-wall { background-image: linear-gradient(180deg, color-mix(in srgb, var(--fx-paper) 58%, transparent), color-mix(in srgb, var(--fx-paper) 78%, transparent) 55%, color-mix(in srgb, var(--fx-paper) 92%, transparent)), url('img/wall-es-light.jpg'); }
 body.pop.dark.wall.t-en #fx-wall { background-image: linear-gradient(180deg, color-mix(in srgb, var(--fx-paper) 45%, transparent), color-mix(in srgb, var(--fx-paper) 72%, transparent) 55%, color-mix(in srgb, var(--fx-paper) 90%, transparent)), url('img/wall-en.jpg'); }
-body.pop.dark.wall.t-es #fx-wall { background-image: linear-gradient(180deg, color-mix(in srgb, var(--fx-paper) 55%, transparent), color-mix(in srgb, var(--fx-paper) 78%, transparent) 55%, color-mix(in srgb, var(--fx-paper) 92%, transparent)), url('img/wall-es.jpg'); }
+body.pop.dark.wall.t-es #fx-wall { background-image: linear-gradient(180deg, color-mix(in srgb, var(--fx-paper) 45%, transparent), color-mix(in srgb, var(--fx-paper) 72%, transparent) 55%, color-mix(in srgb, var(--fx-paper) 90%, transparent)), url('img/wall-es-dark.jpg'); }
 @keyframes fxWallDrift { from { transform: scale(1.06) translateY(0); } to { transform: scale(1.06) translateY(-1.5%); } }
 /* anciens fonds décoratifs posés en ligne dans le HTML */
 body.pop .screen > div[style*="z-index:-1"] { display: none !important; }

@@ -259,7 +259,7 @@ entrées dans `AUDIO_MAP`. Coût Google Chirp 3 HD : 1 million de caractères gr
   le texte courant, `--fx-paper` / `--fx-panel` / `--fx-field` pour les fonds, une palette par langue.
 - Mode clair ou sombre : `body.dark`, réglage `aprende_theme` (`auto`, `light`, `dark` ; `auto` suit le système),
   appliqué par `fxApplyTheme()` et dès le chargement par un petit script dans `index.html` (pas de flash).
-- Fonds d'écran : `#fx-wall` (fixe, sous tout le contenu), `img/wall-en.jpg`, `img/wall-es.jpg` (sombre) et `img/wall-es-light.jpg` (clair) avec un voile de la
+- Fonds d'écran : `#fx-wall` (fixe, sous tout le contenu), `img/wall-en.jpg`, `img/wall-es-dark.jpg` (sombre) et `img/wall-es-light.jpg` (clair) avec un voile de la
   couleur du thème ; réglage `aprende_wall` (`0` = désactivé). Pour une nouvelle langue : ajouter `img/wall-<lang>.jpg`
   et les deux règles `body.pop.wall.t-<lang> #fx-wall` (clair et sombre).
 
