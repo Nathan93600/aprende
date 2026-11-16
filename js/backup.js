@@ -32,6 +32,7 @@ function buildProgressExport() {
     grammar_srs: JSON.parse(localStorage.getItem('grammar_srs') || '{}'),
     conj_srs: JSON.parse(localStorage.getItem('conj_srs') || '{}'),
     conj_per_day: conjPerDay(),
+    pending_words: pwLoad(),
     srs_algo: 'fsrs6',
     crs_prog: JSON.parse(localStorage.getItem('crs_prog') || '{}'),
     crs_added: JSON.parse(localStorage.getItem('crs_added') || '{}'),
@@ -269,6 +270,7 @@ function importProgress(file) {
       if(data.grammar_srs) localStorage.setItem('grammar_srs', JSON.stringify(data.grammar_srs));
       if(data.conj_srs) { localStorage.setItem('conj_srs', JSON.stringify(data.conj_srs)); conjInvalidateCache(); }
       if(data.conj_per_day !== undefined) localStorage.setItem('conj_per_day', String(data.conj_per_day));
+      if(Array.isArray(data.pending_words)) { localStorage.setItem('pending_words', JSON.stringify(data.pending_words)); pwBadge(); }
       if(data.crs_prog) localStorage.setItem('crs_prog', JSON.stringify(data.crs_prog));
       if(data.crs_added) localStorage.setItem('crs_added', JSON.stringify(data.crs_added));
       if(data.rpg) localStorage.setItem('rpg', JSON.stringify(data.rpg));

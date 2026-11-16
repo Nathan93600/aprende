@@ -36,7 +36,11 @@ Réponses courtes : je lis souvent sur mon téléphone.
 
 ━━ 2. Le « génère » (chaque <VENDREDI>) ━━
 Je t'envoie ma sauvegarde (fichier aprende-progres-AAAA-MM-JJ.json) avec le mot « génère ».
-Tu travailles dans le dépôt et tu fais, pour tous les mots en attente :
+La sauvegarde contient aussi les mots que j'ai notés dans l'appli avec le bouton « + mot »
+(pending_words) : ajoute-les à ceux notés ici.
+Commence par `node tools/genere.js doublons <sauvegarde.json>` (et les mots notés dans la conversation,
+sous la forme en:"mot1|mot2") : dis-moi lesquels j'ai déjà, et ne les refais pas.
+Puis tu travailles dans le dépôt et tu fais, pour tous les mots nouveaux :
 a. Les cartes : une session dans JOURNAL_SESSIONS (js/journal.js) datée du jour, avec pour chaque mot
    [mot, traduction, exemple, traduction de l'exemple], ou le paquet de la langue (formats : TECHNIQUE.md §5).
 b. Une ou deux unités thématiques dans la section « Perso » de courses/<lang>.js : titre, emoji,
@@ -50,13 +54,15 @@ e. Une histoire (STORIES) qui réemploie les mots de la semaine : répliques à 
    formulation, un calque du français expliqué, et une version correcte mais moins idiomatique.
 f. Le bilan CRS_WEEK (courses/feedback.js) : lis ma sauvegarde (srs_revlog, srs_data), relève les
    cartes que je rate le plus et écris 3 ou 4 conseils concrets.
-g. Les voix : ajoute les nouveaux textes dans tools/voix_textes.json (format : TECHNIQUE.md §7) et
-   donne-moi la commande pour lancer tools/voix_google.py sur mon ordinateur. Ma clé Google, je la
-   tape moi-même dans le terminal : ne me la demande jamais. Quand je te dis « c'est fait », ajoute les
-   MP3 dans audio/<lang>/ et les entrées dans audio/manifest.js.
-h. Incrémente CACHE_NAME dans sw.js, sinon mon téléphone garde l'ancienne version.
-Avant de pousser : node tests/run.js ; si tu as un navigateur automatisé, charge l'appli avec ma
-sauvegarde, sans erreur, et vérifie que chaque nouveau mot a sa fiche.
+g. Les voix : `node tools/genere.js voix` ajoute les nouveaux textes à tools/voix_textes.json ; pousse,
+   puis donne-moi la commande pour lancer tools/voix_google.py sur mon ordinateur. Ma clé Google, je la
+   tape moi-même dans le terminal : ne me la demande jamais. Quand je te dis « c'est fait », range les
+   MP3 avec `node tools/genere.js audio <dossier ou zip>` (il complète audio/manifest.js).
+h. `node tools/genere.js cache` (incrémente CACHE_NAME dans sw.js, sinon mon téléphone garde
+   l'ancienne version).
+Avant de pousser, TOUJOURS : `node tools/genere.js pret`. Il vérifie que rien n'a été perdu depuis le
+dernier commit (un fichier tronqué, une fiche disparue), le format des données, les voix, le cache,
+l'absence de clé dans le dépôt, puis lance les tests. S'il n'affiche pas « Prêt à pousser », corrige.
 Ne renomme jamais un mot existant (cela remettrait sa carte à zéro) ; corrige seulement sa traduction.
 Pousse, puis résume en quelques lignes : mots ajoutés, nouvelles unités, ce qui reste à faire.
 

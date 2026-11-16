@@ -45,6 +45,7 @@ js/                     la logique, découpée par domaine (26 fichiers, chargé
   stories.js              histoires (STORIES)
   settings.js             réglages et notifications
   plan-c1.js              programme C1 (rappels de l'accueil)
+  pending.js              mots notés dans l'appli (« + mot »), en attente du génère
   init.js                 démarrage (initApp)
 tests/run.js            tests automatiques (voir §10)
 courses/es.js, en.js, ln.js     cours structurés (sections, unités, mots, mini-grammaire)
@@ -104,6 +105,7 @@ Une copie de l'appli n'en a pas besoin : mettre `firebase: false`.
 | `es_mastered`, `en_mastered`, `ln_mastered`, `mastered` | mots maîtrisés dans les jeux |
 | `crs_prog`, `crs_resume`, `crs_added` | progression dans les cours |
 | `pron_srs`, `grammar_srs` | révision de la prononciation (anglais) et des règles de grammaire |
+| `pending_words` | mots notés avec « + mot » : `[{w, l, c, t}]`, `l` = `es`, `en`, `ln` ou `fr` (à traduire vers les deux) |
 | `conj_srs`, `conj_per_day` | cartes de conjugaison espagnole (`conj:verbe|temps`) et leur limite par jour |
 | `rpg` | héros, or, inventaire, quêtes |
 | `genere_sent` | semaine du dernier envoi « génère » |
@@ -259,7 +261,7 @@ orthographe est sans danger (la migration suit la casse), changer le mot lui-mê
 | `voix_google.py` | génère les voix anglaises et espagnoles avec Google Cloud Text-to-Speech (Chirp 3 HD : Puck et Aoede en anglais, Achird et Aoede en espagnol). Lancé sur l'ordinateur de l'apprenant ; la clé est demandée au lancement. Lit `voix_textes.json`. |
 | `voix_textes.json` | liste des textes à enregistrer `{l, k, s, id, v}` |
 | `voix_lingala.py`, `voix_ln.json` | essai de voix lingala avec l'API Gemini (AI Studio). En pause : le quota gratuit est très faible. |
-| `voix_collect.js` | liste les textes de l'appli sans enregistrement (chemins à adapter) |
+| `genere.js` | outil du « génère » : doublons, vérifications, liste des voix, rangement des mp3, cache (§9) |
 | `voix_gen.py` | ancienne génération locale (Piper + vérification Whisper) |
 | `voix_test.py` | comparaison Google / ElevenLabs |
 
@@ -286,19 +288,33 @@ entrées dans `AUDIO_MAP`. Coût Google Chirp 3 HD : 1 million de caractères gr
 
 ## 9. Le « génère » (cycle hebdomadaire)
 
-1. L'apprenant note ses mots dans une conversation Claude au fil de la semaine.
-2. Le vendredi, le bouton **génère** de l'appli exporte la sauvegarde et copie le mot « génère » :
-   l'apprenant dépose le fichier dans la conversation Claude.
-3. Claude produit et pousse dans le dépôt :
+1. L'apprenant note ses mots au fil de la semaine : dans l'appli (bouton **+ mot**, hors connexion,
+   `js/pending.js`, liste `pending_words`) ou dans une conversation Claude.
+2. Le vendredi, le bouton **génère** de l'appli exporte la sauvegarde (qui contient `pending_words`)
+   et copie le mot « génère » : l'apprenant dépose le fichier dans la conversation Claude.
+3. Claude trie la liste, puis produit et pousse dans le dépôt :
    - les cartes : paquet (`VOCAB` / `ENGLISH` / `LINGALA`) ou session de `JOURNAL_SESSIONS` ;
    - une ou plusieurs unités thématiques dans la section « Perso » de `courses/<lang>.js` ;
-   - une fiche par nouveau mot (`courses/feedback_*.js`) ;
+   - une fiche par nouveau mot (`courses/feedback_*.js`), astuce « Pour retenir » comprise ;
    - les exemples, les phrases de prononciation (`PRON_DATA`), une histoire (`STORIES`) qui réemploie les mots ;
    - le bilan `CRS_WEEK`, à partir des cartes les plus ratées de la sauvegarde ;
-   - les voix (script lancé par l'apprenant), puis `AUDIO_MAP` ;
-   - **la version du cache** : `CACHE_NAME` dans `sw.js` (`aprende-vNN`), à incrémenter à chaque
-     mise en ligne, sinon les téléphones gardent l'ancienne version.
-4. Vérifications avant de pousser : `node tests/run.js` (§10), chaque nouveau mot a sa fiche, rien ne casse les cartes existantes (§6).
+   - les voix (script lancé par l'apprenant), puis `AUDIO_MAP`.
+
+### L'outil `tools/genere.js`
+
+| Commande | Rôle |
+|---|---|
+| `node tools/genere.js doublons sauvegarde.json` | pour chaque mot noté : *nouveau*, *DÉJÀ* (avec l'endroit) ou *proche*. Accepte aussi `en:"pay off\|hook" es:lujo` ou un fichier texte `langue: mot` |
+| `node tools/genere.js verif` | les fichiers se chargent ; **aucun compteur ne baisse depuis le dernier commit** (mots, fiches, unités, histoires, voix : un fichier tronqué est vu tout de suite) ; aucun mot renommé ; format des unités, fiches, histoires ; chaque voix a son fichier ; `sw.js` à jour ; aucune clé dans le dépôt |
+| `node tools/genere.js voix` | liste ce que l'appli peut lire et qui n'a pas d'enregistrement, et l'ajoute à `tools/voix_textes.json` (marqué `n:1`) |
+| `node tools/genere.js audio <dossier ou .zip>` | range les mp3 reçus dans `audio/<langue>/` et complète `audio/manifest.js` |
+| `node tools/genere.js cache` | incrémente `CACHE_NAME` dans `sw.js` (une seule fois par mise en ligne) |
+| `node tools/genere.js pret` | `verif` + tests automatiques (§10). **À lancer avant chaque `git push`.** |
+
+`voix` et `pret` demandent Playwright (`NODE_PATH=$(npm root -g)`), les autres commandes rien.
+
+Ordre type : `doublons` → rédaction des données → `voix` → (voix générées sur le PC) → `audio` →
+`cache` → `pret` → `git push`.
 
 ---
 
@@ -323,7 +339,7 @@ python3 -m http.server 8000      # à la racine du dépôt
   `fiches` (chaque mot a sa fiche), `audio` (chaque voix de l'index existe), `progression`
   (les cartes existantes ne bougent pas), `ecrans` (tous les écrans, clair et sombre, et lisibilité
   de chaque texte sur son fond ; détail avec `node tests/run.js ecrans --contraste`), `lecons`,
-  `histoires`, `conjugaison`, `sauvegarde`. À lancer avant chaque mise en ligne.
+  `histoires`, `conjugaison`, `mots`, `sauvegarde`. À lancer avant chaque mise en ligne.
 - Tester avec une sauvegarde réelle : la restaurer depuis Réglages, ou l'injecter dans
   `localStorage` avec un navigateur automatisé (Playwright).
 - Publier : pousser sur la branche servie par GitHub Pages, après avoir incrémenté `CACHE_NAME`.

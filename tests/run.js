@@ -148,6 +148,43 @@ const AUDIT = (min) => {
       await p.close();
     }
 
+    if(want('mots')) {
+      console.log('\nMots notés dans l\'appli (« + mot »)');
+      const p = await open(browser, base);
+      const r = await p.evaluate(() => {
+        const o = {}; localStorage.removeItem('pending_words');
+        selectLang('en'); openPath('en');
+        o.fabPath = document.getElementById('pw-fab').classList.contains('show');
+        const deck = getDeckForLang('en')[0].en, unit = COURSES.es.units[0].w[0][0];
+        o.add = pwAdd('  zzz  newword ', 'en', 'vu  quelque part').ok === true && pwLoad()[0].w === 'zzz newword' && pwLoad()[0].c === 'vu quelque part';
+        o.dupList = pwAdd('ZZZ newword', 'en').dup === 'list';
+        o.dupDeck = pwAdd(deck.toUpperCase(), 'en').dup === 'app';
+        o.dupUnit = pwAdd('  ' + unit, 'es').dup === 'app';
+        o.otherLang = pwAdd(deck, 'fr').ok === true;        // un mot français n'est pas comparé aux paquets
+        o.empty = pwAdd('   ', 'en').empty === true;
+        o.count = pwLoad().length;
+        pwOpen();
+        o.sheet = document.getElementById('crs-modal').classList.contains('show') && document.querySelectorAll('.pw-item').length === 2;
+        document.getElementById('pw-word').value = deck; pwSetLang('en'); pwSubmit();
+        o.warns = !!document.querySelector('.pw-msg.dup') && pwLoad().length === 2;
+        o.badge = document.getElementById('pw-fab-n').textContent === '2';
+        o.exported = JSON.stringify(buildProgressExport().pending_words) === JSON.stringify(pwLoad());
+        o.text = pwText().includes('zzz newword — vu quelque part');
+        // un mot arrivé dans l'appli quitte la liste
+        const list = pwLoad(); list.push({ w: deck, l: 'en', t: 1 }); localStorage.setItem('pending_words', JSON.stringify(list));
+        o.cleaned = pwClean() === 1 && pwLoad().length === 2;
+        pwRemove(pwLoad()[0].t); o.removed = pwLoad().length === 1;
+        crsCloseModal(); openSRS('en');
+        o.fabSrs = document.getElementById('pw-fab').classList.contains('show');
+        return o;
+      });
+      ok('le bouton « + mot » est sur Parcours, pas sur Réviser', r.fabPath && !r.fabSrs);
+      ok('un mot s\'ajoute, espaces nettoyés, avec son contexte', r.add && r.empty && r.count === 2 && r.otherLang, JSON.stringify(r));
+      ok('un mot déjà dans l\'appli ou déjà noté est refusé', r.dupList && r.dupDeck && r.dupUnit && r.warns, JSON.stringify(r));
+      ok('la fenêtre liste les mots et le compteur suit', r.sheet && r.badge && r.text && r.removed, JSON.stringify(r));
+      ok('la liste part dans la sauvegarde et se vide des mots arrivés dans l\'appli', r.exported && r.cleaned && p.errs.length === 0, JSON.stringify(r) + p.errs.join(' | '));
+      await p.close();
+    }
     if(want('conjugaison')) {
       console.log('\nConjugaison (cartes et leçons)');
       const p = await open(browser, base);

@@ -2547,3 +2547,34 @@ body.pop.wall.noveil #screen-lesson .ls-x { color: #fff; filter: drop-shadow(0 0
 body.pop.wall.noveil #screen-lesson .ls-hp { text-shadow: 0 0 2px #fff, 0 0 6px #fff; }
 body.pop.wall.noveil #screen-lesson .ls-body > .ls-prompt[style]:not([style*="background"]) u { color: #ffd166 !important; }
 .ls-prompt.ls-read { display: block; }   /* le mot souligné reste dans la phrase */
+
+/* ── « + mot » : noter un mot en attente du génère ── */
+#pw-fab { display: none; position: fixed; right: 14px; bottom: calc(92px + env(safe-area-inset-bottom)); z-index: 59; align-items: center; gap: .3rem; padding: .55rem .9rem .55rem .7rem; border: 2.5px solid var(--ink); border-radius: 999px; background: var(--sun); color: #2b1408; font: 800 .9rem 'Poppins', sans-serif; box-shadow: 0 4px 0 var(--ink); cursor: pointer; transition: transform .16s var(--fx-spring), box-shadow .16s var(--fx-ease); }
+#pw-fab.show { display: flex; animation: fxRise .35s var(--fx-spring) backwards; }
+#pw-fab:active { transform: translateY(4px); box-shadow: 0 0 0 var(--ink); }
+#pw-fab span { font-size: 1.15rem; line-height: 1; }
+#pw-fab i { font-style: normal; min-width: 1.35rem; padding: 0 .3rem; border-radius: 999px; background: #2b1408; color: #fff7ea; font-size: .72rem; line-height: 1.35rem; text-align: center; }
+body.desktop-mode #pw-fab { bottom: 20px; }
+.pw-sheet { display: flex; flex-direction: column; gap: .6rem; text-align: left; }
+.pw-head { display: flex; align-items: center; justify-content: space-between; }
+.pw-head h3 { font: 800 1.15rem 'Poppins', sans-serif; margin: 0; color: var(--tx); }
+.pw-x { width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--ink); background: var(--fx-field); color: var(--tx); font-weight: 800; cursor: pointer; }
+.pw-langs { display: flex; flex-wrap: wrap; gap: .4rem; }
+.pw-langs button { border: 2.5px solid var(--ink); border-radius: 999px; background: var(--fx-field); color: var(--tx); padding: .38rem .7rem; font: 700 .78rem 'Poppins', sans-serif; cursor: pointer; box-shadow: 0 2px 0 var(--ink); }
+.pw-langs button.on { background: var(--sun); color: #2b1408; }
+#crs-modal .pw-inp { width: 100%; font: 700 1.02rem 'Poppins', sans-serif; padding: .7rem .9rem; border: 2.5px solid var(--ink); border-radius: 16px; background: #fffdf6; color: #2b1408; box-shadow: 0 3px 0 var(--ink); outline: none; }
+#crs-modal .pw-inp.small { font-weight: 500; font-size: .88rem; padding: .55rem .9rem; }
+#crs-modal .pw-inp::placeholder { color: #8a7466; font-weight: 500; }
+#crs-modal .pw-inp:focus { box-shadow: 0 3px 0 var(--ink), 0 0 0 4px color-mix(in srgb, var(--sun) 60%, transparent); }
+.pw-add { border: 2.5px solid var(--ink); border-radius: 16px; background: var(--sun); color: #2b1408; padding: .7rem; font: 800 .98rem 'Poppins', sans-serif; box-shadow: 0 4px 0 var(--ink); cursor: pointer; }
+.pw-add:active { transform: translateY(4px); box-shadow: none; }
+.pw-msg { border: 2px dashed var(--ink); border-radius: 12px; padding: .5rem .7rem; font: 600 .82rem/1.4 'Poppins', sans-serif; color: #2b1408; }
+.pw-msg.ok { background: #d7ffb8; } .pw-msg.dup { background: #ffe1a8; }
+.pw-msg button { border: 2px solid #2b1408; border-radius: 999px; background: #fffdf6; color: #2b1408; padding: .1rem .6rem; font: 700 .76rem 'Poppins', sans-serif; margin-left: .3rem; cursor: pointer; }
+.pw-list-h { display: flex; align-items: center; justify-content: space-between; margin-top: .5rem; font: 800 .72rem 'Poppins', sans-serif; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
+.pw-list-h button { border: 2px solid var(--ink); border-radius: 999px; background: var(--fx-field); color: var(--tx); padding: .2rem .65rem; font: 700 .74rem 'Poppins', sans-serif; text-transform: none; letter-spacing: 0; cursor: pointer; }
+.pw-gh { font: 800 .82rem 'Poppins', sans-serif; color: var(--tx); margin: .3rem 0 .25rem; } .pw-gh span { background: var(--sun); color: #2b1408; border: 2px solid var(--ink); border-radius: 999px; padding: 0 .45rem; font-size: .7rem; margin-left: .25rem; }
+.pw-item { display: flex; align-items: center; justify-content: space-between; gap: .5rem; padding: .4rem .2rem; border-bottom: 1.5px dashed color-mix(in srgb, var(--tx) 25%, transparent); }
+.pw-item b { font: 700 .92rem 'Poppins', sans-serif; color: var(--tx); overflow-wrap: anywhere; } .pw-item small { display: block; font: 500 .74rem/1.35 'Poppins', sans-serif; color: var(--muted); overflow-wrap: anywhere; }
+.pw-item button { flex: none; width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--ink); background: var(--fx-field); color: var(--tx); font-weight: 800; cursor: pointer; }
+.pw-empty, .pw-foot { font: 500 .78rem/1.45 'Poppins', sans-serif; color: var(--muted); margin: 0; }

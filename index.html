@@ -152,6 +152,7 @@
   <button class="tb-btn" data-tab="shop" onclick="tabGo('shop')"><span>🏪</span>Boutique</button>
   <button class="tb-btn" data-tab="settings" onclick="openSettingsModal()"><span>⚙️</span>Réglages</button>
 </nav>
+<button id="pw-fab" onclick="pwOpen()" aria-label="Noter un mot"><span>＋</span>mot<i id="pw-fab-n" style="display:none">0</i></button>
 <div id="crs-modal" onclick="if(event.target===this)crsCloseModal()"><div class="cm-box" id="crs-modal-box"></div></div>
 
 <!-- ═══════════ LANGUE SELECTOR ═══════════ -->
@@ -1603,6 +1604,7 @@
 <script src="js/stories.js"></script>
 <script src="js/conj-trainer.js"></script>
 <script src="js/conj-cards.js"></script>
+<script src="js/pending.js"></script>
 <script src="js/init.js"></script>
 <script src="js/sfx.js"></script>
 <script src="js/settings.js"></script>

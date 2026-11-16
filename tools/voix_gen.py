@@ -1,6 +1,6 @@
 # Génère les voix pré-enregistrées (audio/<lang>/<id>.mp3) avec Piper, puis vérifie chaque phrase par reconnaissance vocale.
 # Utilisé à chaque « génère » pour les nouveaux mots. Tel quel, il attend dans /home/claude/tts :
-#   - texts4.json : {"en":[{"t":texte,"k":clé,"v":0|1 (voix forcée, optionnel)}], "es":[...]}  (produit par voix_collect.js)
+#   - texts4.json : {"en":[{"t":texte,"k":clé,"v":0|1 (voix forcée, optionnel)}], "es":[...]}  (liste des textes : voir tools/genere.js voix)
 #   - les voix Piper et les modèles Whisper de https://github.com/k2-fsa/sherpa-onnx/releases (tts-models, asr-models) :
 #     vits-piper-en_US-ryan-high (voix 0), vits-piper-en_US-lessac-high (voix 1),
 #     vits-piper-es_ES-sharvard-medium (locuteurs 0 = homme, 1 = femme), sherpa-onnx-whisper-base.en, sherpa-onnx-whisper-small

@@ -112,6 +112,17 @@ un piège est compté faux avec son explication.
 
 ---
 
+## Noter un mot (« + mot »)
+
+Sur Parcours et Jeux, le bouton jaune **+ mot** ouvre une fenêtre pour noter un mot rencontré dans
+la journée : la langue (ou « Français → les deux » pour un mot à traduire), le mot, et si on veut
+l'endroit où on l'a vu. Tout marche hors connexion.
+
+- Un mot déjà présent dans l'appli est refusé tout de suite, avec un lien vers sa fiche.
+- La liste se consulte, se corrige et se copie depuis la même fenêtre.
+- Elle part avec la sauvegarde du vendredi (bouton « génère ») ; les mots la quittent d'eux-mêmes
+  une fois arrivés dans l'appli.
+
 ## 6. Jeux
 
 En espagnol, l'onglet montre d'abord les jeux où l'on produit le mot (Frappe le mot, Survie, Wordle,
