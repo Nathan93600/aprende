@@ -1,5 +1,5 @@
 // ¡Aprende! Service Worker v15 — stale-while-revalidate for instant updates
-const CACHE_NAME = 'aprende-v59';
+const CACHE_NAME = 'aprende-v60';
 const ASSETS = [
   './',
   'index.html',
@@ -50,9 +50,12 @@ const ASSETS = [
   'courses/feedback_tips.js',
   'audio/manifest.js',
   'manifest.json',
-  'img/wall-en.jpg',
+  'img/wall-en-dark.jpg',
+  'img/wall-en-light.jpg',
   'img/wall-es-dark.jpg',
-  'img/wall-es-light.jpg'
+  'img/wall-es-light.jpg',
+  'img/wall-ln-dark.jpg',
+  'img/wall-ln-light.jpg'
 ];
 
 self.addEventListener('install', e => {

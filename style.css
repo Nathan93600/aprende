@@ -2196,11 +2196,13 @@ body.pop.dark .c1-mile { background: #ffe98a; }
 /* ── Fond d'écran par langue ── */
 #fx-wall { display: none; }
 body.pop #fx-wall { display: block; position: fixed; inset: 0; z-index: -1; pointer-events: none; background: var(--fx-paper); transition: background-color .4s ease; }
-body.pop.wall.t-en #fx-wall, body.pop.wall.t-es #fx-wall { background-size: cover; background-position: center top; background-repeat: no-repeat; animation: fxWallDrift 40s ease-in-out infinite alternate; }
-body.pop.wall.t-en #fx-wall { background-image: linear-gradient(180deg, color-mix(in srgb, var(--fx-paper) 62%, transparent), color-mix(in srgb, var(--fx-paper) 80%, transparent) 55%, color-mix(in srgb, var(--fx-paper) 92%, transparent)), url('img/wall-en.jpg'); }
+body.pop.wall.t-en #fx-wall, body.pop.wall.t-es #fx-wall, body.pop.wall.t-ln #fx-wall { background-size: cover; background-position: center top; background-repeat: no-repeat; animation: fxWallDrift 40s ease-in-out infinite alternate; }
+body.pop.wall.t-en #fx-wall { background-image: linear-gradient(180deg, color-mix(in srgb, var(--fx-paper) 58%, transparent), color-mix(in srgb, var(--fx-paper) 78%, transparent) 55%, color-mix(in srgb, var(--fx-paper) 92%, transparent)), url('img/wall-en-light.jpg'); }
 body.pop.wall.t-es #fx-wall { background-image: linear-gradient(180deg, color-mix(in srgb, var(--fx-paper) 58%, transparent), color-mix(in srgb, var(--fx-paper) 78%, transparent) 55%, color-mix(in srgb, var(--fx-paper) 92%, transparent)), url('img/wall-es-light.jpg'); }
-body.pop.dark.wall.t-en #fx-wall { background-image: linear-gradient(180deg, color-mix(in srgb, var(--fx-paper) 45%, transparent), color-mix(in srgb, var(--fx-paper) 72%, transparent) 55%, color-mix(in srgb, var(--fx-paper) 90%, transparent)), url('img/wall-en.jpg'); }
+body.pop.wall.t-ln #fx-wall { background-image: linear-gradient(180deg, color-mix(in srgb, var(--fx-paper) 58%, transparent), color-mix(in srgb, var(--fx-paper) 78%, transparent) 55%, color-mix(in srgb, var(--fx-paper) 92%, transparent)), url('img/wall-ln-light.jpg'); }
+body.pop.dark.wall.t-en #fx-wall { background-image: linear-gradient(180deg, color-mix(in srgb, var(--fx-paper) 45%, transparent), color-mix(in srgb, var(--fx-paper) 72%, transparent) 55%, color-mix(in srgb, var(--fx-paper) 90%, transparent)), url('img/wall-en-dark.jpg'); }
 body.pop.dark.wall.t-es #fx-wall { background-image: linear-gradient(180deg, color-mix(in srgb, var(--fx-paper) 45%, transparent), color-mix(in srgb, var(--fx-paper) 72%, transparent) 55%, color-mix(in srgb, var(--fx-paper) 90%, transparent)), url('img/wall-es-dark.jpg'); }
+body.pop.dark.wall.t-ln #fx-wall { background-image: linear-gradient(180deg, color-mix(in srgb, var(--fx-paper) 45%, transparent), color-mix(in srgb, var(--fx-paper) 72%, transparent) 55%, color-mix(in srgb, var(--fx-paper) 90%, transparent)), url('img/wall-ln-dark.jpg'); }
 @keyframes fxWallDrift { from { transform: scale(1.06) translateY(0); } to { transform: scale(1.06) translateY(-1.5%); } }
 /* anciens fonds décoratifs posés en ligne dans le HTML */
 body.pop .screen > div[style*="z-index:-1"] { display: none !important; }
@@ -2426,9 +2428,12 @@ body.pop .stx-axis { color: var(--muted); }
 .dir-chev { font: 800 1.05rem 'Poppins', sans-serif; color: var(--muted); }
 
 /* ── Fond d'écran sans voile (réglage) : l'image seule ; les textes posés dessus gardent un halo ── */
-body.pop.wall.noveil.t-en #fx-wall, body.pop.dark.wall.noveil.t-en #fx-wall { background-image: url('img/wall-en.jpg'); }
+body.pop.wall.noveil.t-en #fx-wall { background-image: url('img/wall-en-light.jpg'); }
+body.pop.dark.wall.noveil.t-en #fx-wall { background-image: url('img/wall-en-dark.jpg'); }
 body.pop.wall.noveil.t-es #fx-wall { background-image: url('img/wall-es-light.jpg'); }
 body.pop.dark.wall.noveil.t-es #fx-wall { background-image: url('img/wall-es-dark.jpg'); }
+body.pop.wall.noveil.t-ln #fx-wall { background-image: url('img/wall-ln-light.jpg'); }
+body.pop.dark.wall.noveil.t-ln #fx-wall { background-image: url('img/wall-ln-dark.jpg'); }
 body.pop.wall.noveil .screen.active > :is(h1, h2, p, .pg-title, .home-sub), body.pop.wall.noveil .game-title-bar h2, body.pop.wall.noveil .fx-title { text-shadow: 0 0 10px var(--fx-paper), 0 0 4px var(--fx-paper), 0 1px 2px var(--fx-paper); }
 
 /* ── Cartes de conjugaison (Réviser) et exercice de conjugaison (leçons) ── */
