@@ -86,13 +86,23 @@ Des cartes « verbe + temps » se mêlent aux mots : une phrase à trou avec son
 la carte montre pourquoi ce temps s'emploie et le tableau des six personnes. Le réglage
 « Conjugaison / jour » fixe leur nombre (10 par défaut, 0 pour les couper).
 
+Neuf temps : présent, prétérit, passé composé, imparfait, futur, subjonctif, impératif (y compris avec
+pronoms collés : *dámelo*, *levántate*), conditionnel et subjonctif imparfait. Chaque carte a sa phrase.
+Le réglage « ustedes » (Réglages ou Atelier conjugaison) retire *vosotros* pour l'espagnol d'Amérique latine.
+
 Les leçons espagnoles contiennent aussi 2 ou 3 de ces phrases, limitées aux temps déjà vus dans
 le parcours. Un mot ou un verbe raté en leçon revient plus tôt dans Réviser.
 
-### Statistiques
+### Tableau de bord (statistiques)
 
-Révisions du jour, rétention réelle sur 30 jours, série de jours, répartition des cartes
-(nouvelles, en apprentissage, jeunes, matures, sangsues), carte d'activité et prévisions sur 30 jours.
+Cartes à réviser, série de jours, révisions du jour, rétention réelle sur 30 jours ; répartition du
+paquet ; 7 derniers jours comparés à la semaine d'avant ; activité sur 6 mois ; révisions à venir ;
+répartition des réponses.
+
+En anglais s'ajoute le **suivi du programme C1** : semaine et phase en cours, mots acquis et cartes en
+cours par rapport à l'objectif de la semaine et à la cible finale, rythme de nouvelles cartes sur 14 jours,
+date estimée d'arrivée à la cible (une carte commencée est comptée acquise au bout de 5 semaines environ),
+unités terminées, jours complets, conversations et écoutes de la semaine.
 
 ---
 

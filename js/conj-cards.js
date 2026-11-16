@@ -164,8 +164,9 @@ const CONJ_SENT = [
   ['esperar', 'subjuntivo', 1, 'Para que tú no ___ demasiado, salgo ya.', 'Pour que tu n\'attendes pas trop, je pars tout de suite.', 'Para que'],
 ];
 
-const CONJ_TENSES = ['presente', 'preterito', 'imperfecto', 'futuro', 'condicional', 'subjuntivo'];
-const CONJ_TENSE_FR = { presente: 'Présent', preterito: 'Prétérit', imperfecto: 'Imparfait', futuro: 'Futur', condicional: 'Conditionnel', subjuntivo: 'Subjonctif' };
+const CONJ_BASE_TENSES = ['presente', 'preterito', 'imperfecto', 'futuro', 'condicional', 'subjuntivo'];   // écrits à la main dans CONJ_DB
+const CONJ_TENSES = [...CONJ_BASE_TENSES, 'perfecto', 'imperativo', 'subj_imperfecto'];                     // les trois derniers sont calculés (conjDerive)
+const CONJ_TENSE_FR = { presente: 'Présent', preterito: 'Prétérit', imperfecto: 'Imparfait', futuro: 'Futur', condicional: 'Conditionnel', subjuntivo: 'Subjonctif', perfecto: 'Passé composé', imperativo: 'Impératif', subj_imperfecto: 'Subjonctif imparfait' };
 // Pourquoi ce temps : rappel affiché après la réponse
 const CONJ_WHY = {
   presente: 'présent : ce qui est vrai maintenant ou d\'habitude',
@@ -174,10 +175,69 @@ const CONJ_WHY = {
   futuro: 'futur : ce qui arrivera',
   condicional: 'conditionnel : hypothèse, conseil ou politesse',
   subjuntivo: 'subjonctif : souhait, doute, émotion ou but',
+  perfecto: 'passé composé : action passée encore liée au présent (hoy, esta semana, ya, todavía no)',
+  imperativo: 'impératif : ordre, conseil ou invitation',
+  subj_imperfecto: 'subjonctif imparfait : hypothèse (si…), ou souhait et doute au passé',
 };
 // Amorce utilisée quand la carte n'a pas de phrase : elle annonce le temps
-const CONJ_LEAD = { presente: 'Ahora', preterito: 'Ayer', imperfecto: 'Antes', futuro: 'Mañana', condicional: 'Con más tiempo,', subjuntivo: 'Ojalá' };
+const CONJ_LEAD = { presente: 'Ahora', preterito: 'Ayer', imperfecto: 'Antes', futuro: 'Mañana', condicional: 'Con más tiempo,', subjuntivo: 'Ojalá', perfecto: 'Hoy', imperativo: '', subj_imperfecto: 'Si' };
 const CONJ_NEW_MAX = 4;   // nouvelles cartes de conjugaison par jour, au plus
+
+// ── Temps calculés : passé composé, impératif, subjonctif imparfait ──
+// Ils se déduisent des temps écrits à la main ; seules les exceptions sont listées ici.
+const CONJ_PART = { hacer: 'hecho', decir: 'dicho', ver: 'visto', poner: 'puesto', ser: 'sido', ir: 'ido', escribir: 'escrito', abrir: 'abierto', volver: 'vuelto', romper: 'roto', morir: 'muerto', cubrir: 'cubierto', resolver: 'resuelto', leer: 'leído', creer: 'creído', caer: 'caído', oír: 'oído', traer: 'traído', reír: 'reído' };
+const CONJ_IMP_TU = { decir: 'di', hacer: 'haz', ir: 've', poner: 'pon', salir: 'sal', ser: 'sé', tener: 'ten', venir: 'ven', mantener: 'mantén' };
+const CONJ_NO_IMP = ['haber', 'poder', 'querer', 'saber', 'deber', 'significar', 'faltar', 'estar'];   // pas d'ordre naturel avec ces verbes
+const CONJ_REFL = ['me', 'te', 'se', 'nos', 'os', 'se'];
+// Pose l'accent écrit sur la syllabe tonique d'un mot accentué sur l'avant-dernière (levanta → levánta), avant d'y coller un pronom
+function conjStress(word) {
+  const groups = [...word.matchAll(/[aeiouáéíóúü]+/g)];
+  if(groups.length < 2 || /[áéíóú]/.test(word)) return word;
+  const g = groups[groups.length - 2], v = g[0];
+  let k = [...v].findIndex(ch => 'aeo'.includes(ch)); if(k < 0) k = v.length - 1;
+  const acc = { a: 'á', e: 'é', i: 'í', o: 'ó', u: 'ú' }[v[k]] || v[k];
+  return word.slice(0, g.index + k) + acc + word.slice(g.index + k + 1);
+}
+function conjDerive() {
+  const haber = ['he', 'has', 'ha', 'hemos', 'habéis', 'han'];
+  for(const verb of Object.keys(CONJ_DB)) {
+    const db = CONJ_DB[verb], refl = /se$/.test(verb) && /^se /.test(db.presente[2]), inf = refl ? verb.slice(0, -2) : verb;
+    const bare = f => refl ? f.replace(/^(me|te|se|nos|os) /, '') : f;
+    // Passé composé : haber + participe
+    if(!db.perfecto) {
+      const part = CONJ_PART[inf] || (/ar$/.test(inf) ? inf.slice(0, -2) + 'ado' : inf.slice(0, -2) + 'ido');
+      db.perfecto = haber.map((h, i) => (refl ? CONJ_REFL[i] + ' ' : '') + h + ' ' + part);
+    }
+    // Subjonctif imparfait (-ra) : à partir de « ellos » au prétérit (dijeron → dijera)
+    if(!db.subj_imperfecto && db.preterito && /ron$/.test(db.preterito[5])) {
+      const stem = bare(db.preterito[5]).slice(0, -3), acc = stem.replace(/([ae])$/, m => ({ a: 'á', e: 'é' }[m]));
+      db.subj_imperfecto = [stem + 'ra', stem + 'ras', stem + 'ra', acc + 'ramos', stem + 'rais', stem + 'ran'].map((f, i) => (refl ? CONJ_REFL[i] + ' ' : '') + f);
+    }
+    // Impératif affirmatif : tú, usted, nosotros, vosotros, ustedes (pas de « yo »)
+    if(!db.imperativo && !CONJ_NO_IMP.includes(verb) && db.subjuntivo) {
+      const tu = CONJ_IMP_TU[inf] || bare(db.presente[2]), ud = bare(db.subjuntivo[2]), nos = inf === 'ir' ? 'vamos' : bare(db.subjuntivo[3]), vos = inf.slice(0, -1) + 'd', uds = bare(db.subjuntivo[5]);
+      db.imperativo = refl
+        ? [null, conjStress(tu) + 'te', conjStress(ud) + 'se', conjStress(nos).slice(0, -1) + 'nos', vos.slice(0, -1) + 'os', conjStress(uds) + 'se']
+        : [null, tu, ud, nos, vos, uds];
+    }
+  }
+}
+try { conjDerive(); } catch(e) { console.warn('[Aprende] temps calculés', e); }
+
+// Espagne (vosotros) ou Amérique latine (ustedes) : avec « ustedes », la 2e personne du pluriel n'est jamais demandée
+function conjUstedes() { try { return localStorage.getItem('conj_ustedes') === '1'; } catch(e) { return false; } }
+function conjSetUstedes(on) { try { localStorage.setItem('conj_ustedes', on ? '1' : '0'); } catch(e) {} }
+function conjPersonOk(tense, i) { return !(i === 4 && conjUstedes()) && !(tense === 'imperativo' && i === 0); }
+function conjPron(tense, i) {
+  if(tense === 'imperativo') return ['', 'tú', 'usted', 'nosotros', 'vosotros', 'ustedes'][i];
+  if(i === 5 && conjUstedes()) return 'ellos / ustedes';
+  return PRONOUNS[i];
+}
+// Majuscule quand le trou ouvre la phrase (¡___! → ¡Levántate!)
+function conjCap(text, ans) { return /^[¡¿\s]*___/.test(String(text)) ? ans.charAt(0).toUpperCase() + ans.slice(1) : ans; }
+function conjFill(s) { return s[3].replace('___', conjCap(s[3], conjAnswer(s))); }
+// Forme attendue pour une phrase : celle du tableau, sauf réponse écrite à la main (impératif avec pronoms : dámelo)
+function conjAnswer(s) { return s[6] || CONJ_DB[s[0]][s[1]][s[2]]; }
 
 // ── Paquet ──
 let _conjCache = null;
@@ -207,21 +267,26 @@ let _conjOrder = null;
 function conjOrder() {
   if(_conjOrder) return _conjOrder;
   _conjOrder = [];
-  Object.keys(CONJ_DB).forEach(v => CONJ_TENSES.forEach(t => { if(CONJ_DB[v][t] && CONJ_DB[v][t].length === 6) _conjOrder.push(conjKey(v, t)); }));
+  // un verbe après l'autre (les plus courants d'abord), ses temps dans l'ordre où on les apprend
+  const seq = ['presente', 'preterito', 'perfecto', 'imperfecto', 'futuro', 'subjuntivo', 'imperativo', 'condicional', 'subj_imperfecto'];
+  Object.keys(CONJ_DB).forEach(v => seq.forEach(t => { if(CONJ_DB[v][t] && CONJ_DB[v][t].length === 6) _conjOrder.push(conjKey(v, t)); }));
   return _conjOrder;
 }
 
 // Ce que la carte demande cette fois-ci : une phrase à déclencheur un passage sur deux, sinon une personne qui tourne
 function conjPrompt(key, rec) {
-  const { verb, tense } = conjParse(key), n = (rec && rec.p) || 0, sents = conjSentences(verb, tense);
+  const { verb, tense } = conjParse(key), n = (rec && rec.p) || 0;
+  const sents = conjSentences(verb, tense).filter(i => conjPersonOk(tense, CONJ_SENT[i][2]));
   const forms = CONJ_DB[verb][tense];
   if(sents.length && n % 2 === 0) {
     const s = CONJ_SENT[sents[(n >> 1) % sents.length]];
-    return { verb, tense, person: s[2], answer: forms[s[2]], text: s[3], fr: s[4], trigger: s[5], sentence: true };
+    return { verb, tense, person: s[2], answer: conjAnswer(s), text: s[3], fr: s[4], trigger: s[5], sentence: true };
   }
-  const person = [0, 2, 5, 1, 3, 4][(n >> 1) % 6];
-  const lead = CONJ_LEAD[tense], pron = PRONOUNS[person].split('/')[0];
-  return { verb, tense, person, answer: forms[person], text: `${lead} ${pron} ___`, fr: '', trigger: lead.replace(/,$/, ''), sentence: false };
+  const order = [0, 2, 5, 1, 3, 4].filter(i => forms[i] && conjPersonOk(tense, i));
+  const person = order[(n >> 1) % order.length];
+  const lead = CONJ_LEAD[tense], pron = conjPron(tense, person).split('/')[0].trim();
+  const text = tense === 'imperativo' ? `¡___! (${pron})` : tense === 'subj_imperfecto' ? `Si ${pron} ___…` : `${lead} ${pron} ___`;
+  return { verb, tense, person, answer: forms[person], text, fr: '', trigger: tense === 'imperativo' ? '¡…!' : lead.replace(/,$/, ''), sentence: false };
 }
 
 function conjEntry(key, rec, now) {
@@ -272,7 +337,7 @@ function conjCardHTML(card, progHTML) {
     <div class="fx-body conj-body">
       <div class="conj-verb">${crsEsc(p.verb)}${fr ? `<small>${crsEsc(fr)}</small>` : ''}</div>
       <div class="conj-sent">${parts[0]}<span class="conj-gap" id="conj-gap">${'&nbsp;'.repeat(6)}</span>${parts[1] || ''}</div>
-      ${p.fr ? `<div class="conj-fr">${crsEsc(p.fr)}</div>` : `<div class="conj-fr">${crsEsc(PRONOUNS[p.person])} · ${CONJ_TENSE_FR[p.tense].toLowerCase()}</div>`}
+      ${p.fr ? `<div class="conj-fr">${crsEsc(p.fr)}</div>` : `<div class="conj-fr">${crsEsc(conjPron(p.tense, p.person))} · ${CONJ_TENSE_FR[p.tense].toLowerCase()}</div>`}
       <div class="conj-entry" id="conj-entry">
         <input type="text" id="conj-inp" class="conj-inp" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="Conjugue ${crsEsc(p.verb)}…" aria-label="Ta réponse">
         <div class="conj-keys">${['á', 'é', 'í', 'ó', 'ú', 'ñ'].map(ch => `<button type="button" onclick="conjType('${ch}')">${ch}</button>`).join('')}</div>
@@ -302,7 +367,7 @@ function conjCheck() {
   const verdict = conjJudge(inp.value, p.answer), good = verdict === 'ok';
   srsState.revealed = true; srsState.conjGood = good;
   const gap = document.getElementById('conj-gap');
-  if(gap) { gap.textContent = p.answer; gap.classList.add(good ? 'ok' : 'ko'); }
+  if(gap) { gap.textContent = conjCap(p.text, p.answer); gap.classList.add(good ? 'ok' : 'ko'); }
   document.getElementById('conj-entry').style.display = 'none';
   const forms = CONJ_DB[p.verb][p.tense];
   const head = good ? '<b class="ok">✅ Juste</b>'
@@ -311,7 +376,7 @@ function conjCheck() {
   const res = document.getElementById('conj-result');
   res.innerHTML = `${head}
     <div class="conj-why">« ${crsEsc(p.trigger)} » → ${CONJ_WHY[p.tense]}</div>
-    <div class="conj-table">${forms.map((f, i) => `<span${i === p.person ? ' class="me"' : ''}><i>${PRONOUNS[i].split('/')[0]}</i>${crsEsc(f)}</span>`).join('')}</div>`;
+    <div class="conj-table">${forms.map((f, i) => f && conjPersonOk(p.tense, i) ? `<span${i === p.person ? ' class="me"' : ''}><i>${conjPron(p.tense, i).split('/')[0]}</i>${crsEsc(f)}</span>` : '').join('')}</div>`;
   res.style.display = 'block';
   inp.blur();
   const top = document.querySelector('.srs-card.top'); if(top) top.classList.add('revealed');
@@ -320,7 +385,7 @@ function conjCheck() {
   const ga = document.getElementById('srs-grade-area'); ga.style.display = 'block';
   try { ga.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); } catch(e) {}
   try { haptic(good ? 'light' : 'error'); if(typeof SFX !== 'undefined' && SFX.sfxEnabled()) (good ? SFX.playCorrect : SFX.playWrong)(); } catch(e) {}
-  try { crsSpeak('es', p.sentence ? p.text.replace('___', p.answer) : p.answer, true); } catch(e) {}
+  try { crsSpeak('es', p.sentence ? p.text.replace('___', conjCap(p.text, p.answer)) : p.answer, true); } catch(e) {}
 }
 function conjUpdateRow() {
   const row = document.getElementById('srs-conj-row'); if(!row) return;
@@ -344,16 +409,18 @@ function conjBump(verb, tense) {
 function conjTensesForUnit(u) {
   const t = ['presente'];
   if(u >= 7) t.push('preterito');
+  if(u >= 8) t.push('perfecto');
   if(u >= 9) t.push('imperfecto');
   if(u >= 10) t.push('futuro');
   if(u >= 13) t.push('subjuntivo');
-  if(u >= 18) t.push('condicional');
+  if(u >= 14) t.push('imperativo');
+  if(u >= 18) t.push('condicional', 'subj_imperfecto');
   return t;
 }
 // Exercices de conjugaison pour une leçon : le temps le plus récent d'abord
 function conjLessonPicks(u, count) {
   const tenses = conjTensesForUnit(u), last = tenses[tenses.length - 1];
-  const idx = CONJ_SENT.map((s, i) => i).filter(i => tenses.includes(CONJ_SENT[i][1]));
+  const idx = CONJ_SENT.map((s, i) => i).filter(i => tenses.includes(CONJ_SENT[i][1]) && conjPersonOk(CONJ_SENT[i][1], CONJ_SENT[i][2]));
   const recent = shuffle(idx.filter(i => CONJ_SENT[i][1] === last)), rest = shuffle(idx.filter(i => CONJ_SENT[i][1] !== last));
   const out = recent.slice(0, Math.ceil(count / 2));
   for(const i of rest) { if(out.length >= count) break; out.push(i); }

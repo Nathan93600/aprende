@@ -80,3 +80,73 @@ function c1OpenPlan() {
   h += `<button class="gbtn" style="width:100%;margin-top:1rem" onclick="crsCloseModal()">Fermer</button>`;
   crsModal(h);
 }
+
+// ── Suivi du programme pour le tableau de bord (anglais) ──
+// Renvoie les chiffres ; c1DashHTML les met en forme. Tout vient des cartes, de l'historique et de c1_log.
+function c1Progress(now) {
+  if(typeof C1_PLAN === 'undefined') return null;
+  now = now || Date.now();
+  const DAY = 864e5, weeks = C1_PLAN.weeks, total = weeks.length, start = new Date(C1_PLAN.start + 'T00:00:00').getTime();
+  const end = start + total * 7 * DAY, w = Math.floor((now - start) / DAY / 7), wi = Math.min(total - 1, Math.max(0, w));
+  const target = weeks[total - 1].mature, weekTarget = w < 0 ? 0 : weeks[wi].mature;
+  // cartes anglaises
+  let mature = 0, pipeline = 0;
+  const data = srsLoad();
+  for(const k in data) { if(!k.startsWith('en:')) continue; const c = data[k]; if(!c.reps) continue; if((c.interval || 0) >= 21) mature++; else pipeline++; }
+  // rythme : nouvelles cartes anglaises par jour sur les 14 derniers jours (première note de chaque carte)
+  const since = now - 14 * DAY, intro = new Set();
+  srsRevlogLoad().forEach(r => { if(r[1] >= since && r[3] === 0 && r[0].startsWith('en:')) intro.add(r[0]); });
+  const pace = intro.size / 14;
+  // estimation : les cartes déjà commencées deviennent acquises en 5 semaines environ ; le reste dépend du rythme
+  const RIPEN = 35, missing = Math.max(0, target - mature), afterPipeline = Math.max(0, missing - pipeline);
+  let eta = null;
+  if(!missing) eta = now;
+  else if(!afterPipeline) eta = now + RIPEN * DAY * Math.min(1, missing / Math.max(1, pipeline)) ;
+  else if(pace > 0) eta = now + (afterPipeline / pace + RIPEN) * DAY;
+  const lateWeeks = eta == null ? null : Math.round((eta - end) / DAY / 7);
+  // unités du parcours anglais
+  const U = (COURSES.en && COURSES.en.units) || []; let unitsDone = 0;
+  U.forEach((u, i) => { if(crsDone('en', i) >= CRS_NODES) unitsDone++; });
+  const weeksLeft = Math.max(1, total - Math.max(0, w));
+  // régularité : semaine en cours et depuis le début
+  const L = c1Log(), wkStart = start + wi * 7 * DAY, week = { done: 0, talk: 0, listen: 0 };
+  for(let i = 0; i < 7; i++) { const d = L[c1Day(new Date(wkStart + i * DAY))]; if(d) { if(d.done) week.done++; if(d.talk) week.talk++; if(d.listen) week.listen++; } }
+  let allDone = 0, talkMin = 0, listenMin = 0;
+  const tMin = (C1_PLAN.daily.find(t => t.id === 'talk') || {}).min || 0, lMin = (C1_PLAN.daily.find(t => t.id === 'listen') || {}).min || 0;
+  for(const k in L) { if(L[k].done) allDone++; if(L[k].talk) talkMin += tMin; if(L[k].listen) listenMin += lMin; }
+  const elapsed = w < 0 ? 0 : Math.min(total * 7, Math.floor((now - start) / DAY) + 1);
+  return { w, wi, total, started: w >= 0, finished: w >= total, phase: c1Phase(wi), focus: weeks[wi].focus, mature, pipeline, target, weekTarget, pace, eta, end, lateWeeks,
+    unitsDone, unitsTotal: U.length, unitsPerWeek: Math.max(0, U.length - unitsDone) / weeksLeft, week, allDone, elapsed, talkMin, listenMin };
+}
+function c1DashHTML() {
+  const p = c1Progress(); if(!p) return '';
+  const fmt = t => new Date(t).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' });
+  const pct = x => Math.max(0, Math.min(100, 100 * x / p.target));
+  let verdict, cls;
+  if(p.mature >= p.target) { verdict = 'Objectif de vocabulaire atteint'; cls = 'ok'; }
+  else if(p.eta == null) { verdict = 'Aucune nouvelle carte depuis 14 jours : pas d\'estimation possible'; cls = 'late'; }
+  else if(p.lateWeeks <= 0) { verdict = `À ce rythme : ${fmt(p.eta)}, dans les temps`; cls = 'ok'; }
+  else { verdict = `À ce rythme : ${fmt(p.eta)}, soit ${p.lateWeeks} semaine${p.lateWeeks > 1 ? 's' : ''} après la fin du programme`; cls = p.lateWeeks > 4 ? 'late' : 'warn'; }
+  const gap = p.mature - p.weekTarget;
+  const here = !p.started ? 'Le programme démarre le ' + new Date(C1_PLAN.start + 'T00:00:00').toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' })
+    : gap >= 0 ? `${gap} mot${gap > 1 ? 's' : ''} d'avance sur l'objectif de la semaine` : `${-gap} mot${-gap > 1 ? 's' : ''} de retard sur l'objectif de la semaine`;
+  const need = p.pace > 0 && p.lateWeeks > 0 ? Math.ceil(Math.max(0, p.target - p.mature - p.pipeline) / Math.max(1, (p.end - Date.now()) / 864e5 - 35)) : 0;
+  const row = (label, val, sub) => `<div class="c1d-cell"><b>${val}</b><span>${label}</span>${sub ? `<small>${sub}</small>` : ''}</div>`;
+  return `<div class="stx-card c1d">
+    <div class="stx-h">🇬🇧 Objectif C1 · avril 2027 <span class="stx-hsub">${p.finished ? 'Programme terminé' : p.started ? `Semaine ${p.wi + 1} sur ${p.total} · ${p.phase.icon} ${p.phase.name}` : 'Pas encore commencé'}</span></div>
+    <div class="c1d-bar" role="img" aria-label="${p.mature} mots acquis sur ${p.target}">
+      <i class="c1d-pipe" style="width:${pct(p.mature + p.pipeline)}%"></i><i class="c1d-mat" style="width:${pct(p.mature)}%"></i>
+      ${p.started ? `<em style="left:${pct(p.weekTarget)}%" title="Objectif de la semaine : ${p.weekTarget}"></em>` : ''}
+    </div>
+    <div class="c1d-legend"><span><i class="c1d-mat"></i>${p.mature} mots acquis</span><span><i class="c1d-pipe"></i>${p.pipeline} en cours</span><span><i class="c1d-tick"></i>objectif semaine ${p.weekTarget}</span><span>cible ${p.target}</span></div>
+    <div class="c1d-verdict ${cls}">${verdict}</div>
+    <div class="c1d-note">Estimation : une carte commencée devient acquise en 5 semaines environ. ${here}.${need ? ` Pour finir à temps : environ ${need} nouvelles cartes par jour.` : ''}</div>
+    <div class="c1d-grid">
+      ${row('nouvelles cartes / jour', (Math.round(p.pace * 10) / 10).toLocaleString('fr-FR'), 'sur 14 jours · conseillé ' + C1_PLAN.newPerDay)}
+      ${row('unités terminées', p.unitsDone + '/' + p.unitsTotal, p.unitsDone < p.unitsTotal ? (Math.round(p.unitsPerWeek * 10) / 10).toLocaleString('fr-FR') + ' par semaine pour finir' : 'parcours terminé')}
+      ${row('jours complets', p.week.done + '/7', 'cette semaine · ' + p.allDone + ' sur ' + p.elapsed + ' depuis le début')}
+      ${row('oral cette semaine', p.week.talk + ' + ' + p.week.listen, 'conversations + écoutes · ' + Math.round((p.talkMin + p.listenMin) / 60 * 10) / 10 + ' h au total')}
+    </div>
+    <button class="c1-link" onclick="c1OpenPlan()">Voir le programme complet</button>
+  </div>`;
+}

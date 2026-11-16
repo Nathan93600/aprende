@@ -148,6 +148,37 @@ const AUDIT = (min) => {
       await p.close();
     }
 
+    if(want('c1')) {
+      console.log('\nProgramme C1 dans le tableau de bord');
+      const p = await open(browser, base);
+      const r = await p.evaluate(() => {
+        const DAY = 864e5, start = new Date(C1_PLAN.start + 'T00:00:00').getTime(), o = {};
+        const data = srsLoad(), keys = Object.keys(data).filter(k => k.startsWith('en:')).slice(0, 60), log = srsRevlogLoad();
+        const t0 = start + 10 * DAY;                       // semaine 2 du programme
+        keys.forEach((k, i) => { Object.assign(data[k], { reps: 3, st: 'review', interval: i < 20 ? 30 : 5, due: t0 + 5 * DAY }); if(i >= 20 && i < 48) log.push([k, t0 - (i % 14) * DAY, 2, 0]); });
+        srsSave(data); srsRevlogSave ? srsRevlogSave(log) : localStorage.setItem('srs_revlog', JSON.stringify(log));
+        try { srsRevlogInvalidateCache(); } catch(e) {}
+        localStorage.setItem('srs_revlog', JSON.stringify(log)); try { srsRevlogInvalidateCache(); } catch(e) {}
+        const L = {}; L[c1Day(new Date(start + 7 * DAY))] = { done: true, talk: true, listen: true }; L[c1Day(new Date(start + 8 * DAY))] = { talk: true }; L[c1Day(new Date(start + 1 * DAY))] = { done: true };
+        localStorage.setItem('c1_log', JSON.stringify(L));
+        const a = c1Progress(t0);
+        o.a = [a.wi, a.mature, a.pipeline, a.target, a.weekTarget, a.pace, a.week.done, a.week.talk, a.week.listen, a.allDone, a.elapsed, a.talkMin, a.listenMin];
+        o.eta = a.eta > t0 && a.lateWeeks === Math.round((a.eta - a.end) / DAY / 7);
+        const before = c1Progress(start - 3 * DAY); o.before = [before.started, before.weekTarget, before.elapsed];
+        const after = c1Progress(start + 200 * DAY); o.after = after.finished;
+        // aucun rythme : pas d'estimation inventée
+        localStorage.setItem('srs_revlog', '[]'); try { srsRevlogInvalidateCache(); } catch(e) {}
+        const none = c1Progress(t0); o.none = [none.pace, none.eta];
+        openStats('en'); o.shown = !!document.querySelector('#stats-content .c1d');
+        openStats('es'); o.hidden = !document.querySelector('#stats-content .c1d');
+        return o;
+      });
+      ok('semaine, mots acquis, cartes en cours, rythme et régularité sont justes', JSON.stringify(r.a) === JSON.stringify([1, 20, 40, 690, 85, 2, 1, 2, 1, 2, 11, 50, 15]), JSON.stringify(r.a));
+      ok('la date estimée découle du rythme ; sans nouvelle carte, pas d\'estimation', r.eta && JSON.stringify(r.none) === JSON.stringify([0, null]), JSON.stringify(r.none));
+      ok('avant le début et après la fin du programme', JSON.stringify(r.before) === JSON.stringify([false, 0, 0]) && r.after === true, JSON.stringify(r.before));
+      ok('le suivi C1 n\'apparaît que dans le tableau de bord anglais', r.shown && r.hidden && p.errs.length === 0, p.errs.join(' | '));
+      await p.close();
+    }
     if(want('mots')) {
       console.log('\nMots notés dans l\'appli (« + mot »)');
       const p = await open(browser, base);
@@ -191,8 +222,20 @@ const AUDIT = (min) => {
       const r = await p.evaluate(async () => {
         const wait = ms => new Promise(r => setTimeout(r, ms)), o = {};
         o.judge = [conjJudge('tuve', 'tuve'), conjJudge(' Tuve. ', 'tuve'), conjJudge('hablo', 'habló'), conjJudge('tuvé', 'tuve'), conjJudge('tengo', 'tuve'), conjJudge('me acuerdo', 'me acuerdo')];
-        o.badSent = CONJ_SENT.filter(s => !CONJ_DB[s[0]] || !CONJ_DB[s[0]][s[1]] || !CONJ_DB[s[0]][s[1]][s[2]] || s[3].split('___').length !== 2 || !s[3].includes(s[5]) || !s[4]).map(s => s[3]);
-        o.badDb = Object.keys(CONJ_DB).filter(v => CONJ_TENSES.some(t => !CONJ_DB[v][t] || CONJ_DB[v][t].length !== 6 || CONJ_DB[v][t].some(f => !f)));
+        o.badSent = CONJ_SENT.filter(s => !CONJ_DB[s[0]] || !CONJ_DB[s[0]][s[1]] || !CONJ_DB[s[0]][s[1]][s[2]] || !conjPersonOk(s[1], s[2]) || s[3].split('___').length !== 2 || !s[3].includes(s[5]) || !s[4]).map(s => s[3]);
+        o.badDb = Object.keys(CONJ_DB).filter(v => CONJ_BASE_TENSES.concat(['perfecto', 'subj_imperfecto']).some(t => !CONJ_DB[v][t] || CONJ_DB[v][t].length !== 6 || CONJ_DB[v][t].some(f => !f)));
+        const cov = new Set(CONJ_SENT.map(s => s[0] + '|' + s[1]));
+        o.noSent = []; Object.keys(CONJ_DB).forEach(v => CONJ_TENSES.forEach(t => { if(CONJ_DB[v][t] && !cov.has(v + '|' + t)) o.noSent.push(v + '|' + t); }));
+        const D = CONJ_DB;
+        o.derived = [D.hacer.perfecto[0], D.levantarse.perfecto[3], D.decir.subj_imperfecto[3], D.ir.subj_imperfecto[1], D.hablar.subj_imperfecto[3], D.moverse.subj_imperfecto[0],
+          D.tener.imperativo[1], D.hacer.imperativo.join(','), D.levantarse.imperativo.slice(1).join(','), D.acordarse.imperativo[1], D.moverse.imperativo[2], D.ir.imperativo[3], String(D.hablar.imperativo[0]), String(D.poder.imperativo)];
+        o.pronouns = [conjAnswer(CONJ_SENT.find(s => s[6] === 'dámelo')), conjFill(CONJ_SENT.find(s => s[6] === 'vete')).slice(0, 5), conjCap('Ayer ___', 'tuve')];
+        // mode ustedes : vosotros n'est jamais demandé
+        conjSetUstedes(true);
+        o.ustedes = [conjPersonOk('presente', 4), conjPron('presente', 5), [0, 1, 2, 3, 4, 5, 6, 7].map(n => conjPrompt('conj:vivir|presente', { p: n }).person).includes(4), conjLessonPicks(27, 200).some(x => CONJ_SENT[x.c][2] === 4)];
+        conjSetUstedes(false);
+        o.vosotros = [conjPersonOk('presente', 4), [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map(n => conjPrompt('conj:hablar|futuro', { p: n }).person).includes(4)];
+        o.impNoYo = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].every(n => conjPrompt('conj:hablar|imperativo', { p: n }).person !== 0 && !!conjPrompt('conj:hablar|imperativo', { p: n }).answer);
         localStorage.setItem('conj_srs', '{}'); conjInvalidateCache(); localStorage.setItem('conj_per_day', '10');
         const vocab = Object.keys(srsLoad()).length;
         srsState.sessionFilter = null;
@@ -232,16 +275,16 @@ const AUDIT = (min) => {
           const c2 = srsLoad()[k]; o.bumped = (!!msg && c2.due <= srsStartOfToday() + 86400000 && JSON.stringify([c2.s, c2.d, c2.reps, c2.interval]) === mem) || ('état ' + data[k].st + ' ' + msg);
         } else o.bumped = 'aucune carte étudiée';
         o.lessonBump = conjBump('ser', 'subjuntivo') && conjLoad()['conj:ser|subjuntivo'].pri === 1;
-        o.picks = [0, 8, 14, 20].map(u => conjLessonPicks(u, 3).map(x => CONJ_SENT[x.c][1]));
+        o.picks = [0, 7, 14, 20].map(u => conjLessonPicks(u, 3).map(x => CONJ_SENT[x.c][1]));
         // Atelier conjugaison : une partie par mode, réponses justes sauf la première
         o.atelier = {};
-        for(const mode of ['mix', 'fill', 'qcm', 'table']) {
-          selectLang('es'); initCT(mode); ctChooseTense(mode === 'mix' ? 'mix' : 'preterito'); ctSetDiff(0); ctStart();
+        for(const mode of ['mix', 'fill', 'qcm', 'table', 'mix:imperativo', 'table:imperativo', 'fill:subj_imperfecto', 'qcm:perfecto']) {
+          selectLang('es'); initCT(mode.split(':')[0]); ctChooseTense(mode.includes(':') ? mode.split(':')[1] : mode === 'mix' ? 'mix' : 'preterito'); ctSetDiff(0); ctStart();
           let n = 0, first = true;
           while(ct.phase === 'play' && n++ < 80) {
             const ex = ct.exercises[ct.idx];
             if(ex.type === 'qcm' || ex.type === 'identify') { const i = first ? ct.opts.findIndex(x => x !== ct.correctAnswer) : ct.opts.indexOf(ct.correctAnswer); document.querySelector(`#ct-body .opt[data-i="${i}"]`).click(); }
-            else if(ex.type === 'fill') document.getElementById('ct-input').value = first ? conjStrip(ct.correctAnswer) + 'x' : ct.correctAnswer;
+            else if(ex.type === 'fill') document.getElementById('ct-input').value = first ? conjStrip(ct.correctAnswer) + 'x' : ct.correctAnswer.toUpperCase() === ct.correctAnswer ? ct.correctAnswer : ct.correctAnswer;
             else document.querySelectorAll('#ct-body .cw-cell:not([readonly])').forEach(c => { c.value = first ? 'x' : ex.forms[+c.dataset.idx]; });
             first = false;
             ctAction(); ctAction(); await wait(5);
@@ -253,7 +296,11 @@ const AUDIT = (min) => {
       });
       ok('accents exigés : hablo ≠ habló', JSON.stringify(r.judge) === JSON.stringify(['ok', 'ok', 'accent', 'accent', 'ko', 'ok']), JSON.stringify(r.judge));
       ok('chaque phrase a un blanc, un déclencheur et une forme connue', r.badSent.length === 0, r.badSent.slice(0, 4).join(' | '));
-      ok('chaque verbe a ses 6 temps complets', r.badDb.length === 0, r.badDb.join(', '));
+      ok('chaque verbe a ses temps complets', r.badDb.length === 0, r.badDb.join(', '));
+      ok('chaque carte de conjugaison a au moins une phrase', r.noSent.length === 0, r.noSent.slice(0, 8).join(', '));
+      ok('temps calculés : passé composé, subjonctif imparfait, impératif', JSON.stringify(r.derived) === JSON.stringify(['he hecho', 'nos hemos levantado', 'dijéramos', 'fueras', 'habláramos', 'me moviera', 'ten', ',haz,haga,hagamos,haced,hagan', 'levántate,levántese,levantémonos,levantaos,levántense', 'acuérdate', 'muévase', 'vamos', 'null', 'undefined']), JSON.stringify(r.derived));
+      ok('impératif : pas de « yo », pronoms collés (dámelo), majuscule en début de phrase', r.impNoYo && JSON.stringify(r.pronouns) === JSON.stringify(['dámelo', '¡Vete', 'tuve']), JSON.stringify(r.pronouns));
+      ok('réglage ustedes : vosotros n\'est plus demandé ; par défaut il l\'est', JSON.stringify(r.ustedes) === JSON.stringify([false, 'ellos / ustedes', false, false]) && JSON.stringify(r.vosotros) === JSON.stringify([true, true]), JSON.stringify([r.ustedes, r.vosotros]));
       ok('les cartes de conjugaison entrent dans Réviser en espagnol seulement, dans la limite du jour', r.es > 0 && r.es <= 10 && r.en === 0 && r.off === 0, `es ${r.es}, en ${r.en}, à 0 : ${r.off}`);
       ok('la carte s\'affiche avec son champ de saisie', r.shown);
       ok('réponse fausse : « Bien » et « Facile » sont bloqués', r.wrongBlocks && r.refused);
@@ -263,7 +310,7 @@ const AUDIT = (min) => {
       ok('la sauvegarde contient les cartes de conjugaison', r.exported);
       ok('une erreur en leçon fait revenir la carte demain, sans changer sa mémoire', r.bumped === true, String(r.bumped));
       ok('un verbe raté en leçon passe en tête des nouvelles cartes', r.lessonBump);
-      ok('les leçons ne demandent que des temps déjà vus', r.picks[0].every(t => t === 'presente') && r.picks[1].every(t => ['presente', 'preterito'].includes(t)) && r.picks[1].includes('preterito') && r.picks.every(x => x.length === 3), JSON.stringify(r.picks));
+      ok('les leçons ne demandent que des temps déjà vus', r.picks[0].every(t => t === 'presente') && r.picks[1].every(t => ['presente', 'preterito'].includes(t)) && r.picks[1].includes('preterito') && r.picks[2].includes('imperativo') && !r.picks[2].includes('subj_imperfecto') && r.picks.every(x => x.length === 3), JSON.stringify(r.picks));
       ok('atelier conjugaison : une partie se joue jusqu\'au bout dans les 4 modes', Object.values(r.atelier).every(Boolean) && r.atelierStars && p.errs.length === 0, JSON.stringify(r.atelier) + ' ' + p.errs.join(' | '));
       await p.close();
     }
@@ -422,7 +469,7 @@ const AUDIT = (min) => {
               if(!wrongDone && ex.opts.length > 1) { k = (k + 1) % ex.opts.length; wrongDone = true; }   // une erreur volontaire, pour tester ce chemin
               crsPick(k);
             } else if(!crs.checked && ex.t === 'dictee') { const el = document.getElementById('ls-dict-inp'); el.value = ex.w[0]; el.dispatchEvent(new Event('input', { bubbles: true })); }
-            else if(!crs.checked && ex.t === 'conj') { sawConj = true; const c = CONJ_SENT[ex.c], el = document.getElementById('ls-conj-inp'); el.value = wrongConj ? CONJ_DB[c[0]][c[1]][c[2]] : 'zzz'; wrongConj = true; }
+            else if(!crs.checked && ex.t === 'conj') { sawConj = true; const c = CONJ_SENT[ex.c], el = document.getElementById('ls-conj-inp'); el.value = wrongConj ? conjAnswer(c) : 'zzz'; wrongConj = true; }
             else if(!crs.checked && ex.t === 'freetr') { const el = document.getElementById('ls-freetr-inp'); el.value = ex.w[0]; el.dispatchEvent(new Event('input', { bubbles: true })); }
             else if(!crs.checked && ex.t === 'build') {
               const used = new Set();

@@ -2485,7 +2485,7 @@ body.pop.dark .srs-card.conj-card { --ink: #06070d; }
 .cw-back:active { transform: translateY(4px); box-shadow: none; }
 .cw-tiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .65rem; }
 .cw-tile { position: relative; text-align: left; display: flex; flex-direction: column; gap: .05rem; padding: .7rem .75rem .6rem; border: 2.5px solid var(--ink); border-radius: 20px; background: var(--c); color: #2b1408; box-shadow: 0 4px 0 var(--ink); cursor: pointer; font-family: 'Poppins', sans-serif; transition: transform .16s var(--fx-spring), box-shadow .16s var(--fx-ease); animation: fxRise .4s var(--fx-spring) backwards; }
-.cw-tile:nth-child(2) { animation-delay: .03s; } .cw-tile:nth-child(3) { animation-delay: .06s; } .cw-tile:nth-child(4) { animation-delay: .09s; } .cw-tile:nth-child(5) { animation-delay: .12s; } .cw-tile:nth-child(6) { animation-delay: .15s; } .cw-tile:nth-child(7) { animation-delay: .18s; grid-column: 1 / -1; }
+.cw-tile:nth-child(2) { animation-delay: .03s; } .cw-tile:nth-child(3) { animation-delay: .06s; } .cw-tile:nth-child(4) { animation-delay: .09s; } .cw-tile:nth-child(5) { animation-delay: .12s; } .cw-tile:nth-child(6) { animation-delay: .15s; } .cw-tile:nth-child(n+7) { animation-delay: .18s; } .cw-tile:last-child:nth-child(odd) { grid-column: 1 / -1; }
 .cw-tile:active { transform: translateY(4px); box-shadow: 0 0 0 var(--ink); }
 .cw-tile.on { transform: translateY(-3px); box-shadow: 0 7px 0 var(--ink); outline: 3px solid var(--tx); outline-offset: 2px; }
 .cw-tile-e { position: absolute; top: .55rem; right: .65rem; font-size: 1.1rem; }
@@ -2578,3 +2578,22 @@ body.desktop-mode #pw-fab { bottom: 20px; }
 .pw-item b { font: 700 .92rem 'Poppins', sans-serif; color: var(--tx); overflow-wrap: anywhere; } .pw-item small { display: block; font: 500 .74rem/1.35 'Poppins', sans-serif; color: var(--muted); overflow-wrap: anywhere; }
 .pw-item button { flex: none; width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--ink); background: var(--fx-field); color: var(--tx); font-weight: 800; cursor: pointer; }
 .pw-empty, .pw-foot { font: 500 .78rem/1.45 'Poppins', sans-serif; color: var(--muted); margin: 0; }
+
+/* ── Tableau de bord : suivi du programme C1 ── */
+.c1d-bar { position: relative; height: 24px; border: 2.5px solid var(--ink); border-radius: 999px; background: var(--fx-field); overflow: hidden; }
+.c1d-bar > i { position: absolute; left: 0; top: 0; bottom: 0; display: block; border-right: 2px solid var(--ink); transition: width .8s var(--fx-ease); }
+.c1d-pipe { background: var(--sun); } .c1d-mat { background: var(--mint); }
+.c1d-bar > em { position: absolute; top: -2px; bottom: -2px; width: 0; border-left: 3px dashed var(--ink); }
+.c1d-legend { display: flex; flex-wrap: wrap; gap: .3rem .9rem; margin-top: .5rem; font: 600 .7rem 'Poppins', sans-serif; color: var(--muted); }
+.c1d-legend span { display: inline-flex; align-items: center; gap: .3rem; }
+.c1d-legend i { width: 12px; height: 12px; border-radius: 4px; border: 2px solid var(--ink); display: inline-block; }
+.c1d-legend i.c1d-tick { width: 0; height: 12px; border: 0; border-left: 3px dashed var(--tx); border-radius: 0; }
+.c1d-verdict { margin-top: .8rem; padding: .55rem .75rem; border: 2.5px solid var(--ink); border-radius: 14px; font: 800 .86rem/1.35 'Poppins', sans-serif; color: #2b1408; box-shadow: 0 3px 0 var(--ink); }
+.c1d-verdict.ok { background: var(--mint); } .c1d-verdict.warn { background: var(--sun); } .c1d-verdict.late { background: var(--coral); }
+.c1d-note { margin-top: .5rem; font: 500 .78rem/1.45 'Poppins', sans-serif; color: var(--muted); }
+.c1d-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .7rem .8rem; margin: .9rem 0 .7rem; }
+.c1d-cell b { display: block; font: 800 1.25rem/1.1 'Poppins', sans-serif; color: var(--tx); }
+.c1d-cell span { display: block; font: 700 .74rem 'Poppins', sans-serif; color: var(--tx); }
+.c1d-cell small { display: block; font: 500 .66rem/1.35 'Poppins', sans-serif; color: var(--muted); }
+.conj-table span { font-size: .72rem; overflow-wrap: normal; word-break: normal; padding: .25rem .1rem; }
+.cw-tile b { padding-right: 1.5rem; }

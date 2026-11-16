@@ -35,7 +35,8 @@ js/                     la logique, découpée par domaine (26 fichiers, chargé
   core.js                 état, navigation (showScreen), utilitaires
   games-basic.js, games-memory.js, games-words.js, sessions.js   les jeux
   conjugation.js, conj-trainer.js      conjugaison espagnole (base CONJ_DB, jeux)
-  conj-cards.js           cartes de conjugaison dans Réviser, phrases à déclencheur (CONJ_SENT)
+  conj-cards.js           cartes de conjugaison dans Réviser, temps calculés, phrases à déclencheur (CONJ_SENT)
+  conj-sentences.js       suite de CONJ_SENT : une phrase par carte, au format compact
   journal.js              journal des mots (JOURNAL_SESSIONS) et règles de grammaire
   backup.js               sauvegarde / restauration, bouton « génère »
   srs.js                  révision espacée FSRS-6, écran Réviser, planning, fiches
@@ -106,7 +107,7 @@ Une copie de l'appli n'en a pas besoin : mettre `firebase: false`.
 | `crs_prog`, `crs_resume`, `crs_added` | progression dans les cours |
 | `pron_srs`, `grammar_srs` | révision de la prononciation (anglais) et des règles de grammaire |
 | `pending_words` | mots notés avec « + mot » : `[{w, l, c, t}]`, `l` = `es`, `en`, `ln` ou `fr` (à traduire vers les deux) |
-| `conj_srs`, `conj_per_day` | cartes de conjugaison espagnole (`conj:verbe|temps`) et leur limite par jour |
+| `conj_srs`, `conj_per_day`, `conj_ustedes` | cartes de conjugaison espagnole (`conj:verbe|temps`), leur limite par jour, et le choix vosotros / ustedes |
 | `rpg` | héros, or, inventaire, quêtes |
 | `genere_sent` | semaine du dernier envoi « génère » |
 | `aprende_sfx`, `aprende_vibe`, `aprende_notif` | réglages sons, vibrations, notifications |
@@ -235,8 +236,18 @@ orthographe est sans danger (la migration suit la casse), changer le mot lui-mê
   cartes par jour (révisions d'abord), dont au plus `CONJ_NEW_MAX` nouvelles.
 - La carte se tape. `conjJudge()` exige les accents (`hablo` ≠ `habló`) ; une réponse fausse ne peut
   être notée que « Encore » ou « Difficile ». À chaque réussite, la personne demandée change (`p`).
-- `CONJ_SENT` : phrases à déclencheur `[verbe, temps, personne, phrase avec ___, traduction, déclencheur]`.
-  La forme attendue vient toujours de `CONJ_DB` ; le test `conjugaison` vérifie chaque phrase.
+- Neuf temps. Six sont écrits à la main dans `CONJ_DB` (`CONJ_BASE_TENSES`) ; `conjDerive()` en calcule
+  trois au chargement : `perfecto` (haber + participe, irréguliers dans `CONJ_PART`), `subj_imperfecto`
+  (à partir de « ellos » au prétérit : dijeron → dijera) et `imperativo` (tú, usted, nosotros, vosotros,
+  ustedes ; pas de « yo », donc `null` au rang 0 ; verbes sans ordre naturel dans `CONJ_NO_IMP`).
+  Ajouter un verbe = ses six temps de base, plus son participe ou son impératif « tú » s'ils sont irréguliers.
+- `CONJ_SENT` : phrases à déclencheur `[verbe, temps, personne, phrase avec ___, traduction, déclencheur]`,
+  plus une réponse écrite à la main en 7ᵉ position pour l'impératif avec pronoms (`dámelo`). Sinon la forme
+  attendue vient de `CONJ_DB` (`conjAnswer`). Les 148 premières sont dans `conj-cards.js`, la suite dans
+  `conj-sentences.js` (une ligne `verbe|personne|phrase|traduction|déclencheur`). On n'ajoute qu'à la fin :
+  les leçons en cours repèrent une phrase par son rang. Le test `conjugaison` vérifie chaque phrase et
+  que chaque carte en a au moins une.
+- `conj_ustedes` = `1` : la 2ᵉ personne du pluriel (vosotros) n'est plus demandée (`conjPersonOk`).
 - Leçons espagnoles : `conjLessonPicks(u, n)` ajoute 2 ou 3 exercices `{t:'conj', c}` limités aux
   temps déjà vus (`conjTensesForUnit`). Pour ajouter un verbe : une entrée dans `CONJ_DB` suffit.
 - Une erreur en leçon (`crsMissToSrs`) avance la carte du mot au lendemain, sans toucher à sa
@@ -339,7 +350,7 @@ python3 -m http.server 8000      # à la racine du dépôt
   `fiches` (chaque mot a sa fiche), `audio` (chaque voix de l'index existe), `progression`
   (les cartes existantes ne bougent pas), `ecrans` (tous les écrans, clair et sombre, et lisibilité
   de chaque texte sur son fond ; détail avec `node tests/run.js ecrans --contraste`), `lecons`,
-  `histoires`, `conjugaison`, `mots`, `sauvegarde`. À lancer avant chaque mise en ligne.
+  `histoires`, `conjugaison`, `mots`, `c1`, `sauvegarde`. À lancer avant chaque mise en ligne.
 - Tester avec une sauvegarde réelle : la restaurer depuis Réglages, ou l'injecter dans
   `localStorage` avec un navigateur automatisé (Playwright).
 - Publier : pousser sur la branche servie par GitHub Pages, après avoir incrémenté `CACHE_NAME`.

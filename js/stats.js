@@ -83,6 +83,9 @@ function renderStats() {
     <div class="dash-kpi k-sky"><div class="dash-ring"><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="26" class="dash-ring-bg"/><circle cx="32" cy="32" r="26" class="dash-ring-fg" stroke-dasharray="${(C * ring / 100).toFixed(1)} ${C.toFixed(1)}" transform="rotate(-90 32 32)"/></svg><b>${retention === null ? '—' : retention + '<small>%</small>'}</b></div><div class="dash-kpi-lbl">rétention sur 30 jours</div><div class="dash-kpi-sub">${retention === null ? 'pas encore de données' : 'objectif : 90 %'}</div></div>
   </div>`;
 
+  // Anglais : où j'en suis dans le programme C1
+  if(lang === 'en') { try { html += c1DashHTML(); } catch(e) { console.warn('[C1] tableau de bord', e); } }
+
   // Mon paquet : répartition des cartes
   const segs = [['mature', 'Acquises', '≥ 21 jours', cnt.mature], ['young', 'Jeunes', '< 21 jours', cnt.young], ['learn', 'En apprentissage', 'vues récemment', cnt.learn], ['new', 'Nouvelles', 'pas encore vues', cnt.new]];
   const totalC = Math.max(1, cards.length);

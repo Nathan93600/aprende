@@ -495,9 +495,9 @@ function crsCheck() {
   if(ex.t === 'conj') {
     const inp = document.getElementById('ls-conj-inp'); if(!inp) return;
     const val = inp.value.trim(); if(!val) return;
-    const s = CONJ_SENT[ex.c], ans = CONJ_DB[s[0]][s[1]][s[2]], verdict = conjJudge(val, ans), full = s[3].replace('___', ans);
+    const s = CONJ_SENT[ex.c], ans = conjAnswer(s), verdict = conjJudge(val, ans), full = conjFill(s);
     const why = `« ${crsEsc(s[5])} » → ${CONJ_WHY[s[1]]}`;
-    const gap = document.getElementById('ls-conj-gap'); if(gap) { gap.textContent = ans; gap.classList.add(verdict === 'ok' ? 'ok' : 'ko'); }
+    const gap = document.getElementById('ls-conj-gap'); if(gap) { gap.textContent = conjCap(s[3], ans); gap.classList.add(verdict === 'ok' ? 'ok' : 'ko'); }
     inp.classList.add(verdict === 'ok' ? 'ok' : 'ko'); inp.blur();
     if(verdict === 'ok') crsResult(true, full, '', why);
     else crsResult(false, full, '', (verdict === 'accent' ? `<span class="almost-msg">Presque : l'accent compte. <b>${crsEsc(val)}</b> → <b>${crsEsc(ans)}</b></span><br>` : '') + why);

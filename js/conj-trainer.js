@@ -10,6 +10,9 @@ const CT_TENSES = [
   { key: 'futuro',      e: '🔵', n: 'Futur simple', d: 'Projets, prédictions', color: '#4cc9f0' },
   { key: 'condicional', e: '🟣', n: 'Conditionnel', d: 'Hypothèses, politesse', color: '#c77dff' },
   { key: 'subjuntivo',  e: '🟠', n: 'Subjonctif',   d: 'Souhaits, doutes, émotions', color: '#fb923c' },
+  { key: 'perfecto',    e: '🟤', n: 'Passé composé', d: 'he hablado, has visto', color: '#d6a36c' },
+  { key: 'imperativo',  e: '❗', n: 'Impératif',    d: 'Ordres et conseils', color: '#ff9db0' },
+  { key: 'subj_imperfecto', e: '⚪', n: 'Subj. imparfait', d: 'si tuviera, si fuera', color: '#cfd8e6' },
 ];
 const CT_DIFFS = ['Facile','Normal','Difficile'];
 let ct = null; // state
@@ -23,7 +26,10 @@ function ctStarStr(n) { return '⭐'.repeat(n) + '☆'.repeat(3-n); }
 const CT_MIX = { key: 'mix', e: '🎲', n: 'Mélange', d: 'Tous les temps', color: '#ff8ae6' };
 const CT_MODES = [['mix', '🔀 Mixte'], ['fill', '✍️ Phrases'], ['qcm', '🎯 QCM'], ['table', '📋 Tableau']];
 const CT_LENS = [8, 12, 16];
-const CT_TILE = { presente: 'var(--mint)', preterito: 'var(--coral)', imperfecto: 'var(--sun)', futuro: 'var(--sky)', condicional: '#c9b3ff', subjuntivo: '#ffb877', mix: 'var(--pink)' };
+const CT_TILE = { presente: 'var(--mint)', preterito: 'var(--coral)', imperfecto: 'var(--sun)', futuro: 'var(--sky)', condicional: '#c9b3ff', subjuntivo: '#ffb877', perfecto: '#e3c39a', imperativo: '#ffb3c1', subj_imperfecto: '#d9e2ef', mix: 'var(--pink)' };
+// Personnes qu'on peut demander pour ce verbe à ce temps (pas de « yo » à l'impératif, pas de vosotros en mode ustedes)
+function ctPersons(forms, tense) { return [0, 1, 2, 3, 4, 5].filter(i => forms[i] && (typeof conjPersonOk !== 'function' || conjPersonOk(tense, i))); }
+function ctPron(tense, i) { return typeof conjPron === 'function' ? conjPron(tense, i) : PRONOUNS[i]; }
 function ctInfo(key) { return key === 'mix' ? CT_MIX : CT_TENSES.find(t => t.key === key); }
 function ctEsc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
 
@@ -47,6 +53,8 @@ function ctRenderSetup() {
     <div class="cw-chips">${CT_MODES.map(([k, l]) => `<button class="cw-chip${ct.mode === k ? ' on' : ''}" onclick="ctSetMode('${k}')">${l}</button>`).join('')}</div>
     <div class="cw-label">Longueur</div>
     <div class="cw-chips">${CT_LENS.map((n, i) => `<button class="cw-chip${ct.diff === i ? ' on' : ''}" onclick="ctSetDiff(${i})">${['Courte', 'Normale', 'Longue'][i]} · ${n}</button>`).join('')}</div>
+    <div class="cw-label">2ᵉ personne du pluriel</div>
+    <div class="cw-chips"><button class="cw-chip${conjUstedes() ? '' : ' on'}" onclick="conjSetUstedes(false); ctRenderSetup()">🇪🇸 vosotros (Espagne)</button><button class="cw-chip${conjUstedes() ? ' on' : ''}" onclick="conjSetUstedes(true); ctRenderSetup()">🌎 ustedes (Amérique latine)</button></div>
     <button class="gbtn cw-go" onclick="ctStart()" ${ct.tense ? '' : 'disabled'}>${ct.tense ? 'Commencer · ' + ctInfo(ct.tense).n : 'Choisis un temps'}</button>
     <p class="cw-note">Les accents comptent. Un verbe raté reviendra dans Réviser.</p>
   </div>`;
@@ -65,11 +73,12 @@ function ctStart() {
     const verb = verbs[i % verbs.length], tense = ct.tense === 'mix' ? tenses[Math.floor(Math.random() * tenses.length)] : ct.tense;
     const forms = CONJ_DB[verb][tense];
     if(!forms) continue;
-    exercises.push({ verb, tense, forms, type: ct.mode === 'mix' ? ctPickType(exercises.length, total) : ct.mode, pIdx: Math.floor(Math.random() * 6) });
+    const ps = ctPersons(forms, tense); if(!ps.length) continue;
+    exercises.push({ verb, tense, forms, type: ct.mode === 'mix' ? ctPickType(exercises.length, total) : ct.mode, pIdx: ps[Math.floor(Math.random() * ps.length)] });
   }
   // en mode phrases : d'abord les verbes qui ont une vraie phrase à déclencheur
   if(ct.mode === 'fill' && typeof conjSentences === 'function') {
-    const withS = shuffle(CONJ_SENT.map((s, i) => i).filter(i => ct.tense === 'mix' || CONJ_SENT[i][1] === ct.tense)).slice(0, total);
+    const withS = shuffle(CONJ_SENT.map((s, i) => i).filter(i => (ct.tense === 'mix' || CONJ_SENT[i][1] === ct.tense) && conjPersonOk(CONJ_SENT[i][1], CONJ_SENT[i][2]))).slice(0, total);
     withS.forEach((si, k) => { const s = CONJ_SENT[si]; exercises[k] = { verb: s[0], tense: s[1], forms: CONJ_DB[s[0]][s[1]], type: 'fill', pIdx: s[2], sent: si }; });
   }
   Object.assign(ct, { exercises, idx: 0, correct: 0, errors: 0, streak: 0, maxStreak: 0, phase: 'play', answered: false, missed: [] });
@@ -117,10 +126,10 @@ function ctRender() {
 }
 
 function ctRenderQCM(body, ex) {
-  const pron = PRONOUNS[ex.pIdx], correct = ex.forms[ex.pIdx];
+  const pron = ctPron(ex.tense, ex.pIdx), correct = ex.forms[ex.pIdx];
   const distractors = new Set();
-  ex.forms.forEach((f, j) => { if(j !== ex.pIdx) distractors.add(f); });
-  CT_TENSES.forEach(t => { const f = CONJ_DB[ex.verb][t.key]; if(f && t.key !== ex.tense) distractors.add(f[ex.pIdx]); });   // même personne, autre temps : le vrai piège
+  ex.forms.forEach((f, j) => { if(f && j !== ex.pIdx) distractors.add(f); });
+  CT_TENSES.forEach(t => { const f = CONJ_DB[ex.verb][t.key]; if(f && t.key !== ex.tense && f[ex.pIdx]) distractors.add(f[ex.pIdx]); });   // même personne, autre temps : le vrai piège
   distractors.delete(correct);
   const opts = shuffle([correct, ...shuffle([...distractors]).slice(0, 3)]);
   ct.correctAnswer = correct; ct.opts = opts; ct.selected = null;
@@ -135,16 +144,18 @@ function ctSelectOpt(el, i) {
 }
 
 function ctRenderFill(body, ex) {
-  const pron = PRONOUNS[ex.pIdx], correct = ex.forms[ex.pIdx];
+  const pron = ctPron(ex.tense, ex.pIdx), correct = ex.forms[ex.pIdx];
   ct.correctAnswer = correct;
   // une vraie phrase à déclencheur quand elle existe, sinon une amorce qui annonce le temps
-  if(ex.sent == null && typeof conjSentences === 'function') { const ss = conjSentences(ex.verb, ex.tense); if(ss.length) { ex.sent = ss[Math.floor(Math.random() * ss.length)]; ex.pIdx = CONJ_SENT[ex.sent][2]; ct.correctAnswer = ex.forms[ex.pIdx]; } }
+  if(ex.sent == null && typeof conjSentences === 'function') { const ss = conjSentences(ex.verb, ex.tense).filter(i => conjPersonOk(ex.tense, CONJ_SENT[i][2])); if(ss.length) { ex.sent = ss[Math.floor(Math.random() * ss.length)]; ex.pIdx = CONJ_SENT[ex.sent][2]; } }
+  if(ex.sent != null) ct.correctAnswer = conjAnswer(CONJ_SENT[ex.sent]);
   const s = ex.sent != null ? CONJ_SENT[ex.sent] : null;
-  const text = s ? s[3] : `${typeof CONJ_LEAD !== 'undefined' ? CONJ_LEAD[ex.tense] : ''} ${pron.split('/')[0]} ___`.trim();
+  const p1 = pron.split('/')[0].trim();
+  const text = s ? s[3] : ex.tense === 'imperativo' ? `¡___! (${p1})` : ex.tense === 'subj_imperfecto' ? `Si ${p1} ___…` : `${typeof CONJ_LEAD !== 'undefined' ? CONJ_LEAD[ex.tense] : ''} ${p1} ___`.trim();
   const parts = ctEsc(text).split('___');
   body.innerHTML = `${ctVerbCard(ex)}
     <div class="cw-sent">${parts[0]}<span class="conj-gap" id="ct-gap">${'&nbsp;'.repeat(6)}</span>${parts[1] || ''}</div>
-    <div class="cw-fr">${s ? ctEsc(s[4]) : ctEsc(PRONOUNS[ex.pIdx]) + ' · ' + ctInfo(ex.tense).n.toLowerCase()}</div>
+    <div class="cw-fr">${s ? ctEsc(s[4]) : ctEsc(pron) + ' · ' + ctInfo(ex.tense).n.toLowerCase()}</div>
     <input type="text" class="cw-input" id="ct-input" placeholder="${ctEsc(ex.verb)} → …" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">
     ${ctKeys()}`;
   const inp = document.getElementById('ct-input');
@@ -153,20 +164,20 @@ function ctRenderFill(body, ex) {
 }
 
 function ctRenderIdentify(body, ex) {
-  const correct = ex.forms[ex.pIdx], pron = PRONOUNS[ex.pIdx], me = ctInfo(ex.tense);
+  const correct = ex.forms[ex.pIdx], pron = ctPron(ex.tense, ex.pIdx), me = ctInfo(ex.tense);
   // on écarte les temps dont la forme est identique (hablamos : présent et prétérit)
   const others = CT_TENSES.filter(t => t.key !== ex.tense && CONJ_DB[ex.verb][t.key] && CONJ_DB[ex.verb][t.key][ex.pIdx] !== correct);
   const opts = shuffle([me, ...shuffle(others).slice(0, 3)]);
   ct.correctAnswer = me.n; ct.opts = opts.map(t => t.n); ct.selected = null;
-  body.innerHTML = `${ctVerbCard(ex, true)}<div class="cw-sent">« ${ctEsc(pron.split('/')[0])} <b>${ctEsc(correct)}</b> »</div><div class="ls-h">Quel temps est-ce ?</div>
+  body.innerHTML = `${ctVerbCard(ex, true)}<div class="cw-sent">« ${ex.tense === 'imperativo' ? '¡' : ctEsc(pron.split('/')[0]) + ' '}<b>${ctEsc(correct)}</b>${ex.tense === 'imperativo' ? '! (' + ctEsc(pron) + ')' : ''} »</div><div class="ls-h">Quel temps est-ce ?</div>
     <div class="opts">${opts.map((t, i) => `<button class="opt" data-i="${i}" onclick="ctSelectOpt(this, ${i})">${t.e} ${t.n}</button>`).join('')}</div>`;
 }
 
 function ctRenderTable(body, ex) {
   ct.correctAnswer = '__table__';
-  const reveal = ct.mode === 'table' ? 0 : 2, shown = shuffle([0, 1, 2, 3, 4, 5]).slice(0, reveal);
+  const rows = ctPersons(ex.forms, ex.tense), reveal = ct.mode === 'table' ? 0 : 2, shown = shuffle([...rows]).slice(0, reveal);
   body.innerHTML = `${ctVerbCard(ex)}<div class="ls-h">Complète les formes</div>
-    <div class="cw-table">${PRONOUNS.map((p, i) => `<label><span>${p}</span>${shown.includes(i)
+    <div class="cw-table">${rows.map(i => [ctPron(ex.tense, i), i]).map(([p, i]) => `<label><span>${p}</span>${shown.includes(i)
       ? `<input class="cw-cell given" value="${ctEsc(ex.forms[i])}" readonly tabindex="-1" data-idx="${i}">`
       : `<input class="cw-cell" data-idx="${i}" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="${p}">`}<em></em></label>`).join('')}</div>
     ${ctKeys()}`;
@@ -197,7 +208,7 @@ function ctAction() {
     isCorrect = verdict === 'ok';
     if(verdict === 'accent') note = `Presque : l'accent compte. « ${ctEsc(inp.value.trim())} » → « ${ctEsc(ct.correctAnswer)} »`;
     inp.classList.add(isCorrect ? 'ok' : 'ko'); inp.readOnly = true; inp.blur();
-    const gap = document.getElementById('ct-gap'); if(gap) { gap.textContent = ct.correctAnswer; gap.classList.add(isCorrect ? 'ok' : 'ko'); }
+    const gap = document.getElementById('ct-gap'); if(gap) { gap.textContent = ex.sent != null ? conjCap(CONJ_SENT[ex.sent][3], ct.correctAnswer) : ct.correctAnswer; gap.classList.add(isCorrect ? 'ok' : 'ko'); }
   } else {
     const cells = [...document.querySelectorAll('#ct-body .cw-cell:not([readonly])')];
     if(cells.every(c => !c.value.trim())) { cells[0] && cells[0].focus(); return; }
@@ -249,7 +260,7 @@ function ctFinish() {
   ct.phase = 'done';
   document.getElementById('ct-top').style.display = 'none';
   document.getElementById('ct-foot').style.display = 'none';
-  const missed = ct.missed.map(m => `<div class="cw-miss"><b>${ctEsc(m.verb)}</b><span>${ctInfo(m.tense).n}</span><em>${CONJ_DB[m.verb][m.tense].map(ctEsc).join(' · ')}</em></div>`).join('');
+  const missed = ct.missed.map(m => `<div class="cw-miss"><b>${ctEsc(m.verb)}</b><span>${ctInfo(m.tense).n}</span><em>${CONJ_DB[m.verb][m.tense].filter(Boolean).map(ctEsc).join(' · ')}</em></div>`).join('');
   document.getElementById('ct-body').innerHTML = `<div class="cw-done">
     <div class="cw-done-e">${stars >= 2 ? '🎉' : stars >= 1 ? '👏' : '💪'}</div>
     <h2>${ct.tenseInfo.n}</h2>

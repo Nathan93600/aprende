@@ -16,7 +16,7 @@ const LANGS = ['es', 'en', 'ln'];
 const C = { r: s => `\x1b[31m${s}\x1b[0m`, g: s => `\x1b[32m${s}\x1b[0m`, y: s => `\x1b[33m${s}\x1b[0m`, b: s => `\x1b[1m${s}\x1b[0m` };
 
 // ── Chargement des données, depuis le dossier de travail ou depuis un commit ──
-const DATA_FILES = ['courses/es.js', 'courses/en.js', 'courses/ln.js', 'js/data-es.js', 'js/data-en.js', 'js/data-ln.js', 'js/journal.js', 'js/stories.js', 'js/conjugation.js', 'js/conj-cards.js', 'audio/manifest.js'];
+const DATA_FILES = ['courses/es.js', 'courses/en.js', 'courses/ln.js', 'js/data-es.js', 'js/data-en.js', 'js/data-ln.js', 'js/journal.js', 'js/stories.js', 'js/conjugation.js', 'js/conj-cards.js', 'js/conj-sentences.js', 'audio/manifest.js'];
 function scriptList(read) {
   const html = read('index.html') || '';
   return [...html.matchAll(/<script src="([^"]+)"><\/script>/g)].map(m => m[1]);
@@ -252,7 +252,7 @@ async function cmdVoix() {
       (course.units || []).forEach(u => (u.w || []).forEach(w => { add(w[0]); add(w[2]); }));
       getDeckForLang(l).forEach(c => { add(c[l]); if(l === 'es' && typeof ES_EXAMPLES !== 'undefined' && ES_EXAMPLES[c.es]) add(ES_EXAMPLES[c.es][0]); if(l === 'en' && c.say) add(c.say); if(typeof c.ex === 'string') add(c.ex); });
       JOURNAL_SESSIONS.forEach(s => (s[l] || (l === 'es' ? s.mots : null) || []).forEach(m => { add(m[0]); add(m[2]); }));
-      if(l === 'es' && typeof CONJ_SENT !== 'undefined') CONJ_SENT.forEach(s => add(s[3].replace('___', CONJ_DB[s[0]][s[1]][s[2]])));
+      if(l === 'es' && typeof CONJ_SENT !== 'undefined') CONJ_SENT.forEach(s => add(conjFill(s)));
     }
     return out;
   });
@@ -261,6 +261,8 @@ async function cmdVoix() {
   let jobs = []; try { jobs = JSON.parse(fs.readFileSync(file, 'utf8')); } catch(e) {}
   const byId = new Map(jobs.map(j => [j.l + j.id, j]));
   jobs.forEach(j => { if(map[j.l] && map[j.l][j.k]) delete j.n; });   // déjà enregistrés : plus « nouveaux »
+  const live = new Set(); for(const l of ['en', 'es']) texts[l].forEach(t => live.add(l + audioId(l, t.k)));
+  jobs = jobs.filter(j => !j.n || live.has(j.l + j.id));               // demandés mais plus lus par l'appli (texte modifié) : retirés
   let added = 0, chars = 0; const per = { en: 0, es: 0 }, alt = { en: 0, es: 0 };
   for(const l of ['en', 'es']) for(const t of texts[l]) {
     if(map[l] && map[l][t.k]) continue;
