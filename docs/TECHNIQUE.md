@@ -257,7 +257,8 @@ pièges, puis teste (8 cartes). Il ne modifie ni `srs_data` ni `srs_revlog`.
 
 `C1_PLAN.reportFormat` fixe le format du rapport (bloc `=== RAPPORT APRENDE ===`, sections `ERREURS:`,
 `A DIRE PLUTOT:`, `MOTS FRANCAIS:`, `VOCABULAIRE:`, `PRONONCIATION:`…). Deux consignes le contiennent :
-`audioPrompt` (Gemini, envoyée avec un enregistrement) et `chatPrompt` (ChatGPT, conversation ; on écrit
+`audioPrompt`, `freePrompt` et `readPrompt` (Gemini, envoyées avec un enregistrement : thème de la semaine,
+vocal libre, lecture d'un texte) et `chatPrompt` (ChatGPT, conversation ; on écrit
 RAPPORT à la fin). `orParse` lit le rapport collé, tolère le texte autour et le gras ; les éléments cochés
 partent dans `pending_words`, le rapport dans `oral_reports`, et la conversation du jour est cochée.
 

@@ -52,7 +52,7 @@ function c1Render() {
       <div class="c1-focus">${W.focus}</div>
       ${W.milestone ? `<div class="c1-mile">⭐ ${W.milestone}</div>` : ''}
       <div class="c1-tasks">${tasks}</div>
-      <div class="c1-row"><button class="c1-btn" onclick="c1CopyPrompt('audio')">🎙️ Gemini : consigne audio</button><button class="c1-btn" onclick="c1CopyPrompt('chat')">💬 ChatGPT : conversation</button></div>
+      <div class="c1-row"><button class="c1-btn" onclick="c1GeminiMenu()">🎙️ Gemini : vocal</button><button class="c1-btn" onclick="c1CopyPrompt('chat')">💬 ChatGPT : conversation</button></div>
       <div class="c1-row"><button class="c1-btn ghost" onclick="orOpen()">📥 Importer le rapport</button><button class="c1-btn ghost" onclick="c1OpenPlan()">📅 Programme</button></div>
       <div class="c1-row c1-meta"><span class="c1-days">${days}</span><span class="c1-mat"><span class="c1-bar"><b style="width:${pct}%"></b></span>${st.mature}/${W.mature} mots acquis</span></div>
       ${npdWarn}
@@ -65,11 +65,24 @@ function c1SetNpd() { localStorage.setItem('srs_new_per_day', String(C1_PLAN.new
 // Consigne à coller : 'audio' = Gemini avec un enregistrement, 'chat' = ChatGPT en conversation
 function c1PromptText(mode) {
   const W = C1_PLAN.weeks[Math.min(C1_PLAN.weeks.length - 1, Math.max(0, c1WeekIndex()))];
-  return C1_PLAN[mode === 'audio' ? 'audioPrompt' : 'chatPrompt'].replace('{topic}', W.topic).replace('{focus}', W.focus).replace('{format}', C1_PLAN.reportFormat).replace('{rules}', C1_PLAN.reportRules);
+  const key = { audio: 'audioPrompt', free: 'freePrompt', read: 'readPrompt', chat: 'chatPrompt' }[mode] || 'chatPrompt';
+  return C1_PLAN[key].replace('{topic}', W.topic).replace('{focus}', W.focus).replace('{format}', C1_PLAN.reportFormat).replace('{rules}', C1_PLAN.reportRules);
+}
+// Gemini : trois sortes de vocal, une consigne chacune (même format de rapport)
+function c1GeminiMenu() {
+  const W = C1_PLAN.weeks[Math.min(C1_PLAN.weeks.length - 1, Math.max(0, c1WeekIndex()))];
+  const opt = (mode, icon, title, desc) => `<button type="button" class="c1g-opt" onclick="c1CopyPrompt('${mode}')"><span>${icon}</span><div><b>${title}</b><small>${desc}</small></div></button>`;
+  crsModal(`<div class="pw-sheet"><div class="pw-head"><h3>🎙️ Vocal pour Gemini</h3><button type="button" class="pw-x" onclick="crsCloseModal()" aria-label="Fermer">✕</button></div>
+    <p class="pw-foot" style="margin:0">Choisis ce que tu enregistres : la consigne est copiée, envoie-la à Gemini avec ton vocal.</p>
+    ${opt('audio', '🎯', 'Thème de la semaine', crsEsc(W.topic))}
+    ${opt('free', '💭', 'Vocal libre', 'Tu parles de ce que tu veux')}
+    ${opt('read', '📖', 'Lecture d\'un texte', 'Colle le texte à la fin de la consigne si tu l\'as')}
+    <p class="pw-foot">Les trois demandent le même rapport : tu l'importes ensuite avec « 📥 Importer le rapport ».</p></div>`);
 }
 function c1CopyPrompt(mode) {
   const txt = c1PromptText(mode);
-  const done = () => { try { showToast(mode === 'audio' ? '📋 Copié : envoie-le à Gemini avec ton enregistrement' : '📋 Copié : colle-le dans ChatGPT, puis écris RAPPORT à la fin'); } catch(e) {} };
+  try { crsCloseModal(); } catch(e) {}
+  const done = () => { try { showToast(mode === 'read' ? '📋 Copié : colle le texte lu à la fin, puis envoie avec ton enregistrement' : mode !== 'chat' ? '📋 Copié : envoie-le à Gemini avec ton enregistrement' : '📋 Copié : colle-le dans ChatGPT, puis écris RAPPORT à la fin'); } catch(e) {} };
   if(navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(done, () => prompt('Copie ce texte :', txt));
   else prompt('Copie ce texte :', txt);
 }

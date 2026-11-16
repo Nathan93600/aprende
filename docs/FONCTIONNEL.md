@@ -121,7 +121,7 @@ date estimée d'arrivée à la cible (une carte commencée est comptée acquise 
 unités terminées, jours complets, conversations et écoutes de la semaine.
 
 **Rapports d'oral** : le programme C1 propose deux consignes à copier, « Gemini » (à envoyer avec un
-enregistrement audio) et « ChatGPT » (conversation en direct, on écrit RAPPORT à la fin). Les deux
+enregistrement audio : thème de la semaine, vocal libre ou lecture d'un texte) et « ChatGPT » (conversation en direct, on écrit RAPPORT à la fin). Les deux
 demandent le même format de rapport. « Importer le rapport » le lit : on coche les corrections et le
 vocabulaire à garder, ils rejoignent les mots en attente, et le rapport est joint à la sauvegarde.
 

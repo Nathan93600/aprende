@@ -41,7 +41,7 @@ function orParse(text) {
 // Ce qui peut partir dans les mots en attente : la bonne forme à retenir, avec d'où elle vient
 function orItems(R) {
   const out = [], cut = s => s.length > 150 ? s.slice(0, 147) + '…' : s;
-  R.better.forEach(x => { if(x.b) out.push({ w: x.b, c: cut(`Au lieu de « ${x.a} »${x.n ? ' · ' + x.n : ''}`), kind: 'Plus naturel', on: true }); });
+  R.better.forEach(x => { if(x.b) out.push({ w: x.b, c: cut(`Au lieu de « ${x.a} »${x.n ? ' · ' + x.n : ''}`), kind: 'Plus naturel', on: x.b.split(/\s+/).length <= 8 }); });   // une phrase entière (relecture) n'est pas cochée d'office
   R.french.forEach(x => { if(x.b) out.push({ w: x.b, c: cut(`${x.a}${x.n ? ' · ' + x.n : ''}`), kind: 'Mot qui manquait', on: true }); });
   R.vocab.forEach(x => out.push({ w: x.a, c: cut([x.b, x.n].filter(Boolean).join(' · ')), kind: 'Vocabulaire', on: true }));
   R.errors.forEach(x => { if(x.b) out.push({ w: x.b, c: cut(`Erreur : « ${x.a} »${x.n ? ' · ' + x.n : ''}`), kind: 'Correction', on: x.b.split(/\s+/).length <= 8 }); });

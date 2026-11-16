@@ -215,7 +215,10 @@ const AUDIT = (min) => {
         const R = orParse(txt);
         o.parse = [R.ok, R.date, R.theme, R.level, R.priority, R.strengths.length, R.errors.length, R.better.length, R.french.length, R.vocab.length, R.pron.length, R.unchecked.length, R.better[0].a, R.better[0].b, R.errors[0].n, R.pron[0].a];
         o.bad = orParse('Super session aujourd\'hui, tu as bien parlé !').ok;
-        o.prompts = [c1PromptText('audio').includes('=== RAPPORT APRENDE ===') && c1PromptText('audio').includes('audio recording') && !c1PromptText('audio').includes('{'), c1PromptText('chat').includes('RAPPORT, stop') && c1PromptText('chat').includes('PRIORITE:')];
+        o.prompts = [c1PromptText('audio').includes('=== RAPPORT APRENDE ===') && c1PromptText('audio').includes('audio recording') && !c1PromptText('audio').includes('{'),
+          c1PromptText('free').includes('=== RAPPORT APRENDE ===') && c1PromptText('free').includes('freely') && !c1PromptText('free').includes('{'),
+          c1PromptText('read').includes('=== RAPPORT APRENDE ===') && c1PromptText('read').includes('reading a text') && c1PromptText('read').trim().endsWith('Text (optional):') && !c1PromptText('read').includes('{'),
+          (c1GeminiMenu(), document.querySelectorAll('.c1g-opt').length === 3) && (crsCloseModal(), true), c1PromptText('chat').includes('RAPPORT, stop') && c1PromptText('chat').includes('PRIORITE:')];
         orOpen(); document.getElementById('or-text').value = txt; orSet('src', 'gemini'); orAnalyse();
         o.review = document.querySelectorAll('.or-item').length;
         o.unchecked = orState.items.filter(x => !x.on).length;     // la longue phrase corrigée n'est pas cochée d'office
