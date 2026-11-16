@@ -52,7 +52,8 @@ function c1Render() {
       <div class="c1-focus">${W.focus}</div>
       ${W.milestone ? `<div class="c1-mile">⭐ ${W.milestone}</div>` : ''}
       <div class="c1-tasks">${tasks}</div>
-      <div class="c1-row"><button class="c1-btn" onclick="c1CopyPrompt()">📋 Copier le sujet de conversation</button><button class="c1-btn ghost" onclick="c1OpenPlan()">📅 Programme</button></div>
+      <div class="c1-row"><button class="c1-btn" onclick="c1CopyPrompt('audio')">🎙️ Gemini : consigne audio</button><button class="c1-btn" onclick="c1CopyPrompt('chat')">💬 ChatGPT : conversation</button></div>
+      <div class="c1-row"><button class="c1-btn ghost" onclick="orOpen()">📥 Importer le rapport</button><button class="c1-btn ghost" onclick="c1OpenPlan()">📅 Programme</button></div>
       <div class="c1-row c1-meta"><span class="c1-days">${days}</span><span class="c1-mat"><span class="c1-bar"><b style="width:${pct}%"></b></span>${st.mature}/${W.mature} mots acquis</span></div>
       ${npdWarn}
     </div>`;
@@ -61,10 +62,14 @@ function c1Render() {
 }
 function c1Toggle(id) { const log = c1Log()[c1Day()] || {}; c1Mark(id, !log[id]); if(!log[id]) try { showToast('✅ Bien joué !', 'correct-toast'); } catch(e) {} c1Render(); }
 function c1SetNpd() { localStorage.setItem('srs_new_per_day', String(C1_PLAN.newPerDay)); try { showToast('Nouvelles cartes : ' + C1_PLAN.newPerDay + ' par jour'); } catch(e) {} c1Render(); }
-function c1CopyPrompt() {
+// Consigne à coller : 'audio' = Gemini avec un enregistrement, 'chat' = ChatGPT en conversation
+function c1PromptText(mode) {
   const W = C1_PLAN.weeks[Math.min(C1_PLAN.weeks.length - 1, Math.max(0, c1WeekIndex()))];
-  const txt = C1_PLAN.geminiPrompt.replace('{topic}', W.topic).replace('{focus}', W.focus);
-  const done = () => { try { showToast('📋 Copié : colle-le dans ChatGPT ou Gemini'); } catch(e) {} };
+  return C1_PLAN[mode === 'audio' ? 'audioPrompt' : 'chatPrompt'].replace('{topic}', W.topic).replace('{focus}', W.focus).replace('{format}', C1_PLAN.reportFormat).replace('{rules}', C1_PLAN.reportRules);
+}
+function c1CopyPrompt(mode) {
+  const txt = c1PromptText(mode);
+  const done = () => { try { showToast(mode === 'audio' ? '📋 Copié : envoie-le à Gemini avec ton enregistrement' : '📋 Copié : colle-le dans ChatGPT, puis écris RAPPORT à la fin'); } catch(e) {} };
   if(navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(done, () => prompt('Copie ce texte :', txt));
   else prompt('Copie ce texte :', txt);
 }
@@ -147,6 +152,7 @@ function c1DashHTML() {
       ${row('jours complets', p.week.done + '/7', 'cette semaine · ' + p.allDone + ' sur ' + p.elapsed + ' depuis le début')}
       ${row('oral cette semaine', p.week.talk + ' + ' + p.week.listen, 'conversations + écoutes · ' + Math.round((p.talkMin + p.listenMin) / 60 * 10) / 10 + ' h au total')}
     </div>
+    ${typeof orLastHTML === 'function' ? orLastHTML() : ''}
     <button class="c1-link" onclick="c1OpenPlan()">Voir le programme complet</button>
   </div>`;
 }

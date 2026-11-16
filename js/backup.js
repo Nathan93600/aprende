@@ -33,6 +33,11 @@ function buildProgressExport() {
     conj_srs: JSON.parse(localStorage.getItem('conj_srs') || '{}'),
     conj_per_day: conjPerDay(),
     conj_ustedes: conjUstedes() ? '1' : '0',
+    extra_srs: JSON.parse(localStorage.getItem('extra_srs') || '{}'),
+    xc_prod_per_day: xcPerDay('prod'),
+    xc_ecoute_per_day: xcPerDay('ecoute'),
+    c1_log: JSON.parse(localStorage.getItem('c1_log') || '{}'),
+    oral_reports: orLoad(),
     pending_words: pwLoad(),
     srs_algo: 'fsrs6',
     crs_prog: JSON.parse(localStorage.getItem('crs_prog') || '{}'),
@@ -271,6 +276,10 @@ function importProgress(file) {
       if(data.grammar_srs) localStorage.setItem('grammar_srs', JSON.stringify(data.grammar_srs));
       if(data.conj_srs) { localStorage.setItem('conj_srs', JSON.stringify(data.conj_srs)); conjInvalidateCache(); }
       if(data.conj_per_day !== undefined) localStorage.setItem('conj_per_day', String(data.conj_per_day));
+      if(data.extra_srs) { localStorage.setItem('extra_srs', JSON.stringify(data.extra_srs)); xcInvalidateCache(); }
+      ['xc_prod_per_day', 'xc_ecoute_per_day'].forEach(k => { if(data[k] !== undefined) localStorage.setItem(k, String(data[k])); });
+      if(data.c1_log) localStorage.setItem('c1_log', JSON.stringify(data.c1_log));
+      if(Array.isArray(data.oral_reports)) localStorage.setItem('oral_reports', JSON.stringify(data.oral_reports));
       if(data.conj_ustedes !== undefined) localStorage.setItem('conj_ustedes', String(data.conj_ustedes));
       if(Array.isArray(data.pending_words)) { localStorage.setItem('pending_words', JSON.stringify(data.pending_words)); pwBadge(); }
       if(data.crs_prog) localStorage.setItem('crs_prog', JSON.stringify(data.crs_prog));

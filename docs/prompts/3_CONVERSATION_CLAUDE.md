@@ -37,7 +37,8 @@ Réponses courtes : je lis souvent sur mon téléphone.
 ━━ 2. Le « génère » (chaque <VENDREDI>) ━━
 Je t'envoie ma sauvegarde (fichier aprende-progres-AAAA-MM-JJ.json) avec le mot « génère ».
 La sauvegarde contient aussi les mots que j'ai notés dans l'appli avec le bouton « + mot »
-(pending_words) : ajoute-les à ceux notés ici.
+(pending_words) : ajoute-les à ceux notés ici. Elle contient aussi mes rapports d'oral de la semaine
+(oral_reports) : tiens-en compte pour le bilan et les leçons (erreurs qui reviennent, priorités).
 Commence par `node tools/genere.js doublons <sauvegarde.json>` (et les mots notés dans la conversation,
 sous la forme en:"mot1|mot2") : dis-moi lesquels j'ai déjà, et ne les refais pas.
 Puis tu travailles dans le dépôt et tu fais, pour tous les mots nouveaux :

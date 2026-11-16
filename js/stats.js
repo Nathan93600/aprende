@@ -92,6 +92,7 @@ function renderStats() {
   html += `<div class="stx-card"><div class="stx-h">Mon paquet <span class="stx-hsub">${studied} carte${studied > 1 ? 's' : ''} étudiée${studied > 1 ? 's' : ''} sur ${cards.length}</span></div>
     <div class="dash-stack">${segs.map(s => s[3] ? `<i class="sg-${s[0]}" style="flex:${s[3]}" data-v="${s[3]} carte${s[3] > 1 ? 's' : ''}" data-l="${s[1]}" tabindex="0"></i>` : '').join('')}</div>
     <div class="dash-legend">${segs.map(s => `<div class="dash-leg"><i class="sg-${s[0]}"></i><div><b>${s[1]}</b><span>${s[2]}</span></div><strong>${s[3]}<small>${Math.round(100 * s[3] / totalC)} %</small></strong></div>`).join('')}</div>
+    ${(typeof lzList === 'function' && lzList(lang).length) ? `<button class="dash-go lz-go" onclick="lzOpen(statsLang)">🩸 ${lzList(lang).length} carte${lzList(lang).length > 1 ? 's' : ''} difficile${lzList(lang).length > 1 ? 's' : ''} · ouvrir l'atelier</button>` : ''}
     ${cnt.leech ? `<div class="dash-note">🩸 ${cnt.leech} carte${cnt.leech > 1 ? 's' : ''} difficile${cnt.leech > 1 ? 's' : ''} (ratée${cnt.leech > 1 ? 's' : ''} souvent)</div>` : ''}
   </div>`;
 
@@ -344,6 +345,9 @@ function srsBuildQueue(lang) {
   // Conjugaison espagnole : ses cartes se mêlent aux mots (hors session filtrée)
   const cj = (lang === 'es' && !filter && typeof conjQueue === 'function') ? conjQueue(now) : null;
   if(cj) { learnNow.push(...cj.learnNow); learnLater.push(...cj.learnLater); }
+  // Cartes en plus (production, écoute) : paquet à part, mêlées aux révisions
+  const xq = (!filter && typeof xcQueue === 'function') ? xcQueue(lang, now) : null;
+  if(xq) { learnNow.push(...xq.learnNow); learnLater.push(...xq.learnLater); }
   // Familles déjà vues aujourd'hui ou déjà présentes dans la file
   const start = srsStartOfToday();
   const fams = new Set(srsRevlogLoad().filter(r => r[1] >= start && r[0].startsWith(lang + ':')).map(r => srsFamilyKey(r[0].split(':').slice(1).join(':'))));
@@ -359,6 +363,7 @@ function srsBuildQueue(lang) {
   }
   // les nouvelles cartes de conjugaison passent en tête, pour arriver dès le début de la séance
   if(cj) { reviews.push(...cj.reviews); picked.unshift(...cj.news); }
+  if(xq) reviews.push(...xq.reviews, ...xq.news);
   // Nouvelles cartes réparties régulièrement entre les révisions
   const rev = shuffle(reviews), mixed = [], total = rev.length + picked.length;
   const step = picked.length ? total / picked.length : Infinity;
@@ -379,7 +384,7 @@ function srsBuildQueue(lang) {
   if(keep) {
     const i = queue.findIndex(e => e.key === keep);
     if(i > 0) queue.unshift(queue.splice(i, 1)[0]);
-    else if(i < 0 && srsState.forceKey) { const e = entries.find(x => x.key === keep) || (typeof conjEntryByKey === 'function' && conjEntryByKey(keep)); if(e) queue.unshift(e); }
+    else if(i < 0 && srsState.forceKey) { const e = entries.find(x => x.key === keep) || (typeof conjEntryByKey === 'function' && conjEntryByKey(keep)) || (typeof xcEntryByKey === 'function' && xcEntryByKey(keep)); if(e) queue.unshift(e); }
   }
   srsState.forceKey = null; srsState.justGraded = false;
   srsState.learnLater = learnLater;
@@ -391,6 +396,7 @@ function srsBuildQueue(lang) {
     mastered: entries.filter(e => e.reps >= 5 && e.interval >= 21).length,
     leeches: entries.filter(e => e.leech).length,
     conjWaiting: cj ? cj.waiting : 0,
+    extraWaiting: xq ? xq.waiting : 0,
   };
   return queue;
 }
@@ -416,6 +422,8 @@ function srsRefresh() {
   }
   srsUpdateUndoBtn();
   if(typeof conjUpdateRow === 'function') conjUpdateRow();
+  if(typeof xcUpdateRows === 'function') xcUpdateRows();
+  if(typeof lzUpdateBtn === 'function') lzUpdateBtn();
 
   const badge = document.getElementById('srs-filter-badge');
   if(srsState.sessionFilter) {
@@ -506,10 +514,12 @@ function srsGrade(grade) {
   if(!srsState.revealed || !srsState.currentCard) return;
   const key = srsState.currentCard.key;
   const conj = typeof conjIsKey === 'function' && conjIsKey(key);
-  if(conj && srsState.conjGood === false && grade >= 2) return;   // réponse fausse : ni « Bien » ni « Facile »
-  const data = conj ? conjLoad() : srsLoad();
+  const xc = typeof xcIsKey === 'function' && xcIsKey(key);
+  if((conj || xc) && srsState.conjGood === false && grade >= 2) return;   // réponse fausse : ni « Bien » ni « Facile »
+  const data = conj ? conjLoad() : xc ? xcLoad() : srsLoad();
   const existed = !!data[key];
   if(conj && !existed) data[key] = conjNewRec();
+  if(xc && !existed) data[key] = xcNewRec(key);
   const card = data[key];
   if(!card) return;
   const prev = existed ? JSON.parse(JSON.stringify(card)) : null;
@@ -518,6 +528,7 @@ function srsGrade(grade) {
   const wasLeech = !!card.leech;
   srsUpdate(card, grade, key);
   if(conj) { if(grade > 0) card.p = (card.p || 0) + 1; delete card.pri; conjSave(data); }
+  else if(xc) xcSave(data);
   else srsSave(data);
   const log = srsRevlogLoad();
   log.push([key, Date.now(), grade, type, card.interval || 0, srsState.shownAt ? Math.min(60000, Date.now() - srsState.shownAt) : 0]);
@@ -542,10 +553,10 @@ function srsGrade(grade) {
 function srsUndo() {
   const u = srsState.undo.pop();
   if(!u) return;
-  const conj = typeof conjIsKey === 'function' && conjIsKey(u.key);
-  const data = conj ? conjLoad() : srsLoad();
+  const conj = typeof conjIsKey === 'function' && conjIsKey(u.key), xc = typeof xcIsKey === 'function' && xcIsKey(u.key);
+  const data = conj ? conjLoad() : xc ? xcLoad() : srsLoad();
   if(u.prev) data[u.key] = u.prev; else delete data[u.key];
-  if(conj) conjSave(data); else srsSave(data);
+  if(conj) conjSave(data); else if(xc) xcSave(data); else srsSave(data);
   const log = srsRevlogLoad();
   if(log.length > u.logLen) { log.length = u.logLen; srsRevlogSave(log); }
   srsState.forceKey = u.key;

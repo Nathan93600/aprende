@@ -46,6 +46,9 @@ js/                     la logique, découpée par domaine (26 fichiers, chargé
   stories.js              histoires (STORIES)
   settings.js             réglages et notifications
   plan-c1.js              programme C1 (rappels de l'accueil)
+  extra-cards.js          cartes en plus dans Réviser : production et écoute (paquet extra_srs)
+  leech.js                atelier des cartes difficiles (entraînement libre)
+  oral-reports.js         import des rapports d'oral (Gemini, ChatGPT) vers les mots en attente
   pending.js              mots notés dans l'appli (« + mot »), en attente du génère
   init.js                 démarrage (initApp)
 tests/run.js            tests automatiques (voir §10)
@@ -106,6 +109,9 @@ Une copie de l'appli n'en a pas besoin : mettre `firebase: false`.
 | `es_mastered`, `en_mastered`, `ln_mastered`, `mastered` | mots maîtrisés dans les jeux |
 | `crs_prog`, `crs_resume`, `crs_added` | progression dans les cours |
 | `pron_srs`, `grammar_srs` | révision de la prononciation (anglais) et des règles de grammaire |
+| `extra_srs`, `xc_prod_per_day`, `xc_ecoute_per_day` | cartes en plus (`prod:en:mot`, `ecoute:en:mot`) et leur limite par jour |
+| `oral_reports` | rapports d'oral importés : `[{d, src, lang, theme, level, priority, n, added, raw}]` (60 derniers) |
+| `c1_log` | programme C1 : tâches cochées par jour |
 | `pending_words` | mots notés avec « + mot » : `[{w, l, c, t}]`, `l` = `es`, `en`, `ln` ou `fr` (à traduire vers les deux) |
 | `conj_srs`, `conj_per_day`, `conj_ustedes` | cartes de conjugaison espagnole (`conj:verbe|temps`), leur limite par jour, et le choix vosotros / ustedes |
 | `rpg` | héros, or, inventaire, quêtes |
@@ -227,6 +233,33 @@ STORIES.es = [{ id, title, desc, level, chars: { T: ['🧑', 'Tú'], L: ['👩',
 
 **Conséquence importante** : renommer un mot dans les données crée une nouvelle carte. Corriger une
 orthographe est sans danger (la migration suit la casse), changer le mot lui-même repart de zéro.
+
+### Cartes en plus : production et écoute (`js/extra-cards.js`)
+
+- Elles s'ajoutent aux cartes de base, sans les remplacer. Paquet à part `extra_srs`, clés
+  `prod:<langue>:<mot>` et `ecoute:<langue>:<mot>`, même FSRS et même historique que le reste.
+- `xcQueue(lang)` est mêlée à la file par `srsBuildQueue`. Une carte en plus n'est créée que si la carte
+  de base est bien connue (intervalle ≥ 7 jours pour la production, ≥ 4 pour l'écoute), 4 nouvelles par
+  type et par jour au plus, et jamais le jour où la carte de base (ou l'autre carte en plus du même mot)
+  est révisée.
+- Production : le français est affiché, on tape le mot ou on le dit puis on révèle. `xcJudgeWord` accepte
+  l'article ou « to » en moins, une variante « a / b », une lettre d'écart ; en espagnol l'accent compte.
+- Écoute (espagnol, anglais) : `xcListen` choisit la phrase d'exemple si elle a une voix enregistrée, sinon
+  le mot. Un mot sans voix n'a pas de carte d'écoute.
+- Réponse fausse : seulement « Encore » ou « Difficile ». Révélée sans rien taper : on se note soi-même.
+
+### Atelier des cartes difficiles (`js/leech.js`)
+
+`lzList(lang)` : sangsues, puis cartes oubliées au moins 2 fois. L'atelier montre l'astuce, le mot et les
+pièges, puis teste (8 cartes). Il ne modifie ni `srs_data` ni `srs_revlog`.
+
+### Rapports d'oral (`js/oral-reports.js`)
+
+`C1_PLAN.reportFormat` fixe le format du rapport (bloc `=== RAPPORT APRENDE ===`, sections `ERREURS:`,
+`A DIRE PLUTOT:`, `MOTS FRANCAIS:`, `VOCABULAIRE:`, `PRONONCIATION:`…). Deux consignes le contiennent :
+`audioPrompt` (Gemini, envoyée avec un enregistrement) et `chatPrompt` (ChatGPT, conversation ; on écrit
+RAPPORT à la fin). `orParse` lit le rapport collé, tolère le texte autour et le gras ; les éléments cochés
+partent dans `pending_words`, le rapport dans `oral_reports`, et la conversation du jour est cochée.
 
 ### Conjugaison espagnole (`js/conj-cards.js`)
 
@@ -350,7 +383,7 @@ python3 -m http.server 8000      # à la racine du dépôt
   `fiches` (chaque mot a sa fiche), `audio` (chaque voix de l'index existe), `progression`
   (les cartes existantes ne bougent pas), `ecrans` (tous les écrans, clair et sombre, et lisibilité
   de chaque texte sur son fond ; détail avec `node tests/run.js ecrans --contraste`), `lecons`,
-  `histoires`, `conjugaison`, `mots`, `c1`, `sauvegarde`. À lancer avant chaque mise en ligne.
+  `histoires`, `conjugaison`, `bonus`, `rapport`, `difficiles`, `mots`, `c1`, `sauvegarde`. À lancer avant chaque mise en ligne.
 - Tester avec une sauvegarde réelle : la restaurer depuis Réglages, ou l'injecter dans
   `localStorage` avec un navigateur automatisé (Playwright).
 - Publier : pousser sur la branche servie par GitHub Pages, après avoir incrémenté `CACHE_NAME`.

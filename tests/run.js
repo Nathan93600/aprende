@@ -148,6 +148,121 @@ const AUDIT = (min) => {
       await p.close();
     }
 
+    if(want('bonus')) {
+      console.log('\nCartes en plus : production et écoute');
+      const p = await open(browser, base);
+      const r = await p.evaluate(async () => {
+        const wait = ms => new Promise(r => setTimeout(r, ms)), o = {}, DAY = 864e5, now = Date.now();
+        o.judge = [xcJudgeWord('meddle', 'to meddle', 'en'), xcJudgeWord('At one point', 'back then / at one point', 'en'), xcJudgeWord('lujo', 'el lujo', 'es'), xcJudgeWord('cancion', 'canción', 'es'),
+          xcJudgeWord('burgoning', 'burgeoning', 'en'), xcJudgeWord('cat', 'dog', 'en'), xcJudgeText('stop meddling in my life', 'Stop meddling in my life.'), xcJudgeText('esta manana', '¿Está mañana?'), xcJudgeText('nothing', 'Stop meddling in my life.')];
+        localStorage.removeItem('extra_srs'); xcInvalidateCache(); localStorage.setItem('srs_revlog', '[]'); try { srsRevlogInvalidateCache(); } catch(e) {}
+        const data = srsLoad(), en = Object.keys(data).filter(k => k.startsWith('en:'));
+        const withAudio = en.filter(k => xcListen('en', srsGetCardData('en', k.slice(3)))).slice(0, 12), plain = en.filter(k => !withAudio.includes(k)).slice(0, 6);
+        [...withAudio, ...plain].forEach((k, i) => Object.assign(data[k], { reps: 4, st: 'review', interval: 30 + i, due: now + 10 * DAY, lr: now - 5 * DAY }));
+        const busyKey = withAudio[0]; data[busyKey].due = now - DAY;                    // carte de base à revoir aujourd'hui
+        srsSave(data);
+        const vocab = JSON.stringify(Object.keys(srsLoad()).length);
+        const q = xcQueue('en', now), kinds = q.news.map(e => e.xc), words = q.news.map(e => e.word);
+        o.news = [kinds.filter(k => k === 'ecoute').length, kinds.filter(k => k === 'prod').length, new Set(words).size === words.length, !words.includes(busyKey.slice(3)),
+          q.news.filter(e => e.xc === 'ecoute').every(e => !!xcListen('en', srsGetCardData('en', e.word)))];
+        o.ln = xcQueue('ln', now).news.every(e => e.xc === 'prod');
+        localStorage.setItem('xc_prod_per_day', '0'); localStorage.setItem('xc_ecoute_per_day', '0'); o.off = xcQueue('en', now).news.length; localStorage.removeItem('xc_prod_per_day'); localStorage.removeItem('xc_ecoute_per_day');
+        srsState.sessionFilter = null;
+        const main = srsBuildQueue('en'); o.inQueue = main.filter(c => c.xc).length === q.news.length && main.some(c => !c.xc && !c.conj);
+        // une carte de production : faux, puis révélée
+        const pk = q.news.find(e => e.xc === 'prod').key, word = pk.slice(8);
+        openSRS('en'); srsState.forceKey = pk; srsRefresh(); await wait(80);
+        o.shown = srsState.currentCard.key === pk && !!document.getElementById('conj-inp') && srsState.xcPrompt.kind === 'prod' && !document.querySelector('.srs-card.top').textContent.includes(word);
+        document.getElementById('conj-inp').value = 'zzzz qqqq'; xcCheck();
+        o.wrong = document.querySelector('#srs-grade-area .srs-grade-good').disabled && document.querySelector('.xc-ans').textContent.trim() === word;
+        const n0 = srsRevlogLoad().length; srsGrade(2); o.refused = srsRevlogLoad().length === n0;
+        srsGrade(0); await wait(450);
+        o.stored = !!xcLoad()[pk] && xcLoad()[pk].reps > 0 && !(pk in srsLoad()) && JSON.stringify(Object.keys(srsLoad()).length) === vocab && srsRevlogLoad().slice(-1)[0][0] === pk;
+        srsUndo(); await wait(80); o.undone = !xcLoad()[pk];
+        srsState.forceKey = pk; srsRefresh(); await wait(80);
+        xcCheck(true); o.self = srsState.conjGood === null && !document.querySelector('#srs-grade-area .srs-grade-good').disabled;
+        srsGrade(2); await wait(450); o.graded = xcLoad()[pk].reps === 1;
+        // une carte d'écoute : la phrase n'est pas affichée avant la réponse
+        const ek = q.news.find(e => e.xc === 'ecoute').key;
+        srsState.forceKey = ek; srsRefresh(); await wait(80);
+        const text = srsState.xcPrompt.text;
+        o.hidden = !!text && !document.querySelector('.srs-card.top').textContent.includes(text) && !!document.querySelector('.xc-play');
+        document.getElementById('conj-inp').value = text.toLowerCase().replace(/[.,!?]/g, ''); xcCheck();
+        o.heard = srsState.conjGood === true && document.querySelector('.xc-ans').textContent.includes(text);
+        srsGrade(2); await wait(450);
+        // le lendemain de la carte de base : pas deux cartes du même mot le même jour
+        const b = buildProgressExport(); o.exported = !!b.extra_srs[pk] && !!b.extra_srs[ek] && b.xc_prod_per_day === 8;
+        o.rows = document.getElementById('srs-prod-row').style.display !== 'none' && document.getElementById('srs-more-sum').textContent.includes('production 8');
+        return o;
+      });
+      ok('correction : article ou « to » facultatif, variantes, accent en espagnol, faute de frappe', JSON.stringify(r.judge) === JSON.stringify(['ok', 'ok', 'ok', 'accent', 'near', 'ko', 'ok', 'ok', 'ko']), JSON.stringify(r.judge));
+      ok('nouvelles cartes : 4 par type au plus, mots distincts, jamais le jour de la carte de base, écoute avec voix', JSON.stringify(r.news) === JSON.stringify([4, 4, true, true, true]) && r.ln && r.off === 0, JSON.stringify(r.news) + r.ln + r.off);
+      ok('elles se mêlent à la file sans remplacer les cartes de base', r.inQueue);
+      ok('production : le mot est caché, une réponse fausse bloque « Bien »', r.shown && r.wrong && r.refused, JSON.stringify(r));
+      ok('paquet à part : le vocabulaire n\'est pas touché ; annuler fonctionne', r.stored && r.undone, JSON.stringify(r));
+      ok('révéler sans taper : on se note soi-même', r.self && r.graded);
+      ok('écoute : la phrase est cachée puis corrigée', r.hidden && r.heard, JSON.stringify(r));
+      ok('sauvegarde et réglages des cartes en plus', r.exported && r.rows && p.errs.length === 0, p.errs.join(' | '));
+      await p.close();
+    }
+    if(want('rapport')) {
+      console.log('\nRapports d\'oral');
+      const p = await open(browser, base);
+      const r = await p.evaluate(() => {
+        const o = {}; localStorage.removeItem('pending_words'); localStorage.removeItem('oral_reports'); localStorage.removeItem('c1_log');
+        const deck = getDeckForLang('en')[0].en;
+        const txt = `Bien sûr ! Voici le rapport :\n\n**=== RAPPORT APRENDE ===**\nDATE: 2026-11-17\nTHEME: my family tree\n**NIVEAU:** B2\nPOINTS FORTS:\n- Bon débit\n- Vocabulaire varié\nERREURS:\n- I have two cousin => I have two cousins | pluriel : le S final\n- she don't know everything about the family history that we have => she doesn't know everything about our family history that we have | 3e personne\nA DIRE PLUTOT:\n- 1. I am agree → I agree | pas de « be »\nMOTS FRANCAIS:\n- famille recomposée => blended family | We are a blended family.\nVOCABULAIRE:\n- ${deck} = déjà dans l'appli | exemple\n- on my dad's side = du côté de mon père | My cousins on my dad's side.\nPRONONCIATION:\n- cousins : prononce le Z final\nNON VERIFIE:\n- aucun\nPRIORITE: le S final\n=== FIN ===`;
+        const R = orParse(txt);
+        o.parse = [R.ok, R.date, R.theme, R.level, R.priority, R.strengths.length, R.errors.length, R.better.length, R.french.length, R.vocab.length, R.pron.length, R.unchecked.length, R.better[0].a, R.better[0].b, R.errors[0].n, R.pron[0].a];
+        o.bad = orParse('Super session aujourd\'hui, tu as bien parlé !').ok;
+        o.prompts = [c1PromptText('audio').includes('=== RAPPORT APRENDE ===') && c1PromptText('audio').includes('audio recording') && !c1PromptText('audio').includes('{'), c1PromptText('chat').includes('RAPPORT, stop') && c1PromptText('chat').includes('PRIORITE:')];
+        orOpen(); document.getElementById('or-text').value = txt; orSet('src', 'gemini'); orAnalyse();
+        o.review = document.querySelectorAll('.or-item').length;
+        o.unchecked = orState.items.filter(x => !x.on).length;     // la longue phrase corrigée n'est pas cochée d'office
+        orImport();
+        const pw = pwLoad(), rep = orLoad();
+        o.added = [orState.added, orState.dup, pw.map(x => x.w).join('|'), pw.every(x => x.l === 'en' && x.c)];
+        o.stored = rep.length === 1 && rep[0].d === '2026-11-17' && rep[0].src === 'gemini' && rep[0].level === 'B2' && rep[0].raw.includes('RAPPORT APRENDE');
+        o.talk = c1Log()['2026-11-17'].talk === true;
+        o.exported = buildProgressExport().oral_reports.length === 1 && !!buildProgressExport().c1_log['2026-11-17'];
+        o.dash = orLastHTML().includes('B2');
+        return o;
+      });
+      ok('le rapport est lu malgré le texte autour et le gras', JSON.stringify(r.parse) === JSON.stringify([true, '2026-11-17', 'my family tree', 'B2', 'le S final', 2, 2, 1, 1, 2, 1, 0, 'I am agree', 'I agree', 'pluriel : le S final', 'cousins']), JSON.stringify(r.parse));
+      ok('un texte libre est signalé comme non reconnu ; les deux consignes contiennent le format', r.bad === false && r.prompts.every(Boolean), JSON.stringify(r.prompts));
+      ok('les éléments cochés rejoignent les mots en attente, sans doublon', r.review === 6 && r.unchecked === 1 && JSON.stringify(r.added) === JSON.stringify([4, 1, "I agree|blended family|on my dad's side|I have two cousins", true]), JSON.stringify([r.review, r.unchecked, r.added]));
+      ok('le rapport est gardé, la conversation du jour cochée, le tout dans la sauvegarde', r.stored && r.talk && r.exported && r.dash && p.errs.length === 0, JSON.stringify(r) + p.errs.join(' | '));
+      await p.close();
+    }
+    if(want('difficiles')) {
+      console.log('\nAtelier des cartes difficiles');
+      const p = await open(browser, base);
+      const r = await p.evaluate(() => {
+        const o = {}, data = srsLoad(), es = Object.keys(data).filter(k => k.startsWith('es:')).slice(0, 5);
+        o.none = lzList('es').length;
+        es.forEach((k, i) => Object.assign(data[k], { reps: 5, st: 'review', interval: 3, due: Date.now() + 864e5, lapses: i === 4 ? 1 : 2 + i, leech: i === 0 }));
+        srsSave(data);
+        const before = localStorage.getItem('srs_data') + localStorage.getItem('srs_revlog');
+        const L = lzList('es'); o.list = [L.length, L[0].word === es[0].slice(3), L[1].lapses];
+        openSRS('es'); o.btn = document.getElementById('srs-leech-btn').style.display !== 'none' && document.getElementById('srs-leech-btn').textContent.includes('4');
+        lzOpen('es');
+        o.study = !!document.querySelector('.lz-tip') && document.querySelector('.lz-word').textContent.includes(lz.items[0].word);
+        lzTest(); o.test = !document.querySelector('.lz').textContent.includes(lz.items[0].word) || lz.items[0].word === lz.items[0].fr;
+        document.getElementById('lz-inp').value = lz.items[0].word; lzCheck(); o.right = lz.verdict === 'ok'; lzNext();
+        lzTest(); document.getElementById('lz-inp').value = 'zzzzzz'; lzCheck(); o.wrong = lz.verdict === 'ko'; lzNext();
+        lzTest(); lzCheck(true); o.self = lz.verdict === 'self'; lzMark(true);
+        lzTest(); lzCheck(true); lzMark(false);
+        o.done = lz.phase === 'done' && lz.ok.length === 2 && lz.ko.length === 2 && !!document.querySelector('.lz-score');
+        lzOpen('es', lz.redo); o.redo = lz.items.length === 2;
+        o.untouched = before === localStorage.getItem('srs_data') + localStorage.getItem('srs_revlog');
+        return o;
+      });
+      ok('les cartes les plus ratées sont listées, sangsues d\'abord', r.none === 0 && JSON.stringify(r.list) === JSON.stringify([4, true, 5]) && r.btn, JSON.stringify(r));
+      ok('astuce d\'abord, puis test sans le mot sous les yeux', r.study && r.test);
+      ok('réponse tapée ou auto-évaluée, bilan, reprise des ratées', r.right && r.wrong && r.self && r.done && r.redo, JSON.stringify(r));
+      ok('l\'atelier ne change ni les cartes ni l\'historique', r.untouched && p.errs.length === 0, p.errs.join(' | '));
+      await p.close();
+    }
     if(want('c1')) {
       console.log('\nProgramme C1 dans le tableau de bord');
       const p = await open(browser, base);

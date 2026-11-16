@@ -2597,3 +2597,40 @@ body.desktop-mode #pw-fab { bottom: 20px; }
 .c1d-cell small { display: block; font: 500 .66rem/1.35 'Poppins', sans-serif; color: var(--muted); }
 .conj-table span { font-size: .72rem; overflow-wrap: normal; word-break: normal; padding: .25rem .1rem; }
 .cw-tile b { padding-right: 1.5rem; }
+
+/* ── Cartes en plus : production et écoute ── */
+#screen-srs .srs-card.conj-card.xc-prod, #screen-srs .srs-card.conj-card.xc-prod.revealed { background-color: var(--mint, #b9f0c2); }
+#screen-srs .srs-card.conj-card.xc-ecoute, #screen-srs .srs-card.conj-card.xc-ecoute.revealed { background-color: #dccbff; }
+.xc-label { font: 800 .7rem 'Poppins', sans-serif; letter-spacing: .08em; text-transform: uppercase; color: var(--ink); opacity: .7; text-align: center; }
+.xc-fr { font: 800 1.45rem/1.25 'Poppins', sans-serif; color: var(--ink); text-align: center; overflow-wrap: anywhere; }
+.xc-play { display: flex; gap: .5rem; justify-content: center; margin: .3rem 0; }
+.xc-play button { border: 2.5px solid var(--ink); border-radius: 999px; background: #fffdf6; color: #2b1408; padding: .6rem 1.1rem; font: 800 .95rem 'Poppins', sans-serif; box-shadow: 0 3px 0 var(--ink); cursor: pointer; }
+.xc-play button:active { transform: translateY(3px); box-shadow: none; }
+.xc-btns { display: flex; gap: .5rem; width: 100%; justify-content: center; } .xc-btns > * { flex: 1; max-width: 220px; }
+#screen-srs .fx-fiche.xc-reveal { background: transparent; color: var(--ink) !important; }
+.xc-ans { font: 800 1.5rem/1.2 'Poppins', sans-serif; color: var(--ink); margin: .45rem 0 .1rem; overflow-wrap: anywhere; } .xc-ans.small { font-size: 1.05rem; line-height: 1.45; }
+body.pop.dark .srs-card.conj-card .xc-label, body.pop.dark .srs-card.conj-card .xc-fr, body.pop.dark .srs-card.conj-card .xc-ans { color: #06070d; }
+.fx-more { width: 100%; } .fx-more > summary { list-style: none; cursor: pointer; font: 700 .8rem 'Poppins', sans-serif; color: var(--tx); padding: .35rem 0; display: flex; align-items: center; gap: .4rem; flex-wrap: wrap; }
+.fx-more > summary::-webkit-details-marker { display: none; } .fx-more > summary::after { content: '▾'; margin-left: auto; transition: transform .2s; } .fx-more[open] > summary::after { transform: rotate(180deg); }
+.fx-more > summary span { font-weight: 500; color: var(--muted); font-size: .72rem; }
+.fx-leech { width: 100%; margin-top: .4rem; border: 2.5px solid var(--ink); border-radius: 999px; background: var(--coral); color: #2b1408; padding: .4rem .8rem; font: 800 .78rem 'Poppins', sans-serif; box-shadow: 0 3px 0 var(--ink); cursor: pointer; }
+.fx-leech:active { transform: translateY(3px); box-shadow: none; }
+/* ── Atelier cartes difficiles, rapports d'oral ── */
+.lz { display: flex; flex-direction: column; gap: .55rem; text-align: left; }
+.lz-top { display: flex; align-items: center; gap: .5rem; } .lz-top b { font: 800 1.05rem 'Poppins', sans-serif; color: var(--tx); } .lz-top span { flex: 1; font: 600 .74rem 'Poppins', sans-serif; color: var(--muted); }
+.lz-tip { border: 2.5px solid var(--ink); border-radius: 16px; background: var(--sun); color: #2b1408; padding: .7rem .85rem; font: 600 .9rem/1.45 'Poppins', sans-serif; box-shadow: 0 3px 0 var(--ink); }
+.lz-tip b { display: block; font: 800 .7rem 'Poppins', sans-serif; letter-spacing: .07em; text-transform: uppercase; margin-bottom: .2rem; }
+.lz-word { font: 800 1.5rem/1.2 'Poppins', sans-serif; color: var(--tx); margin-top: .3rem; overflow-wrap: anywhere; } .lz-fr { font: 600 .95rem 'Poppins', sans-serif; color: var(--muted); }
+.lz .xc-label { color: var(--muted); opacity: 1; text-align: left; }
+.pw-add.lz-ghost { background: var(--fx-field); color: var(--tx); }
+.lz-score { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; } .lz-score > div { border: 2.5px solid var(--ink); border-radius: 18px; background: var(--c); color: #2b1408; box-shadow: 0 4px 0 var(--ink); padding: .6rem; text-align: center; }
+.lz-score b { display: block; font: 800 1.7rem/1 'Poppins', sans-serif; } .lz-score span { font: 700 .72rem 'Poppins', sans-serif; }
+.dash-go.lz-go { margin-top: .8rem; }
+#crs-modal .or-text { min-height: 190px; font: 500 .8rem/1.4 ui-monospace, Menlo, monospace; resize: vertical; }
+.or-meta { font: 700 .82rem 'Poppins', sans-serif; color: var(--tx); }
+.or-ul { margin: 0; padding-left: 1.1rem; font: 500 .8rem/1.5 'Poppins', sans-serif; color: var(--tx); }
+.or-item { display: flex; gap: .6rem; align-items: flex-start; padding: .45rem .1rem; border-bottom: 1.5px dashed color-mix(in srgb, var(--tx) 25%, transparent); cursor: pointer; }
+.or-item input { width: 20px; height: 20px; margin-top: .15rem; flex: none; accent-color: #2b1408; }
+.or-item em { display: block; font: 800 .62rem 'Poppins', sans-serif; font-style: normal; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.or-item b { display: block; font: 700 .9rem 'Poppins', sans-serif; color: var(--tx); overflow-wrap: anywhere; } .or-item small { display: block; font: 500 .74rem/1.35 'Poppins', sans-serif; color: var(--muted); overflow-wrap: anywhere; }
+body.pop #screen-srs .srs-card .fx-fiche.xc-reveal, body.pop.dark #screen-srs .srs-card .fx-fiche.xc-reveal { background: #fffdf6; color: #2b1408 !important; }

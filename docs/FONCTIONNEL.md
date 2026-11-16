@@ -79,6 +79,22 @@ Autres éléments de l'écran :
 Les cartes oubliées 8 fois deviennent des **sangsues**. Les cartes en apprentissage reviennent
 dans la même séance (1 min, puis 10 min).
 
+### Cartes en plus : production et écoute
+
+En plus des cartes de base, pour les mots déjà bien connus :
+
+- **Production** (carte verte) : le français est affiché, il faut retrouver le mot, en le tapant ou en le
+  disant à voix haute avant de révéler ;
+- **Écoute** (carte violette, espagnol et anglais) : on entend une phrase enregistrée, sans la voir, et on
+  la retrouve.
+
+Chaque type a son réglage par jour dans « Cartes en plus » (8 par défaut, 0 pour couper). Ces cartes ont
+leur propre calendrier et ne tombent jamais le même jour que la carte de base du même mot.
+
+**Atelier des cartes difficiles** : le bouton rouge de l'écran Réviser regroupe les cartes les plus
+ratées. Pour chacune : l'astuce d'abord, le mot, ses pièges, puis un test. C'est un entraînement libre,
+qui ne change pas le calendrier.
+
 ### Conjugaison (espagnol)
 
 Des cartes « verbe + temps » se mêlent aux mots : une phrase à trou avec son déclencheur
@@ -103,6 +119,11 @@ En anglais s'ajoute le **suivi du programme C1** : semaine et phase en cours, mo
 cours par rapport à l'objectif de la semaine et à la cible finale, rythme de nouvelles cartes sur 14 jours,
 date estimée d'arrivée à la cible (une carte commencée est comptée acquise au bout de 5 semaines environ),
 unités terminées, jours complets, conversations et écoutes de la semaine.
+
+**Rapports d'oral** : le programme C1 propose deux consignes à copier, « Gemini » (à envoyer avec un
+enregistrement audio) et « ChatGPT » (conversation en direct, on écrit RAPPORT à la fin). Les deux
+demandent le même format de rapport. « Importer le rapport » le lit : on coche les corrections et le
+vocabulaire à garder, ils rejoignent les mots en attente, et le rapport est joint à la sauvegarde.
 
 ---
 

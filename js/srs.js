@@ -639,26 +639,27 @@ function srsRenderStack() {
   document.querySelectorAll('#srs-grade-area .srs-grade-btn').forEach(b => { b.disabled = false; });
 
   const visible = srsState.queue.slice(0, 3);
-  stack.classList.toggle('conj-mode', !!(visible[0] && visible[0].conj));
+  stack.classList.toggle('conj-mode', !!(visible[0] && (visible[0].conj || visible[0].xc)));
   document.getElementById('srs-counter').textContent = `${srsState.queue.length} à réviser`;
 
   visible.forEach((card, i) => {
     try {
-    if(card.conj) {
-      // Carte de conjugaison : on tape la forme, pas de retournement
+    if(card.conj || card.xc) {
+      // Carte de conjugaison, de production ou d'écoute : on tape la réponse, pas de retournement
       const el = document.createElement('div');
-      el.className = 'srs-card conj-card ' + (i === 0 ? 'top' : i === 1 ? 'below-1' : 'below-2');
+      el.className = 'srs-card conj-card ' + (card.xc ? 'xc-' + card.xc + ' ' : '') + (i === 0 ? 'top' : i === 1 ? 'below-1' : 'below-2');
       if(i === 0) {
         el.classList.add(srsState.fxRise ? 'fx-rise' : 'fx-pop');
         const done = srsState.sessionDone || 0, total = done + srsState.queue.length + srsState.learnLater.length;
         const pct = total ? Math.round(100 * done / total) : 0;
         srsState.fxPrevPct = pct;
-        el.innerHTML = conjCardHTML(card, `<div class="fx-prog"><span class="fx-prog-bar"><i style="width:${pct}%"></i></span><b>${done}/${total}</b></div>`);
+        el.innerHTML = (card.xc ? xcCardHTML : conjCardHTML)(card, `<div class="fx-prog"><span class="fx-prog-bar"><i style="width:${pct}%"></i></span><b>${done}/${total}</b></div>`);
       }
       stack.appendChild(el);
       if(i === 0) {
         const inp = el.querySelector('#conj-inp');
-        if(inp) inp.addEventListener('keydown', e => { if(e.key === 'Enter') { e.preventDefault(); conjCheck(); } });
+        if(inp) inp.addEventListener('keydown', e => { if(e.key === 'Enter') { e.preventDefault(); card.xc ? xcCheck() : conjCheck(); } });
+        if(card.xc === 'ecoute' && srsState.xcPlayed !== card.key) { srsState.xcPlayed = card.key; setTimeout(() => { try { xcPlay(); } catch(e) {} }, 400); }
       }
       return;
     }
@@ -738,7 +739,7 @@ function srsRenderStack() {
   try {
   if(srsState.currentCard) {
     const ck = srsState.currentCard.key;
-    const data = srsState.currentCard.conj ? (conjLoad()[ck] || conjNewRec()) : srsLoad()[ck];
+    const data = srsState.currentCard.conj ? (conjLoad()[ck] || conjNewRec()) : srsState.currentCard.xc ? (xcLoad()[ck] || xcNewRec(ck)) : srsLoad()[ck];
     [0,1,2,3].forEach(g => {
       document.getElementById(`srs-int-${g}`).textContent = srsFormatInterval(data, g, srsState.currentCard.key);
     });
@@ -753,9 +754,9 @@ function srsRenderStack() {
 
 function srsReveal() {
   if(srsState.revealed) return;
-  if(srsState.currentCard && srsState.currentCard.conj) {   // carte de conjugaison : on vérifie ce qui est tapé
+  if(srsState.currentCard && (srsState.currentCard.conj || srsState.currentCard.xc)) {   // carte à taper : on vérifie ce qui est écrit
     const inp = document.getElementById('conj-inp');
-    if(inp && inp.value.trim()) conjCheck(); else if(inp) inp.focus();
+    if(inp && inp.value.trim()) (srsState.currentCard.xc ? xcCheck : conjCheck)(); else if(inp) inp.focus();
     return;
   }
   srsState.revealed = true;
