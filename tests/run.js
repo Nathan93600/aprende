@@ -96,7 +96,8 @@ const AUDIT = (min) => {
     if(!txt || !/[A-Za-zÀ-ÿ0-9]/.test(txt)) continue;
     const r = el.getBoundingClientRect(); if(r.width < 2 || r.height < 2) continue;
     const cs = getComputedStyle(el); if(cs.visibility === 'hidden' || cs.display === 'none') continue;
-    if(el.closest('.hub-card, .unit-ban') || parseFloat(cs.webkitTextStrokeWidth) > 0) continue;   // blanc sur couleur vive, texte à contour : voulus
+    if(el.closest('.hub-card, .unit-ban') || parseFloat(cs.webkitTextStrokeWidth) > 0) continue;
+    if(document.body.classList.contains('noveil') && cs.textShadow && cs.textShadow.split('rgb').length > 3) continue;   // texte cerné sur l'image : lisible par son contour   // blanc sur couleur vive, texte à contour : voulus
     let op = 1; for(let e = el; e && e.nodeType === 1; e = e.parentElement) op *= parseFloat(getComputedStyle(e).opacity); if(op < .3) continue;
     if(cs.webkitTextFillColor === 'rgba(0, 0, 0, 0)' || cs.backgroundClip === 'text' || cs.webkitBackgroundClip === 'text') continue;
     const bg = bgOf(el), fg0 = parse(cs.color); if(!fg0) continue; const fg = over(fg0, bg);

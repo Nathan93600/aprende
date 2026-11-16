@@ -2529,3 +2529,21 @@ body.pop .gbtn.gbtn.gbtn.cw-ghost { background: var(--fx-panel) !important; colo
 .cw-miss em { grid-column: 1 / -1; font: 500 .76rem/1.4 'Poppins', sans-serif; font-style: normal; color: var(--muted); }
 .cw-done .gbtn { width: 100%; }
 @media (prefers-reduced-motion: reduce) { .cw-tile, .cw-verb, .cw-done-e { animation: none; } }
+
+/* ── Sans voile : les consignes posées directement sur l'image passent en blanc, cernées de noir ── */
+body.pop.wall.noveil #screen-lesson .ls-body > :is(.ls-kind, .ls-h, .dict-hint, div[style]:not([class])),
+body.pop.wall.noveil #screen-lesson .ls-body > .ls-h *,
+body.pop.wall.noveil #screen-lesson .ls-body > .ls-prompt[style]:not([style*="background"]),
+body.pop.wall.noveil #screen-lesson .ls-body > .ls-prompt[style]:not([style*="background"]) *:not(button),
+body.pop.wall.noveil #screen-conjtrainer :is(.ls-h, .cw-sent, .cw-fr, .cw-label, .cw-note, .cw-head h2, .cw-head p, .cw-done h2),
+body.pop.wall.noveil #screen-conjtrainer .cw-sent * {
+  color: #fff !important;
+  text-shadow: 0 0 2px #000, 0 1px 3px rgba(0, 0, 0, .95), 0 0 8px rgba(0, 0, 0, .7), 0 0 16px rgba(0, 0, 0, .45) !important;
+}
+body.pop.wall.noveil #screen-lesson .ls-body > .ls-kind, body.pop.wall.noveil #screen-conjtrainer .cw-label { color: #ffd166 !important; }
+body.pop.wall.noveil #screen-lesson .ls-body > div[style]:not([class]) { font-weight: 700 !important; }
+body.pop.wall.noveil :is(#screen-lesson, #screen-conjtrainer) .conj-gap { border-color: #fff; }
+body.pop.wall.noveil #screen-lesson .ls-x { color: #fff; filter: drop-shadow(0 0 3px #000) drop-shadow(0 0 6px rgba(0, 0, 0, .6)); }
+body.pop.wall.noveil #screen-lesson .ls-hp { text-shadow: 0 0 2px #fff, 0 0 6px #fff; }
+body.pop.wall.noveil #screen-lesson .ls-body > .ls-prompt[style]:not([style*="background"]) u { color: #ffd166 !important; }
+.ls-prompt.ls-read { display: block; }   /* le mot souligné reste dans la phrase */

@@ -394,7 +394,7 @@ function crsShow() {
       const sentence = w[2] || '';
       const highlighted = sentence.replace(new RegExp('(' + w[0].replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'i'), '<u style="color:var(--accent2);font-weight:800;text-decoration:underline">$1</u>');
       h = `<div class="ls-kind">${crsP('readContext')}</div><div class="ls-h">${crsP('readQuestion')}</div>
-        <div class="ls-prompt" style="font-size:1.05rem;line-height:1.6">${highlighted}</div>
+        <div class="ls-prompt ls-read" style="font-size:1.05rem;line-height:1.6">${highlighted}</div>
         <div style="color:var(--muted);font-weight:700;margin:-.3rem 0 1rem;font-size:.85rem">${crsEsc(w[3])}</div>` + crsOptsHTML(ex.opts);
       crsSetBtn(crsP('check'), false);
     }
