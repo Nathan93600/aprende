@@ -5,7 +5,7 @@
 // Le rapport suit le format fixé par C1_PLAN.reportFormat (bloc « === RAPPORT APRENDE === »).
 // orParse le lit ; les corrections et le vocabulaire choisis partent dans les mots en attente (pending_words),
 // et le rapport est gardé dans « oral_reports » (joint à la sauvegarde du génère).
-const OR_SECTIONS = { 'POINTS FORTS': 'strengths', 'ERREURS': 'errors', 'A DIRE PLUTOT': 'better', 'MOTS FRANCAIS': 'french', 'VOCABULAIRE': 'vocab', 'PRONONCIATION': 'pron', 'NON VERIFIE': 'unchecked' };
+const OR_SECTIONS = { 'POINTS FORTS': 'strengths', 'ERREURS': 'errors', 'A DIRE PLUTOT': 'better', 'MOTS FRANCAIS': 'french', 'VOCABULAIRE': 'vocab', 'PRONONCIATION': 'pron', 'TEXTE CORRIGE': 'corrected', 'NON VERIFIE': 'unchecked' };
 const OR_FIELDS = { DATE: 'date', THEME: 'theme', NIVEAU: 'level', PRIORITE: 'priority', DUREE: 'duration' };
 let orState = null;
 
@@ -13,7 +13,7 @@ function orLoad() { try { const a = JSON.parse(localStorage.getItem('oral_report
 function orSave(list) { try { localStorage.setItem('oral_reports', JSON.stringify(list.slice(-60))); } catch(e) { console.warn('[Aprende] rapport non sauvegardé', e); } }
 
 function orParse(text) {
-  const R = { date: '', theme: '', level: '', priority: '', duration: '', strengths: [], errors: [], better: [], french: [], vocab: [], pron: [], unchecked: [], found: 0 };
+  const R = { date: '', theme: '', level: '', priority: '', duration: '', strengths: [], errors: [], better: [], french: [], vocab: [], pron: [], corrected: '', unchecked: [], found: 0 };
   const up = s => s.toUpperCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/\s+/g, ' ').trim();
   const empty = s => /^(aucun|aucune|none|rien|ras|n\/a|\.\.\.|…|-)?\.?$/i.test(s.trim());
   let cur = null;
@@ -26,6 +26,7 @@ function orParse(text) {
     if(!cur) continue;
     line = line.replace(/^(([-•–]|\d+[.)])\s*)+/, '').trim();
     if(empty(line)) continue;
+    if(cur === 'corrected') { R.corrected += (R.corrected ? ' ' : '') + line; continue; }
     if(cur === 'strengths' || cur === 'unchecked') { R[cur].push(line); continue; }
     const bar = line.split(/\s+\|\s+/), main = bar[0], note = bar.slice(1).join(' | ').trim();
     const sep = cur === 'vocab' ? /\s+=\s+|\s*=>\s*|\s*→\s*/ : cur === 'pron' ? /\s*:\s+|\s*=>\s*|\s*→\s*/ : /\s*=>\s*|\s*→\s*|\s*->\s*/;
