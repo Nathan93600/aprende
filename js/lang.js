@@ -17,6 +17,7 @@ function selectLang(lang) {
     updateENStats();
     updateNativeBests();
     updatePronBadge();
+    if(typeof oralTextsBadge === 'function') oralTextsBadge();
     showScreen('home-en');
   }
 }

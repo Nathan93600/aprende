@@ -2647,3 +2647,24 @@ body.pop .badge-grid { grid-template-columns: repeat(auto-fill, minmax(104px, 1f
 .badge-item small { font: 700 .62rem 'Poppins', sans-serif; color: var(--muted); }
 .badge-item .bprog { display: block; width: 80%; height: 7px; border-radius: 99px; background: color-mix(in srgb, var(--tx) 15%, transparent); overflow: hidden; margin-top: .15rem; }
 .badge-item .bprog > i { display: block; height: 100%; background: var(--mint); border-radius: 99px; }
+
+/* ═══ Oral Texts screen ═══ */
+.ot-card { background: var(--card); border-radius: 1rem; margin-bottom: 1rem; overflow: hidden; border: 1px solid var(--border); }
+.ot-card[open] { border-color: rgba(6,182,212,.4); }
+.ot-sum { display: flex; flex-wrap: wrap; align-items: baseline; gap: .3rem .8rem; padding: 1rem 1.2rem; cursor: pointer; list-style: none; font-family: 'Poppins', sans-serif; }
+.ot-sum::-webkit-details-marker { display: none; }
+.ot-sum::marker { content: ''; }
+.ot-date { font-size: .75rem; color: var(--muted); min-width: 6rem; }
+.ot-theme { font-weight: 700; font-size: .95rem; flex: 1; }
+.ot-stats { font-size: .72rem; color: var(--muted); width: 100%; }
+.ot-body { padding: 0 1.2rem 1.2rem; }
+.ot-section { margin-bottom: 1rem; }
+.ot-label { font: 600 .78rem 'Poppins', sans-serif; color: #06b6d4; margin-bottom: .4rem; }
+.ot-label.dim { color: var(--muted); font-style: italic; }
+.ot-label small { color: var(--muted); font-weight: 400; }
+.ot-text { font: 400 .88rem 'DM Sans', sans-serif; line-height: 1.65; color: var(--tx); background: color-mix(in srgb, var(--tx) 5%, transparent); padding: .8rem 1rem; border-radius: .6rem; }
+.ot-text.idio { background: linear-gradient(135deg, rgba(168,85,247,.08), rgba(6,182,212,.08)); border: 1px solid rgba(168,85,247,.2); }
+.ot-text.small { font-size: .82rem; padding: .5rem .8rem; }
+.ot-ul { list-style: none; padding: 0; margin: 0; }
+.ot-ul li { font-size: .82rem; padding: .2rem 0; color: var(--tx); }
+.ot-ul li::before { content: '✓ '; color: #34d399; font-weight: 700; }

@@ -73,7 +73,8 @@ function orImport(keepOnly) {
   if(!keepOnly) orState.items.forEach(it => { if(!it.on) return; const r = pwAdd(it.w, orState.lang, it.c); if(r.ok) added++; else if(r.dup) dup++; });
   const list = orLoad();
   list.push({ d: day, t: Date.now(), src: orState.src, lang: orState.lang, theme: R.theme, level: R.level, priority: R.priority, strengths: R.strengths.slice(0, 8), pron: R.pron.slice(0, 8),
-    n: { errors: R.errors.length, better: R.better.length, french: R.french.length, vocab: R.vocab.length }, added, raw: orState.text.slice(0, 8000) });
+    n: { errors: R.errors.length, better: R.better.length, french: R.french.length, vocab: R.vocab.length }, added, raw: orState.text.slice(0, 8000),
+    corrected: R.corrected || '' });
   orSave(list);
   // la conversation du jour est cochée dans le programme C1
   try { if(orState.lang === 'en') { const L = c1Log(); L[day] = L[day] || {}; L[day].talk = true; crsSetJ('c1_log', L); c1Render(); } } catch(e) {}
@@ -124,4 +125,39 @@ function orLastHTML() {
   const list = orLoad().filter(r => r.lang === 'en'); if(!list.length) return '';
   const r = list[list.length - 1], d = new Date(r.d + 'T00:00:00').toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' });
   return `<div class="c1d-note"><b>Dernier rapport d'oral</b> · ${d}${r.level ? ' · niveau ' + crsEsc(r.level) : ''} · ${list.length} au total${r.priority ? '<br>🎯 ' + crsEsc(r.priority) : ''}</div>`;
+}
+// ═══════════════════════════════════════════════
+// ÉCRAN « MES TEXTES ORAUX »
+// ═══════════════════════════════════════════════
+function openOralTexts() {
+  showScreen('screen-oral-texts');
+  const box = document.getElementById('oral-texts-list'); if(!box) return;
+  const list = orLoad().filter(r => r.lang === 'en').reverse();
+  if(!list.length) { box.innerHTML = '<div style="text-align:center;padding:3rem 1rem;color:var(--muted)"><div style="font-size:3rem;margin-bottom:.8rem">📝</div><p>Pas encore de rapport d\'oral.<br>Enregistre-toi et envoie l\'audio à Gemini avec le prompt du programme C1.</p></div>'; return; }
+  const esc = typeof crsEsc === 'function' ? crsEsc : s => s.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  box.innerHTML = list.map((r, i) => {
+    const d = r.d ? new Date(r.d + 'T00:00:00').toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }) : '?';
+    const hasCorr = r.corrected && r.corrected.trim();
+    const hasIdio = r.idiomatic && r.idiomatic.trim();
+    const stats = [r.level && `niveau ${esc(r.level)}`, r.n && `${r.n.errors || 0} erreurs`, r.n && `${r.n.better || 0} tournures`].filter(Boolean).join(' · ');
+    return `<details class="ot-card" ${i === 0 ? 'open' : ''}>
+      <summary class="ot-sum">
+        <span class="ot-date">${d}</span>
+        <span class="ot-theme">${r.theme ? esc(r.theme) : 'Sans thème'}</span>
+        <span class="ot-stats">${stats}</span>
+      </summary>
+      <div class="ot-body">
+        ${hasCorr ? `<div class="ot-section"><div class="ot-label">✅ Texte corrigé <small>(Gemini)</small></div><div class="ot-text">${esc(r.corrected)}</div></div>` : '<div class="ot-section"><div class="ot-label dim">Pas de texte corrigé dans ce rapport</div></div>'}
+        ${hasIdio ? `<div class="ot-section"><div class="ot-label">💎 Version idiomatique <small>(génère)</small></div><div class="ot-text idio">${r.idiomatic}</div></div>` : ''}
+        ${r.priority ? `<div class="ot-section"><div class="ot-label">🎯 Priorité</div><div class="ot-text small">${esc(r.priority)}</div></div>` : ''}
+        ${r.strengths && r.strengths.length ? `<div class="ot-section"><div class="ot-label">💪 Points forts</div><ul class="ot-ul">${r.strengths.map(s => `<li>${esc(s)}</li>`).join('')}</ul></div>` : ''}
+      </div>
+    </details>`;
+  }).join('');
+}
+// badge count
+function oralTextsBadge() {
+  const el = document.getElementById('oral-texts-badge'); if(!el) return;
+  const n = orLoad().filter(r => r.lang === 'en' && r.corrected && r.corrected.trim()).length;
+  el.textContent = n ? `${n} texte${n > 1 ? 's' : ''}` : 'Lecture';
 }

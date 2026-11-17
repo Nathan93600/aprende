@@ -946,6 +946,12 @@
         <div class="card-desc">PHOtograph, phoTOgraphy, DAta… Trouve la syllabe forte, puis écoute la prononciation US.</div>
         <span class="card-badge" id="nat-best-stress">60s · Audio</span>
       </div>
+      <div class="game-card" style="--card-color:#06b6d4;--card-glow:radial-gradient(circle at 50% 0%,#06b6d4,transparent 70%);grid-column:1/-1" onclick="openOralTexts()">
+        <span class="card-icon">📝</span>
+        <div class="card-title">Mes textes oraux</div>
+        <div class="card-desc">Relis tes productions orales corrigées par Gemini. Bientôt : versions retravaillées avec expressions idiomatiques.</div>
+        <span class="card-badge" id="oral-texts-badge">Lecture</span>
+      </div>
     </div>
   </div>
   <div style="margin-top:2rem;display:flex;gap:.8rem;flex-wrap:wrap;justify-content:center">
@@ -957,6 +963,15 @@
     <button class="btn btn-primary" onclick="openSRS('en')" style="background:linear-gradient(135deg,#a855f7,#ec4899)">🧠 Révision SRS</button>
     <button class="btn btn-primary" onclick="openShuffle('en')" style="background:linear-gradient(135deg,#4cc9f0,#3b82f6)">🔀 Session rapide</button>
   </div>
+</div>
+
+<!-- ═══════════ ORAL TEXTS (corrected by Gemini) ═══════════ -->
+<div class="screen" id="screen-oral-texts">
+  <div class="game-header" style="max-width:700px">
+    <button class="back-btn" onclick="selectLang('en')">← Retour</button>
+    <div class="game-title-bar"><h2>📝 Mes textes oraux</h2></div>
+  </div>
+  <div id="oral-texts-list" style="width:100%;max-width:700px;padding:0 1rem 2rem"></div>
 </div>
 
 <!-- ═══════════ NATIVE SPEAKING MODES ═══════════ -->
