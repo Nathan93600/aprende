@@ -27,15 +27,17 @@ function buildProgressExport() {
     aura_map: JSON.parse(localStorage.getItem('aura_map') || '{}'),
     // Historique des révisions, réglages, SRS prononciation et grammaire
     srs_revlog: JSON.parse(localStorage.getItem('srs_revlog') || '[]'),
-    srs_new_per_day: srsNewPerDay(),
+    srs_new_per_day: srsNewPerDay('es'),
+    srs_new_per_day_by_lang: { es: srsNewPerDay('es'), en: srsNewPerDay('en'), ln: srsNewPerDay('ln') },
     pron_srs: JSON.parse(localStorage.getItem('pron_srs') || '{}'),
     grammar_srs: JSON.parse(localStorage.getItem('grammar_srs') || '{}'),
     conj_srs: JSON.parse(localStorage.getItem('conj_srs') || '{}'),
     conj_per_day: conjPerDay(),
     conj_ustedes: conjUstedes() ? '1' : '0',
     extra_srs: JSON.parse(localStorage.getItem('extra_srs') || '{}'),
-    xc_prod_per_day: xcPerDay('prod'),
-    xc_ecoute_per_day: xcPerDay('ecoute'),
+    xc_prod_per_day: xcPerDay('prod', 'en'),
+    xc_ecoute_per_day: xcPerDay('ecoute', 'en'),
+    xc_per_day_by_lang: Object.fromEntries(['es', 'en', 'ln'].map(l => [l, { prod: xcPerDay('prod', l), ecoute: xcPerDay('ecoute', l) }])),
     c1_log: JSON.parse(localStorage.getItem('c1_log') || '{}'),
     oral_reports: orLoad(),
     badges_earned: crsJ('badges_earned', []),
@@ -275,6 +277,8 @@ function importProgress(file) {
       if(data.aura_map) localStorage.setItem('aura_map', JSON.stringify(data.aura_map));
       if(data.srs_revlog) localStorage.setItem('srs_revlog', JSON.stringify(data.srs_revlog));
       if(data.srs_new_per_day !== undefined) localStorage.setItem('srs_new_per_day', String(data.srs_new_per_day));
+      if(data.srs_new_per_day_by_lang) Object.entries(data.srs_new_per_day_by_lang).forEach(([l, v]) => localStorage.setItem('srs_new_per_day_' + l, String(v)));
+      if(data.xc_per_day_by_lang) Object.entries(data.xc_per_day_by_lang).forEach(([l, o]) => ['prod', 'ecoute'].forEach(k => { if(o[k] !== undefined) localStorage.setItem('xc_' + k + '_per_day_' + l, String(o[k])); }));
       if(data.pron_srs) localStorage.setItem('pron_srs', JSON.stringify(data.pron_srs));
       if(data.grammar_srs) localStorage.setItem('grammar_srs', JSON.stringify(data.grammar_srs));
       if(data.conj_srs) { localStorage.setItem('conj_srs', JSON.stringify(data.conj_srs)); conjInvalidateCache(); }

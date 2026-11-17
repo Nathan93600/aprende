@@ -307,10 +307,17 @@ function srsRevlogInvalidateCache() { _srsRevlogCache = null; }
 function srsStartOfToday() { const n = new Date(); return new Date(n.getFullYear(), n.getMonth(), n.getDate()).getTime(); }
 
 // ── Limite de nouvelles cartes par jour (par langue) ──
-function srsNewPerDay() { const v = parseInt(localStorage.getItem('srs_new_per_day'), 10); return isNaN(v) ? SRS_CFG.defaultNewPerDay : v; }
-function srsSetNewPerDay(delta) {
-  const v = Math.min(100, Math.max(0, srsNewPerDay() + delta));
-  localStorage.setItem('srs_new_per_day', String(v));
+// Chaque langue a sa limite (« srs_new_per_day_en »…). Sans réglage propre, elle reprend l'ancienne limite commune.
+function srsNewPerDay(lang) {
+  lang = lang || (typeof srsState !== 'undefined' && srsState.lang) || currentLang;
+  let v = parseInt(localStorage.getItem('srs_new_per_day_' + lang), 10);
+  if(isNaN(v)) v = parseInt(localStorage.getItem('srs_new_per_day'), 10);
+  return isNaN(v) ? SRS_CFG.defaultNewPerDay : v;
+}
+function srsSetNewPerDay(delta, lang) {
+  lang = lang || srsState.lang || currentLang;
+  const v = Math.min(100, Math.max(0, srsNewPerDay(lang) + delta));
+  localStorage.setItem('srs_new_per_day_' + lang, String(v));
   srsRefresh();
 }
 function srsIntroducedToday(lang) {
@@ -352,7 +359,7 @@ function srsBuildQueue(lang) {
   const start = srsStartOfToday();
   const fams = new Set(srsRevlogLoad().filter(r => r[1] >= start && r[0].startsWith(lang + ':')).map(r => srsFamilyKey(r[0].split(':').slice(1).join(':'))));
   [...learnNow, ...learnLater, ...reviews].forEach(e => fams.add(srsFamilyKey(e.word)));
-  const baseLimit = filter ? Infinity : Math.max(0, srsNewPerDay() - srsIntroducedToday(lang));
+  const baseLimit = filter ? Infinity : Math.max(0, srsNewPerDay(lang) - srsIntroducedToday(lang));
   const limit = baseLimit + (srsState._extraNew || 0);
   const picked = []; let buried = 0;
   for(const e of shuffle(news)) {
@@ -412,7 +419,8 @@ function srsRefresh() {
   document.getElementById('srs-new-count').textContent = st.newC;
   document.getElementById('srs-due-count').textContent = st.dueC;
   document.getElementById('srs-mastered-count').textContent = st.mastered;
-  const npd = document.getElementById('srs-npd-value'); if(npd) npd.textContent = srsNewPerDay();
+  const npd = document.getElementById('srs-npd-value'); if(npd) npd.textContent = srsNewPerDay(srsState.lang);
+  const npdL = document.getElementById('srs-npd-label'); if(npdL) npdL.textContent = 'Nouvelles / jour ' + ({ es: '🇪🇸', en: '🇬🇧', ln: '🇨🇩' }[srsState.lang] || '');
   const npdHint = document.getElementById('srs-npd-hint');
   if(npdHint) {
     const bits = [];
@@ -457,7 +465,7 @@ function srsRefresh() {
         ? `⏰ Prochaine révision ${srsFormatDueDate(upcoming[0])} · <strong style="color:var(--accent2)">${upcoming.length}</strong> carte${upcoming.length > 1 ? 's' : ''} planifiée${upcoming.length > 1 ? 's' : ''}`
         : '';
       const limitHint = (st.newLeft || st.buried) && !filter
-        ? `<br><br><span style="font-size:.8rem;opacity:.85">🆕 Limite du jour atteinte (${srsNewPerDay()} nouvelles cartes). ${st.newLeft + st.buried} nouvelle${st.newLeft + st.buried > 1 ? 's' : ''} t'attendent demain.</span>`
+        ? `<br><br><span style="font-size:.8rem;opacity:.85">🆕 Limite du jour atteinte (${srsNewPerDay(srsState.lang)} nouvelles cartes). ${st.newLeft + st.buried} nouvelle${st.newLeft + st.buried > 1 ? 's' : ''} t'attendent demain.</span>`
         : '';
       if(filter) {
         emptyTitle.textContent = '✓ Session à jour !';

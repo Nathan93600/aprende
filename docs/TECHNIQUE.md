@@ -109,7 +109,8 @@ Une copie de l'appli n'en a pas besoin : mettre `firebase: false`.
 | `es_mastered`, `en_mastered`, `ln_mastered`, `mastered` | mots maîtrisés dans les jeux |
 | `crs_prog`, `crs_resume`, `crs_added` | progression dans les cours |
 | `pron_srs`, `grammar_srs` | révision de la prononciation (anglais) et des règles de grammaire |
-| `extra_srs`, `xc_prod_per_day`, `xc_ecoute_per_day` | cartes en plus (`prod:en:mot`, `ecoute:en:mot`) et leur limite par jour |
+| `srs_new_per_day_<langue>` | limite de nouvelles cartes par jour, propre à chaque langue (`srs_new_per_day` = ancienne limite commune, valeur de départ) |
+| `extra_srs`, `xc_<prod|ecoute>_per_day_<langue>` | cartes en plus (`prod:en:mot`, `ecoute:en:mot`) et leur limite par jour |
 | `oral_reports` | rapports d'oral importés : `[{d, src, lang, theme, level, priority, n, added, raw}]` (60 derniers) |
 | `c1_log` | programme C1 : tâches cochées par jour |
 | `pending_words` | mots notés avec « + mot » : `[{w, l, c, t}]`, `l` = `es`, `en`, `ln` ou `fr` (à traduire vers les deux) |

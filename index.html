@@ -563,7 +563,7 @@
           <input type="checkbox" id="srs-sim-toggle" onchange="toggleSRSSim()">
           <span title="Mode simulation : 1 jour = 3 secondes">Simulation</span>
         </label>
-        <span class="fx-npd">Nouvelles / jour</span>
+        <span class="fx-npd" id="srs-npd-label" title="Limite propre à cette langue">Nouvelles / jour</span>
         <button class="fx-step" onclick="srsSetNewPerDay(-5)" aria-label="Moins">−</button>
         <strong id="srs-npd-value">20</strong>
         <button class="fx-step" onclick="srsSetNewPerDay(5)" aria-label="Plus">+</button>

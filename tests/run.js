@@ -294,6 +294,25 @@ const AUDIT = (min) => {
       ok('progression affichée, écran par langue, succès dans la sauvegarde', JSON.stringify(r.prog) === JSON.stringify([25, 100]) && r.screen && r.saved && p.errs.length === 0, JSON.stringify(r.prog) + p.errs.join(' | '));
       await p.close();
     }
+    if(want('limites')) {
+      console.log('\nLimites de cartes par langue');
+      const p = await open(browser, base);
+      const r = await p.evaluate(() => {
+        const o = {}; ['es', 'en', 'ln'].forEach(l => { localStorage.removeItem('srs_new_per_day_' + l); localStorage.removeItem('xc_prod_per_day_' + l); });
+        localStorage.setItem('srs_new_per_day', '12');
+        o.legacy = ['es', 'en', 'ln'].map(l => srsNewPerDay(l));          // l'ancien réglage commun reste la valeur de départ
+        openSRS('en'); srsSetNewPerDay(10); openSRS('es'); srsSetNewPerDay(-5);
+        o.split = ['es', 'en', 'ln'].map(l => srsNewPerDay(l));
+        o.shown = document.getElementById('srs-npd-value').textContent === '7' && document.getElementById('srs-npd-label').textContent.includes('🇪🇸');
+        openSRS('en'); o.shownEn = document.getElementById('srs-npd-value').textContent === '22';
+        xcSetPerDay('prod', 4); openSRS('es'); o.xc = [xcPerDay('prod', 'en'), xcPerDay('prod', 'es')];
+        const b = buildProgressExport(); o.saved = b.srs_new_per_day_by_lang.en === 22 && b.srs_new_per_day_by_lang.es === 7 && b.xc_per_day_by_lang.en.prod === 12;
+        return o;
+      });
+      ok('chaque langue a sa limite de nouvelles cartes, en partant de l\'ancienne', JSON.stringify(r.legacy) === '[12,12,12]' && JSON.stringify(r.split) === '[7,22,12]' && r.shown && r.shownEn, JSON.stringify(r));
+      ok('les cartes en plus aussi, et la sauvegarde garde les trois', JSON.stringify(r.xc) === '[12,8]' && r.saved && p.errs.length === 0, JSON.stringify(r) + p.errs.join(' | '));
+      await p.close();
+    }
     if(want('c1')) {
       console.log('\nProgramme C1 dans le tableau de bord');
       const p = await open(browser, base);

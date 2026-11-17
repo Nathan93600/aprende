@@ -20,10 +20,10 @@ function xcIsKey(k) { return typeof k === 'string' && /^(prod|ecoute):/.test(k);
 function xcKey(kind, lang, word) { return kind + ':' + lang + ':' + word; }
 function xcParse(key) { const a = key.indexOf(':'), b = key.indexOf(':', a + 1); return { kind: key.slice(0, a), lang: key.slice(a + 1, b), word: key.slice(b + 1) }; }
 function xcNewRec(key) { return { ef: 2.5, interval: 0, reps: 0, due: Date.now(), lang: xcParse(key).lang, st: 'new' }; }
-function xcPerDay(kind) { const v = parseInt(localStorage.getItem('xc_' + kind + '_per_day'), 10); return isNaN(v) ? XC[kind].def : v; }
+function xcPerDay(kind, lang) { lang = lang || (typeof srsState !== 'undefined' && srsState.lang) || currentLang; let v = parseInt(localStorage.getItem('xc_' + kind + '_per_day_' + lang), 10); if(isNaN(v)) v = parseInt(localStorage.getItem('xc_' + kind + '_per_day'), 10); return isNaN(v) ? XC[kind].def : v; }
 function xcSetPerDay(kind, delta) {
-  const v = Math.min(40, Math.max(0, xcPerDay(kind) + delta));
-  try { localStorage.setItem('xc_' + kind + '_per_day', String(v)); } catch(e) {}
+  const lang = srsState.lang || currentLang, v = Math.min(40, Math.max(0, xcPerDay(kind, lang) + delta));
+  try { localStorage.setItem('xc_' + kind + '_per_day_' + lang, String(v)); } catch(e) {}
   srsRefresh();
 }
 
@@ -62,7 +62,7 @@ function xcQueue(lang, now) {
   // la carte de base est-elle « occupée » aujourd'hui (pas encore sue, à revoir ou déjà revue) ?
   const busy = word => { const c = data[srsKey(lang, word)]; return !c || !c.reps || srsIsIntraday(c) || c.due < end || (c.lr || 0) >= start; };
   for(const kind of kinds) {
-    const cap = xcPerDay(kind), due = [];
+    const cap = xcPerDay(kind, lang), due = [];
     for(const k in store) {
       const p = xcParse(k); if(p.kind !== kind || p.lang !== lang) continue;
       const e = xcEntry(k, store[k], now); if(!e.reps) continue;
@@ -195,8 +195,8 @@ function xcUpdateRows() {
     const row = document.getElementById('srs-' + kind + '-row'), ok = XC[kind].langs.includes(lang);
     if(row) row.style.display = ok ? '' : 'none';
     if(!ok) continue;
-    const v = document.getElementById('srs-' + kind + '-value'); if(v) v.textContent = xcPerDay(kind);
-    sum.push(XC[kind].name.toLowerCase() + ' ' + xcPerDay(kind));
+    const v = document.getElementById('srs-' + kind + '-value'); if(v) v.textContent = xcPerDay(kind, lang);
+    sum.push(XC[kind].name.toLowerCase() + ' ' + xcPerDay(kind, lang));
   }
   const s = document.getElementById('srs-more-sum'); if(s) s.textContent = sum.join(' · ');
 }

@@ -45,7 +45,7 @@ function c1Render() {
     for(let i = 0; i < 7; i++) { const d = new Date(s0); d.setDate(d.getDate() + i); const k = c1Day(d), today = k === c1Day();
       days += `<i class="${(L[k] && L[k].done) ? 'ok' : ''}${today ? ' today' : ''}" title="${k}">${'LMMJVSD'[i]}</i>`; }
     const pct = Math.min(100, Math.round(100 * st.mature / W.mature));
-    const npd = srsNewPerDay(), npdWarn = npd > C1_PLAN.newPerDay ? `<div class="c1-hint">Nouvelles cartes : ${npd}/jour, ${C1_PLAN.newPerDay} conseillé. <button class="c1-link" onclick="c1SetNpd()">Régler à ${C1_PLAN.newPerDay}</button></div>` : '';
+    const npd = srsNewPerDay('en'), npdWarn = npd > C1_PLAN.newPerDay ? `<div class="c1-hint">Nouvelles cartes : ${npd}/jour, ${C1_PLAN.newPerDay} conseillé. <button class="c1-link" onclick="c1SetNpd()">Régler à ${C1_PLAN.newPerDay}</button></div>` : '';
     html = `<div class="c1-wrap">
       <div class="c1-top"><span class="c1-t">🇬🇧 Objectif C1 · avril 2027</span><span class="c1-w">${w < 0 ? 'Démarre lundi 16 nov.' : 'Semaine ' + (wi + 1) + '/' + total}</span></div>
       <div class="c1-phase">${P.icon} ${P.name}</div>
@@ -61,7 +61,7 @@ function c1Render() {
   slots.forEach(el => el.innerHTML = html);
 }
 function c1Toggle(id) { const log = c1Log()[c1Day()] || {}; c1Mark(id, !log[id]); if(!log[id]) try { showToast('✅ Bien joué !', 'correct-toast'); } catch(e) {} c1Render(); }
-function c1SetNpd() { localStorage.setItem('srs_new_per_day', String(C1_PLAN.newPerDay)); try { showToast('Nouvelles cartes : ' + C1_PLAN.newPerDay + ' par jour'); } catch(e) {} c1Render(); }
+function c1SetNpd() { localStorage.setItem('srs_new_per_day_en', String(C1_PLAN.newPerDay)); try { showToast('Nouvelles cartes : ' + C1_PLAN.newPerDay + ' par jour'); } catch(e) {} c1Render(); }
 // Consigne à coller : 'audio' = Gemini avec un enregistrement, 'chat' = ChatGPT en conversation
 function c1PromptText(mode) {
   const W = C1_PLAN.weeks[Math.min(C1_PLAN.weeks.length - 1, Math.max(0, c1WeekIndex()))];
