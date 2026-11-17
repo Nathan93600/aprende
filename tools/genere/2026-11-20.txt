@@ -1,5 +1,5 @@
 # Génère du vendredi 20/11/2026 : mots notés dans la conversation depuis le 14/11.
-# À compléter vendredi avec les mots notés dans l'appli (« + mot ») et les rapports d'oral de la sauvegarde.
+# Mots notés dans l'appli : copiés le 17/11 (en bas). Vendredi, ajouter ceux notés depuis, avec la sauvegarde.
 # Les doublons n'ont pas encore été vérifiés : node tools/genere.js doublons tools/genere/2026-11-20.txt
 
 # Anglais : session « family tree » du 14/11 (ChatGPT)
@@ -73,3 +73,102 @@ es: concursos
 es: belleza
 es: raza
 es: lujo
+
+# ── Mots notés dans l'appli (« + mot »), copiés le 17/11 ──
+# Espagnol
+es: naranjas
+es: estrenando
+# Anglais (dont corrections des rapports d'oral)
+en: laid out   # Kingdom hearts (path laid out for you)
+en: to show up   # Kh
+en: immovable
+en: eatch => etched   # Kh : My own path is eat her in my heart
+en: asking a few questions   # Au lieu de « asking few questions » · Sans l'article a, few signifie très peu (sens négatif), alors que a few signifie quelques.
+en: we share both grandparents   # Au lieu de « we share both grandma and granddad together » · Le mot together est redondant avec le verbe share.
+en: 14 of them are my half-cousins   # Au lieu de « 14 of them are like my half cousins » · L'abus de like comme tic de remplissage dilue l'affirmation d'un fait précis.
+en: extended family   # la famille élargie · With 89 cousins, I definitely have a massive extended family.
+en: to keep track of   # garder le fil / suivre le compte · It is hard to keep track of all my cousins' names.
+en: sibling   # frère ou sœur · My dad didn't have any full siblings on his side.
+en: blended family   # famille recomposée · Having multiple marriages in the family creates a large blended family.
+en: full cousin / half-cousin   # cousin germain / demi-cousin · We share both grandparents, so we are full cousins.
+en: asking my parents questions   # Erreur : « asking questions to my parents » · Le verbe ask est transitif direct et ne prend pas de préposition avant la personne interrogée.
+en: how many cousins I have   # Erreur : « how many cousin I have » · L'expression how many est toujours suivie d'un nom pluriel dénombrable.
+en: 16 of them   # Erreur : « 16 from them » · Pour exprimer une fraction ou une partie d'un groupe, on utilise la préposition of et non from.
+en: on my dad's side, it's more complex   # Erreur : « on my dad's side is more complex » · En anglais, un verbe conjugué a toujours besoin d'un sujet explicite comme it.
+en: we share the same grandma and granddad   # Erreur : « we share same grandma, same granddad » · Le mot same est presque toujours précédé de l'article défini the.
+en: 89 cousins   # Erreur : « 89 cousin (prise 3) » · Tout nombre supérieur à un impose la marque du pluriel à l'oral.
+en: I couldn't beat him   # Au lieu de « I did not manage to beat him » · La forme contractée couldn't est beaucoup plus fluide et naturelle à l'oral américain.
+en: go through another phase   # Au lieu de « go for another round » · Dans le vocabulaire des jeux vidéo, on parle de phases pour les étapes d'un combat de boss.
+en: spamming super powerful attacks   # Au lieu de « throwing attacks so many times and so powerful » · L'expression est beaucoup plus idiomatique dans le registre gaming américain
+en: in the Little Mermaid world, her name is Ursula   # Au lieu de « in the Little Mermaid's... her name is Ursula » · Ajouter le mot world clarifie immédiatement le contexte du niveau dans le jeu
+en: to be stuck on a boss   # être bloqué sur un boss · I was stuck on the final boss for over an hour.
+en: difficulty spike   # pic de difficulté · Proud Mode has a huge difficulty spike near the end of the game.
+en: attack pattern   # schéma d'attaque · You have to memorize the boss's attack patterns to dodge them.
+en: to beat a game   # finir un jeu · It took me forever to beat Kingdom Hearts on Proud Mode.
+en: to rage quit   # quitter par frustration · The fight was so unfair that I almost rage quit.
+en: I gave up   # Erreur : « I have given up » · Le prétérit simple est obligatoire pour raconter une action terminée dans le passé.
+en: I didn't listen to him   # Erreur : « I haven't listened to him » · Une action passée précise et révolue demande le prétérit simple plutôt que le present perfect.
+en: The bosses in Kingdom Hearts are generally so hard   # Erreur : « The boss from Kingdom Hearts generally are so hard » · Il faut accorder le sujet au pluriel (bosses) et placer l'adverbe après le
+en: I was racking my brains / I was focusing   # Erreur : « I've been racking my brains / I've been focusing » · Dans un récit au passé, une action en cours se décrit au past continuous et 
+en: I almost gave up   # Erreur : « I almost given up » · Le prétérit de give est gave ; le participe passé given ne s'emploie pas sans auxiliaire.
+en: The last boss in that game is so long   # Erreur : « What is the last boss in that game is so long » · Il ne faut pas introduire le sujet d'une phrase affirmative avec what is.
+en: at the very least, standard mode at most   # Erreur : « at the very least, at very most standard » · L'expression idiomatique pour le maximum est at most (sans very).
+en: nowhere near finished   # Au lieu de « seriously not finished » · Seriously not finished est un calque du français sérieusement pas fini.
+en: had a proper development cycle   # Au lieu de « reached to the end » · Reach est transitif direct et l'expression sonne plus naturelle pour parler de développement logiciel.
+en: the best in any Sonic game   # Au lieu de « the best from a Sonic game » · On utilise la préposition in pour situer un élément à l'intérieur d'une série de jeux.
+en: a soundtrack on that level   # Au lieu de « that level of soundtrack » · Cette tournure est beaucoup plus idiomatique en anglais américain pour exprimer la qualité.
+en: rushed development   # développement précipité · The game suffered from a rushed development to meet the holiday deadline.
+en: game-breaking bug   # bug bloquant · Players encountered game-breaking bugs right from the first level.
+en: fan-made port   # portage réalisé par des fans · A fan-made port finally fixed the frame rate issues on PC.
+en: to live up to the hype   # être à la hauteur des attentes · Unfortunately, the anniversary title failed to live up to the hype.
+en: cult classic   # œuvre culte malgré ses défauts · Despite its flaws, the game has become a cult classic for its music.
+en: a few days ago some people released   # Erreur : « a few days ago some people have released » · Avec un marqueur de passé révolu comme a few days ago, il faut utiliser le prétérit 
+en: a game that was released in 2006   # Erreur : « a game that has been released on 2006 » · On utilise le prétérit passif pour une date passée et la préposition in devant une anné
+en: the game had plenty of bugs   # Erreur : « the game was plenty of bugs » · L'expression plenty of désigne une quantité et s'utilise avec le verbe have ou la tournure there 
+en: I've never seen   # Erreur : « I never seen » · Le participe passé seen nécessite l'auxiliaire have pour former le present perfect.
+en: on the internet   # Erreur : « on internet » · Le mot internet est toujours précédé de l'article défini the dans ce contexte.
+en: she got mad at me   # Au lieu de « she became mad at me » · En anglais américain oral, get mad est beaucoup plus courant et naturel que become mad.
+en: I had to vote my friend out   # Au lieu de « I had to kill my friend » · Dans les jeux de société à rôles cachés comme Undercover, on utilise plutôt vote out ou eliminate.
+en: long story short / essentially   # Au lieu de « basically (répété cinq fois) » · Varier les connecteurs évite de transformer basically en tic de remplissage qui ralentit le dé
+en: to vote someone out   # éliminer quelqu'un par un vote · The group decided to vote him out on the very last turn.
+en: to throw someone off the scent   # brouiller les pistes / détourner les soupçons · I eliminated my own partner to throw the civilians off the scent.
+en: to blend in   # se fondre dans la masse · As the undercover player, your main goal is to blend in with the group.
+en: poker face   # visage impassible · You need a solid poker face when everyone starts accusing you.
+en: in a bar with my friends   # Erreur : « in a bar with my friend » · Comme il y avait au moins cinq joueurs dans la partie, le nom doit être au pluriel.
+en: one of my friends   # Erreur : « one of my friend » · L'expression one of est toujours suivie d'un nom au pluriel.
+en: everyone believed   # Erreur : « everyone was believing » · Le verbe d'état believe ne s'utilise quasiment jamais à la forme progressive en -ing.
+en: that made them shift their votes   # Erreur : « that had made me gravitate their votes » · Le verbe gravitate est intransitif et ne peut pas avoir de complément d'objet direct c
+en: I told her   # Erreur : « I was telling her (pour rapporter une réplique ponctuelle) » · Pour une action ponctuelle et terminée dans le passé, le prétérit 
+en: show my true skill / show what I'm really capable of   # Au lieu de « show my true level » · Utiliser level pour parler de compétence aux jeux vidéo est un calque francophone.
+en: I revealed that I was   # Au lieu de « I revealed to them that I was » · Supprimer to them rend la phrase beaucoup plus directe et percutante à l'oral.
+en: people just assume I'm not that good   # Au lieu de « people are just used that I'm not really that good » · Le verbe assume exprime beaucoup plus naturellement l'idée que les autre
+en: to play dumb   # faire l'idiot / jouer l'innocent · I always play dumb at the beginning of the game so nobody suspects me.
+en: to sandbag   # faire exprès de mal jouer pour tromper ses adversaires · He was sandbagging during the first few rounds before crushing everyone.
+en: to catch someone off guard   # prendre quelqu'un au dépourvu · Showing my real strategy at the very end caught everyone off guard.
+en: to lull someone into a false sense of security   # endormir la méfiance de quelqu'un · Acting clueless lulled the other players into a false sense of security.
+en: the sequel to my last recording   # Erreur : « the sequel from my last recording » · Le nom sequel se construit avec la préposition to et non from.
+en: people get used to me being bad   # Erreur : « people get used that I am bad » · L'expression get used to est toujours suivie d'un nom ou d'un verbe en -ing, jamais de that.
+en: when your time comes   # Erreur : « when your times comes » · Le nom time est au singulier ici et ne doit pas prendre de S final.
+en: shocked by how good you are   # Erreur : « shocked about your level » · L'adjectif shocked se construit avec by ou at, et le mot level pour parler d'un talent est un calque
+en: they thought they'd won   # Erreur : « they were thinking that they won » · Le verbe d'état think ne s'emploie pas à la forme progressive dans ce contexte.
+en: I act like I'm bad   # Erreur : « I act out like I am bad » · Act out signifie faire un caprice ou mimer ; pour dire faire semblant, on utilise act like.
+en: outright
+en: curled up
+en: to fool sb
+en: to cross
+en: stay sharp
+en: get past
+en: step asside => step aside
+en: such a
+en: to spot
+en: to break out of the box => to think outside the box
+en: my transit card / my bus pass   # Au lieu de « my transport card » · Transport card est un calque du français carte de transport ; transit card ou bus pass sont les termes am
+en: transit card / bus pass   # carte de transport / pass de bus · I couldn't get on the bus because my transit card was inside my wallet.
+en: to misplace   # égarer temporairement · I'm always misplacing my wallet right before leaving the house.
+en: to turn up   # réapparaître / être retrouvé · After searching for a whole week, my wallet finally turned up.
+en: scatterbrained   # tête en l'air · My mom thinks I'm scatterbrained because I'm always losing my stuff.
+en: yesterday I asked my mom   # Erreur : « yesterday I was asking to my mom » · Le verbe ask est transitif direct (sans préposition to) et un marqueur passé précis comme ye
+en: if she had seen my wallet   # Erreur : « if she has seen my keys » · Dans un récit au passé, le discours indirect demande la concordance des temps avec le past perfect (h
+en: I'd been looking for my wallet for a week   # Erreur : « I have looked for my keys for one week » · Une action qui a duré avant un moment passé se traduit par le past perfect continuous 
+en: because I finally found my wallet   # Erreur : « because I have found my wallet » · En anglais américain oral, le prétérit simple est beaucoup plus naturel que le present perfect
+en: a sweet spot

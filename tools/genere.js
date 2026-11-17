@@ -85,7 +85,7 @@ function cmdDoublons(args) {
       list.forEach(x => asked.push([x.l || 'en', x.w]));
       if(!list.length) console.log(C.y(`${a} : aucun mot noté dans l'appli (pending_words vide).`));
     } else if(fs.existsSync(a)) {
-      fs.readFileSync(a, 'utf8').split('\n').map(s => s.trim()).filter(s => s && !s.startsWith('#')).forEach(s => { const m = s.match(/^(es|en|ln|fr)\s*[:\t]\s*(.+)$/); if(m) asked.push([m[1], m[2]]); });
+      fs.readFileSync(a, 'utf8').split('\n').map(s => s.replace(/\s+#.*$/, '').replace(/\s+!.*$/, '').replace(/\s*=>\s*.*$/, '').trim()).filter(s => s && !s.startsWith('#')).forEach(s => { const m = s.match(/^(es|en|ln|fr)\s*[:\t]\s*(.+)$/); if(m) asked.push([m[1], m[2]]); });
     } else { const m = a.match(/^(es|en|ln|fr):(.+)$/); if(m) m[2].split('|').forEach(w => asked.push([m[1], w.trim()])); else console.log(C.y(`ignoré : ${a} (attendu : langue:mot, ou un fichier)`)); }
   }
   if(!asked.length) { console.log('Aucun mot à vérifier. Exemple : node tools/genere.js doublons en:"pay off|hook" es:lujo'); return 1; }
