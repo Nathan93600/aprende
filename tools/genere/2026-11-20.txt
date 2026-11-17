@@ -1,0 +1,75 @@
+# Génère du vendredi 20/11/2026 : mots notés dans la conversation depuis le 14/11.
+# À compléter vendredi avec les mots notés dans l'appli (« + mot ») et les rapports d'oral de la sauvegarde.
+# Les doublons n'ont pas encore été vérifiés : node tools/genere.js doublons tools/genere/2026-11-20.txt
+
+# Anglais : session « family tree » du 14/11 (ChatGPT)
+en: on my dad's side
+en: share the same grandparents
+en: got married multiple times
+en: multiple wives
+en: there are a lot of us
+en: extended family
+en: blended family
+en: get together
+en: keep in touch
+en: become closer
+en: we're spread out all over the world
+en: I'd rather let things happen naturally
+en: back then
+en: at one point
+en: well…
+en: actually…
+en: let me think…
+en: what I mean is…
+
+# Anglais : mots notés du 15 au 16/11
+en: garnish
+en: cut from the same cloth
+en: ruffled
+en: wear down
+en: set up
+en: slumber
+en: spew hate
+en: put it to work
+en: pick up the slack
+en: fetch
+en: run on
+en: pay off
+en: hit plot points
+en: ever since
+en: be off to
+en: to cast
+en: cut through
+en: the other way around
+en: steer
+en: to grieve
+en: burgeoning
+en: nurtured
+en: round them up
+en: shelf
+en: torn apart
+en: scattered
+en: slip
+en: slip off
+en: groove
+en: carved
+en: stitching
+en: stitching thread
+en: hand over
+en: to gather
+en: play the odds
+en: to clutch
+en: cloth
+en: give off
+en: corny
+en: robe
+en: sigil
+en: lock away
+en: at last
+en: memory flashes back
+
+# Espagnol
+es: concursos
+es: belleza
+es: raza
+es: lujo

@@ -39,7 +39,11 @@ Je t'envoie ma sauvegarde (fichier aprende-progres-AAAA-MM-JJ.json) avec le mot 
 La sauvegarde contient aussi les mots que j'ai notés dans l'appli avec le bouton « + mot »
 (pending_words) : ajoute-les à ceux notés ici. Elle contient aussi mes rapports d'oral de la semaine
 (oral_reports) : tiens-en compte pour le bilan et les leçons (erreurs qui reviennent, priorités).
-Commence par `node tools/genere.js doublons <sauvegarde.json>` (et les mots notés dans la conversation,
+D'abord, écris la liste du génère dans tools/genere/AAAA-MM-JJ.txt : une ligne par mot, ceux de la
+sauvegarde ET tous ceux notés dans cette conversation depuis le dernier génère (format : tools/genere/LISEZMOI.md).
+Dis-moi combien de mots elle contient par langue. Aucun mot ne disparaît en silence : un mot que tu
+n'intègres pas reste dans la liste avec « ! raison », et tu me le signales.
+Ensuite `node tools/genere.js doublons <sauvegarde.json>` (et les mots notés dans la conversation,
 sous la forme en:"mot1|mot2") : dis-moi lesquels j'ai déjà, et ne les refais pas.
 Puis tu travailles dans le dépôt et tu fais, pour tous les mots nouveaux :
 a. Les cartes : une session dans JOURNAL_SESSIONS (js/journal.js) datée du jour, avec pour chaque mot
@@ -61,7 +65,11 @@ g. Les voix : `node tools/genere.js voix` ajoute les nouveaux textes à tools/vo
    MP3 avec `node tools/genere.js audio <dossier ou zip>` (il complète audio/manifest.js).
 h. `node tools/genere.js cache` (incrémente CACHE_NAME dans sw.js, sinon mon téléphone garde
    l'ancienne version).
-Avant de pousser, TOUJOURS : `node tools/genere.js pret`. Il vérifie que rien n'a été perdu depuis le
+Avant de pousser, TOUJOURS : `node tools/genere.js pret <sauvegarde.json>`. Il lance aussi
+`complet`, qui contrôle chaque mot de la liste (unité, exemple traduit, fiche, astuce, équivalents C1,
+variété, voix), les nouvelles unités, l'histoire, le bilan, et que les mots notés dans l'appli y sont tous.
+Tu ne pousses que s'il affiche « Génère complet » ou « Données complètes » (voix à venir), et tu me
+recopies sa dernière ligne. Il vérifie que rien n'a été perdu depuis le
 dernier commit (un fichier tronqué, une fiche disparue), le format des données, les voix, le cache,
 l'absence de clé dans le dépôt, puis lance les tests. S'il n'affiche pas « Prêt à pousser », corrige.
 Ne renomme jamais un mot existant (cela remettrait sa carte à zéro) ; corrige seulement sa traduction.

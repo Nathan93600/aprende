@@ -3,6 +3,7 @@
 //
 //   node tools/genere.js doublons <sauvegarde.json>      mots en attente déjà présents dans l'appli
 //   node tools/genere.js doublons en:"pay off" es:lujo   idem, mots donnés à la main
+//   node tools/genere.js complet [liste.txt] [sauvegarde.json]   chaque mot de la liste a-t-il unité, exemple, fiche, voix… ?
 //   node tools/genere.js verif                           format des données, rien de perdu depuis le dernier commit, cache, secrets
 //   node tools/genere.js voix                            met à jour tools/voix_textes.json (textes sans enregistrement, marqués n:1)
 //   node tools/genere.js audio <dossier ou .zip>         range les mp3 reçus dans audio/ et met à jour audio/manifest.js
@@ -16,7 +17,7 @@ const LANGS = ['es', 'en', 'ln'];
 const C = { r: s => `\x1b[31m${s}\x1b[0m`, g: s => `\x1b[32m${s}\x1b[0m`, y: s => `\x1b[33m${s}\x1b[0m`, b: s => `\x1b[1m${s}\x1b[0m` };
 
 // ── Chargement des données, depuis le dossier de travail ou depuis un commit ──
-const DATA_FILES = ['courses/es.js', 'courses/en.js', 'courses/ln.js', 'js/data-es.js', 'js/data-en.js', 'js/data-ln.js', 'js/journal.js', 'js/stories.js', 'js/conjugation.js', 'js/conj-cards.js', 'js/conj-sentences.js', 'audio/manifest.js'];
+const DATA_FILES = ['courses/es.js', 'courses/en.js', 'courses/ln.js', 'js/data-es.js', 'js/data-en.js', 'js/data-ln.js', 'js/en-oral.js', 'js/journal.js', 'js/stories.js', 'js/conjugation.js', 'js/conj-cards.js', 'js/conj-sentences.js', 'audio/manifest.js'];
 function scriptList(read) {
   const html = read('index.html') || '';
   return [...html.matchAll(/<script src="([^"]+)"><\/script>/g)].map(m => m[1]);
@@ -56,6 +57,7 @@ function load(read) {
   D.deck.es = arr(ctx.DATA && ctx.DATA.length ? ctx.DATA : ctx.VOCAB).filter(c => c && c.es);   // DATA = VOCAB sans les doublons de casse
   D.deck.en = arr(ctx.ENGLISH).filter(c => c && c.en);
   D.deck.ln = arr(ctx.LINGALA).filter(c => c && c.ln);
+  D.examples = ctx.ES_EXAMPLES || {}; D.pron = ctx.PRON_DATA || {}; D.week = ctx.CRS_WEEK || {};
   return D;
 }
 const readWork = f => { try { return fs.readFileSync(path.join(ROOT, f), 'utf8'); } catch(e) { return null; } };
@@ -305,8 +307,156 @@ function cmdAudio(args) {
   return 0;
 }
 
-function cmdPret() {
-  const a = cmdVerif();
+// ── Génère complet : chaque mot de la liste a-t-il tout ce qu'il lui faut ? ──
+// La liste (tools/genere/AAAA-MM-JJ.txt) est le contrat du génère : une ligne par mot à intégrer.
+//   en: pay off                              mot à intégrer
+//   en: stitching thread => thread           noté sous une forme, intégré sous une autre
+//   en: well…  ! trop banal                  volontairement laissé de côté (raison obligatoire)
+//   fr: empêcher de => es: impedir ; en: prevent from      mot noté en français : une forme par langue
+const readAt = ref => f => { try { return cp.execSync(`git show ${ref}:${JSON.stringify(f).slice(1, -1)}`, { cwd: ROOT, encoding: 'utf8', maxBuffer: 64 << 20, stdio: ['ignore', 'pipe', 'ignore'] }); } catch(e) { return null; } };
+function parseListe(file) {
+  const items = [], errs = [];
+  fs.readFileSync(file, 'utf8').split('\n').forEach((raw, n) => {
+    const line = raw.replace(/\s+#.*$/, '').trim(); if(!line || line.startsWith('#')) return;
+    const m = line.match(/^(es|en|ln|fr)\s*:\s*(.+)$/); if(!m) { errs.push(`ligne ${n + 1} illisible : ${raw.trim()}`); return; }
+    let [, l, rest] = m, skip = null;
+    const sk = rest.match(/^(.*?)\s+!\s*(.*)$/); if(sk) { rest = sk[1]; skip = sk[2].trim(); if(!skip) errs.push(`ligne ${n + 1} : « ! » sans raison`); }
+    const [src, dst] = rest.split(/\s*=>\s*/).map(x => x.trim());
+    if(skip !== null) { items.push({ l, src, skip }); return; }
+    if(l === 'fr') {
+      if(!dst) { errs.push(`ligne ${n + 1} : « ${src} » est en français, il faut « => es: … ; en: … »`); return; }
+      const t = dst.split(/\s*;\s*/).map(x => x.match(/^(es|en|ln)\s*:\s*(.+)$/)).filter(Boolean);
+      if(!t.length) { errs.push(`ligne ${n + 1} : cible illisible après « => »`); return; }
+      t.forEach(x => items.push({ l: x[1], src, srcLang: 'fr', word: x[2].trim() }));
+    } else items.push({ l, src, word: dst || src });
+  });
+  return { items, errs };
+}
+function cmdComplet(args) {
+  const opt = k => { const i = args.indexOf(k); return i >= 0 ? args.splice(i, 2)[1] : null; };
+  let since = opt('--depuis');
+  const dir = path.join(ROOT, 'tools', 'genere');
+  let file = args.find(a => /\.txt$/.test(a) && fs.existsSync(a));
+  const backup = args.find(a => /\.json$/.test(a) && fs.existsSync(a));
+  if(!file && fs.existsSync(dir)) { const all = fs.readdirSync(dir).filter(f => /^\d{4}-\d{2}-\d{2}\.txt$/.test(f)).sort(); if(all.length) file = path.join(dir, all[all.length - 1]); }
+  if(!file) { console.log('Aucune liste. Crée tools/genere/AAAA-MM-JJ.txt (une ligne par mot : « en: pay off »), puis relance.'); return 1; }
+  const rel = path.relative(ROOT, path.resolve(file)).replace(/\\/g, '/');
+  if(!since) {   // état de référence : juste avant ce génère
+    let dirty = ''; try { dirty = cp.execSync(`git status --porcelain -- ${JSON.stringify(rel)}`, { cwd: ROOT, encoding: 'utf8' }); } catch(e) {}
+    if(dirty.trim()) since = 'HEAD';
+    else { let first = ''; try { first = cp.execSync(`git log --diff-filter=A --format=%H -- ${JSON.stringify(rel)}`, { cwd: ROOT, encoding: 'utf8' }).trim().split('\n').pop(); } catch(e) {} since = first ? first + '^' : 'HEAD'; }
+  }
+  const errs = [], warns = [], voice = [];
+  const ko = m => { errs.push(m); console.log(C.r('  ✗ ') + m); }, wn = m => { warns.push(m); console.log(C.y('  ! ') + m); }, ok = m => console.log(C.g('  ✓ ') + m);
+  console.log(C.b(`Génère : ${rel}`) + `  (comparé à ${since.slice(0, 10)})`);
+  const { items, errs: perr } = parseListe(file); perr.forEach(ko);
+  const D = load(readWork), B = load(readAt(since)), KB = known(B);
+  const isS = x => typeof x === 'string' && x.trim().length > 0;
+
+  // 1. Rien d'oublié : tous les mots notés dans l'appli sont dans la liste
+  if(backup) {
+    const j = JSON.parse(fs.readFileSync(backup, 'utf8')), pend = (j.data || j).pending_words || [];
+    const listed = new Set(items.map(x => (x.srcLang || x.l) + ':' + norm(x.src)));
+    const missing = pend.filter(x => !listed.has(x.l + ':' + norm(x.w)));
+    missing.length ? missing.forEach(x => ko(`noté dans l'appli mais absent de la liste : ${x.l}: ${x.w}`)) : ok(`les ${pend.length} mots notés dans l'appli sont tous dans la liste`);
+  } else wn('pas de sauvegarde donnée : impossible de vérifier que les mots notés dans l\'appli (« + mot ») sont tous dans la liste');
+  const seen = new Set();
+  items.forEach(x => { if(x.skip !== undefined && x.skip !== null) return; const id = x.l + ':' + norm(x.word); if(seen.has(id)) wn(`deux fois dans la liste : ${x.l}: ${x.word}`); seen.add(id); });
+
+  // 2. Chaque mot : unité, traduction, exemple, fiche, voix
+  console.log(C.b('\nMot par mot'));
+  const idx = {};
+  for(const l of LANGS) {
+    const m = idx[l] = new Map();
+    (D.course[l].units || []).forEach((u, i) => (u.w || []).forEach(w => { if(isS(w[0]) && !m.has(norm(w[0]))) m.set(norm(w[0]), { unit: i, u, w }); }));
+  }
+  const todo = items.filter(x => x.skip === undefined || x.skip === null), newWords = { es: [], en: [], ln: [] };
+  let full = 0;
+  for(const it of todo) {
+    const l = it.l, n = norm(it.word), miss = [], soft = [];
+    const hit = idx[l].get(n), deck = D.deck[l].find(c => norm(c[l]) === n);
+    const key = hit ? hit.w[0] : deck ? deck[l] : it.word;
+    const was = KB[l].get(n);
+    if(!hit) miss.push(deck ? 'dans le paquet mais dans aucune unité (pas de leçon)' : 'absent de l\'appli (ni unité ni paquet)');
+    const fr = hit ? hit.w[1] : deck && deck.fr, ex = hit ? hit.w[2] : (l === 'es' ? (D.examples[key] || [])[0] : l === 'en' ? ((deck && deck.say) || (D.pron[key] || [])[0]) : deck && deck.ex_ln);
+    const exFr = hit ? hit.w[3] : (l === 'es' ? (D.examples[key] || [])[1] : l === 'ln' ? deck && deck.ex_fr : 'n/a');
+    if(hit || deck) {
+      if(!isS(fr)) miss.push('traduction');
+      if(!isS(ex)) miss.push('phrase d\'exemple'); else if(!isS(exFr)) miss.push('traduction de l\'exemple');
+      const f = D.fiches[l][key] || Object.entries(D.fiches[l]).filter(([k]) => norm(k) === n).map(x => x[1])[0];
+      if(!f) miss.push('fiche');
+      else {
+        if(!isS(f.tip)) miss.push('astuce « Pour retenir »');
+        if(l === 'en' && !(Array.isArray(f.alt) && f.alt.length)) miss.push('équivalents C1 (fiche.alt)');
+        if(l === 'es' && !['es', 'latam', 'gen'].includes(f.reg)) miss.push('variété (fiche.reg : es, latam ou gen)');
+        if(l === 'ln' && !isS(f.reg)) miss.push('variété (fiche.reg)');
+        if(!(Array.isArray(f.err) && f.err.length)) soft.push('fiche sans piège (err)');
+      }
+      if(l === 'en' && !D.pron[key]) soft.push('pas de phrases de prononciation (PRON_DATA)');
+      if(l !== 'ln') { const m = D.audio[l] || {}; const lack = [[key, 'mot'], [ex, 'exemple']].filter(([t]) => isS(t) && !m[audioKey(t)]).map(x => x[1]); if(lack.length) voice.push(`${l}: ${key} (${lack.join(' + ')})`); }
+      if(!was) newWords[l].push(key);
+    }
+    const label = `${l}  ${it.word}${it.src !== it.word ? `  (noté : ${it.src})` : ''}${was ? '  [déjà là avant : ' + was.where + ']' : ''}${hit ? `  → unité ${hit.unit + 1}` : ''}`;
+    if(was && !hit) ko(`${label} : ce mot était déjà dans l'appli avant ce génère. Retire-le de la liste ou écris « ${l}: ${it.src} ! déjà dans l'appli »`);
+    else if(miss.length) ko(`${label} : manque ${miss.join(', ')}`);
+    else { full++; if(soft.length) wn(`${label} : ${soft.join(' ; ')}`); else if(it.src !== it.word) console.log(`  · ${label}`); }
+  }
+  if(full) ok(`${full} mot(s) sur ${todo.length} complets (unité, traduction, exemple, fiche${todo.some(x => x.l === 'en') ? ', équivalents C1' : ''})`);
+  const skipped = items.filter(x => x.skip !== undefined && x.skip !== null);
+  if(skipped.length) { console.log(C.b('\nLaissés de côté (à signaler à l\'utilisateur)')); skipped.forEach(x => console.log(`  – ${x.l}: ${x.src} : ${x.skip}`)); }
+
+  // 3. Le reste du génère
+  console.log(C.b('\nAutour des mots'));
+  for(const l of LANGS) {
+    const nb = (B.course[l].units || []).length, fresh = (D.course[l].units || []).slice(nb), nw = newWords[l];
+    if(!nw.length) continue;
+    if(!fresh.length) ko(`${l} : ${nw.length} mots nouveaux mais aucune nouvelle unité`);
+    fresh.forEach((u, i) => {
+      const name = `${l} unité ${nb + i + 1} « ${u.t} »`;
+      if(!u.free) ko(`${name} : il manque free: true (elle serait verrouillée)`);
+      if(!isS(u.t) || !isS(u.e)) ko(`${name} : titre ou emoji manquant`);
+      if(!u.g || !(Array.isArray(u.g) ? u.g.length : Object.keys(u.g).length)) wn(`${name} : pas de guide (g)`);
+      if((u.w || []).length < 4) wn(`${name} : seulement ${(u.w || []).length} mots (une leçon en demande au moins 4)`);
+      if((u.w || []).length > 14) wn(`${name} : ${(u.w || []).length} mots, c'est long : coupe en deux thèmes`);
+    });
+    if(fresh.length) ok(`${l} : ${fresh.length} nouvelle(s) unité(s), ${fresh.reduce((a, u) => a + (u.w || []).length, 0)} mots`);
+    if(l !== 'ln' || D.stories[l].length) {
+      const ids = new Set(B.stories[l].map(s => s && s.id)), ns = B.stories[l].length ? D.stories[l].filter(s => s && !ids.has(s.id)) : [];
+      if(nw.length >= 5 && !ns.length) ko(`${l} : aucune nouvelle histoire pour réemployer les ${nw.length} mots`);
+      ns.forEach(s => { const txt = norm(JSON.stringify(s.steps)), used = nw.filter(w => txt.includes(norm(w))); (used.length >= Math.min(3, nw.length) ? ok : wn)(`${l} histoire « ${s.title} » : réemploie ${used.length} des ${nw.length} mots nouveaux`); });
+    }
+  }
+  const wk = D.week || {}, wkB = B.week || {};
+  if(JSON.stringify(wk) === JSON.stringify(wkB)) ko('le bilan de la semaine (CRS_WEEK) n\'a pas été mis à jour');
+  else { const m = String(wk.date || '').match(/^(\d{2})\/(\d{2})\/(\d{4})$/), age = m ? (Date.now() - new Date(+m[3], +m[2] - 1, +m[1])) / 864e5 : 99; (age >= -1 && age < 8 ? ok : ko)(`bilan de la semaine daté du ${wk.date}`); }
+  const dates = D.journal.map(s => s.date), jb = new Set(B.journal.map(s => s.date));
+  if(!dates.some(d => !jb.has(d))) wn('pas de nouvelle session dans le journal (JOURNAL_SESSIONS) : normal si tous les mots sont dans des unités');
+  let jobs = []; try { jobs = JSON.parse(readWork('tools/voix_textes.json') || '[]'); } catch(e) {}
+  const pendingVoice = jobs.filter(j => j.n).length;
+  if(voice.length) { console.log(C.y(`  ! voix : ${voice.length} mot(s) sans enregistrement (mot ou exemple)`)); voice.slice(0, 8).forEach(v => console.log('      ' + v)); if(!pendingVoice) ko('ces textes ne sont pas dans tools/voix_textes.json : lance « node tools/genere.js voix »'); }
+  else ok('chaque mot et chaque exemple a sa voix');
+
+  console.log('\n' + (errs.length ? C.r(`Génère incomplet : ${errs.length} point(s) à corriger.`) : voice.length ? C.y(`Données complètes. Reste les voix : ${pendingVoice} texte(s) à enregistrer sur le PC, puis « audio » et relancer.`) : C.g('Génère complet.')) + (warns.length ? C.y(` ${warns.length} avertissement(s).`) : ''));
+  return errs.length ? 1 : 0;
+}
+// Un génère est-il en cours ? (liste nouvelle ou modifiée dans tools/genere/)
+function genereEnCours() {
+  try {   // liste récente (± 7 jours) et données de cours modifiées : c'est un génère
+    const dir = path.join(ROOT, 'tools', 'genere'), all = fs.existsSync(dir) ? fs.readdirSync(dir).filter(f => /^\d{4}-\d{2}-\d{2}\.txt$/.test(f)).sort() : [];
+    const last = all[all.length - 1];
+    if(last && Math.abs(Date.now() - new Date(last.slice(0, 10) + 'T12:00:00')) < 8 * 864e5 && cp.execSync('git status --porcelain -- courses js/journal.js js/stories.js js/data-es.js js/data-en.js js/data-ln.js', { cwd: ROOT, encoding: 'utf8' }).trim()) return path.join(dir, last);
+  } catch(e) {}
+  try { const out = cp.execSync('git status --porcelain -- tools/genere', { cwd: ROOT, encoding: 'utf8' }).trim().split('\n').filter(Boolean).map(l => l.slice(3).trim()).filter(f => /\d{4}-\d{2}-\d{2}\.txt$/.test(f)).sort(); return out.length ? path.join(ROOT, out[out.length - 1]) : null; } catch(e) { return null; }
+}
+
+function cmdPret(args) {
+  let a = cmdVerif();
+  const liste = (args || []).find(x => /\.txt$/.test(x)) || genereEnCours();
+  if(liste) { console.log(''); a = cmdComplet([liste, ...(args || []).filter(x => /\.json$/.test(x))]) || a; }
+  const t = cp.spawnSync(process.execPath, [path.join(ROOT, 'tests', 'genere.js')], { cwd: ROOT, encoding: 'utf8' });
+  const tSum = ((t.stdout || '').match(/\d+ réussi\(s\), \d+ échoué\(s\)/) || [''])[0];
+  console.log(C.b('\nTests de l\'outil du génère') + '\n' + (t.status ? C.r((t.stdout || '') + (t.stderr || '')) : C.g('  ✓ ' + tSum)));
+  if(t.status) a = 1;
   console.log(C.b('\nTests automatiques'));
   const r = cp.spawnSync(process.execPath, [path.join(ROOT, 'tests', 'run.js')], { cwd: ROOT, encoding: 'utf8', env: process.env, maxBuffer: 64 << 20 });
   const out = (r.stdout || '') + (r.stderr || ''), fails = out.split('\n').filter(l => /✗/.test(l)), sum = (out.match(/\d+ réussi\(s\), \d+ échoué\(s\)/) || [])[0];
@@ -318,6 +468,6 @@ function cmdPret() {
 }
 
 const [cmd, ...args] = process.argv.slice(2);
-const run = { doublons: cmdDoublons, verif: cmdVerif, cache: cmdCache, voix: cmdVoix, audio: cmdAudio, pret: cmdPret }[cmd];
+const run = { doublons: cmdDoublons, verif: cmdVerif, complet: cmdComplet, cache: cmdCache, voix: cmdVoix, audio: cmdAudio, pret: cmdPret }[cmd];
 if(!run) { console.log(fs.readFileSync(__filename, 'utf8').split('\n').slice(1, 13).map(l => l.replace(/^\/\/ ?/, '')).join('\n')); process.exit(cmd ? 1 : 0); }
 Promise.resolve(run(args)).then(c => process.exit(c || 0)).catch(e => { console.error(C.r(e.stack || e)); process.exit(1); });

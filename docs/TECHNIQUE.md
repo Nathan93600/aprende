@@ -350,6 +350,7 @@ entrées dans `AUDIO_MAP`. Coût Google Chirp 3 HD : 1 million de caractères gr
 | Commande | Rôle |
 |---|---|
 | `node tools/genere.js doublons sauvegarde.json` | pour chaque mot noté : *nouveau*, *DÉJÀ* (avec l'endroit) ou *proche*. Accepte aussi `en:"pay off\|hook" es:lujo` ou un fichier texte `langue: mot` |
+| `node tools/genere.js complet [liste] [sauvegarde.json]` | **le contrôle du génère** : pour chaque mot de la liste `tools/genere/AAAA-MM-JJ.txt`, il faut une unité, une traduction, un exemple traduit, une fiche avec astuce, les équivalents C1 (anglais), la variété (espagnol, lingala), les voix. Autour : unités `free: true`, histoire qui réemploie les mots, `CRS_WEEK` daté, mots notés dans l'appli tous dans la liste. Format de la liste : `tools/genere/LISEZMOI.md` |
 | `node tools/genere.js verif` | les fichiers se chargent ; **aucun compteur ne baisse depuis le dernier commit** (mots, fiches, unités, histoires, voix : un fichier tronqué est vu tout de suite) ; aucun mot renommé ; format des unités, fiches, histoires ; chaque voix a son fichier ; `sw.js` à jour ; aucune clé dans le dépôt |
 | `node tools/genere.js voix` | liste ce que l'appli peut lire et qui n'a pas d'enregistrement, et l'ajoute à `tools/voix_textes.json` (marqué `n:1`) |
 | `node tools/genere.js audio <dossier ou .zip>` | range les mp3 reçus dans `audio/<langue>/` et complète `audio/manifest.js` |
@@ -358,7 +359,10 @@ entrées dans `AUDIO_MAP`. Coût Google Chirp 3 HD : 1 million de caractères gr
 
 `voix` et `pret` demandent Playwright (`NODE_PATH=$(npm root -g)`), les autres commandes rien.
 
-Ordre type : `doublons` → rédaction des données → `voix` → (voix générées sur le PC) → `audio` →
+`pret` lance `complet` tout seul dès qu'une liste récente existe et que les cours ont changé, ainsi que
+`tests/genere.js` (les tests de l'outil lui-même).
+
+Ordre type : écrire la liste → `doublons` → rédaction des données → `complet` → `voix` → (voix générées sur le PC) → `audio` →
 `cache` → `pret` → `git push`.
 
 ---
