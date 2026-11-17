@@ -266,6 +266,34 @@ const AUDIT = (min) => {
       ok('l\'atelier ne change ni les cartes ni l\'historique', r.untouched && p.errs.length === 0, p.errs.join(' | '));
       await p.close();
     }
+    if(want('succes')) {
+      console.log('\nSuccès anglais et espagnol');
+      const p = await open(browser, base);
+      const r = await p.evaluate(() => {
+        const o = {}, DAY = 864e5, now = Date.now(); localStorage.removeItem('badges_earned');
+        const ids = BADGES_DEF.map(b => b.id); o.unique = new Set(ids).size === ids.length;
+        o.groups = ['en', 'es'].map(g => BADGES_DEF.filter(b => b.g === g).length);
+        o.allCheck = BADGES_DEF.every(b => typeof b.check === 'function');
+        const data = srsLoad(), en = Object.keys(data).filter(k => k.startsWith('en:')).slice(0, 25), log = [];
+        en.forEach(k => Object.assign(data[k], { reps: 3, st: 'review', interval: 25 }));
+        srsSave(data);
+        for(let i = 0; i < 160; i++) log.push([en[i % 25], now - 3600e3, 2, 2]);
+        ['presente', 'preterito', 'perfecto', 'imperfecto', 'futuro', 'subjuntivo', 'imperativo', 'condicional', 'subj_imperfecto'].forEach(t => log.push(['conj:hablar|' + t, now, 2, 0]));
+        log.push(['prod:en:x', now, 0, 0]);
+        localStorage.setItem('srs_revlog', JSON.stringify(log)); try { srsRevlogInvalidateCache(); } catch(e) {}
+        const got = badgeCheck().map(b => b.id);
+        o.got = ['en_mature25', 'en_day150', 'es_tenses'].every(x => got.includes(x)) && !got.includes('en_mature100') && !got.includes('en_prod50') && !got.includes('es_conj50');
+        o.prog = BADGES_DEF.find(b => b.id === 'en_mature100').p();
+        o.again = badgeCheck().length === 0;   // déjà obtenus : pas de seconde notification
+        openBadges(); o.screen = document.querySelectorAll('.badge-sec').length === 3 && !!document.querySelector('.badge-item .bprog');
+        o.saved = buildProgressExport().badges_earned.includes('en_mature25');
+        return o;
+      });
+      ok('identifiants uniques, des succès anglais et espagnols', r.unique && r.groups[0] >= 15 && r.groups[1] >= 15 && r.allCheck, JSON.stringify(r.groups));
+      ok('ils se débloquent sur les vraies données, une seule fois', r.got && r.again, JSON.stringify(r));
+      ok('progression affichée, écran par langue, succès dans la sauvegarde', JSON.stringify(r.prog) === JSON.stringify([25, 100]) && r.screen && r.saved && p.errs.length === 0, JSON.stringify(r.prog) + p.errs.join(' | '));
+      await p.close();
+    }
     if(want('c1')) {
       console.log('\nProgramme C1 dans le tableau de bord');
       const p = await open(browser, base);

@@ -256,6 +256,7 @@ function ctFinish() {
   const pct = total ? Math.round(ct.correct / total * 100) : 0;
   const stars = pct >= 90 ? 3 : pct >= 70 ? 2 : pct >= 50 ? 1 : 0;
   ctSetStars(ct.tense, stars);
+  if(typeof badgeSoon === 'function') badgeSoon();
   const xpGain = ct.correct * 8 + ct.maxStreak * 5, goldGain = Math.floor(ct.correct * 2);
   if(typeof addXP === 'function') addXP('es', xpGain);
   if(typeof rpg !== 'undefined' && rpg) { rpgAddGold(goldGain); rpgLog(`Conjugaison ${ct.tenseInfo.n} : ${pct}% (${ctStarStr(stars)})`); rpgSave(); }

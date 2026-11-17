@@ -115,7 +115,7 @@ function crsEsc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => 
 function crsJ(k, def) { try { const v = JSON.parse(localStorage.getItem(k)); return v == null ? def : v; } catch(e) { return def; } }
 function crsSetJ(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch(e) { console.warn('[Aprende] sauvegarde impossible', k, e); } }
 function crsDone(lang, u) { const p = crsJ('crs_prog', {}); return (p[lang] && p[lang][u]) || 0; }
-function crsSetDone(lang, u, n) { const p = crsJ('crs_prog', {}); p[lang] = p[lang] || {}; if((p[lang][u] || 0) < n) { if(lang === 'en' && typeof c1Mark === 'function') { const l = (c1Log()[c1Day()] || {}); c1Mark('unit', (l.unit || 0) + (n - (p[lang][u] || 0))); } p[lang][u] = n; } crsSetJ('crs_prog', p); }
+function crsSetDone(lang, u, n) { if(typeof badgeSoon === 'function') badgeSoon(); const p = crsJ('crs_prog', {}); p[lang] = p[lang] || {}; if((p[lang][u] || 0) < n) { if(lang === 'en' && typeof c1Mark === 'function') { const l = (c1Log()[c1Day()] || {}); c1Mark('unit', (l.unit || 0) + (n - (p[lang][u] || 0))); } p[lang][u] = n; } crsSetJ('crs_prog', p); }
 function crsCurrent(lang) {
   const U = COURSES[lang].units;
   for(let u = 0; u < U.length; u++) { if(U[u].free) continue; const d = crsDone(lang, u); if(d < CRS_NODES) return { u, n: d }; }

@@ -38,6 +38,9 @@ function buildProgressExport() {
     xc_ecoute_per_day: xcPerDay('ecoute'),
     c1_log: JSON.parse(localStorage.getItem('c1_log') || '{}'),
     oral_reports: orLoad(),
+    badges_earned: crsJ('badges_earned', []),
+    stories_done: crsJ('stories_done', []),
+    ct_stars: crsJ('ct_stars', {}),
     pending_words: pwLoad(),
     srs_algo: 'fsrs6',
     crs_prog: JSON.parse(localStorage.getItem('crs_prog') || '{}'),
@@ -279,6 +282,8 @@ function importProgress(file) {
       if(data.extra_srs) { localStorage.setItem('extra_srs', JSON.stringify(data.extra_srs)); xcInvalidateCache(); }
       ['xc_prod_per_day', 'xc_ecoute_per_day'].forEach(k => { if(data[k] !== undefined) localStorage.setItem(k, String(data[k])); });
       if(data.c1_log) localStorage.setItem('c1_log', JSON.stringify(data.c1_log));
+      ['badges_earned', 'stories_done'].forEach(k => { if(Array.isArray(data[k])) localStorage.setItem(k, JSON.stringify(data[k])); });
+      if(data.ct_stars && typeof data.ct_stars === 'object') localStorage.setItem('ct_stars', JSON.stringify(data.ct_stars));
       if(Array.isArray(data.oral_reports)) localStorage.setItem('oral_reports', JSON.stringify(data.oral_reports));
       if(data.conj_ustedes !== undefined) localStorage.setItem('conj_ustedes', String(data.conj_ustedes));
       if(Array.isArray(data.pending_words)) { localStorage.setItem('pending_words', JSON.stringify(data.pending_words)); pwBadge(); }

@@ -76,6 +76,7 @@ function orImport(keepOnly) {
   orSave(list);
   // la conversation du jour est cochée dans le programme C1
   try { if(orState.lang === 'en') { const L = c1Log(); L[day] = L[day] || {}; L[day].talk = true; crsSetJ('c1_log', L); c1Render(); } } catch(e) {}
+  if(typeof badgeSoon === 'function') badgeSoon();
   orState.step = 'done'; orState.added = added; orState.dup = dup; orRender();
   try { haptic('light'); } catch(e) {}
 }

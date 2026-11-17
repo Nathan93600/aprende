@@ -154,6 +154,14 @@ l'endroit où on l'a vu. Tout marche hors connexion.
 - Elle part avec la sauvegarde du vendredi (bouton « génère ») ; les mots la quittent d'eux-mêmes
   une fois arrivés dans l'appli.
 
+## Badges et succès
+
+61 succès, rangés en trois sections : Général, Anglais, Espagnol. Ceux par langue suivent les mots
+acquis, les révisions, les unités, les histoires, la rétention, les cartes de production et d'écoute,
+les rapports d'oral et le programme C1 (anglais), la conjugaison et l'Atelier (espagnol). Les succès
+pas encore obtenus montrent une barre de progression ; ils se vérifient tout seuls après une révision,
+une leçon, une partie de l'Atelier ou un import de rapport.
+
 ## 6. Jeux
 
 En espagnol, l'onglet montre d'abord les jeux où l'on produit le mot (Frappe le mot, Survie, Wordle,

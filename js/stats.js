@@ -544,6 +544,7 @@ function srsGrade(grade) {
   if(top) { top.classList.remove('fx-flip', 'fx-pop', 'fx-rise'); top.classList.add('swipe-out', grade === 0 ? 'swipe-left' : 'swipe-right'); }
   document.getElementById('srs-grade-area').classList.add('fx-leave');
   srsState.sessionDone = (srsState.sessionDone || 0) + 1;
+  if(typeof badgeSoon === 'function') badgeSoon();
   srsState.fxRise = true;
   addXP(grade === 0 ? 2 : grade * 5);
   setTimeout(() => { document.getElementById('srs-grade-area').classList.remove('fx-leave'); srsRefresh(); }, 320);

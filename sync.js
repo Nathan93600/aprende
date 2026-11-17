@@ -91,7 +91,7 @@ const DOC_MAP = {
     'srs_data', 'es_xp', 'ln_xp', 'en_xp', 'score', 'streak',
     'mastered', 'es_mastered', 'ln_mastered', 'en_mastered',
     'aura_map', 'srs_revlog', 'pron_srs', 'grammar_srs', 'rpg',
-    'srs_new_per_day', 'badge_dg_count', 'conj_srs', 'conj_per_day', 'conj_ustedes', 'pending_words', 'extra_srs', 'xc_prod_per_day', 'xc_ecoute_per_day', 'c1_log', 'oral_reports'
+    'srs_new_per_day', 'badge_dg_count', 'conj_srs', 'conj_per_day', 'conj_ustedes', 'pending_words', 'extra_srs', 'xc_prod_per_day', 'xc_ecoute_per_day', 'c1_log', 'oral_reports', 'badges_earned', 'stories_done', 'ct_stars'
   ],
   courses: [
     'crs_prog', 'crs_added', 'crs_resume'
@@ -550,7 +550,7 @@ async function syncMigrateFromLocal(uid) {
   const keysToMigrate = [
     'srs_data', 'es_xp', 'ln_xp', 'en_xp', 'score', 'streak',
     'mastered', 'es_mastered', 'ln_mastered', 'en_mastered',
-    'aura_map', 'srs_revlog', 'pron_srs', 'grammar_srs', 'conj_srs', 'conj_per_day', 'conj_ustedes', 'pending_words', 'extra_srs', 'xc_prod_per_day', 'xc_ecoute_per_day', 'c1_log', 'oral_reports',
+    'aura_map', 'srs_revlog', 'pron_srs', 'grammar_srs', 'conj_srs', 'conj_per_day', 'conj_ustedes', 'pending_words', 'extra_srs', 'xc_prod_per_day', 'xc_ecoute_per_day', 'c1_log', 'oral_reports', 'badges_earned', 'stories_done', 'ct_stars',
     'crs_prog', 'crs_added', 'rpg', 'srs_new_per_day',
     'aprende_sfx', 'aprende_vibe', 'aprende_notif',
     'daily_goal', 'desktop_mode', 'crs_resume', 'badge_dg_count'

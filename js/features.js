@@ -241,29 +241,123 @@ const BADGES_DEF = [
   { id: 'srs_ln100', e: '🇨🇩', n: 'Lingaliste', d: '100 révisions en lingala', check: () => srsRevlogLoad().filter(r => r[0].startsWith('ln:')).length >= 100 },
   { id: 'srs_en100', e: '🇬🇧', n: 'Angliciste', d: '100 révisions en anglais', check: () => srsRevlogLoad().filter(r => r[0].startsWith('en:')).length >= 100 },
 ];
+// ── Succès par langue (anglais, espagnol) ──
+// p() renvoie [où j'en suis, objectif] : sert à la fois au test et à la barre de progression.
+const BADGE_GROUPS = [['gen', '🏅 Général'], ['en', '🇬🇧 Anglais'], ['es', '🇪🇸 Espagnol']];
+let _bc = null;   // données lues une seule fois par vérification
+function bcData() {
+  if(_bc) return _bc;
+  const data = srsLoad(), log = srsRevlogLoad(), now = Date.now(), DAY = 864e5, d = { now };
+  for(const l of ['en', 'es']) {
+    const o = d[l] = { mature: 0, rev: 0, units: 0, unitsAll: 0, ret: null, ret30n: 0, prodOk: 0, ecouteOk: 0, maxIv: 0 };
+    for(const k in data) if(k.startsWith(l + ':')) { const c = data[k]; if(c.reps && (c.interval || 0) >= 21) o.mature++; if((c.interval || 0) > o.maxIv) o.maxIv = c.interval || 0; }
+    try { const U = COURSES[l].units; o.unitsAll = U.length; U.forEach((u, i) => { if(crsDone(l, i) >= CRS_NODES) o.units++; }); } catch(e) {}
+  }
+  let conjOk = 0; const conjTenses = new Set();
+  const r30 = { en: [0, 0], es: [0, 0] }, since = now - 30 * DAY, days = {};
+  for(const r of log) {
+    const k = r[0], ok = r[2] > 0;
+    if(k.startsWith('en:') || k.startsWith('es:')) {
+      const l = k.slice(0, 2); d[l].rev++;
+      if(r[3] === 2 && r[1] >= since) { r30[l][0]++; if(ok) r30[l][1]++; }
+      if(r[1] >= now - 60 * DAY) { const day = new Date(r[1]).toDateString(); (days[l] = days[l] || {})[day] = ((days[l] || {})[day] || 0) + 1; }
+    } else if(k.startsWith('conj:')) { if(ok) { conjOk++; conjTenses.add(k.split('|')[1]); } }
+    else if(/^(prod|ecoute):/.test(k) && ok) { const p = k.split(':'); if(d[p[1]]) d[p[1]][p[0] + 'Ok']++; }
+  }
+  for(const l of ['en', 'es']) { d[l].ret = r30[l][0] >= 200 ? Math.round(100 * r30[l][1] / r30[l][0]) : null; d[l].ret30n = r30[l][0]; d[l].bigDay = Math.max(0, ...Object.values(days[l] || {})); }
+  d.conjOk = conjOk; d.conjTenses = conjTenses.size;
+  const stars = (typeof ctGetStars === 'function' && ctGetStars()) || {}, tens = (typeof CONJ_TENSES !== 'undefined' ? CONJ_TENSES : []);
+  d.atelier3 = Object.values(stars).filter(x => x >= 3).length; d.atelierAll = tens.filter(t => (stars[t] || 0) >= 1).length; d.atelierTot = tens.length;
+  const rep = typeof orLoad === 'function' ? orLoad() : [];
+  d.reports = rep.filter(r => r.lang === 'en').length; d.reportsC1 = rep.some(r => r.lang === 'en' && /C1|C2/i.test(r.level || ''));
+  d.reportsSrc = new Set(rep.filter(r => r.lang === 'en').map(r => r.src).filter(Boolean)).size;
+  // programme C1 : une semaine du programme entièrement cochée (7 jours complets)
+  d.c1Week = 0;
+  try { const L = c1Log(), start = new Date(C1_PLAN.start + 'T00:00:00').getTime();
+    for(let w = 0; w < C1_PLAN.weeks.length; w++) { let n = 0; for(let i = 0; i < 7; i++) { const x = L[c1Day(new Date(start + (w * 7 + i) * DAY))]; if(x && x.done) n++; } d.c1Week = Math.max(d.c1Week, n); } } catch(e) {}
+  const sd = crsJ('stories_done', []), st = l => { try { const S = STORIES[l]; return (Array.isArray(S) ? S : Object.values(S || {})).filter(Boolean).length; } catch(e) { return 0; } };
+  for(const l of ['en', 'es']) { d[l].stories = sd.filter(k => k.startsWith(l + '_')).length; d[l].storiesAll = st(l); }
+  return (_bc = d);
+}
+const bcP = (f, goal) => () => { const v = f(bcData()); return [Math.min(v, goal), goal]; };
+const bcAll = (f, g) => () => { const d = bcData(), v = f(d), t = g(d); return [Math.min(v, t), t]; };
+BADGES_DEF.push(
+  // 🇬🇧 Anglais
+  { g: 'en', id: 'en_mature25', e: '🌿', n: 'Racines', d: '25 mots anglais acquis (révision à 21 jours ou plus)', p: bcP(d => d.en.mature, 25) },
+  { g: 'en', id: 'en_mature100', e: '🌳', n: 'Vocabulaire solide', d: '100 mots anglais acquis', p: bcP(d => d.en.mature, 100) },
+  { g: 'en', id: 'en_mature300', e: '🗽', n: 'New Yorkais', d: '300 mots anglais acquis', p: bcP(d => d.en.mature, 300) },
+  { g: 'en', id: 'en_mature690', e: '🏆', n: 'Vocabulaire C1', d: '690 mots anglais acquis : la cible du programme', p: bcP(d => d.en.mature, 690) },
+  { g: 'en', id: 'en_rev500', e: '🔁', n: 'Endurant', d: '500 révisions en anglais', p: bcP(d => d.en.rev, 500) },
+  { g: 'en', id: 'en_rev2500', e: '🏃', n: 'Marathonien', d: '2 500 révisions en anglais', p: bcP(d => d.en.rev, 2500) },
+  { g: 'en', id: 'en_day150', e: '⚡', n: 'Grosse journée', d: '150 révisions d\'anglais en un jour', p: bcP(d => d.en.bigDay, 150) },
+  { g: 'en', id: 'en_units10', e: '🧭', n: 'Explorateur', d: '10 unités anglaises terminées', p: bcP(d => d.en.units, 10) },
+  { g: 'en', id: 'en_unitsAll', e: '🎓', n: 'Parcours bouclé', d: 'Toutes les unités anglaises terminées', p: bcAll(d => d.en.units, d => d.en.unitsAll) },
+  { g: 'en', id: 'en_stories', e: '🎬', n: 'Scénariste', d: 'Toutes les histoires anglaises terminées', p: bcAll(d => d.en.stories, d => d.en.storiesAll) },
+  { g: 'en', id: 'en_ret90', e: '🎯', n: 'Mémoire d\'éléphant', d: '90 % de rétention en anglais sur 30 jours (200 révisions au moins)', p: () => { const d = bcData().en; return [d.ret != null && d.ret >= 90 ? 1 : 0, 1]; }, info: () => { const d = bcData().en; return d.ret == null ? `${d.ret30n}/200 révisions` : `${d.ret} %`; } },
+  { g: 'en', id: 'en_prod50', e: '🗣️', n: 'Ça sort tout seul', d: '50 cartes de production réussies en anglais', p: bcP(d => d.en.prodOk, 50) },
+  { g: 'en', id: 'en_ecoute50', e: '🎧', n: 'Oreille américaine', d: '50 cartes d\'écoute réussies en anglais', p: bcP(d => d.en.ecouteOk, 50) },
+  { g: 'en', id: 'en_report1', e: '🎙️', n: 'Premier rapport', d: 'Importer un rapport d\'oral', p: bcP(d => d.reports, 1) },
+  { g: 'en', id: 'en_report10', e: '📻', n: 'Bavard', d: '10 rapports d\'oral importés', p: bcP(d => d.reports, 10) },
+  { g: 'en', id: 'en_report30', e: '🎤', n: 'Orateur', d: '30 rapports d\'oral importés', p: bcP(d => d.reports, 30) },
+  { g: 'en', id: 'en_both', e: '🤝', n: 'Deux coachs', d: 'Un rapport de Gemini et un de ChatGPT', p: bcP(d => d.reportsSrc, 2) },
+  { g: 'en', id: 'en_c1level', e: '🦅', n: 'Niveau C1', d: 'Un rapport d\'oral qui te donne C1', p: () => [bcData().reportsC1 ? 1 : 0, 1] },
+  { g: 'en', id: 'en_c1week', e: '📅', n: 'Semaine parfaite', d: 'Les 7 jours d\'une semaine du programme C1 complets', p: bcP(d => d.c1Week, 7) },
+  // 🇪🇸 Espagnol
+  { g: 'es', id: 'es_mature25', e: '🌱', n: 'Semilla', d: '25 mots espagnols acquis', p: bcP(d => d.es.mature, 25) },
+  { g: 'es', id: 'es_mature100', e: '🌻', n: 'Girasol', d: '100 mots espagnols acquis', p: bcP(d => d.es.mature, 100) },
+  { g: 'es', id: 'es_mature300', e: '⛪', n: 'Sagrada Família', d: '300 mots espagnols acquis', p: bcP(d => d.es.mature, 300) },
+  { g: 'es', id: 'es_rev1000', e: '💃', n: 'Flamenco', d: '1 000 révisions en espagnol', p: bcP(d => d.es.rev, 1000) },
+  { g: 'es', id: 'es_rev5000', e: '🐂', n: 'Incansable', d: '5 000 révisions en espagnol', p: bcP(d => d.es.rev, 5000) },
+  { g: 'es', id: 'es_day150', e: '☀️', n: 'Día de sol', d: '150 révisions d\'espagnol en un jour', p: bcP(d => d.es.bigDay, 150) },
+  { g: 'es', id: 'es_units15', e: '🗺️', n: 'Camino', d: '15 unités espagnoles terminées', p: bcP(d => d.es.units, 15) },
+  { g: 'es', id: 'es_unitsAll', e: '🎓', n: 'Graduado', d: 'Toutes les unités espagnoles terminées', p: bcAll(d => d.es.units, d => d.es.unitsAll) },
+  { g: 'es', id: 'es_stories', e: '📖', n: 'Cuentacuentos', d: 'Toutes les histoires espagnoles terminées', p: bcAll(d => d.es.stories, d => d.es.storiesAll) },
+  { g: 'es', id: 'es_ret90', e: '🧠', n: 'Memoria de hierro', d: '90 % de rétention en espagnol sur 30 jours (200 révisions au moins)', p: () => { const d = bcData().es; return [d.ret != null && d.ret >= 90 ? 1 : 0, 1]; }, info: () => { const d = bcData().es; return d.ret == null ? `${d.ret30n}/200 révisions` : `${d.ret} %`; } },
+  { g: 'es', id: 'es_conj50', e: '🔁', n: 'Conjugador', d: '50 cartes de conjugaison réussies', p: bcP(d => d.conjOk, 50) },
+  { g: 'es', id: 'es_conj300', e: '⚙️', n: 'Máquina', d: '300 cartes de conjugaison réussies', p: bcP(d => d.conjOk, 300) },
+  { g: 'es', id: 'es_tenses', e: '⏳', n: 'Maître du temps', d: 'Une carte réussie à chacun des 9 temps', p: bcAll(d => d.conjTenses, () => (typeof CONJ_TENSES !== 'undefined' ? CONJ_TENSES.length : 9)) },
+  { g: 'es', id: 'es_atelier3', e: '⭐', n: 'Sans faute', d: '3 étoiles à un temps de l\'Atelier conjugaison', p: bcP(d => d.atelier3, 1) },
+  { g: 'es', id: 'es_atelierAll', e: '🌠', n: 'Tous les temps', d: 'Au moins une étoile à chaque temps de l\'Atelier', p: bcAll(d => d.atelierAll, d => d.atelierTot) },
+  { g: 'es', id: 'es_prod50', e: '🗣️', n: 'Lengua suelta', d: '50 cartes de production réussies en espagnol', p: bcP(d => d.es.prodOk, 50) },
+  { g: 'es', id: 'es_ecoute50', e: '👂', n: 'Buen oído', d: '50 cartes d\'écoute réussies en espagnol', p: bcP(d => d.es.ecouteOk, 50) },
+);
+BADGES_DEF.forEach(b => { if(!b.g) b.g = /_en|^en_/.test(b.id) ? 'en' : /_es|^es_/.test(b.id) ? 'es' : 'gen'; if(b.p && !b.check) b.check = () => { const [v, t] = b.p(); return t > 0 && v >= t; }; });
 function badgeCheck() {
+  _bc = null;
   const earned = crsJ('badges_earned', []);
   let newBadges = [];
   BADGES_DEF.forEach(b => {
     if(earned.includes(b.id)) return;
     try { if(b.check()) { earned.push(b.id); newBadges.push(b); } } catch(e) {}
   });
+  _bc = null;
   if(newBadges.length) {
     crsSetJ('badges_earned', earned);
-    newBadges.forEach(b => {
-      showToast(`🏅 Badge : ${b.e} ${b.n}`, 'correct-toast');
-      if(rpg) { rpgAddGold(15); rpgLog(`🏅 Badge obtenu : ${b.e} ${b.n}`); rpgSave(); }
-    });
+    newBadges.slice(0, 3).forEach((b, i) => setTimeout(() => showToast(`🏅 Succès : ${b.e} ${b.n}`, 'correct-toast'), i * 1600));
+    if(newBadges.length > 3) setTimeout(() => showToast(`🏅 Et ${newBadges.length - 3} autre(s) succès débloqué(s)`, 'correct-toast'), 4800);
+    if(rpg) { rpgAddGold(15 * newBadges.length); newBadges.forEach(b => rpgLog(`🏅 Badge obtenu : ${b.e} ${b.n}`)); rpgSave(); }
   }
+  return newBadges;
 }
+// Vérification groupée, quelques secondes après une activité (révision, leçon, atelier, rapport)
+let _badgeT = null;
+function badgeSoon() { clearTimeout(_badgeT); _badgeT = setTimeout(() => { try { badgeCheck(); } catch(e) {} }, 2500); }
 function openBadges() {
   badgeCheck();
   showScreen('screen-badges');
-  const earned = crsJ('badges_earned', []);
+  const earned = crsJ('badges_earned', []), esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  _bc = null;
+  const item = b => {
+    const ok = earned.includes(b.id); let prog = '';
+    if(!ok && b.p) { try { const [v, t] = b.p(); if(t > 1) prog = `<i class="bprog"><i style="width:${Math.round(100 * v / t)}%"></i></i><small>${v.toLocaleString('fr-FR')} / ${t.toLocaleString('fr-FR')}</small>`; else if(b.info) prog = `<small>${esc(b.info())}</small>`; } catch(e) {} }
+    return `<div class="badge-item${ok ? ' earned' : ''}" title="${esc(b.d)}"><span class="be">${b.e}</span><b>${esc(b.n)}</b><span>${esc(b.d)}</span>${prog}</div>`;
+  };
   document.getElementById('badges-body').innerHTML = `<div class="pg-title">🏅 Badges & Succès</div>
     <div style="font-size:.85rem;color:var(--muted);margin-bottom:1rem">${earned.length} / ${BADGES_DEF.length} débloqués</div>
-    <div class="badge-grid">${BADGES_DEF.map(b => {
-      const ok = earned.includes(b.id);
-      return `<div class="badge-item${ok?' earned':''}"><span class="be">${b.e}</span><b>${b.n}</b><span>${b.d}</span></div>`;
-    }).join('')}</div>`;
+    ${BADGE_GROUPS.map(([g, name]) => { const list = BADGES_DEF.filter(b => b.g === g), n = list.filter(b => earned.includes(b.id)).length;
+      // à débloquer : les plus avancés d'abord
+      const score = b => { try { const [v, t] = b.p ? b.p() : [0, 1]; return t ? v / t : 0; } catch(e) { return 0; } };
+      const sorted = [...list.filter(b => earned.includes(b.id)), ...list.filter(b => !earned.includes(b.id)).sort((a, b) => score(b) - score(a))];
+      return `<div class="badge-sec"><div class="badge-sec-h">${name}<span>${n} / ${list.length}</span></div><div class="badge-grid">${sorted.map(item).join('')}</div></div>`; }).join('')}`;
+  _bc = null;
 }
