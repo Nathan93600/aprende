@@ -247,6 +247,8 @@ function ctAction() {
   }
   document.getElementById('ct-streak-n').textContent = ct.streak;
   document.getElementById('ct-btn').textContent = 'Continuer';
+  // on fait entendre la bonne réponse (voix enregistrée)
+  try { const say = ex.sent != null ? conjFill(CONJ_SENT[ex.sent]) : ex.type === 'table' ? '' : ex.forms[ex.pIdx]; if(say) crsSpeak('es', say); } catch(e) {}
 }
 
 function ctFinish() {

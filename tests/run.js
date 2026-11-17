@@ -393,6 +393,10 @@ const AUDIT = (min) => {
           const c2 = srsLoad()[k]; o.bumped = (!!msg && c2.due <= srsStartOfToday() + 86400000 && JSON.stringify([c2.s, c2.d, c2.reps, c2.interval]) === mem) || ('état ' + data[k].st + ' ' + msg);
         } else o.bumped = 'aucune carte étudiée';
         o.lessonBump = conjBump('ser', 'subjuntivo') && conjLoad()['conj:ser|subjuntivo'].pri === 1;
+        // la carte lit la voix enregistrée (pas la voix du téléphone)
+        { let rec = null; const orig = playRecorded; playRecorded = (l, t) => { rec = t; return true; };
+          srsState.forceKey = 'conj:tener|preterito'; srsRefresh(); await wait(80); document.getElementById('conj-inp').value = srsState.conjPrompt.answer; conjCheck();
+          o.voice = !!rec && rec.includes(srsState.conjPrompt.answer); playRecorded = orig; srsGrade(2); await wait(450); }
         o.picks = [0, 7, 14, 20].map(u => conjLessonPicks(u, 3).map(x => CONJ_SENT[x.c][1]));
         // Atelier conjugaison : une partie par mode, réponses justes sauf la première
         o.atelier = {};
@@ -428,6 +432,7 @@ const AUDIT = (min) => {
       ok('la sauvegarde contient les cartes de conjugaison', r.exported);
       ok('une erreur en leçon fait revenir la carte demain, sans changer sa mémoire', r.bumped === true, String(r.bumped));
       ok('un verbe raté en leçon passe en tête des nouvelles cartes', r.lessonBump);
+      ok('la carte de conjugaison lit la voix enregistrée', r.voice === true);
       ok('les leçons ne demandent que des temps déjà vus', r.picks[0].every(t => t === 'presente') && r.picks[1].every(t => ['presente', 'preterito'].includes(t)) && r.picks[1].includes('preterito') && r.picks[2].includes('imperativo') && !r.picks[2].includes('subj_imperfecto') && r.picks.every(x => x.length === 3), JSON.stringify(r.picks));
       ok('atelier conjugaison : une partie se joue jusqu\'au bout dans les 4 modes', Object.values(r.atelier).every(Boolean) && r.atelierStars && p.errs.length === 0, JSON.stringify(r.atelier) + ' ' + p.errs.join(' | '));
       await p.close();

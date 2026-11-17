@@ -255,6 +255,7 @@ async function cmdVoix() {
       getDeckForLang(l).forEach(c => { add(c[l]); if(l === 'es' && typeof ES_EXAMPLES !== 'undefined' && ES_EXAMPLES[c.es]) add(ES_EXAMPLES[c.es][0]); if(l === 'en' && c.say) add(c.say); if(typeof c.ex === 'string') add(c.ex); });
       JOURNAL_SESSIONS.forEach(s => (s[l] || (l === 'es' ? s.mots : null) || []).forEach(m => { add(m[0]); add(m[2]); }));
       if(l === 'es' && typeof CONJ_SENT !== 'undefined') CONJ_SENT.forEach(s => add(conjFill(s)));
+      if(l === 'es' && typeof CONJ_DB !== 'undefined') Object.keys(CONJ_DB).forEach(v => CONJ_TENSES.forEach(t => (CONJ_DB[v][t] || []).forEach(f => add(f))));   // chaque forme, lue seule sur les cartes et dans le tableau
     }
     return out;
   });

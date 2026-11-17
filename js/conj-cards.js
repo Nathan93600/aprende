@@ -376,7 +376,7 @@ function conjCheck() {
   const res = document.getElementById('conj-result');
   res.innerHTML = `${head}
     <div class="conj-why">« ${crsEsc(p.trigger)} » → ${CONJ_WHY[p.tense]}</div>
-    <div class="conj-table">${forms.map((f, i) => f && conjPersonOk(p.tense, i) ? `<span${i === p.person ? ' class="me"' : ''}><i>${conjPron(p.tense, i).split('/')[0]}</i>${crsEsc(f)}</span>` : '').join('')}</div>`;
+    <div class="conj-table">${forms.map((f, i) => f && conjPersonOk(p.tense, i) ? `<span${i === p.person ? ' class="me"' : ''} role="button" tabindex="0" onclick="crsSpeak('es', this.dataset.f)" data-f="${crsEsc(f)}"><i>${conjPron(p.tense, i).split('/')[0]}</i>${crsEsc(f)}</span>` : '').join('')}</div>`;
   res.style.display = 'block';
   inp.blur();
   const top = document.querySelector('.srs-card.top'); if(top) top.classList.add('revealed');
@@ -385,7 +385,7 @@ function conjCheck() {
   const ga = document.getElementById('srs-grade-area'); ga.style.display = 'block';
   try { ga.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); } catch(e) {}
   try { haptic(good ? 'light' : 'error'); if(typeof SFX !== 'undefined' && SFX.sfxEnabled()) (good ? SFX.playCorrect : SFX.playWrong)(); } catch(e) {}
-  try { crsSpeak('es', p.sentence ? p.text.replace('___', conjCap(p.text, p.answer)) : p.answer, true); } catch(e) {}
+  try { crsSpeak('es', p.sentence ? p.text.replace('___', conjCap(p.text, p.answer)) : p.answer); } catch(e) {}   // voix enregistrée si elle existe
 }
 function conjUpdateRow() {
   const row = document.getElementById('srs-conj-row'); if(!row) return;
