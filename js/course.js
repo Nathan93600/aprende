@@ -170,12 +170,34 @@ function crsPool(lang) {
   getDeckForLang(lang).forEach(c => { if(c) out.push([c[lang], c.fr]); });
   return out;
 }
+// Sens français d'une traduction (« usine, centrale (grand site) · C1 facility » → {usine, centrale})
+const CRS_STOP = new Set(['le','la','les','un','une','des','de','du','d','l','se','s','qqn','qqch','quelque','chose','etre','avoir','faire','en','a','au','aux','et','ou','sur','pour','par','avec']);
+function crsSenses(fr) {
+  const head = String(fr || '').split('·')[0].replace(/\([^)]*\)/g, ' ');
+  const out = new Set();
+  head.split(/[,;\/]/).forEach(part => {
+    const t = crsTokN(part).replace(/['’]/g, ' ').split(/\s+/).filter(x => x.length > 2 && !CRS_STOP.has(x));
+    if(t.length) out.add(t.join(' '));
+  });
+  return out;
+}
+function crsWords(s) { return new Set(crsTokN(String(s || '')).replace(/['’]/g, ' ').split(/\s+/).filter(Boolean)); }
+// Deux fiches trop proches pour servir de piège : même sens français, ou l'une cite l'autre en équivalent
+function crsTooClose(a, b) {
+  const sa = crsSenses(a[1]), sb = crsSenses(b[1]);
+  for(const x of sa) if(sb.has(x)) return true;
+  const wa = srsNorm(a[0]), wb = srsNorm(b[0]);
+  if(wa && crsWords(b[1]).has(crsTokN(a[0]))) return true;
+  if(wb && crsWords(a[1]).has(crsTokN(b[0]))) return true;
+  return false;
+}
 function crsDistract(lang, w, field, n, prefer) {
   const seen = new Set([srsNorm(w[field])]), res = [];
   const cands = shuffle(prefer || []).concat(shuffle(crsPool(lang)));
   for(const c of cands) {
     const v = c[field]; if(!v) continue;
     const k = srsNorm(v); if(!k || seen.has(k)) continue;
+    if(srsNorm(c[0]) === srsNorm(w[0]) || crsTooClose(w, c)) continue;
     seen.add(k); res.push(v); if(res.length >= n) break;
   }
   return res;

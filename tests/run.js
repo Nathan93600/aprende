@@ -683,6 +683,20 @@ const AUDIT = (min) => {
       await p.close();
     }
 
+    if(want('pieges')) {
+      console.log('\nPièges des QCM');
+      const p = await open(browser, base);
+      const r = await p.evaluate(() => {
+        const close = crsTooClose(['plant', 'usine, centrale (grand site) · C1 facility · C2 works'], ['factory', 'usine · C1 plant, facility · C2 works']);
+        const far = crsTooClose(['plant', 'usine, centrale (grand site) · C1 facility'], ['deter', 'dissuader · C1 discourage']);
+        const w = ['plant', 'usine, centrale (grand site) · C1 facility · C2 works'];
+        let bad = 0; for(let i = 0; i < 40; i++) crsDistract('en', w, 1, 3).forEach(v => { if(crsSenses(v).has('usine') || /\bplant\b/i.test(v)) bad++; });
+        return { close, far, bad };
+      });
+      ok('deux fiches « usine » ne servent pas de piège l\'une pour l\'autre', r.close && !r.far && r.bad === 0, JSON.stringify(r));
+      await p.close();
+    }
+
     if(want('sauvegarde') && process.env.APRENDE_BACKUP) {
       console.log('\nSauvegarde réelle');
       const bk = JSON.parse(fs.readFileSync(process.env.APRENDE_BACKUP, 'utf8')), src = bk.data || bk;
