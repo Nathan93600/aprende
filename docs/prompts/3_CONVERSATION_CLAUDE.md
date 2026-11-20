@@ -64,7 +64,9 @@ g. Les voix : `node tools/genere.js voix` ajoute les nouveaux textes à tools/vo
    tape moi-même dans le terminal : ne me la demande jamais. Quand je te dis « c'est fait », range les
    MP3 avec `node tools/genere.js audio <dossier ou zip>` (il complète audio/manifest.js).
 f bis. Pour chaque rapport d'oral anglais de la sauvegarde : une version idiomatique dans courses/oral_idiomatic.js
-   (clé « date|thème »), mon texte retravaillé avec des expressions qui sont dans l'appli, en <b>gras</b>.
+   (clé « date|thème » ; champs html, stress, audio) : mon texte retravaillé avec des expressions qui sont dans
+   l'appli, en <b>gras</b> ; la version « Rythme » (syllabes accentuées en MAJUSCULES, tirets entre syllabes) ; le texte
+   lu par les deux voix (`voix` ajoute « [homme] … » et « [femme] … »).
    Elle s'affiche dans « Mes textes oraux ». `complet` vérifie qu'aucun rapport n'en manque.
 g bis. `node tools/genere.js traites` : les mots notés sous une forme et intégrés sous une autre (=>), ou laissés
    de côté (!), quittent ainsi ma liste « Mots en attente » dans l'appli.

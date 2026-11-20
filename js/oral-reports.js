@@ -138,8 +138,11 @@ function openOralTexts() {
   box.innerHTML = list.map((r, i) => {
     const d = r.d ? new Date(r.d + 'T00:00:00').toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }) : '?';
     const hasCorr = r.corrected && r.corrected.trim();
-    const idio = r.idiomatic || (typeof ORAL_IDIOMATIC !== 'undefined' && ORAL_IDIOMATIC[(r.d || '') + '|' + (r.theme || '')]) || '';
+    const ent = (typeof ORAL_IDIOMATIC !== 'undefined' && ORAL_IDIOMATIC[(r.d || '') + '|' + (r.theme || '')]) || null;
+    const idio = r.idiomatic || (ent && (typeof ent === 'string' ? ent : ent.html)) || '';
     const hasIdio = idio && idio.trim();
+    const stressTxt = ent && ent.stress, audioTxt = ent && ent.audio;
+    const hasRec = v => audioTxt && typeof AUDIO_MAP !== 'undefined' && AUDIO_MAP.en && AUDIO_MAP.en['[' + v + '] ' + audioTxt];
     const stats = [r.level && `niveau ${esc(r.level)}`, r.n && `${r.n.errors || 0} erreurs`, r.n && `${r.n.better || 0} tournures`].filter(Boolean).join(' · ');
     return `<details class="ot-card" ${i === 0 ? 'open' : ''}>
       <summary class="ot-sum">
@@ -149,7 +152,7 @@ function openOralTexts() {
       </summary>
       <div class="ot-body">
         ${hasCorr ? `<div class="ot-section"><div class="ot-label">✅ Texte corrigé <small>(Gemini)</small></div><div class="ot-text">${esc(r.corrected)}</div></div>` : hasIdio ? '' : '<div class="ot-section"><div class="ot-label dim">Pas de texte corrigé dans ce rapport</div></div>'}
-        ${hasIdio ? `<div class="ot-section"><div class="ot-label">💎 Version idiomatique <small>(génère)</small></div><div class="ot-text idio">${idio}</div><div class="ot-label dim">En gras : les expressions de tes cartes. Lis-le à voix haute.</div></div>` : ''}
+        ${hasIdio ? `<div class="ot-section"><div class="ot-label">💎 Version idiomatique <small>(génère)</small></div>${stressTxt ? `<div class="ot-tabs"><button class="ot-tab on" onclick="otView(this,0)">💎 Expressions</button><button class="ot-tab" onclick="otView(this,1)">🥁 Rythme</button></div>` : ''}<div class="ot-text idio">${idio}</div>${stressTxt ? `<div class="ot-text idio stress" hidden>${stressTxt}</div>` : ''}<div class="ot-label dim ot-hint">En gras : les expressions de tes cartes. Lis-le à voix haute.</div>${stressTxt ? '<div class="ot-label dim ot-hint" hidden>MAJUSCULES : la syllabe accentuée. Appuie dessus, glisse sur le reste.</div>' : ''}${audioTxt ? (hasRec('homme') || hasRec('femme') ? `<div class="ot-audio">${['homme', 'femme'].map(v => hasRec(v) ? `<button class="ot-play" onclick="otPlay(this,'${v}')" data-t="${esc(audioTxt).replace(/"/g, '&quot;')}">${v === 'homme' ? '🧔 Voix homme' : '👩 Voix femme'}</button>` : '').join('')}</div>` : '<div class="ot-label dim">🔊 Voix homme et femme : au prochain envoi des voix.</div>') : ''}</div>` : ''}
         ${r.priority ? `<div class="ot-section"><div class="ot-label">🎯 Priorité</div><div class="ot-text small">${esc(r.priority)}</div></div>` : ''}
         ${r.strengths && r.strengths.length ? `<div class="ot-section"><div class="ot-label">💪 Points forts</div><ul class="ot-ul">${r.strengths.map(s => `<li>${esc(s)}</li>`).join('')}</ul></div>` : ''}
       </div>
@@ -161,4 +164,19 @@ function oralTextsBadge() {
   const el = document.getElementById('oral-texts-badge'); if(!el) return;
   const n = orLoad().filter(r => r.lang === 'en' && ((r.corrected && r.corrected.trim()) || (typeof ORAL_IDIOMATIC !== 'undefined' && ORAL_IDIOMATIC[(r.d || '') + '|' + (r.theme || '')]))).length;
   el.textContent = n ? `${n} texte${n > 1 ? 's' : ''}` : 'Lecture';
+}
+// Onglets « Expressions / Rythme » et lecture du texte par les deux voix
+function otView(btn, i) {
+  const sec = btn.closest('.ot-section'); if(!sec) return;
+  sec.querySelectorAll('.ot-tab').forEach((b, k) => b.classList.toggle('on', k === i));
+  sec.querySelectorAll('.ot-text.idio').forEach((t, k) => { t.hidden = k !== i; });
+  sec.querySelectorAll('.ot-hint').forEach((t, k) => { t.hidden = k !== i; });
+}
+function otPlay(btn, v) {
+  const playing = btn.classList.contains('on');
+  document.querySelectorAll('.ot-play.on').forEach(b => b.classList.remove('on'));
+  if(typeof _recAudio !== 'undefined' && _recAudio) { try { _recAudio.pause(); } catch(e) {} _recAudio = null; }
+  if(playing) return;
+  const ok = playRecorded('en', '[' + v + '] ' + btn.dataset.t, 0, () => btn.classList.remove('on'));
+  if(ok) { btn.classList.add('on'); if(_recAudio) _recAudio.onended = () => btn.classList.remove('on'); }
 }

@@ -250,6 +250,7 @@ async function cmdVoix() {
         const voice = who => { const e = ((s.chars || {})[who] || [])[0] || ''; return /👩|👧|👵|🧕|👸|🙋‍♀️|💁‍♀️|👩‍/.test(e) ? 1 : 0; };
         const walk = steps => (steps || []).forEach(x => { if(x.type === 'line') add(x.text, voice(x.who)); else if(x.type === 'choice') (x.opts || []).forEach(o => { if(o.ok !== false) add(o.text, voice(x.who)); walk(o.then); }); });
         walk(s.steps); });
+      if(l === 'en' && typeof ORAL_IDIOMATIC !== 'undefined') Object.values(ORAL_IDIOMATIC).forEach(e => { if(e && e.audio) { add('[homme] ' + e.audio, 0); add('[femme] ' + e.audio, 1); } });   // textes oraux : les deux voix
       if(l === 'en' && typeof PRON_LESSONS !== 'undefined') PRON_LESSONS.forEach(x => (x.points || []).forEach(pt => (pt.ex || []).forEach(e => add(e[0]))));
       const course = l === 'es' ? COURSE_ES : COURSE_EN;
       (course.units || []).forEach(u => (u.w || []).forEach(w => { add(w[0]); add(w[2]); }));

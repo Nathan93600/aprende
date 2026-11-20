@@ -2703,3 +2703,11 @@ body.pop .ot-ul li { color: var(--tx); font: 500 .84rem/1.45 'Poppins', sans-ser
 body.pop .ot-ul li::before { color: #1f9d4a; }
 body.pop.dark .ot-ul li::before { color: var(--mint); }
 body.pop .ot-text.idio b { font-weight: 800; background: rgba(255,255,255,.6); border-radius: 5px; padding: 0 .2em; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+body.pop .ot-tabs { display: flex; gap: .4rem; margin: .1rem 0 .55rem; }
+body.pop .ot-tab, body.pop .ot-play { font: 700 .78rem 'Poppins', sans-serif; color: var(--tx); background: var(--fx-field); border: 2px solid var(--ink); border-radius: 999px; padding: .38rem .8rem; box-shadow: 0 2px 0 var(--ink); cursor: pointer; }
+body.pop .ot-tab.on { background: var(--sun); color: #2b1408; }
+body.pop .ot-audio { display: flex; gap: .5rem; flex-wrap: wrap; margin-top: .6rem; }
+body.pop .ot-play.on { background: var(--mint); color: #10301c; }
+body.pop .ot-play.on::after { content: ' ■'; }
+body.pop .ot-text.idio.stress { line-height: 1.75; letter-spacing: .01em; }
+body.pop .ot-text.idio.stress b { background: none; padding: 0; font-weight: 800; color: #b3261e; }
