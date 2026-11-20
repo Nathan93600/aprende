@@ -152,7 +152,7 @@ function openOralTexts() {
       </summary>
       <div class="ot-body">
         ${hasCorr ? `<div class="ot-section"><div class="ot-label">✅ Texte corrigé <small>(Gemini)</small></div><div class="ot-text">${esc(r.corrected)}</div></div>` : hasIdio ? '' : '<div class="ot-section"><div class="ot-label dim">Pas de texte corrigé dans ce rapport</div></div>'}
-        ${hasIdio ? `<div class="ot-section"><div class="ot-label">💎 Version idiomatique <small>(génère)</small></div>${stressTxt ? `<div class="ot-tabs"><button class="ot-tab on" onclick="otView(this,0)">💎 Expressions</button><button class="ot-tab" onclick="otView(this,1)">🥁 Rythme</button></div>` : ''}<div class="ot-text idio">${idio}</div>${stressTxt ? `<div class="ot-text idio stress" hidden>${stressTxt}</div>` : ''}<div class="ot-label dim ot-hint">En gras : les expressions de tes cartes. Lis-le à voix haute.</div>${stressTxt ? '<div class="ot-label dim ot-hint" hidden>MAJUSCULES : la syllabe accentuée. Appuie dessus, glisse sur le reste.</div>' : ''}${audioTxt ? (hasRec('homme') || hasRec('femme') ? `<div class="ot-audio">${['homme', 'femme'].map(v => hasRec(v) ? `<button class="ot-play" onclick="otPlay(this,'${v}')" data-t="${esc(audioTxt).replace(/"/g, '&quot;')}">${v === 'homme' ? '🧔 Voix homme' : '👩 Voix femme'}</button>` : '').join('')}</div>` : '<div class="ot-label dim">🔊 Voix homme et femme : au prochain envoi des voix.</div>') : ''}</div>` : ''}
+        ${hasIdio ? `<div class="ot-section"><div class="ot-label">💎 Version idiomatique <small>(génère)</small></div>${stressTxt ? `<div class="ot-tabs"><button class="ot-tab on" onclick="otView(this,0)">💎 Expressions</button><button class="ot-tab" onclick="otView(this,1)">🥁 Rythme</button></div>` : ''}<div class="ot-text idio">${idio}</div>${stressTxt ? `<div class="ot-text idio stress" hidden>${stressTxt}</div>` : ''}<div class="ot-label dim ot-hint">En gras : les expressions de tes cartes. Lis-le à voix haute.</div>${stressTxt ? '<div class="ot-label dim ot-hint" hidden>MAJUSCULES : la syllabe accentuée. Appuie dessus, glisse sur le reste.</div>' : ''}${audioTxt ? (hasRec('homme') || hasRec('femme') ? `<div class="ot-audio"><button class="ot-play ot-speed" onclick="otSpeed(this)">${otSpeedLabel()}</button>${['homme', 'femme'].map(v => hasRec(v) ? `<button class="ot-play" onclick="otPlay(this,'${v}')" data-t="${esc(audioTxt).replace(/"/g, '&quot;')}">${v === 'homme' ? '🧔 Voix homme' : '👩 Voix femme'}</button>` : '').join('')}</div>` : '<div class="ot-label dim">🔊 Voix homme et femme : au prochain envoi des voix.</div>') : ''}</div>` : ''}
         ${r.priority ? `<div class="ot-section"><div class="ot-label">🎯 Priorité</div><div class="ot-text small">${esc(r.priority)}</div></div>` : ''}
         ${r.strengths && r.strengths.length ? `<div class="ot-section"><div class="ot-label">💪 Points forts</div><ul class="ot-ul">${r.strengths.map(s => `<li>${esc(s)}</li>`).join('')}</ul></div>` : ''}
       </div>
@@ -177,6 +177,16 @@ function otPlay(btn, v) {
   document.querySelectorAll('.ot-play.on').forEach(b => b.classList.remove('on'));
   if(typeof _recAudio !== 'undefined' && _recAudio) { try { _recAudio.pause(); } catch(e) {} _recAudio = null; }
   if(playing) return;
-  const ok = playRecorded('en', '[' + v + '] ' + btn.dataset.t, 0, () => btn.classList.remove('on'));
+  const ok = playRecorded('en', '[' + v + '] ' + btn.dataset.t, 0.95 * otSpeedGet(), () => btn.classList.remove('on'));
   if(ok) { btn.classList.add('on'); if(_recAudio) _recAudio.onended = () => btn.classList.remove('on'); }
+}
+// Vitesse de lecture des textes oraux (la hauteur de la voix ne change pas) : 1×, 0,85×, 0,75×
+const OT_SPEEDS = [1, 0.85, 0.75];
+function otSpeedGet() { try { const v = parseFloat(localStorage.getItem('ot_speed')); return OT_SPEEDS.includes(v) ? v : 1; } catch(e) { return 1; } }
+function otSpeedLabel() { const v = otSpeedGet(); return (v === 1 ? '🐇 ' : '🐢 ') + String(v).replace('.', ',') + '×'; }
+function otSpeed(btn) {
+  const v = OT_SPEEDS[(OT_SPEEDS.indexOf(otSpeedGet()) + 1) % OT_SPEEDS.length];
+  try { localStorage.setItem('ot_speed', String(v)); } catch(e) {}
+  document.querySelectorAll('.ot-speed').forEach(b => { b.textContent = otSpeedLabel(); });
+  if(typeof _recAudio !== 'undefined' && _recAudio && document.querySelector('.ot-play.on')) _recAudio.playbackRate = v;
 }
