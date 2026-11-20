@@ -356,3 +356,163 @@ Object.assign(CRS_FB.es, {
     tip: "Tómate una pastilla : prends un cachet. Et « una pastilla de jabón » = une savonnette."
   },
 });
+
+// ── Génère du 20/11/2026 ──
+Object.assign(CRS_FB.es, {
+ "los concursos": {
+  "reg": "gen",
+  "alt": [
+   [
+    "el certamen",
+    "concours formel, artistique"
+   ],
+   [
+    "el programa de concursos",
+    "jeu télé"
+   ]
+  ],
+  "err": [
+   [
+    "*el concurso (pour un examen d'entrée)",
+    "Un concours administratif = las oposiciones en Espagne."
+   ]
+  ],
+  "tip": "Concurso = concours ou jeu télé. Concurso de belleza = concours de beauté."
+ },
+ "la belleza": {
+  "reg": "gen",
+  "alt": [
+   [
+    "la hermosura",
+    "plus littéraire"
+   ],
+   [
+    "bello / bonito / guapo",
+    "adjectifs"
+   ]
+  ],
+  "err": [
+   [
+    "*la beldad",
+    "Vieilli. On dit la belleza."
+   ],
+   [
+    "*la beauté (z prononcé s)",
+    "En Espagne, le z se dit comme le th anglais : be-YE-tha."
+   ]
+  ],
+  "tip": "Bello → belleza, comme pobre → pobreza, triste → tristeza."
+ },
+ "la raza": {
+  "reg": "gen",
+  "alt": [
+   [
+    "la etnia",
+    "pour les humains, plus juste"
+   ],
+   [
+    "el linaje",
+    "la lignée"
+   ]
+  ],
+  "err": [
+   [
+    "*la rasa",
+    "Ça s'écrit raza, avec un z."
+   ]
+  ],
+  "tip": "Pour un chien : ¿de qué raza es? Pour les humains, on préfère la etnia."
+ },
+ "el lujo": {
+  "reg": "gen",
+  "alt": [
+   [
+    "de lujo",
+    "de luxe, haut de gamme"
+   ],
+   [
+    "lujoso",
+    "luxueux"
+   ],
+   [
+    "darse el lujo de",
+    "se payer le luxe de"
+   ]
+  ],
+  "err": [
+   [
+    "*la lujuria",
+    "La lujuria = la luxure ! Le luxe = el lujo."
+   ]
+  ],
+  "tip": "Faux ami piège : lujo = luxe, lujuria = luxure. ¡Qué lujo! = quel luxe !"
+ },
+ "las naranjas": {
+  "reg": "gen",
+  "alt": [
+   [
+    "el zumo de naranja",
+    "Espagne"
+   ],
+   [
+    "el jugo de naranja",
+    "Amérique latine"
+   ],
+   [
+    "naranja",
+    "couleur orange (invariable souvent)"
+   ]
+  ],
+  "err": [
+   [
+    "*las oranges",
+    "En espagnol : la naranja, el naranjo (l'oranger)."
+   ]
+  ],
+  "tip": "La naranja (le fruit), el naranjo (l'arbre). Zumo en Espagne, jugo en Amérique latine."
+ },
+ "estrenando": {
+  "reg": "gen",
+  "alt": [
+   [
+    "estrenar",
+    "étrenner ; sortir (un film)"
+   ],
+   [
+    "el estreno",
+    "la première, la sortie"
+   ]
+  ],
+  "err": [
+   [
+    "*entrenando",
+    "Entrenar = s'entraîner. Estrenar = étrenner."
+   ]
+  ],
+  "tip": "Estrenar = la première fois. Entrenar = s'entraîner. Une seule lettre d'écart."
+ },
+ "atrapar": {
+  "reg": "gen",
+  "alt": [
+   [
+    "coger",
+    "attraper (Espagne ; évité en Amérique latine)"
+   ],
+   [
+    "agarrar",
+    "Amérique latine"
+   ],
+   [
+    "pillar",
+    "familier, Espagne"
+   ]
+  ],
+  "err": [
+   [
+    "*attrapar",
+    "Un seul t : atrapar."
+   ]
+  ],
+  "tip": "Atrapar = un t, un r. Me atrapó el tráfico = je suis resté coincé dans les bouchons."
+ }
+});

@@ -7,13 +7,13 @@
 // Rempli à chaque « génère » du vendredi pour les mots de la semaine.
 // Le mot de la semaine, affiché dans le bilan. Réécrit à chaque « génère ».
 const CRS_WEEK = {
-  date: "13/11/2026",
+  date: "20/11/2026",
   notes: [
-    "Grosse semaine : 1 458 révisions, environ 80 % de bonnes réponses en espagnol comme en anglais. Garde ce rythme, mais limite les nouvelles cartes tant que « À revoir » dépasse 100.",
-    "Tes cartes les plus ratées sont des mots anglais abstraits : arguably, dwell, relentless, upheaval, gravitate toward. Écris une phrase sur ta propre vie avec chacun : un mot que tu as utilisé toi-même se retient bien mieux.",
-    "Espagnol : acordarse revient 7 fois en « Encore ». Retiens la structure : me acuerdo DE ti (pronominal + de), comme se souvenir de. Sans « me », c'est acordar = se mettre d'accord.",
-    "Conversation avec Gemini : ton point faible est le S final sous la vitesse (my cousin, my parent, dad side). Avant d'accélérer, termine chaque nom : cousinZ, parentS, dad'S. Nouvelle unité « Tes faux pas à l'oral » et leçon d'accent « Tes points faibles à l'oral ».",
-    "Plantilla et agacharse sont tombés 4 fois chacun depuis le début : plantilla = l'effectif (d'une équipe, d'une entreprise), agacharse = se baisser (¡agáchate!)."
+    "Semaine record : 2 042 révisions. 67 % de bonnes réponses en anglais, mais seulement 56 % en espagnol, et 124 cartes en retard. Avant d'ouvrir les 14 nouvelles unités, vide « À revoir » et baisse les nouvelles cartes espagnoles à 5 par jour pendant une semaine.",
+    "Anglais : upheaval, either way, provided that, preclude et even so sont tombés 4 ou 5 fois chacun. Ce sont des connecteurs et des mots abstraits : dis une phrase sur ta journée avec chacun (provided that I finish early, I'll call you).",
+    "Espagnol : nevera, no parar quieto et maña reviennent 5 fois en « Encore ». Nevera = le frigo (nieve, la neige, aide). No parar quieto = ne pas tenir en place. Maña = l'adresse, le savoir-faire (darse maña = se débrouiller).",
+    "Tes 6 rapports d'oral disent tous la même chose : le S du pluriel (friendZ, gameZ, cousinZ), ask sans to (I asked my mom), et le prétérit pour une action finie (I found, I gave up). Nouvelles unités « Tes faux pas : la famille », « Tes faux pas : le bluff » et « Tes faux pas : objectifs et lecture ».",
+    "Nouvelle structure à automatiser : get used to + -ing (people get used to me being bad) et want + objet + to (I want my Spanish to reach B2). Deux pièges de francophone, chacun dans une mini-grammaire de la semaine."
   ]
 };
 
@@ -89,7 +89,7 @@ const CRS_FB = {
 
     // ── Adverbial phrases — Contraste ──
     "that being said": {
-      alt: [["that said", "version courte, très courante"], ["having said that"], ["with that said"], ["even so", "= malgré ça"], ["still", "oral, en tête de phrase"]],
+      alt: [["that said", "version courte, très courante"], ["with that being said", "même sens, avec with en tête"], ["having said that"], ["with that said"], ["even so", "= malgré ça"], ["still", "oral, en tête de phrase"]],
       err: [["that been said", "BEING (en train d'être), pas « been »."], ["this said", "Calque de « ceci dit ». L'anglais utilise THAT : that said."], ["it said", "L'expression est « that said » / « that being said »."]]
     },
     "having said that": {

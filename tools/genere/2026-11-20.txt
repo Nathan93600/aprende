@@ -3,13 +3,11 @@
 # Les doublons n'ont pas encore été vérifiés : node tools/genere.js doublons tools/genere/2026-11-20.txt
 
 # Anglais : session « family tree » du 14/11 (ChatGPT)
-en: on my dad's side
-en: share the same grandparents
+en: on my dad's side  ! même expression que « on my dad's side, it's more complex » (noté dans l'appli)
+en: share the same grandparents  ! même correction que « we share the same grandma and granddad »
 en: got married multiple times
 en: multiple wives
 en: there are a lot of us
-en: extended family
-en: blended family
 en: get together
 en: keep in touch
 en: become closer
@@ -17,8 +15,8 @@ en: we're spread out all over the world
 en: I'd rather let things happen naturally
 en: back then
 en: at one point
-en: well…
-en: actually…
+en: well…  ! trop basique pour une carte : tu l'emploies déjà
+en: actually…  ! trop basique pour une carte : tu l'emploies déjà
 en: let me think…
 en: what I mean is…
 
@@ -90,7 +88,7 @@ en: extended family   # la famille élargie · With 89 cousins, I definitely hav
 en: to keep track of   # garder le fil / suivre le compte · It is hard to keep track of all my cousins' names.
 en: sibling   # frère ou sœur · My dad didn't have any full siblings on his side.
 en: blended family   # famille recomposée · Having multiple marriages in the family creates a large blended family.
-en: full cousin / half-cousin   # cousin germain / demi-cousin · We share both grandparents, so we are full cousins.
+en: full cousin / half-cousin  ! déjà dans l'appli (half-cousins et full cousins, unité 29)   # cousin germain / demi-cousin · We share both grandparents, so we are full cousins.
 en: asking my parents questions   # Erreur : « asking questions to my parents » · Le verbe ask est transitif direct et ne prend pas de préposition avant la personne interrogée.
 en: how many cousins I have   # Erreur : « how many cousin I have » · L'expression how many est toujours suivie d'un nom pluriel dénombrable.
 en: 16 of them   # Erreur : « 16 from them » · Pour exprimer une fraction ou une partie d'un groupe, on utilise la préposition of et non from.
@@ -128,13 +126,13 @@ en: the game had plenty of bugs   # Erreur : « the game was plenty of bugs » �
 en: I've never seen   # Erreur : « I never seen » · Le participe passé seen nécessite l'auxiliaire have pour former le present perfect.
 en: on the internet   # Erreur : « on internet » · Le mot internet est toujours précédé de l'article défini the dans ce contexte.
 en: she got mad at me   # Au lieu de « she became mad at me » · En anglais américain oral, get mad est beaucoup plus courant et naturel que become mad.
-en: I had to vote my friend out   # Au lieu de « I had to kill my friend » · Dans les jeux de société à rôles cachés comme Undercover, on utilise plutôt vote out ou eliminate.
-en: long story short / essentially   # Au lieu de « basically (répété cinq fois) » · Varier les connecteurs évite de transformer basically en tic de remplissage qui ralentit le dé
+en: I had to vote my friend out  ! même expression que « to vote someone out »   # Au lieu de « I had to kill my friend » · Dans les jeux de société à rôles cachés comme Undercover, on utilise plutôt vote out ou eliminate.
+en: long story short / essentially => essentially   # Au lieu de « basically (répété cinq fois) » · Varier les connecteurs évite de transformer basically en tic de remplissage qui ralentit le dé
 en: to vote someone out   # éliminer quelqu'un par un vote · The group decided to vote him out on the very last turn.
 en: to throw someone off the scent   # brouiller les pistes / détourner les soupçons · I eliminated my own partner to throw the civilians off the scent.
 en: to blend in   # se fondre dans la masse · As the undercover player, your main goal is to blend in with the group.
 en: poker face   # visage impassible · You need a solid poker face when everyone starts accusing you.
-en: in a bar with my friends   # Erreur : « in a bar with my friend » · Comme il y avait au moins cinq joueurs dans la partie, le nom doit être au pluriel.
+en: in a bar with my friends  ! même correction que « playing Undercover with my friends »   # Erreur : « in a bar with my friend » · Comme il y avait au moins cinq joueurs dans la partie, le nom doit être au pluriel.
 en: one of my friends   # Erreur : « one of my friend » · L'expression one of est toujours suivie d'un nom au pluriel.
 en: everyone believed   # Erreur : « everyone was believing » · Le verbe d'état believe ne s'utilise quasiment jamais à la forme progressive en -ing.
 en: that made them shift their votes   # Erreur : « that had made me gravitate their votes » · Le verbe gravitate est intransitif et ne peut pas avoir de complément d'objet direct c
@@ -162,7 +160,7 @@ en: step asside => step aside
 en: such a
 en: to spot
 en: to break out of the box => to think outside the box
-en: my transit card / my bus pass   # Au lieu de « my transport card » · Transport card est un calque du français carte de transport ; transit card ou bus pass sont les termes am
+en: my transit card / my bus pass  ! même correction que « transit card / bus pass »   # Au lieu de « my transport card » · Transport card est un calque du français carte de transport ; transit card ou bus pass sont les termes am
 en: transit card / bus pass   # carte de transport / pass de bus · I couldn't get on the bus because my transit card was inside my wallet.
 en: to misplace   # égarer temporairement · I'm always misplacing my wallet right before leaving the house.
 en: to turn up   # réapparaître / être retrouvé · After searching for a whole week, my wallet finally turned up.
@@ -172,3 +170,53 @@ en: if she had seen my wallet   # Erreur : « if she has seen my keys » · Dans
 en: I'd been looking for my wallet for a week   # Erreur : « I have looked for my keys for one week » · Une action qui a duré avant un moment passé se traduit par le past perfect continuous 
 en: because I finally found my wallet   # Erreur : « because I have found my wallet » · En anglais américain oral, le prétérit simple est beaucoup plus naturel que le present perfect
 en: a sweet spot
+
+# ── Mots notés dans l'appli du 17 au 20/11 (rapport « objectifs et immersion » + lecture) ──
+en: step out from the train => step off the train
+en: wouldn't it be better to live abroad   # Au lieu de « it is not better to live in another country » · La tournure avec abroad est beaucoup plus fluide et idiomatique pour rapporter la sugg…
+en: express myself like a native speaker   # Au lieu de « express myself as a native » · On utilise like (à la manière de) plutôt que as (en tant que) pour comparer sa façon de parler.
+en: colorful idioms / everyday slang   # Au lieu de « expressive idioms » · Expressive idioms sonne un peu lourd ; les Américains parlent plutôt d'idioms ou de slang.
+en: to be at a loss for words   # chercher ses mots / ne pas trouver ses mots · When Americans speak too fast, I'm sometimes at a loss for words.
+en: language immersion   # immersion linguistique · Living abroad is the fastest way to achieve full language immersion.
+en: to hit a plateau   # stagner / atteindre un palier · Many learners hit a plateau when trying to go from B2 to C1.
+en: active vocabulary   # vocabulaire actif · Reading helps, but speaking daily is what builds your active vocabulary.
+en: native-like fluency   # aisance proche d'un natif · My ultimate goal is to reach native-like fluency in American English.
+en: struggling to find the right words   # Erreur : « looking for my words » · Looking for my words est un calque littéral du français chercher ses mots.
+en: I hesitate, which is really frustrating   # Erreur : « I'm hesitating, which is very embarrassing » · On utilise le présent simple pour une habitude générale, et embarrassing signifie gênant …
+en: a C1 level in English / in Spanish   # Erreur : « a C1 level at English / at Spanish » · On utilise la préposition in et non at pour indiquer son niveau dans une langue.
+en: in the United States   # Erreur : « in United States » · L'article défini the est obligatoire devant United States.
+en: playing Undercover with my friends   # Erreur : « playing an Undercover game with my friend » · Le contexte du jeu implique plusieurs amis au pluriel.
+en: THOUGH it's NOT as EASY as we THINK => though it's not as easy as we think   # Au lieu de « though it is not as easy as we think » · Ne remplace pas though par so et contracte it is en it's pour garder le rythme naturel améric…
+en: AMERICANS speak VERY fast, and they REALLY use COLORFUL IDIOMS => Americans speak very fast, and they really use colorful idioms   # Au lieu de « Americans speak very fast and they really use colorful idioms » · Marque une pause après fast et articule distinctement les trois syll…
+en: SOMETIMES I STRUGGLE to find the RIGHT WORDS and I HESITATE  ! même phrase que « struggling to find the right words »   # Au lieu de « sometimes I struggle to find the right words and I hesitate » · Ralentis légèrement avant struggle pour éviter de trébucher sur le gro…
+en: native speaker   # locuteur natif · My goal is to express myself like a native speaker.
+en: to struggle to   # avoir du mal à · Sometimes I struggle to find the right words in fast conversations.
+en: to live abroad   # vivre à l'étranger · Living abroad helps, though it is not as easy as we think.
+en: though sometimes / though not as much / though it is not  ! même correction que la lecture « though it's not as easy as we think »   # Erreur : « so sometimes / so not as much / so it is not » · Le mot de liaison though a été lu trois fois comme so par automatisme visuel.
+en: wouldn't it be better  ! même correction que « wouldn't it be better to live abroad »   # Erreur : « he wouldn't be better » · Substitution du pronom it par he et oubli de l'inversion interrogative.
+en: when I was in the United States  ! même correction que « in the United States »   # Erreur : « when I was in United States » · Omission de l'article défini the devant United States lors de la seconde occurrence.
+en: Americans speak very fast  ! même phrase que la lecture « Americans speak very fast, and they really use colorful idioms »   # Erreur : « Americans speaks very fast » · Ajout d'un S parasite à la fin du verbe speak après un sujet pluriel.
+en: colorful idioms  ! même mot que « colorful idioms / everyday slang » (prononciation IH-dee-uhmz dans sa fiche)   # Erreur : « colorful idoms » · Omission de la voyelle centrale i dans idioms, qui se prononce en trois syllabes.
+en: with my friends  ! même correction que « playing Undercover with my friends »   # Erreur : « with my friend » · Omission du S final du pluriel à la fin de friends.
+en: against my ally   # Erreur : « against an ally » · Remplacement du déterminant possessif my par l'article an.
+en: and I answered him   # Erreur : « and I answer him » · Omission de la terminaison du passé -ed à la lecture.
+
+# ── Mots notés dans la conversation du 17 au 20/11 ──
+en: front and back   # I want front and back pics of your driver's license
+en: pics
+en: driver's license
+en: with that being said  ! déjà dans l'appli sous « that being said » (variante ajoutée à sa fiche)
+en: laid-back
+en: stumble across
+en: down the street
+en: disclose
+en: pass on
+en: reach out
+en: racket   # the men behind a huge racket
+en: up for grabs
+en: put out fires   # noté : handle the fires
+en: landslide
+en: level   # leveling this city (raser) ≠ level up
+en: factory  ! déjà dans l'appli (unité 28) : astuce factory / plant / facility / mill / works ajoutée à sa fiche   # distinguer factory / plant / facility / mill / works
+en: mill  ! déjà dans l'appli (unité 28) : même astuce ajoutée à sa fiche
+es: atrapar

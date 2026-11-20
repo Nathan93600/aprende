@@ -131,22 +131,22 @@ Object.assign(CRS_FB.en, {
   "factory": {
     alt: [["plant", "grand site, énergie"], ["facility", "registre pro"], ["works", "surtout UK"], ["mill", "textile, papier, acier"]],
     err: [["usine", "Mot français. En anglais : factory."], ["fabric", "Faux-ami : fabric = tissu."]],
-    tip: "Factory vient de « factor » (agent) : là où l'on fait. Prononcé « FAK-tuh-ree », le o disparaît presque."
+    tip: "Factory vient de « factor » (agent) : là où l'on fait. Prononcé « FAK-tuh-ree », le o disparaît presque. Pour choisir : on fabrique des objets dans une factory, on produit de l'énergie ou on transforme en continu dans une plant, on transforme une matière brute dans une mill, facility est le mot officiel neutre, works est britannique."
   },
   "plant": {
     alt: [["factory"], ["power plant", "centrale électrique"], ["facility"]],
     err: [["plantation", "Une plantation agricole, pas une usine."]],
-    tip: "Plant = la plante et l'usine, comme en espagnol (la planta). Power plant = centrale."
+    tip: "Plant = la plante et l'usine, comme en espagnol (la planta). Power plant = centrale. Pour choisir : on fabrique des objets dans une factory, on produit de l'énergie ou on transforme en continu dans une plant, on transforme une matière brute dans une mill, facility est le mot officiel neutre, works est britannique."
   },
   "facility": {
     alt: [["site", "site"], ["premises", "locaux"], ["plant", "usine"]],
     err: [["facility = facilité", "Faux-ami : la facilité = ease. Facility = installation, site."], ["a facilities", "Au singulier : a facility ; au pluriel : facilities (équipements)."]],
-    tip: "Facility = un endroit équipé pour faire quelque chose : a research facility, sports facilities."
+    tip: "Facility = un endroit équipé pour faire quelque chose : a research facility, sports facilities. Pour choisir : on fabrique des objets dans une factory, on produit de l'énergie ou on transforme en continu dans une plant, on transforme une matière brute dans une mill, facility est le mot officiel neutre, works est britannique."
   },
   "mill": {
     alt: [["steel mill", "aciérie"], ["paper mill", "papeterie"], ["windmill", "moulin à vent"]],
     err: [["mile", "Mile = mille (distance), prononcé « maïl ». Mill = « mil »."]],
-    tip: "Au départ un moulin (to mill = moudre), puis toute usine qui transforme une matière : run-of-the-mill = banal, ordinaire."
+    tip: "Au départ un moulin (to mill = moudre), puis toute usine qui transforme une matière : run-of-the-mill = banal, ordinaire. Pour choisir : on fabrique des objets dans une factory, on produit de l'énergie ou on transforme en continu dans une plant, on transforme une matière brute dans une mill, facility est le mot officiel neutre, works est britannique."
   },
   "sweatshop": {
     alt: [["exploitative factory"], ["slave labor", "travail forcé"]],
@@ -156,7 +156,7 @@ Object.assign(CRS_FB.en, {
   "works": {
     alt: [["plant"], ["factory"], ["gasworks", "usine à gaz"]],
     err: [["a work", "Une usine se dit « a works » (même forme au singulier), pas « a work »."]],
-    tip: "Surtout britannique et dans des noms : the gas works, the steel works. Aux États-Unis, on dit plutôt plant."
+    tip: "Surtout britannique et dans des noms : the gas works, the steel works. Aux États-Unis, on dit plutôt plant. Pour choisir : on fabrique des objets dans une factory, on produit de l'énergie ou on transforme en continu dans une plant, on transforme une matière brute dans une mill, facility est le mot officiel neutre, works est britannique."
   },
   "stop sb from doing": {
     alt: [["stop sb doing", "UK, sans from"], ["prevent sb from doing", "plus formel"], ["keep sb from doing"]],
@@ -416,5 +416,3635 @@ Object.assign(CRS_FB.en, {
    ]
   ],
   "tip": "The last time + prétérit + was + date : the last time I saw him was in 2019."
+ }
+});
+
+// ── Génère du 20/11/2026 ──
+Object.assign(CRS_FB.en, {
+ "got married multiple times": {
+  "alt": [
+   [
+    "remarried several times",
+    "insiste sur les remariages"
+   ],
+   [
+    "was married more than once"
+   ]
+  ],
+  "err": [
+   [
+    "*married himself several times",
+    "Se marier = get married, jamais married himself."
+   ],
+   [
+    "*was married multiple times ago",
+    "Pas de « ago » : got married multiple times."
+   ]
+  ],
+  "tip": "Se marier = GET married (devenir marié). Be married = l'état (être marié)."
+ },
+ "multiple wives": {
+  "alt": [
+   [
+    "several wives"
+   ],
+   [
+    "more than one wife"
+   ]
+  ],
+  "err": [
+   [
+    "*multiple wifes",
+    "Pluriel irrégulier : wife → wives (f → ves), comme knife → knives."
+   ]
+  ],
+  "tip": "Wife → wives, life → lives, knife → knives : le f devient ves au pluriel."
+ },
+ "there are a lot of us": {
+  "alt": [
+   [
+    "we're a big family"
+   ],
+   [
+    "there are so many of us",
+    "plus expressif"
+   ]
+  ],
+  "err": [
+   [
+    "*we are a lot",
+    "Calque de « on est beaucoup ». On dit there are a lot of us."
+   ]
+  ],
+  "tip": "« On est beaucoup » = THERE ARE a lot OF US, jamais « we are a lot »."
+ },
+ "get together": {
+  "alt": [
+   [
+    "meet up",
+    "plus décontracté"
+   ],
+   [
+    "reunite",
+    "après une longue séparation"
+   ],
+   [
+    "a get-together",
+    "nom : une petite fête"
+   ]
+  ],
+  "err": [
+   [
+    "*reunite us",
+    "Pas de pronom : we get together / we reunite."
+   ]
+  ],
+  "tip": "Get together = se rassembler. Le nom a get-together = une petite réunion entre proches."
+ },
+ "keep in touch": {
+  "alt": [
+   [
+    "stay in touch"
+   ],
+   [
+    "keep in contact",
+    "plus neutre"
+   ]
+  ],
+  "err": [
+   [
+    "*keep the contact",
+    "Calque. On dit keep in touch (with sb)."
+   ]
+  ],
+  "tip": "Touch = contact. Keep IN touch WITH sb : deux prépositions à retenir."
+ },
+ "become closer": {
+  "alt": [
+   [
+    "grow closer",
+    "plus naturel, progressif"
+   ],
+   [
+    "bond",
+    "créer des liens"
+   ]
+  ],
+  "err": [
+   [
+    "*approach each other",
+    "Approach = s'approcher physiquement. Pour une relation : grow closer."
+   ]
+  ],
+  "tip": "Grow closer est le plus naturel : la relation pousse comme une plante."
+ },
+ "we're spread out all over the world": {
+  "alt": [
+   [
+    "we're scattered around the globe"
+   ],
+   [
+    "we live all over the world"
+   ]
+  ],
+  "err": [
+   [
+    "*we're spread in all the world",
+    "On dit all over the world."
+   ],
+   [
+    "*spreaded",
+    "Spread est irrégulier : spread, spread, spread."
+   ]
+  ],
+  "tip": "All over the world = partout dans le monde. Spread out = étalé, éparpillé."
+ },
+ "I'd rather let things happen naturally": {
+  "alt": [
+   [
+    "I'd rather go with the flow"
+   ],
+   [
+    "I'd rather let things take their course",
+    "plus soutenu"
+   ]
+  ],
+  "err": [
+   [
+    "*I'd rather to let",
+    "Pas de to après I'd rather : I'd rather let."
+   ],
+   [
+    "*I prefer let things",
+    "I prefer TO let ou I'd rather let."
+   ]
+  ],
+  "tip": "I'd rather + verbe sans to. I prefer + to + verbe. Ne mélange pas les deux."
+ },
+ "extended family": {
+  "alt": [
+   [
+    "relatives"
+   ],
+   [
+    "the wider family"
+   ],
+   [
+    "kin",
+    "soutenu, littéraire"
+   ]
+  ],
+  "err": [
+   [
+    "*large family",
+    "Large family = famille nombreuse (beaucoup d'enfants). La famille élargie = extended family."
+   ]
+  ],
+  "tip": "Extended = étendu : la famille au-delà des parents et des frères et sœurs."
+ },
+ "sibling": {
+  "alt": [
+   [
+    "brother or sister"
+   ],
+   [
+    "half-sibling",
+    "demi-frère ou demi-sœur"
+   ]
+  ],
+  "err": [
+   [
+    "*brothers and sisters (pour un seul)",
+    "Pour « frère ou sœur » sans préciser : a sibling. Do you have any siblings?"
+   ]
+  ],
+  "tip": "Do you have any siblings? = As-tu des frères et sœurs ? Un seul mot, sans genre."
+ },
+ "blended family": {
+  "alt": [
+   [
+    "stepfamily"
+   ],
+   [
+    "step-siblings",
+    "demi-frères et sœurs par alliance"
+   ]
+  ],
+  "err": [
+   [
+    "*recomposed family",
+    "Calque. On dit blended family ou stepfamily."
+   ]
+  ],
+  "tip": "Blend = mélanger (un blender) : une famille « mixée »."
+ },
+ "to keep track of": {
+  "alt": [
+   [
+    "stay on top of"
+   ],
+   [
+    "keep up with",
+    "suivre le rythme"
+   ],
+   [
+    "lose track of",
+    "contraire : perdre le fil"
+   ]
+  ],
+  "err": [
+   [
+    "*follow the count",
+    "Calque. On dit keep track of."
+   ]
+  ],
+  "tip": "Track = la piste. Keep track = garder la piste ; lose track = la perdre (I lost track of time)."
+ },
+ "we share both grandparents": {
+  "alt": [
+   [
+    "we have both grandparents in common"
+   ],
+   [
+    "we're full cousins"
+   ]
+  ],
+  "err": [
+   [
+    "*we share both grandma and granddad together",
+    "Together est redondant avec share."
+   ]
+  ],
+  "tip": "Share contient déjà l'idée d'ensemble : jamais share … together."
+ },
+ "14 of them are my half-cousins": {
+  "alt": [
+   [
+    "fourteen of them are half-cousins"
+   ]
+  ],
+  "err": [
+   [
+    "*14 of them are like my half cousins",
+    "Le like de remplissage affaiblit un fait précis : supprime-le."
+   ]
+  ],
+  "tip": "Pour un fait précis, pas de like : 14 of them ARE my half-cousins."
+ },
+ "asking a few questions": {
+  "alt": [
+   [
+    "asking a couple of questions"
+   ],
+   [
+    "asking some questions"
+   ]
+  ],
+  "err": [
+   [
+    "*asking few questions",
+    "Sans a, few veut dire « très peu » (sens négatif)."
+   ]
+  ],
+  "tip": "A few = quelques. Few = presque aucun. L'article change tout."
+ },
+ "asking my parents questions": {
+  "alt": [
+   [
+    "asking my parents about it"
+   ],
+   [
+    "quizzing my parents",
+    "familier : bombarder de questions"
+   ]
+  ],
+  "err": [
+   [
+    "*asking questions to my parents",
+    "Ask est transitif direct : ask sb sth, sans to."
+   ]
+  ],
+  "tip": "Ask + personne + chose : ask my parents questions, ask him the time."
+ },
+ "how many cousins I have": {
+  "alt": [
+   [
+    "the number of cousins I have"
+   ]
+  ],
+  "err": [
+   [
+    "*how many cousin I have",
+    "How many est toujours suivi d'un pluriel."
+   ]
+  ],
+  "tip": "How many + pluriel (cousins). How much + indénombrable (money)."
+ },
+ "16 of them": {
+  "alt": [
+   [
+    "sixteen of them"
+   ],
+   [
+    "sixteen among them",
+    "plus écrit"
+   ]
+  ],
+  "err": [
+   [
+    "*16 from them",
+    "Pour une partie d'un groupe : of, pas from."
+   ]
+  ],
+  "tip": "Une partie d'un groupe = OF : some of them, most of us, 16 of them."
+ },
+ "on my dad's side, it's more complex": {
+  "alt": [
+   [
+    "my dad's side is more complicated"
+   ],
+   [
+    "things get trickier on my dad's side"
+   ]
+  ],
+  "err": [
+   [
+    "*on my dad's side is more complex",
+    "Il faut un sujet : on my dad's side, IT'S more complex."
+   ]
+  ],
+  "tip": "Un verbe conjugué a toujours un sujet : « c'est » = it's."
+ },
+ "we share the same grandma and granddad": {
+  "alt": [
+   [
+    "we have the same grandparents"
+   ]
+  ],
+  "err": [
+   [
+    "*we share same grandma, same granddad",
+    "Same est précédé de the."
+   ]
+  ],
+  "tip": "THE same, toujours : the same grandma, the same day, the same thing."
+ },
+ "89 cousins": {
+  "alt": [
+   [
+    "eighty-nine cousins"
+   ]
+  ],
+  "err": [
+   [
+    "*89 cousin",
+    "Au-delà de un, le nom prend un S, et on l'entend à l'oral : cousinZ."
+   ]
+  ],
+  "tip": "Le S du pluriel se prononce Z après un son vocal : cousinz, friendz."
+ },
+ "back then": {
+  "alt": [
+   [
+    "at the time"
+   ],
+   [
+    "in those days",
+    "plus nostalgique"
+   ]
+  ],
+  "err": [
+   [
+    "*at this time",
+    "At this time = en ce moment. Pour le passé : back then / at the time."
+   ]
+  ],
+  "tip": "Back = en arrière dans le temps. Back then = à ce moment-là, autrefois."
+ },
+ "at one point": {
+  "alt": [
+   [
+    "at some point"
+   ],
+   [
+    "at one stage",
+    "britannique"
+   ]
+  ],
+  "err": [
+   [
+    "*at a moment given",
+    "Calque. On dit at one point."
+   ]
+  ],
+  "tip": "At one point (passé, un moment précis) ; at some point (futur ou passé, un moment quelconque)."
+ },
+ "let me think…": {
+  "alt": [
+   [
+    "let me see"
+   ],
+   [
+    "give me a sec"
+   ],
+   [
+    "bear with me",
+    "un instant, soyez patient"
+   ]
+  ],
+  "err": [
+   [
+    "*let me reflect",
+    "Trop formel à l'oral : let me think / let me see."
+   ]
+  ],
+  "tip": "Remplace le « euh » par let me think : tu gagnes du temps sans hésiter."
+ },
+ "what I mean is…": {
+  "alt": [
+   [
+    "in other words"
+   ],
+   [
+    "I mean"
+   ],
+   [
+    "to put it another way"
+   ]
+  ],
+  "err": [
+   [
+    "*what I want to say is",
+    "Calque de « ce que je veux dire ». Plus naturel : what I mean is."
+   ]
+  ],
+  "tip": "Mean = vouloir dire. What I mean is… reformule sans calque."
+ },
+ "garnish": {
+  "alt": [
+   [
+    "decoration",
+    "pour un plat"
+   ],
+   [
+    "trimming",
+    "accompagnement"
+   ],
+   [
+    "to top with",
+    "verbe : garnir de"
+   ]
+  ],
+  "err": [
+   [
+    "*garniture",
+    "Faux ami : garniture = side dish ou trimming ; garnish est la petite déco du plat."
+   ]
+  ],
+  "tip": "Garnish = la touche déco posée sur l'assiette (persil, citron). Le plat d'accompagnement = side dish."
+ },
+ "cut from the same cloth": {
+  "alt": [
+   [
+    "two of a kind"
+   ],
+   [
+    "birds of a feather",
+    "souvent péjoratif"
+   ],
+   [
+    "very much alike"
+   ]
+  ],
+  "err": [
+   [
+    "*cut in the same fabric",
+    "Expression figée : cut FROM the same CLOTH."
+   ]
+  ],
+  "tip": "Deux vêtements taillés dans le même tissu se ressemblent : même étoffe, même caractère."
+ },
+ "ruffled": {
+  "alt": [
+   [
+    "disheveled",
+    "cheveux, tenue"
+   ],
+   [
+    "flustered",
+    "troublé"
+   ],
+   [
+    "ruffle sb's feathers",
+    "froisser quelqu'un"
+   ]
+  ],
+  "err": [
+   [
+    "*rumpled (pour une personne)",
+    "Rumpled = froissé pour un vêtement. Pour une personne contrariée : ruffled ou flustered."
+   ]
+  ],
+  "tip": "Ruffle sb's feathers = froisser quelqu'un, comme un oiseau qui gonfle ses plumes."
+ },
+ "stitching": {
+  "alt": [
+   [
+    "seams",
+    "les coutures d'assemblage"
+   ],
+   [
+    "needlework",
+    "travail d'aiguille, broderie"
+   ]
+  ],
+  "err": [
+   [
+    "*sewing (pour le résultat)",
+    "Sewing = l'activité de coudre. Les points visibles = the stitching."
+   ]
+  ],
+  "tip": "A stitch = un point. Stitching = l'ensemble des points. A stitch in time saves nine."
+ },
+ "stitching thread": {
+  "alt": [
+   [
+    "sewing thread"
+   ],
+   [
+    "thread"
+   ],
+   [
+    "yarn",
+    "fil de laine, plus épais"
+   ]
+  ],
+  "err": [
+   [
+    "*wire",
+    "Wire = fil métallique ou électrique. Fil à coudre = thread."
+   ]
+  ],
+  "tip": "Thread se prononce THRED : th + red. Le fil de l'histoire, c'est aussi a thread."
+ },
+ "carved": {
+  "alt": [
+   [
+    "engraved",
+    "gravé finement"
+   ],
+   [
+    "chiseled",
+    "taillé au ciseau"
+   ],
+   [
+    "carve out",
+    "se tailler (une place, une carrière)"
+   ]
+  ],
+  "err": [
+   [
+    "*sculpted (pour un motif dans le bois)",
+    "Sculpted = sculpté en volume (une statue). Un motif creusé = carved."
+   ]
+  ],
+  "tip": "Carve = découper au couteau : on carve the turkey à Thanksgiving, on carve wood."
+ },
+ "etched": {
+  "alt": [
+   [
+    "engraved"
+   ],
+   [
+    "ingrained",
+    "profondément ancré"
+   ],
+   [
+    "burned into my memory",
+    "gravé dans ma mémoire"
+   ]
+  ],
+  "err": [
+   [
+    "*eatched",
+    "Ça s'écrit etched (e-t-c-h) et se prononce ETCHT."
+   ]
+  ],
+  "tip": "Etched in my memory = gravé dans ma mémoire. Ça ne s'efface pas."
+ },
+ "cloth": {
+  "alt": [
+   [
+    "fabric"
+   ],
+   [
+    "rag",
+    "chiffon usé"
+   ],
+   [
+    "clothes",
+    "vêtements (autre mot !)"
+   ]
+  ],
+  "err": [
+   [
+    "*clothe",
+    "Cloth (KLOTH) = tissu ; clothes (KLOHZ) = vêtements ; clothe = vêtir."
+   ]
+  ],
+  "tip": "Cloth = le tissu. Clothes = les vêtements faits avec. Ajoute un S et le sens change."
+ },
+ "robe": {
+  "alt": [
+   [
+    "bathrobe",
+    "peignoir"
+   ],
+   [
+    "gown",
+    "toge, robe de cérémonie"
+   ],
+   [
+    "dress",
+    "une robe de femme"
+   ]
+  ],
+  "err": [
+   [
+    "*robe (pour une robe de soirée)",
+    "Faux ami : une robe de femme = a dress. Robe = peignoir ou tunique."
+   ]
+  ],
+  "tip": "Faux ami : robe = peignoir, toge ou tunique de mage. Une robe = a dress."
+ },
+ "sigil": {
+  "alt": [
+   [
+    "seal"
+   ],
+   [
+    "emblem"
+   ],
+   [
+    "glyph",
+    "symbole gravé"
+   ]
+  ],
+  "err": [
+   [
+    "*sigle",
+    "Faux ami : un sigle (acronyme) = an acronym. Sigil = symbole magique."
+   ]
+  ],
+  "tip": "Sigil se prononce SIDJ-il. Le sceau magique des jeux et de la fantasy."
+ },
+ "groove": {
+  "alt": [
+   [
+    "notch",
+    "encoche"
+   ],
+   [
+    "slot",
+    "fente"
+   ],
+   [
+    "get into the groove",
+    "prendre le rythme"
+   ]
+  ],
+  "err": [
+   [
+    "*grove",
+    "Grove (GROHV) = bosquet. Groove (GROOV) = rainure ou rythme."
+   ]
+  ],
+  "tip": "Le sillon d'un vinyle est a groove : d'où le groove de la musique."
+ },
+ "to clutch": {
+  "alt": [
+   [
+    "grip"
+   ],
+   [
+    "clasp",
+    "plus doux"
+   ],
+   [
+    "hold on tight to"
+   ],
+   [
+    "in the clutch",
+    "au moment décisif"
+   ]
+  ],
+  "err": [
+   [
+    "*to clutch (pour un embrayage en verbe)",
+    "The clutch = l'embrayage (nom). Le verbe = serrer fort."
+   ]
+  ],
+  "tip": "Clutch = serrer dans le poing. Clutching at straws = se raccrocher à n'importe quoi."
+ },
+ "slip": {
+  "alt": [
+   [
+    "slide",
+    "glisser volontairement"
+   ],
+   [
+    "lose one's footing",
+    "perdre l'équilibre"
+   ],
+   [
+    "a slip-up",
+    "une bourde"
+   ]
+  ],
+  "err": [
+   [
+    "*slide (pour une chute)",
+    "Slip = glisser sans le vouloir ; slide = glisser exprès (sur un toboggan)."
+   ]
+  ],
+  "tip": "Slip = glissade involontaire. A Freudian slip = un lapsus révélateur."
+ },
+ "slip off": {
+  "alt": [
+   [
+    "take off",
+    "enlever"
+   ],
+   [
+    "slip away",
+    "s'éclipser"
+   ],
+   [
+    "sneak out",
+    "filer en douce"
+   ]
+  ],
+  "err": [
+   [
+    "*slip out his shoes",
+    "Slip off his shoes, ou slip his shoes off."
+   ]
+  ],
+  "tip": "Slip off = enlever en un geste (chaussures, bague) ou disparaître discrètement."
+ },
+ "slumber": {
+  "alt": [
+   [
+    "sleep"
+   ],
+   [
+    "doze",
+    "somnoler"
+   ],
+   [
+    "slumber party",
+    "soirée pyjama"
+   ]
+  ],
+  "err": [
+   [
+    "*slumber (au quotidien)",
+    "Slumber est littéraire. Au quotidien : sleep, nap."
+   ]
+  ],
+  "tip": "Slumber = sommeil de conte de fées. Une slumber party = une soirée pyjama."
+ },
+ "lock away": {
+  "alt": [
+   [
+    "lock up"
+   ],
+   [
+    "keep under lock and key"
+   ],
+   [
+    "shut away",
+    "isoler"
+   ]
+  ],
+  "err": [
+   [
+    "*close away",
+    "Pour enfermer : lock away / lock up."
+   ]
+  ],
+  "tip": "Lock away = mettre sous clé, loin des regards. Les souvenirs, les trésors, les gens."
+ },
+ "at last": {
+  "alt": [
+   [
+    "finally"
+   ],
+   [
+    "at long last",
+    "après une très longue attente"
+   ]
+  ],
+  "err": [
+   [
+    "*at least",
+    "At least = au moins. At last = enfin. Une lettre change tout."
+   ]
+  ],
+  "tip": "At LAST = enfin (le dernier moment). At LEAST = au moins (le minimum)."
+ },
+ "memory flashes back": {
+  "alt": [
+   [
+    "a memory comes rushing back"
+   ],
+   [
+    "it all came back to me"
+   ],
+   [
+    "a flashback",
+    "nom"
+   ]
+  ],
+  "err": [
+   [
+    "*a souvenir comes back",
+    "Faux ami : souvenir = objet-souvenir. Un souvenir mental = a memory."
+   ]
+  ],
+  "tip": "Souvenir (anglais) = l'objet rapporté. Le souvenir dans ta tête = a memory."
+ },
+ "laid out": {
+  "alt": [
+   [
+    "set out"
+   ],
+   [
+    "mapped out",
+    "planifié en détail"
+   ],
+   [
+    "planned"
+   ]
+  ],
+  "err": [
+   [
+    "*lied out",
+    "Lay (poser) → laid. Lie (être allongé) → lay → lain."
+   ]
+  ],
+  "tip": "Lay out = étaler sur la table : un plan, des vêtements, un chemin. Passé : laid out."
+ },
+ "to show up": {
+  "alt": [
+   [
+    "turn up"
+   ],
+   [
+    "arrive"
+   ],
+   [
+    "make an appearance",
+    "plus formel"
+   ]
+  ],
+  "err": [
+   [
+    "*to show (pour arriver)",
+    "Show seul = montrer. Arriver = show up."
+   ]
+  ],
+  "tip": "Show up = se montrer sur place. Il n'est pas venu = he didn't show up (a no-show)."
+ },
+ "immovable": {
+  "alt": [
+   [
+    "unshakable"
+   ],
+   [
+    "steadfast"
+   ],
+   [
+    "unyielding",
+    "qui ne cède pas"
+   ]
+  ],
+  "err": [
+   [
+    "*unmovable",
+    "On dit immovable (préfixe im-)."
+   ]
+  ],
+  "tip": "Im- + movable : qu'on ne peut pas bouger. An immovable object meets an unstoppable force."
+ },
+ "torn apart": {
+  "alt": [
+   [
+    "devastated",
+    "anéanti"
+   ],
+   [
+    "broken up"
+   ],
+   [
+    "ripped apart",
+    "plus violent"
+   ]
+  ],
+  "err": [
+   [
+    "*teared apart",
+    "Tear → tore → torn : torn apart."
+   ]
+  ],
+  "tip": "Tear → tore → torn. Torn between two choices = tiraillé entre deux choix."
+ },
+ "scattered": {
+  "alt": [
+   [
+    "strewn",
+    "jonché"
+   ],
+   [
+    "spread out"
+   ],
+   [
+    "dispersed",
+    "plus formel"
+   ]
+  ],
+  "err": [
+   [
+    "*dispatched",
+    "Dispatched = envoyé. Éparpillé = scattered."
+   ]
+  ],
+  "tip": "Scattered showers = averses éparses. Scatterbrained = tête en l'air."
+ },
+ "to grieve": {
+  "alt": [
+   [
+    "mourn"
+   ],
+   [
+    "be in mourning",
+    "être en deuil"
+   ],
+   [
+    "grief",
+    "nom : le chagrin"
+   ]
+  ],
+  "err": [
+   [
+    "*grieve about",
+    "On dit grieve (for) sb ou grieve the loss of sb."
+   ]
+  ],
+  "tip": "Grieve (verbe), grief (nom), grievous (grave). Good grief! = bon sang !"
+ },
+ "nurtured": {
+  "alt": [
+   [
+    "fostered"
+   ],
+   [
+    "cultivated"
+   ],
+   [
+    "raised",
+    "élevé (un enfant)"
+   ]
+  ],
+  "err": [
+   [
+    "*nourished (pour une amitié)",
+    "Nourished = nourri physiquement. Une relation, un talent = nurtured."
+   ]
+  ],
+  "tip": "Nature vs nurture = l'inné et l'acquis. Nurture = faire grandir avec soin."
+ },
+ "burgeoning": {
+  "alt": [
+   [
+    "budding"
+   ],
+   [
+    "growing"
+   ],
+   [
+    "flourishing",
+    "florissant"
+   ]
+  ],
+  "err": [
+   [
+    "*bourgeoning",
+    "Ça s'écrit burgeoning et se prononce BUR-juh-ning."
+   ]
+  ],
+  "tip": "A burgeon = un bourgeon : burgeoning = qui bourgeonne, qui grandit vite."
+ },
+ "steer": {
+  "alt": [
+   [
+    "guide"
+   ],
+   [
+    "navigate"
+   ],
+   [
+    "steer clear of",
+    "éviter soigneusement"
+   ]
+  ],
+  "err": [
+   [
+    "*stir",
+    "Stir = remuer (une soupe). Steer (STEER) = diriger."
+   ]
+  ],
+  "tip": "The steering wheel = le volant. Steer clear of sth = rester loin de quelque chose."
+ },
+ "to gather": {
+  "alt": [
+   [
+    "assemble"
+   ],
+   [
+    "round up"
+   ],
+   [
+    "I gather that…",
+    "je crois comprendre que…"
+   ]
+  ],
+  "err": [
+   [
+    "*to reunite (pour rassembler des gens)",
+    "Reunite = réunir après une séparation. Rassembler = gather."
+   ]
+  ],
+  "tip": "I gather (that) you're new here = je crois comprendre que tu es nouveau."
+ },
+ "wear down": {
+  "alt": [
+   [
+    "wear out",
+    "épuiser complètement"
+   ],
+   [
+    "grind down"
+   ],
+   [
+    "sap one's energy"
+   ]
+  ],
+  "err": [
+   [
+    "*use down",
+    "Calque. User quelqu'un = wear sb down."
+   ]
+  ],
+  "tip": "Wear (porter, user) → wore → worn. Wear sb down = l'user petit à petit, comme une semelle."
+ },
+ "set up": {
+  "alt": [
+   [
+    "establish"
+   ],
+   [
+    "arrange"
+   ],
+   [
+    "frame",
+    "faire porter le chapeau"
+   ],
+   [
+    "a setup",
+    "un coup monté, une installation"
+   ]
+  ],
+  "err": [
+   [
+    "*install (pour une réunion)",
+    "Install = installer un logiciel. Organiser une réunion = set up a meeting."
+   ]
+  ],
+  "tip": "Set up a meeting, set up a business, set sb up : mettre en place, ou piéger."
+ },
+ "put it to work": {
+  "alt": [
+   [
+    "put it to use"
+   ],
+   [
+    "put it into practice"
+   ],
+   [
+    "harness",
+    "exploiter (une énergie)"
+   ]
+  ],
+  "err": [
+   [
+    "*put it at work",
+    "Préposition : put it TO work."
+   ]
+  ],
+  "tip": "Put sth to work / to use = le faire travailler pour toi."
+ },
+ "pick up the slack": {
+  "alt": [
+   [
+    "take up the slack"
+   ],
+   [
+    "fill the gap"
+   ],
+   [
+    "cover for sb",
+    "remplacer quelqu'un"
+   ]
+  ],
+  "err": [
+   [
+    "*take the relay",
+    "Calque de « prendre le relais ». On dit pick up the slack ou take over."
+   ]
+  ],
+  "tip": "Slack = le mou d'une corde. Pick up the slack = retendre la corde que l'autre a lâchée."
+ },
+ "fetch": {
+  "alt": [
+   [
+    "go get"
+   ],
+   [
+    "bring"
+   ],
+   [
+    "retrieve",
+    "récupérer"
+   ],
+   [
+    "fetch a price",
+    "se vendre à"
+   ]
+  ],
+  "err": [
+   [
+    "*search (pour aller chercher)",
+    "Search = chercher (fouiller). Aller chercher et rapporter = fetch / go get."
+   ]
+  ],
+  "tip": "Play fetch = jouer à la baballe avec un chien : il va chercher et rapporte."
+ },
+ "run on": {
+  "alt": [
+   [
+    "be powered by"
+   ],
+   [
+    "drag on",
+    "s'éterniser"
+   ],
+   [
+    "a run-on sentence",
+    "phrase interminable"
+   ]
+  ],
+  "err": [
+   [
+    "*run with electricity",
+    "Pour l'énergie : run ON electricity, run on coffee."
+   ]
+  ],
+  "tip": "I run on coffee = je carbure au café. A run-on sentence = une phrase qui n'en finit pas."
+ },
+ "pay off": {
+  "alt": [
+   [
+    "work out"
+   ],
+   [
+    "bear fruit"
+   ],
+   [
+    "pay off a debt",
+    "rembourser une dette"
+   ],
+   [
+    "a payoff",
+    "une récompense"
+   ]
+  ],
+  "err": [
+   [
+    "*pay back (pour un effort)",
+    "Pay back = rembourser quelqu'un. Un effort qui réussit = pays off."
+   ]
+  ],
+  "tip": "Hard work pays off = le travail paie. Pay off a loan = solder un prêt."
+ },
+ "hit plot points": {
+  "alt": [
+   [
+    "cover the key beats"
+   ],
+   [
+    "hit all the beats"
+   ],
+   [
+    "follow the formula"
+   ]
+  ],
+  "err": [
+   [
+    "*touch the points of the plot",
+    "On dit hit (the) plot points."
+   ]
+  ],
+  "tip": "A plot point = un tournant de l'intrigue. Hit = cocher, toucher la cible."
+ },
+ "be off to": {
+  "alt": [
+   [
+    "head to"
+   ],
+   [
+    "leave for"
+   ],
+   [
+    "set off for",
+    "plus littéraire"
+   ],
+   [
+    "I'm off!",
+    "j'y vais !"
+   ]
+  ],
+  "err": [
+   [
+    "*I'm off of work (pour partir au travail)",
+    "I'm off TO work = je pars au travail. I'm off work = je ne travaille pas."
+   ]
+  ],
+  "tip": "I'm off to bed = je vais me coucher. I'm off = j'y vais. Court et très américain."
+ },
+ "to cast": {
+  "alt": [
+   [
+    "throw"
+   ],
+   [
+    "cast a vote",
+    "voter"
+   ],
+   [
+    "cast doubt on",
+    "mettre en doute"
+   ],
+   [
+    "the cast",
+    "les acteurs"
+   ]
+  ],
+  "err": [
+   [
+    "*casted",
+    "Cast est irrégulier : cast, cast, cast."
+   ]
+  ],
+  "tip": "Cast, cast, cast : comme put. Cast a spell (sort), cast a vote (vote), the cast (distribution)."
+ },
+ "cut through": {
+  "alt": [
+   [
+    "slice through"
+   ],
+   [
+    "take a shortcut through"
+   ],
+   [
+    "cut to the chase",
+    "aller droit au but"
+   ]
+  ],
+  "err": [
+   [
+    "*cross by the park",
+    "Pour couper à travers : cut through the park."
+   ]
+  ],
+  "tip": "Cut through the noise = se faire entendre malgré tout. Cut to the chase = aller droit au but."
+ },
+ "round them up": {
+  "alt": [
+   [
+    "gather them"
+   ],
+   [
+    "herd them together",
+    "comme un troupeau"
+   ],
+   [
+    "a roundup",
+    "un récapitulatif, une rafle"
+   ]
+  ],
+  "err": [
+   [
+    "*round up them",
+    "Pronom au milieu : round them up."
+   ]
+  ],
+  "tip": "Le cow-boy round up the cattle : il ramène le troupeau en cercle. A news roundup = un récap."
+ },
+ "hand over": {
+  "alt": [
+   [
+    "pass over"
+   ],
+   [
+    "give up",
+    "abandonner"
+   ],
+   [
+    "relinquish",
+    "céder (soutenu)"
+   ],
+   [
+    "a handover",
+    "une passation"
+   ]
+  ],
+  "err": [
+   [
+    "*give over",
+    "Remettre = hand over."
+   ]
+  ],
+  "tip": "Hand = la main : hand over = passer de main en main. A handover = une passation de dossiers."
+ },
+ "give off": {
+  "alt": [
+   [
+    "emit"
+   ],
+   [
+    "exude",
+    "respirer (la confiance)"
+   ],
+   [
+    "give off vibes",
+    "dégager une impression"
+   ]
+  ],
+  "err": [
+   [
+    "*give out (pour une odeur)",
+    "Give out = distribuer, lâcher. Dégager = give off."
+   ]
+  ],
+  "tip": "Give off a smell / heat / vibes : ce qui sort de quelque chose sans qu'on le veuille."
+ },
+ "spew hate": {
+  "alt": [
+   [
+    "spread hate"
+   ],
+   [
+    "spout vitriol",
+    "soutenu"
+   ],
+   [
+    "rant",
+    "vociférer"
+   ]
+  ],
+  "err": [
+   [
+    "*vomit hate",
+    "Calque. On dit spew hate."
+   ]
+  ],
+  "tip": "Spew = vomir, cracher en jet (un volcan spews lava). Au figuré : des mots toxiques."
+ },
+ "play the odds": {
+  "alt": [
+   [
+    "play the percentages"
+   ],
+   [
+    "the odds are…",
+    "il y a de fortes chances que…"
+   ],
+   [
+    "against all odds",
+    "contre toute attente"
+   ]
+  ],
+  "err": [
+   [
+    "*play the odd",
+    "Odds au pluriel = les chances. Odd seul = bizarre."
+   ]
+  ],
+  "tip": "Odds = les chances (au pluriel). Odd = bizarre. Against all odds = contre toute attente."
+ },
+ "ever since": {
+  "alt": [
+   [
+    "since then"
+   ],
+   [
+    "from then on"
+   ],
+   [
+    "ever since",
+    "plus fort que since seul"
+   ]
+  ],
+  "err": [
+   [
+    "*even since",
+    "C'est EVER since, pas even."
+   ],
+   [
+    "*since we've met",
+    "Après since + moment passé : prétérit (since we met)."
+   ]
+  ],
+  "tip": "Ever renforce since : depuis toujours, depuis ce jour-là. Present perfect + ever since + prétérit."
+ },
+ "the other way around": {
+  "alt": [
+   [
+    "vice versa"
+   ],
+   [
+    "the reverse"
+   ],
+   [
+    "conversely",
+    "écrit"
+   ]
+  ],
+  "err": [
+   [
+    "*either way around",
+    "Either way = de toute façon. L'inverse = the other way around."
+   ]
+  ],
+  "tip": "The other way around = retourné dans l'autre sens. Either way = dans un cas comme dans l'autre."
+ },
+ "shelf": {
+  "alt": [
+   [
+    "shelving",
+    "les étagères"
+   ],
+   [
+    "off-the-shelf",
+    "standard, prêt à l'emploi"
+   ],
+   [
+    "shelve",
+    "mettre de côté un projet"
+   ]
+  ],
+  "err": [
+   [
+    "*shelfs",
+    "Pluriel irrégulier : shelves."
+   ]
+  ],
+  "tip": "Shelf → shelves. Shelve a project = le mettre au placard."
+ },
+ "corny": {
+  "alt": [
+   [
+    "cheesy"
+   ],
+   [
+    "cringey",
+    "gênant"
+   ],
+   [
+    "hackneyed",
+    "rebattu"
+   ]
+  ],
+  "err": [
+   [
+    "*corned",
+    "Corned beef = bœuf salé. Ringard = corny."
+   ]
+  ],
+  "tip": "Corny = cheesy : sentimental et vieillot, comme une blague de papa (dad joke)."
+ },
+ "a sweet spot": {
+  "alt": [
+   [
+    "the happy medium"
+   ],
+   [
+    "the ideal balance"
+   ],
+   [
+    "hit the sweet spot",
+    "trouver le bon dosage"
+   ]
+  ],
+  "err": [
+   [
+    "*the sweet point",
+    "On dit the sweet spot."
+   ]
+  ],
+  "tip": "Au tennis ou au baseball, le sweet spot est le point idéal de la raquette ou de la batte."
+ },
+ "outright": {
+  "alt": [
+   [
+    "flat-out"
+   ],
+   [
+    "completely"
+   ],
+   [
+    "unequivocally",
+    "sans équivoque"
+   ],
+   [
+    "win outright",
+    "gagner haut la main"
+   ]
+  ],
+  "err": [
+   [
+    "*outrightly",
+    "Outright est déjà un adverbe : refuse outright."
+   ]
+  ],
+  "tip": "Outright = sans détour, d'un coup : refuse outright, an outright lie, ban sth outright."
+ },
+ "curled up": {
+  "alt": [
+   [
+    "snuggled up"
+   ],
+   [
+    "huddled",
+    "blotti (contre le froid)"
+   ],
+   [
+    "curl up with a book",
+    "se pelotonner avec un livre"
+   ]
+  ],
+  "err": [
+   [
+    "*rolled up (pour une personne)",
+    "Rolled up = enroulé (un tapis). Une personne pelotonnée = curled up."
+   ]
+  ],
+  "tip": "Curl = boucle. Curled up = en boule, comme un chat."
+ },
+ "to fool sb": {
+  "alt": [
+   [
+    "trick"
+   ],
+   [
+    "deceive"
+   ],
+   [
+    "hoodwink",
+    "rouler (familier)"
+   ],
+   [
+    "you can't fool me",
+    "on ne me la fait pas"
+   ]
+  ],
+  "err": [
+   [
+    "*make fool sb",
+    "Fool est un verbe : fool sb. Ou : make a fool of sb (ridiculiser)."
+   ]
+  ],
+  "tip": "Fool sb = le tromper. Make a fool of sb = le ridiculiser. April Fools' Day = le 1er avril."
+ },
+ "to cross": {
+  "alt": [
+   [
+    "double-cross",
+    "trahir un allié"
+   ],
+   [
+    "betray"
+   ],
+   [
+    "cross my mind",
+    "me venir à l'esprit"
+   ]
+  ],
+  "err": [
+   [
+    "*cross me in the street",
+    "Croiser quelqu'un = run into sb ; cross sb = le trahir."
+   ]
+  ],
+  "tip": "Cross sb = le doubler, le trahir. Croiser quelqu'un par hasard = run into sb."
+ },
+ "stay sharp": {
+  "alt": [
+   [
+    "stay alert"
+   ],
+   [
+    "stay on your toes"
+   ],
+   [
+    "keep your wits about you"
+   ]
+  ],
+  "err": [
+   [
+    "*stay sharpened",
+    "Sharpened = aiguisé (un couteau). Rester vif = stay sharp."
+   ]
+  ],
+  "tip": "Sharp = tranchant : un esprit aiguisé. Look sharp! = grouille-toi / sois vigilant."
+ },
+ "get past": {
+  "alt": [
+   [
+    "get over",
+    "se remettre de"
+   ],
+   [
+    "overcome"
+   ],
+   [
+    "get beyond"
+   ]
+  ],
+  "err": [
+   [
+    "*pass the second phase",
+    "Pour franchir un obstacle : get past."
+   ]
+  ],
+  "tip": "Get past a guard, a level, an argument : franchir l'obstacle."
+ },
+ "step aside": {
+  "alt": [
+   [
+    "move aside"
+   ],
+   [
+    "step down",
+    "démissionner"
+   ],
+   [
+    "stand down"
+   ]
+  ],
+  "err": [
+   [
+    "*asside",
+    "Ça s'écrit aside (un seul s)."
+   ]
+  ],
+  "tip": "Aside = à côté. Step aside = faire un pas de côté, ou laisser sa place."
+ },
+ "such a": {
+  "alt": [
+   [
+    "quite a"
+   ],
+   [
+    "what a",
+    "exclamation"
+   ],
+   [
+    "so + adjectif",
+    "sans nom"
+   ]
+  ],
+  "err": [
+   [
+    "*so a good player",
+    "Avec un nom : such a good player. So seul + adjectif : he's so good."
+   ]
+  ],
+  "tip": "Such a + nom. So + adjectif. Such a nice day / it's so nice."
+ },
+ "to be stuck on a boss": {
+  "alt": [
+   [
+    "be hard-stuck",
+    "gamer : bloqué durablement"
+   ],
+   [
+    "hit a wall"
+   ],
+   [
+    "can't get past"
+   ]
+  ],
+  "err": [
+   [
+    "*be blocked on a boss",
+    "Calque. Bloqué = stuck."
+   ]
+  ],
+  "tip": "Stuck = coincé (stick → stuck → stuck). Stuck in traffic, stuck on a level."
+ },
+ "difficulty spike": {
+  "alt": [
+   [
+    "sudden jump in difficulty"
+   ],
+   [
+    "the game ramps up",
+    "la difficulté grimpe"
+   ]
+  ],
+  "err": [
+   [
+    "*difficulty peak",
+    "On dit spike pour une hausse brutale."
+   ]
+  ],
+  "tip": "Spike = une pointe : la courbe de difficulté fait un pic soudain."
+ },
+ "attack pattern": {
+  "alt": [
+   [
+    "move set"
+   ],
+   [
+    "telegraphed attack",
+    "attaque annoncée à l'avance"
+   ]
+  ],
+  "err": [
+   [
+    "*attack schema",
+    "On dit attack pattern."
+   ]
+  ],
+  "tip": "Pattern = un motif qui se répète. Learn the patterns = apprendre les enchaînements."
+ },
+ "to beat a game": {
+  "alt": [
+   [
+    "complete a game"
+   ],
+   [
+    "finish a game"
+   ],
+   [
+    "clear the game"
+   ]
+  ],
+  "err": [
+   [
+    "*finish the game (pour un boss)",
+    "Un boss se bat : beat the boss. Un jeu se finit : beat / finish the game."
+   ]
+  ],
+  "tip": "Beat = battre : on bat un boss, et on « bat » un jeu quand on le termine."
+ },
+ "to rage quit": {
+  "alt": [
+   [
+    "quit in frustration"
+   ],
+   [
+    "throw in the towel",
+    "jeter l'éponge"
+   ]
+  ],
+  "err": [
+   [
+    "*rage-quitted",
+    "Quit est irrégulier : quit, quit, quit (I rage quit yesterday)."
+   ]
+  ],
+  "tip": "Quit, quit, quit : I rage quit last night. Le joueur = a rage quitter."
+ },
+ "go through another phase": {
+  "alt": [
+   [
+    "enter a new phase"
+   ],
+   [
+    "phase two kicks in",
+    "la phase deux démarre"
+   ]
+  ],
+  "err": [
+   [
+    "*go for another round",
+    "Round = une manche (boxe). Pour un boss : another phase."
+   ]
+  ],
+  "tip": "Boss fight = plusieurs phases. Phase two kicks in = la phase deux commence."
+ },
+ "spamming super powerful attacks": {
+  "alt": [
+   [
+    "spamming attacks"
+   ],
+   [
+    "chaining moves"
+   ],
+   [
+    "overpowered (OP)",
+    "trop puissant"
+   ]
+  ],
+  "err": [
+   [
+    "*throwing attacks so many times and so powerful",
+    "Lourd. En gaming : spam attacks."
+   ]
+  ],
+  "tip": "Spam = répéter en boucle, comme les mails indésirables. Spam the attack button."
+ },
+ "in the Little Mermaid world, her name is Ursula": {
+  "alt": [
+   [
+    "in the Little Mermaid level"
+   ],
+   [
+    "in Atlantica",
+    "le nom du monde dans le jeu"
+   ]
+  ],
+  "err": [
+   [
+    "*in the Little Mermaid's…",
+    "Précise le contexte : in the Little Mermaid WORLD."
+   ]
+  ],
+  "tip": "Dans Kingdom Hearts, chaque film Disney est un world : in the Hercules world, in the Aladdin world."
+ },
+ "I couldn't beat him": {
+  "alt": [
+   [
+    "I couldn't take him down"
+   ],
+   [
+    "he got the better of me"
+   ],
+   [
+    "I wasn't able to beat him",
+    "plus neutre"
+   ]
+  ],
+  "err": [
+   [
+    "*I did not manage to beat him",
+    "Correct mais lourd à l'oral. Couldn't est plus naturel."
+   ]
+  ],
+  "tip": "« Je n'ai pas réussi à » = I couldn't, tout simplement."
+ },
+ "I gave up": {
+  "alt": [
+   [
+    "I threw in the towel"
+   ],
+   [
+    "I called it quits"
+   ],
+   [
+    "I quit"
+   ]
+  ],
+  "err": [
+   [
+    "*I have given up",
+    "Récit d'une action terminée : prétérit (I gave up)."
+   ]
+  ],
+  "tip": "Récit au passé : I gave up. I've given up = j'ai arrêté (et c'est toujours le cas)."
+ },
+ "I didn't listen to him": {
+  "alt": [
+   [
+    "I ignored him"
+   ],
+   [
+    "I didn't take his advice"
+   ]
+  ],
+  "err": [
+   [
+    "*I haven't listened to him",
+    "Action passée précise : prétérit."
+   ]
+  ],
+  "tip": "Raconter ce qui s'est passé = prétérit. Listen TO sb, toujours avec to."
+ },
+ "The bosses in Kingdom Hearts are generally so hard": {
+  "alt": [
+   [
+    "Kingdom Hearts bosses tend to be brutal"
+   ],
+   [
+    "the bosses are notoriously hard"
+   ]
+  ],
+  "err": [
+   [
+    "*The boss from Kingdom Hearts generally are so hard",
+    "Sujet au pluriel (bosses), in pour une série, adverbe après are."
+   ]
+  ],
+  "tip": "Boss → bosses (es après ss). L'adverbe se place après be : they are generally hard."
+ },
+ "I was racking my brains / I was focusing": {
+  "alt": [
+   [
+    "I was thinking hard"
+   ],
+   [
+    "I was concentrating"
+   ]
+  ],
+  "err": [
+   [
+    "*I've been racking my brains",
+    "Dans un récit au passé, action en cours : past continuous (I was racking)."
+   ]
+  ],
+  "tip": "Récit au passé : I was + -ing pour le décor, le prétérit pour l'action."
+ },
+ "I almost gave up": {
+  "alt": [
+   [
+    "I nearly gave up"
+   ],
+   [
+    "I came close to quitting"
+   ]
+  ],
+  "err": [
+   [
+    "*I almost given up",
+    "Given sans have n'existe pas : I almost gave up."
+   ]
+  ],
+  "tip": "« J'ai failli » = I almost / I nearly + prétérit."
+ },
+ "The last boss in that game is so long": {
+  "alt": [
+   [
+    "that final boss drags on"
+   ],
+   [
+    "the last boss is a marathon"
+   ]
+  ],
+  "err": [
+   [
+    "*What is the last boss in that game is so long",
+    "Pas de what is au début d'une affirmation."
+   ]
+  ],
+  "tip": "Affirmation = sujet + verbe : the last boss IS so long. What is… sert aux questions."
+ },
+ "at the very least, standard mode at most": {
+  "alt": [
+   [
+    "at a minimum… at a maximum"
+   ],
+   [
+    "at least… at most"
+   ]
+  ],
+  "err": [
+   [
+    "*at very most",
+    "On dit at most (sans very) ou at the very most."
+   ]
+  ],
+  "tip": "At least / at most ; renforcés : at the very least / at the very most (avec the)."
+ },
+ "nowhere near finished": {
+  "alt": [
+   [
+    "far from finished"
+   ],
+   [
+    "a long way from done"
+   ],
+   [
+    "half-baked",
+    "bâclé"
+   ]
+  ],
+  "err": [
+   [
+    "*seriously not finished",
+    "Calque de « sérieusement pas fini »."
+   ]
+  ],
+  "tip": "Nowhere near = pas du tout, loin de : nowhere near ready, nowhere near enough."
+ },
+ "had a proper development cycle": {
+  "alt": [
+   [
+    "was given enough time"
+   ],
+   [
+    "was properly developed"
+   ]
+  ],
+  "err": [
+   [
+    "*reached to the end",
+    "Reach est transitif direct (reach the end) et l'idée est mieux rendue par a proper development cycle."
+   ]
+  ],
+  "tip": "Proper = digne de ce nom : a proper meal, a proper job, a proper development cycle."
+ },
+ "the best in any Sonic game": {
+  "alt": [
+   [
+    "the best in the series"
+   ],
+   [
+    "the best of any Sonic game"
+   ]
+  ],
+  "err": [
+   [
+    "*the best from a Sonic game",
+    "Pour situer dans une série : in any Sonic game."
+   ]
+  ],
+  "tip": "Superlatif + in : the best in the world, the best in any game."
+ },
+ "a soundtrack on that level": {
+  "alt": [
+   [
+    "a soundtrack that good"
+   ],
+   [
+    "a soundtrack of that caliber"
+   ]
+  ],
+  "err": [
+   [
+    "*that level of soundtrack",
+    "Moins naturel. On dit a soundtrack on that level."
+   ]
+  ],
+  "tip": "On that level / on another level = d'un autre niveau, exceptionnel."
+ },
+ "rushed development": {
+  "alt": [
+   [
+    "rushed production"
+   ],
+   [
+    "crunch",
+    "heures sup massives avant la sortie"
+   ],
+   [
+    "rushed out",
+    "sorti à la hâte"
+   ]
+  ],
+  "err": [
+   [
+    "*precipitated development",
+    "Calque. On dit rushed."
+   ]
+  ],
+  "tip": "Rush = se précipiter. A rushed job = du travail bâclé."
+ },
+ "game-breaking bug": {
+  "alt": [
+   [
+    "critical bug"
+   ],
+   [
+    "showstopper",
+    "bug qui empêche la sortie"
+   ],
+   [
+    "soft-lock",
+    "blocage sans issue"
+   ]
+  ],
+  "err": [
+   [
+    "*blocking bug",
+    "On dit game-breaking bug."
+   ]
+  ],
+  "tip": "Game-breaking = qui casse le jeu. Deal-breaker = rédhibitoire, même logique."
+ },
+ "fan-made port": {
+  "alt": [
+   [
+    "fan port"
+   ],
+   [
+    "community port"
+   ],
+   [
+    "fan-made",
+    "fait par des fans"
+   ]
+  ],
+  "err": [
+   [
+    "*port made by fans",
+    "Plus naturel en adjectif composé : fan-made port."
+   ]
+  ],
+  "tip": "Port = portage (adapter un jeu à une autre plateforme). Fan-made, homemade, handmade."
+ },
+ "to live up to the hype": {
+  "alt": [
+   [
+    "meet expectations"
+   ],
+   [
+    "live up to expectations"
+   ],
+   [
+    "deliver",
+    "tenir ses promesses"
+   ]
+  ],
+  "err": [
+   [
+    "*live at the height of",
+    "Calque. On dit live up to."
+   ]
+  ],
+  "tip": "Live up to = être à la hauteur de. Live up to your name, live up to the hype."
+ },
+ "cult classic": {
+  "alt": [
+   [
+    "cult favorite"
+   ],
+   [
+    "cult following",
+    "une base de fans fidèles"
+   ]
+  ],
+  "err": [
+   [
+    "*cult game (pour un classique)",
+    "On dit a cult classic (adjectif : cult)."
+   ]
+  ],
+  "tip": "Cult = culte : a cult movie, a cult classic, a cult following."
+ },
+ "a few days ago some people released": {
+  "alt": [
+   [
+    "a few days back, some fans put out"
+   ],
+   [
+    "some people dropped",
+    "familier : ont sorti"
+   ]
+  ],
+  "err": [
+   [
+    "*a few days ago some people have released",
+    "Ago = passé révolu : prétérit."
+   ]
+  ],
+  "tip": "Ago impose le prétérit : two days ago I saw, a week ago they released."
+ },
+ "a game that was released in 2006": {
+  "alt": [
+   [
+    "a game that came out in 2006"
+   ],
+   [
+    "a 2006 game"
+   ]
+  ],
+  "err": [
+   [
+    "*a game that has been released on 2006",
+    "Date passée : prétérit passif, et in + année."
+   ]
+  ],
+  "tip": "Come out = sortir (un jeu, un film). In 2006, on May 5th, at 8pm."
+ },
+ "the game had plenty of bugs": {
+  "alt": [
+   [
+    "the game was full of bugs"
+   ],
+   [
+    "there were plenty of bugs"
+   ],
+   [
+    "riddled with bugs",
+    "criblé de bugs"
+   ]
+  ],
+  "err": [
+   [
+    "*the game was plenty of bugs",
+    "Plenty of = beaucoup de : avec have ou there were."
+   ]
+  ],
+  "tip": "Plenty of = beaucoup de. Was full of / had plenty of / was riddled with."
+ },
+ "to vote someone out": {
+  "alt": [
+   [
+    "eliminate"
+   ],
+   [
+    "kick out",
+    "virer"
+   ],
+   [
+    "oust",
+    "évincer"
+   ]
+  ],
+  "err": [
+   [
+    "*kill my friend (au jeu)",
+    "Dans les jeux de rôles cachés, on vote out ou eliminate."
+   ]
+  ],
+  "tip": "Vote sb out = le faire sortir par un vote, comme dans les émissions de télé-réalité."
+ },
+ "to throw someone off the scent": {
+  "alt": [
+   [
+    "throw sb off"
+   ],
+   [
+    "put sb off the scent"
+   ],
+   [
+    "a red herring",
+    "une fausse piste"
+   ]
+  ],
+  "err": [
+   [
+    "*mix the tracks",
+    "Calque de « brouiller les pistes ». On dit throw sb off the scent."
+   ]
+  ],
+  "tip": "Scent = l'odeur que suit un chien : on l'éloigne de la piste."
+ },
+ "to blend in": {
+  "alt": [
+   [
+    "fit in",
+    "s'intégrer"
+   ],
+   [
+    "go unnoticed"
+   ],
+   [
+    "stand out",
+    "contraire : se démarquer"
+   ]
+  ],
+  "err": [
+   [
+    "*melt in the mass",
+    "Calque. On dit blend in."
+   ]
+  ],
+  "tip": "Blend = mélanger (un blender) : blend in = se mélanger aux autres. Contraire : stand out."
+ },
+ "poker face": {
+  "alt": [
+   [
+    "straight face"
+   ],
+   [
+    "keep a straight face",
+    "garder son sérieux"
+   ],
+   [
+    "deadpan",
+    "pince-sans-rire"
+   ]
+  ],
+  "err": [
+   [
+    "*poker head",
+    "On dit poker face."
+   ]
+  ],
+  "tip": "Au poker, on ne montre rien : keep a poker face = ne rien laisser paraître."
+ },
+ "to play dumb": {
+  "alt": [
+   [
+    "feign ignorance"
+   ],
+   [
+    "act clueless"
+   ],
+   [
+    "play innocent"
+   ]
+  ],
+  "err": [
+   [
+    "*make the stupid",
+    "Calque. On dit play dumb."
+   ]
+  ],
+  "tip": "Dumb = bête. Play dumb = jouer au bête, faire semblant de ne rien savoir."
+ },
+ "to sandbag": {
+  "alt": [
+   [
+    "hold back"
+   ],
+   [
+    "lowball",
+    "sous-estimer exprès"
+   ],
+   [
+    "hustle",
+    "arnaquer en feignant d'être nul"
+   ]
+  ],
+  "err": [
+   [
+    "*sandbagging (pour un sac de sable)",
+    "Au jeu, to sandbag = cacher son vrai niveau."
+   ]
+  ],
+  "tip": "Sandbag = sac de sable : on se leste exprès pour paraître lent."
+ },
+ "to catch someone off guard": {
+  "alt": [
+   [
+    "take sb by surprise"
+   ],
+   [
+    "blindside",
+    "prendre complètement par surprise"
+   ],
+   [
+    "catch sb napping"
+   ]
+  ],
+  "err": [
+   [
+    "*catch someone off guarded",
+    "Guard est un nom : off guard."
+   ]
+  ],
+  "tip": "Off guard = la garde baissée, comme un boxeur. On guard = sur ses gardes."
+ },
+ "to lull someone into a false sense of security": {
+  "alt": [
+   [
+    "make sb drop their guard"
+   ],
+   [
+    "lull sb into complacency"
+   ]
+  ],
+  "err": [
+   [
+    "*sleep their mistrust",
+    "Calque. On dit lull sb into a false sense of security."
+   ]
+  ],
+  "tip": "A lullaby = une berceuse : lull = bercer, endormir."
+ },
+ "she got mad at me": {
+  "alt": [
+   [
+    "she got angry with me"
+   ],
+   [
+    "she was upset with me"
+   ],
+   [
+    "she lost her temper"
+   ]
+  ],
+  "err": [
+   [
+    "*she became mad at me",
+    "À l'oral américain, get mad est bien plus naturel."
+   ]
+  ],
+  "tip": "Get mad AT sb = s'énerver contre. Mad = en colère en américain, fou en britannique."
+ },
+ "one of my friends": {
+  "alt": [
+   [
+    "a friend of mine"
+   ],
+   [
+    "one of my buddies",
+    "familier"
+   ]
+  ],
+  "err": [
+   [
+    "*one of my friend",
+    "One of + pluriel : one of my friendS."
+   ]
+  ],
+  "tip": "One of + pluriel : one of my friends, one of the best games."
+ },
+ "everyone believed": {
+  "alt": [
+   [
+    "everyone was convinced"
+   ],
+   [
+    "they all bought it",
+    "familier : ils y ont tous cru"
+   ]
+  ],
+  "err": [
+   [
+    "*everyone was believing",
+    "Believe est un verbe d'état : pas de -ing."
+   ]
+  ],
+  "tip": "Believe, know, want, like, need : verbes d'état, presque jamais en -ing."
+ },
+ "that made them shift their votes": {
+  "alt": [
+   [
+    "that swayed their votes"
+   ],
+   [
+    "that changed their minds"
+   ]
+  ],
+  "err": [
+   [
+    "*that had made me gravitate their votes",
+    "Gravitate est intransitif : pas de complément direct."
+   ]
+  ],
+  "tip": "Make + personne + verbe sans to : it made them shift, it made me laugh."
+ },
+ "I told her": {
+  "alt": [
+   [
+    "I said to her"
+   ],
+   [
+    "I replied"
+   ]
+  ],
+  "err": [
+   [
+    "*I was telling her (pour une réplique)",
+    "Réplique ponctuelle et terminée : prétérit."
+   ]
+  ],
+  "tip": "Tell + personne (I told her). Say + chose (I said that…). Jamais « I said her »."
+ },
+ "essentially": {
+  "alt": [
+   [
+    "in short"
+   ],
+   [
+    "long story short"
+   ],
+   [
+    "in a nutshell",
+    "en résumé"
+   ]
+  ],
+  "err": [
+   [
+    "*basically (cinq fois de suite)",
+    "Varie : essentially, long story short, in short."
+   ]
+  ],
+  "tip": "Remplace un basically sur deux par essentially ou long story short."
+ },
+ "show my true skill / show what I'm really capable of": {
+  "alt": [
+   [
+    "show what I can really do"
+   ],
+   [
+    "show my true skill"
+   ]
+  ],
+  "err": [
+   [
+    "*show my true level",
+    "Level pour une compétence est un calque : skill ou what I'm capable of."
+   ]
+  ],
+  "tip": "« Mon niveau » au jeu = my skill. Level = un niveau de jeu (level 3)."
+ },
+ "I revealed that I was": {
+  "alt": [
+   [
+    "I let on that I was",
+    "j'ai laissé entendre"
+   ],
+   [
+    "I came clean",
+    "j'ai avoué"
+   ]
+  ],
+  "err": [
+   [
+    "*I revealed to them that I was",
+    "To them alourdit : reveal that suffit."
+   ]
+  ],
+  "tip": "Plus court = plus percutant à l'oral : I revealed that I was…"
+ },
+ "people just assume I'm not that good": {
+  "alt": [
+   [
+    "people underestimate me"
+   ],
+   [
+    "people take it for granted that I'm bad"
+   ]
+  ],
+  "err": [
+   [
+    "*people are just used that I'm not really that good",
+    "Be used to + that n'existe pas. Assume est le verbe juste."
+   ]
+  ],
+  "tip": "Assume = supposer, partir du principe. Don't assume! = ne tire pas de conclusions."
+ },
+ "the sequel to my last recording": {
+  "alt": [
+   [
+    "the follow-up to"
+   ],
+   [
+    "part two of"
+   ]
+  ],
+  "err": [
+   [
+    "*the sequel from my last recording",
+    "Sequel se construit avec to."
+   ]
+  ],
+  "tip": "A sequel to, a prequel to, an answer to, a solution to : tous avec to."
+ },
+ "people get used to me being bad": {
+  "alt": [
+   [
+    "people grow accustomed to me losing"
+   ],
+   [
+    "people come to expect it"
+   ]
+  ],
+  "err": [
+   [
+    "*people get used that I am bad",
+    "Get used to + nom ou -ing, jamais that."
+   ]
+  ],
+  "tip": "Get used to + -ing : I got used to waking up early."
+ },
+ "when your time comes": {
+  "alt": [
+   [
+    "when the time is right"
+   ],
+   [
+    "when your moment comes"
+   ]
+  ],
+  "err": [
+   [
+    "*when your times comes",
+    "Time est au singulier ici."
+   ]
+  ],
+  "tip": "Your time = ton moment. Times = des fois (three times)."
+ },
+ "shocked by how good you are": {
+  "alt": [
+   [
+    "amazed at how good you are"
+   ],
+   [
+    "stunned by your skill"
+   ]
+  ],
+  "err": [
+   [
+    "*shocked about your level",
+    "Shocked by / at, et level est un calque."
+   ]
+  ],
+  "tip": "Shocked by / at, surprised by / at, amazed at. Pas about."
+ },
+ "they thought they'd won": {
+  "alt": [
+   [
+    "they assumed they'd won"
+   ],
+   [
+    "they were sure they'd won"
+   ]
+  ],
+  "err": [
+   [
+    "*they were thinking that they won",
+    "Think (= croire) est un verbe d'état, et l'antériorité demande had won."
+   ]
+  ],
+  "tip": "They'd won = they had won : le past perfect marque ce qui était fini avant."
+ },
+ "I act like I'm bad": {
+  "alt": [
+   [
+    "I pretend to be bad"
+   ],
+   [
+    "I play dumb"
+   ]
+  ],
+  "err": [
+   [
+    "*I act out like I am bad",
+    "Act out = faire une crise ou mimer. Faire semblant = act like."
+   ]
+  ],
+  "tip": "Act like = faire comme si. Act out = faire une crise (un enfant) ou jouer une scène."
+ },
+ "I've never seen": {
+  "alt": [
+   [
+    "I've yet to see"
+   ],
+   [
+    "never have I seen",
+    "inversion soutenue"
+   ]
+  ],
+  "err": [
+   [
+    "*I never seen",
+    "Seen exige have : I've never seen."
+   ]
+  ],
+  "tip": "See → saw → seen. Seen toujours avec have : I've seen, I haven't seen."
+ },
+ "on the internet": {
+  "alt": [
+   [
+    "online"
+   ],
+   [
+    "on the web"
+   ]
+  ],
+  "err": [
+   [
+    "*on internet",
+    "The est obligatoire : on the internet."
+   ]
+  ],
+  "tip": "On THE internet, on THE radio, on TV (sans the)."
+ },
+ "playing Undercover with my friends": {
+  "alt": [
+   [
+    "playing a game of Undercover"
+   ],
+   [
+    "during a game of Undercover"
+   ]
+  ],
+  "err": [
+   [
+    "*playing an Undercover game with my friend",
+    "Play + nom du jeu sans article, et friends au pluriel."
+   ]
+  ],
+  "tip": "Play chess, play Undercover, play soccer : pas d'article. Et friendZ."
+ },
+ "against my ally": {
+  "alt": [
+   [
+    "against my teammate"
+   ],
+   [
+    "against my partner"
+   ]
+  ],
+  "err": [
+   [
+    "*against an ally",
+    "Le possessif change le sens : my ally (le tien précisément)."
+   ]
+  ],
+  "tip": "Ally se prononce AL-eye. My ally = mon allié à moi, pas un allié quelconque."
+ },
+ "and I answered him": {
+  "alt": [
+   [
+    "and I replied"
+   ],
+   [
+    "and I told him"
+   ]
+  ],
+  "err": [
+   [
+    "*and I answer him",
+    "Récit au passé : -ed (answered)."
+   ]
+  ],
+  "tip": "En lisant un texte au passé, prononce bien le -ed : ANSWERD."
+ },
+ "transit card / bus pass": {
+  "alt": [
+   [
+    "metro card",
+    "à New York : MetroCard"
+   ],
+   [
+    "commuter pass"
+   ],
+   [
+    "Navigo pass",
+    "à Paris"
+   ]
+  ],
+  "err": [
+   [
+    "*transport card",
+    "Calque de « carte de transport ». Américain : transit card, bus pass."
+   ]
+  ],
+  "tip": "Transit = les transports en commun aux États-Unis (public transit)."
+ },
+ "to misplace": {
+  "alt": [
+   [
+    "mislay"
+   ],
+   [
+    "lose track of"
+   ],
+   [
+    "lose",
+    "perdre (plus définitif)"
+   ]
+  ],
+  "err": [
+   [
+    "*displace",
+    "Displace = déplacer (des populations). Égarer = misplace."
+   ]
+  ],
+  "tip": "Mis- = mal : misplace = mal ranger, ne plus savoir où on a mis."
+ },
+ "to turn up": {
+  "alt": [
+   [
+    "show up"
+   ],
+   [
+    "resurface"
+   ],
+   [
+    "turn up the volume",
+    "monter le son"
+   ]
+  ],
+  "err": [
+   [
+    "*turn back (pour un objet retrouvé)",
+    "Turn back = faire demi-tour. Réapparaître = turn up."
+   ]
+  ],
+  "tip": "Turn up = réapparaître (objet) ou se pointer (personne). Turn it up = monte le son."
+ },
+ "scatterbrained": {
+  "alt": [
+   [
+    "absent-minded"
+   ],
+   [
+    "forgetful"
+   ],
+   [
+    "head in the clouds",
+    "dans la lune"
+   ]
+  ],
+  "err": [
+   [
+    "*head in the air",
+    "Calque. On dit scatterbrained ou absent-minded."
+   ]
+  ],
+  "tip": "Scattered brain = un cerveau éparpillé. Absent-minded = distrait."
+ },
+ "yesterday I asked my mom": {
+  "alt": [
+   [
+    "I checked with my mom"
+   ],
+   [
+    "I asked my mother"
+   ]
+  ],
+  "err": [
+   [
+    "*yesterday I was asking to my mom",
+    "Ask sans to, et yesterday + action ponctuelle = prétérit."
+   ]
+  ],
+  "tip": "Ask + personne directement : I asked my mom, I asked him."
+ },
+ "if she had seen my wallet": {
+  "alt": [
+   [
+    "whether she'd seen it"
+   ],
+   [
+    "if she'd come across it"
+   ]
+  ],
+  "err": [
+   [
+    "*if she has seen my keys",
+    "Récit au passé : concordance → had seen."
+   ]
+  ],
+  "tip": "Discours indirect au passé : has seen → had seen, is → was, can → could."
+ },
+ "I'd been looking for my wallet for a week": {
+  "alt": [
+   [
+    "I'd spent a week searching for it"
+   ],
+   [
+    "it had been missing for a week"
+   ]
+  ],
+  "err": [
+   [
+    "*I have looked for my keys for one week",
+    "Durée avant un moment passé : past perfect continuous."
+   ]
+  ],
+  "tip": "« Depuis » dans un récit au passé = had been + -ing + for."
+ },
+ "because I finally found my wallet": {
+  "alt": [
+   [
+    "because my wallet finally turned up"
+   ],
+   [
+    "because I tracked it down"
+   ]
+  ],
+  "err": [
+   [
+    "*because I have found my wallet",
+    "À l'oral américain, le prétérit est plus naturel ici."
+   ]
+  ],
+  "tip": "Finally + prétérit : I finally found it, I finally beat him."
+ },
+ "step off the train": {
+  "alt": [
+   [
+    "get off the train"
+   ],
+   [
+    "alight",
+    "très formel, annonces"
+   ]
+  ],
+  "err": [
+   [
+    "*step out from the train",
+    "Pour un train, un bus, un avion : off. Pour une voiture : out of."
+   ]
+  ],
+  "tip": "Train, bus, plane : get on / get off. Voiture, taxi : get in / get out of."
+ },
+ "to spot": {
+  "alt": [
+   [
+    "notice"
+   ],
+   [
+    "catch sight of"
+   ],
+   [
+    "a spot",
+    "un endroit, une tache"
+   ]
+  ],
+  "err": [
+   [
+    "*to spot (pour une tache)",
+    "A spot = une tache ou un endroit ; le verbe = repérer."
+   ]
+  ],
+  "tip": "Spot the difference = le jeu des sept erreurs. Good spot! = bien vu !"
+ },
+ "to think outside the box": {
+  "alt": [
+   [
+    "be creative"
+   ],
+   [
+    "think laterally"
+   ],
+   [
+    "get creative"
+   ]
+  ],
+  "err": [
+   [
+    "*break out of the box",
+    "L'expression figée est think outside the box."
+   ]
+  ],
+  "tip": "La boîte = le cadre habituel : on réfléchit en dehors."
+ },
+ "wouldn't it be better to live abroad": {
+  "alt": [
+   [
+    "wouldn't you be better off abroad"
+   ],
+   [
+    "why not move abroad?"
+   ]
+  ],
+  "err": [
+   [
+    "*it is not better to live in another country",
+    "Pour une suggestion : wouldn't it be better…? et abroad."
+   ],
+   [
+    "*he wouldn't be better",
+    "Le sujet est it, avec l'inversion : wouldn't it be."
+   ]
+  ],
+  "tip": "Suggestion polie = question négative : wouldn't it be better…? Abroad sans to ni in."
+ },
+ "express myself like a native speaker": {
+  "alt": [
+   [
+    "sound like a native"
+   ],
+   [
+    "speak like a native"
+   ]
+  ],
+  "err": [
+   [
+    "*express myself as a native",
+    "As = en tant que. À la manière de = like."
+   ]
+  ],
+  "tip": "Like = comme (comparaison). As = en tant que (rôle) : as a consultant."
+ },
+ "colorful idioms / everyday slang": {
+  "alt": [
+   [
+    "idiomatic expressions"
+   ],
+   [
+    "slang"
+   ],
+   [
+    "vernacular",
+    "langue parlée"
+   ]
+  ],
+  "err": [
+   [
+    "*expressive idioms",
+    "Sonne lourd. On dit colorful idioms ou slang."
+   ],
+   [
+    "*idoms",
+    "Trois syllabes : IH-dee-uhmz."
+   ]
+  ],
+  "tip": "Colorful = imagé. Idioms se dit IH-dee-uhmz, trois syllabes."
+ },
+ "to be at a loss for words": {
+  "alt": [
+   [
+    "be lost for words"
+   ],
+   [
+    "be tongue-tied"
+   ],
+   [
+    "be speechless",
+    "sans voix"
+   ]
+  ],
+  "err": [
+   [
+    "*look for my words",
+    "Calque de « chercher ses mots »."
+   ]
+  ],
+  "tip": "At a loss = perdu, démuni. At a loss for words = à court de mots."
+ },
+ "language immersion": {
+  "alt": [
+   [
+    "full immersion"
+   ],
+   [
+    "immersive learning"
+   ]
+  ],
+  "err": [
+   [
+    "*linguistic immersion",
+    "On dit language immersion."
+   ]
+  ],
+  "tip": "Language (la langue) + immersion. Linguistic est plus scientifique."
+ },
+ "to hit a plateau": {
+  "alt": [
+   [
+    "plateau",
+    "verbe aussi : my progress plateaued"
+   ],
+   [
+    "stall"
+   ],
+   [
+    "stagnate"
+   ]
+  ],
+  "err": [
+   [
+    "*to stagnate at a step",
+    "On dit hit a plateau."
+   ]
+  ],
+  "tip": "Plateau = palier plat sur la courbe : on monte, puis plus rien. Break through = percer."
+ },
+ "active vocabulary": {
+  "alt": [
+   [
+    "productive vocabulary"
+   ],
+   [
+    "passive vocabulary",
+    "les mots qu'on comprend sans les utiliser"
+   ]
+  ],
+  "err": [
+   [
+    "*active vocabularies",
+    "Vocabulary est indénombrable ici."
+   ]
+  ],
+  "tip": "Actif = les mots que tu utilises. Passif = ceux que tu comprends seulement."
+ },
+ "native-like fluency": {
+  "alt": [
+   [
+    "near-native fluency"
+   ],
+   [
+    "native-level proficiency"
+   ]
+  ],
+  "err": [
+   [
+    "*fluidity",
+    "Fluidity = fluidité (d'un liquide). Aisance à l'oral = fluency."
+   ]
+  ],
+  "tip": "Fluent = qui parle couramment. Fluency = l'aisance. Pas fluidity."
+ },
+ "native speaker": {
+  "alt": [
+   [
+    "native"
+   ],
+   [
+    "mother-tongue speaker"
+   ],
+   [
+    "non-native speaker",
+    "contraire"
+   ]
+  ],
+  "err": [
+   [
+    "*native locutor",
+    "Calque. On dit native speaker."
+   ]
+  ],
+  "tip": "Native speaker = celui dont c'est la langue maternelle (mother tongue)."
+ },
+ "to struggle to": {
+  "alt": [
+   [
+    "find it hard to"
+   ],
+   [
+    "have trouble -ing"
+   ],
+   [
+    "have difficulty -ing"
+   ]
+  ],
+  "err": [
+   [
+    "*struggle for find",
+    "Struggle to + verbe."
+   ]
+  ],
+  "tip": "Struggle to do = avoir du mal à. Have trouble doing = même sens, avec -ing."
+ },
+ "to live abroad": {
+  "alt": [
+   [
+    "live overseas"
+   ],
+   [
+    "move abroad",
+    "partir vivre à l'étranger"
+   ],
+   [
+    "expat",
+    "expatrié"
+   ]
+  ],
+  "err": [
+   [
+    "*live at abroad",
+    "Abroad est un adverbe : pas de préposition (go abroad, live abroad)."
+   ]
+  ],
+  "tip": "Abroad sans préposition : go abroad, study abroad, live abroad."
+ },
+ "struggling to find the right words": {
+  "alt": [
+   [
+    "groping for words"
+   ],
+   [
+    "at a loss for words"
+   ]
+  ],
+  "err": [
+   [
+    "*looking for my words",
+    "Calque littéral de « chercher ses mots »."
+   ]
+  ],
+  "tip": "Chercher ses mots = struggle to find the right words, ou be at a loss for words."
+ },
+ "I hesitate, which is really frustrating": {
+  "alt": [
+   [
+    "I falter"
+   ],
+   [
+    "I trip over my words",
+    "je bafouille"
+   ]
+  ],
+  "err": [
+   [
+    "*I'm hesitating, which is very embarrassing",
+    "Habitude : présent simple. Embarrassing = honteux, gênant."
+   ]
+  ],
+  "tip": "Embarrassing = gênant, honteux (faux ami de embarrassant). Agaçant = frustrating, annoying."
+ },
+ "a C1 level in English / in Spanish": {
+  "alt": [
+   [
+    "C1 proficiency in English"
+   ],
+   [
+    "I'm C1 in English",
+    "familier"
+   ]
+  ],
+  "err": [
+   [
+    "*a C1 level at English",
+    "Niveau dans une langue : in."
+   ]
+  ],
+  "tip": "Good AT English (doué), a level IN English (niveau). Deux prépositions, deux sens."
+ },
+ "in the United States": {
+  "alt": [
+   [
+    "in the US"
+   ],
+   [
+    "in the States",
+    "familier"
+   ],
+   [
+    "in America"
+   ]
+  ],
+  "err": [
+   [
+    "*in United States",
+    "The est obligatoire : the United States, the UK."
+   ]
+  ],
+  "tip": "Pays au pluriel ou en « union » : the United States, the UK, the Netherlands."
+ },
+ "though it's not as easy as we think": {
+  "alt": [
+   [
+    "although it's harder than it seems"
+   ],
+   [
+    "easier said than done",
+    "plus facile à dire qu'à faire"
+   ]
+  ],
+  "err": [
+   [
+    "*so it is not as easy",
+    "So = donc. Le contraste = though."
+   ],
+   [
+    "*though it is not",
+    "Contracte à l'oral : it's."
+   ]
+  ],
+  "tip": "Lecture : accentue THOUGH, NOT, EASY, THINK. Contracte it is en it's."
+ },
+ "Americans speak very fast, and they really use colorful idioms": {
+  "alt": [
+   [
+    "Americans talk fast and use lots of idioms"
+   ]
+  ],
+  "err": [
+   [
+    "*Americans speaks",
+    "Sujet pluriel : speak sans S."
+   ],
+   [
+    "*idoms",
+    "Trois syllabes : IH-dee-uhmz."
+   ]
+  ],
+  "tip": "Pause après fast. Accentue AMERICANS, VERY, REALLY, COLORFUL IDIOMS."
+ },
+ "front and back": {
+  "alt": [
+   [
+    "both sides"
+   ],
+   [
+    "double-sided",
+    "imprimé recto verso"
+   ]
+  ],
+  "err": [
+   [
+    "*recto verso",
+    "En anglais : front and back, ou both sides."
+   ]
+  ],
+  "tip": "Recto verso = front and back. Une impression recto verso = double-sided."
+ },
+ "pics": {
+  "alt": [
+   [
+    "photos"
+   ],
+   [
+    "shots"
+   ],
+   [
+    "snaps",
+    "familier"
+   ]
+  ],
+  "err": [
+   [
+    "*pictures (pour des dessins)",
+    "Picture = image, dessin ou photo ; pic est sa version courte."
+   ]
+  ],
+  "tip": "Pic = picture en abrégé. Pics or it didn't happen = sans preuve, ça n'a pas eu lieu."
+ },
+ "driver's license": {
+  "alt": [
+   [
+    "license"
+   ],
+   [
+    "ID",
+    "pièce d'identité"
+   ],
+   [
+    "driving licence",
+    "britannique"
+   ]
+  ],
+  "err": [
+   [
+    "*driving permit (au quotidien)",
+    "Américain : driver's license. Britannique : driving licence."
+   ]
+  ],
+  "tip": "US : driver's license (avec s). UK : driving licence (avec c)."
+ },
+ "laid-back": {
+  "alt": [
+   [
+    "easygoing"
+   ],
+   [
+    "chill",
+    "familier"
+   ],
+   [
+    "relaxed"
+   ]
+  ],
+  "err": [
+   [
+    "*lying back",
+    "Lying back = allongé en arrière. Décontracté = laid-back."
+   ]
+  ],
+  "tip": "Laid-back = « posé en arrière » : quelqu'un de détendu. Lie back = s'allonger."
+ },
+ "stumble across": {
+  "alt": [
+   [
+    "come across"
+   ],
+   [
+    "run into",
+    "une personne"
+   ],
+   [
+    "chance upon",
+    "soutenu"
+   ]
+  ],
+  "err": [
+   [
+    "*fall on (par hasard)",
+    "Calque de « tomber sur ». On dit stumble across ou come across."
+   ]
+  ],
+  "tip": "Stumble = trébucher : on trébuche sur une trouvaille sans la chercher."
+ },
+ "down the street": {
+  "alt": [
+   [
+    "around the corner"
+   ],
+   [
+    "a stone's throw away",
+    "à deux pas"
+   ],
+   [
+    "up the street",
+    "presque pareil"
+   ]
+  ],
+  "err": [
+   [
+    "*descending the street",
+    "Down the street n'implique pas de pente : juste plus loin."
+   ]
+  ],
+  "tip": "Down / up the street = plus loin dans la rue, sans idée de pente."
+ },
+ "disclose": {
+  "alt": [
+   [
+    "divulge"
+   ],
+   [
+    "reveal"
+   ],
+   [
+    "full disclosure",
+    "en toute transparence"
+   ],
+   [
+    "undisclosed",
+    "non divulgué"
+   ]
+  ],
+  "err": [
+   [
+    "*unclose",
+    "Le contraire de close ici est disclose (dis- + close)."
+   ]
+  ],
+  "tip": "Disclosure = la divulgation. Full disclosure, … = pour être transparent, …"
+ },
+ "pass on": {
+  "alt": [
+   [
+    "relay",
+    "transmettre"
+   ],
+   [
+    "turn down",
+    "décliner"
+   ],
+   [
+    "pass away",
+    "décéder"
+   ]
+  ],
+  "err": [
+   [
+    "*pass up (pour transmettre)",
+    "Pass up = laisser passer une occasion. Transmettre = pass on."
+   ]
+  ],
+  "tip": "Pass on a message, pass on an offer. Pass out = s'évanouir."
+ },
+ "reach out": {
+  "alt": [
+   [
+    "get in touch"
+   ],
+   [
+    "contact"
+   ],
+   [
+    "touch base",
+    "faire un point"
+   ],
+   [
+    "outreach",
+    "nom : prospection"
+   ]
+  ],
+  "err": [
+   [
+    "*reach out me",
+    "Reach out TO sb."
+   ]
+  ],
+  "tip": "Très utilisé au bureau : I'll reach out to the client = je vais contacter le client."
+ },
+ "racket": {
+  "alt": [
+   [
+    "scheme"
+   ],
+   [
+    "scam"
+   ],
+   [
+    "protection racket",
+    "racket, extorsion"
+   ],
+   [
+    "the man behind",
+    "le cerveau de"
+   ]
+  ],
+  "err": [
+   [
+    "*rack",
+    "Rack = étagère ou bois de cerf. Trafic = racket (RAK-it)."
+   ]
+  ],
+  "tip": "Racket = trafic organisé, ou vacarme (make a racket = faire un boucan)."
+ },
+ "up for grabs": {
+  "alt": [
+   [
+    "available"
+   ],
+   [
+    "on offer"
+   ],
+   [
+    "up in the air",
+    "pas encore décidé"
+   ]
+  ],
+  "err": [
+   [
+    "*for grab",
+    "Expression figée au pluriel : up for grabs."
+   ]
+  ],
+  "tip": "Grab = attraper : quelque chose que n'importe qui peut attraper."
+ },
+ "put out fires": {
+  "alt": [
+   [
+    "troubleshoot"
+   ],
+   [
+    "firefighting",
+    "le mode pompier"
+   ],
+   [
+    "do damage control"
+   ]
+  ],
+  "err": [
+   [
+    "*handle the fires",
+    "L'expression courante est put out fires."
+   ]
+  ],
+  "tip": "Put out = éteindre (un feu, une cigarette). Au bureau : régler les urgences."
+ },
+ "landslide": {
+  "alt": [
+   [
+    "sweeping victory"
+   ],
+   [
+    "win hands down"
+   ],
+   [
+    "mudslide",
+    "coulée de boue"
+   ]
+  ],
+  "err": [
+   [
+    "*land slide (en deux mots)",
+    "Un seul mot : landslide."
+   ]
+  ],
+  "tip": "Win by a landslide = gagner avec une avalanche de voix."
+ },
+ "level": {
+  "alt": [
+   [
+    "raze to the ground"
+   ],
+   [
+    "flatten"
+   ],
+   [
+    "level with sb",
+    "être franc"
+   ],
+   [
+    "level up",
+    "monter de niveau"
+   ]
+  ],
+  "err": [
+   [
+    "*level up (pour détruire)",
+    "Level up = monter de niveau. Level seul = raser."
+   ]
+  ],
+  "tip": "Level = rendre plat : raser une ville. Level up = gagner un niveau. I'll level with you = franchement."
  }
 });

@@ -4,6 +4,37 @@
 // ═══════════════════════════════════════════════
 const STORIES = {
   es: [
+    { id: 'lujo', title: '✨ Un lujo de tarde', desc: 'Une sortie avec Lucía : chaussures neuves, oranges et concours télé.', level: 'B1',
+      chars: { T: ['🧑', 'Tú'], L: ['👩', 'Lucía'] },
+      steps: [
+        { type: 'line', who: 'L', text: '¡Qué zapatillas tan bonitas! ¿Son nuevas?', tr: 'Quelles jolies baskets ! Elles sont neuves ?' },
+        { type: 'choice', who: 'T', prompt: 'Tu les portes pour la première fois. Tu réponds :', opts: [
+          { text: 'Sí, hoy las estoy estrenando.', tr: 'Oui, je les étrenne aujourd\'hui.', best: true, note: 'Estrenar = porter pour la première fois. Le mot exact.',
+            then: [{ type: 'line', who: 'L', text: '¡Pues qué lujo! Te quedan genial.', tr: 'Eh bien, quel luxe ! Elles te vont super bien.' }] },
+          { text: 'Sí, hoy las estoy entrenando.', tr: '(confusion) Oui, je les entraîne aujourd\'hui.', ok: false, note: 'Entrenar = s\'entraîner. Étrenner = estrenar. Une lettre d\'écart.',
+            then: [{ type: 'line', who: 'L', text: '¿Entrenando? ¿Las zapatillas van al gimnasio? Querrás decir estrenando.', tr: 'Tu les entraînes ? Les baskets vont à la salle ? Tu veux dire que tu les étrennes.' }] },
+          { text: 'Sí, es la primera vez que las llevo.', tr: 'Oui, c\'est la première fois que je les porte.', note: 'Correct et clair. Un Espagnol dirait simplement « las estoy estrenando ».',
+            then: [{ type: 'line', who: 'L', text: 'Se nota, están impecables.', tr: 'Ça se voit, elles sont impeccables.' }] },
+        ] },
+        { type: 'line', who: 'L', text: 'Vamos al mercado, que quiero comprar naranjas para el zumo.', tr: 'Allons au marché, je veux acheter des oranges pour le jus.' },
+        { type: 'q', prompt: '« Naranjas » son…', opts: ['Des citrons', 'Des oranges', 'Des pêches'], ans: 1 },
+        { type: 'line', who: 'L', text: 'Luego, en casa, vemos un concurso en la tele. Mi abuela no se pierde ni uno.', tr: 'Ensuite, à la maison, on regarde un jeu télé. Ma grand-mère n\'en rate pas un.' },
+        { type: 'choice', who: 'T', prompt: 'Le jeu télé est un concours de beauté pour chiens. Tu demandes :', opts: [
+          { text: '¿De qué raza es el perro que va ganando?', tr: 'Le chien qui est en tête, il est de quelle race ?', best: true, note: 'Pour un animal : ¿de qué raza es? Naturel et précis.',
+            then: [{ type: 'line', who: 'L', text: 'Es un galgo. ¡Qué belleza de animal!', tr: 'C\'est un lévrier. Quelle beauté, cet animal !' }] },
+          { text: '¿De qué rasa es el perro?', tr: '(orthographe) Il est de quelle race, le chien ?', ok: false, note: 'Ça s\'écrit raza, et en Espagne le z se prononce comme le th anglais.',
+            then: [{ type: 'line', who: 'L', text: 'Raza, con zeta. Es un galgo. ¡Qué belleza!', tr: 'Raza, avec un z. C\'est un lévrier. Quelle beauté !' }] },
+        ] },
+        { type: 'line', who: 'L', text: 'Mira, el ganador se lleva un viaje de lujo. Y el perro… atrapa la pelota al vuelo.', tr: 'Regarde, le gagnant remporte un voyage de luxe. Et le chien… attrape la balle au vol.' },
+        { type: 'q', prompt: '« Atrapa la pelota » veut dire…', opts: ['Il lance la balle', 'Il attrape la balle', 'Il perd la balle'], ans: 1 },
+        { type: 'choice', who: 'T', prompt: 'Dernier mot :', opts: [
+          { text: 'Este programa te atrapa, no puedo dejar de verlo.', tr: 'Cette émission te scotche, je n\'arrive pas à arrêter de la regarder.', best: true, note: 'Atrapar au sens figuré : captiver. Très naturel.',
+            then: [{ type: 'line', who: 'L', text: 'Te lo dije. Mi abuela tiene buen gusto.', tr: 'Je te l\'avais dit. Ma grand-mère a bon goût.' }] },
+          { text: 'Este programa es una lujuria.', tr: '(faux ami) Cette émission est une luxure.', ok: false, note: 'La lujuria = la luxure ! Le luxe = el lujo : « es un lujo ».',
+            then: [{ type: 'line', who: 'L', text: '¿Una lujuria? ¡Será un lujo! Qué vergüenza, jaja.', tr: 'Une luxure ? Tu veux dire un luxe ! La honte, haha.' }] },
+        ] },
+      ]
+    },
     { id: 'partido', title: '🔀 Rumbo al partido', desc: 'En route pour le match avec Lucía. À toi de choisir tes répliques : l\'histoire suit tes choix.', level: 'B2',
       chars: { T: ['🧑', 'Tú'], L: ['👩', 'Lucía'] },
       steps: [
@@ -141,6 +172,45 @@ const STORIES = {
     },
   ],
   en: [
+    { id: 'undercover-night', title: '🕵️ Undercover Night', desc: 'Une soirée Undercover au bar, puis un portefeuille introuvable. Tes répliques, tes bluffs.', level: 'C1',
+      chars: { Y: ['🧑', 'You'], J: ['👩', 'Jess'] },
+      steps: [
+        { type: 'line', who: 'J', text: 'Okay, last round. Somebody here is the undercover, and I\'m going to find out who.', tr: 'OK, dernière manche. Quelqu\'un ici est l\'imposteur, et je vais trouver qui.' },
+        { type: 'choice', who: 'Y', prompt: 'Tu es l\'imposteur. Tu bluffes :', opts: [
+          { text: 'Don\'t look at me. I can barely keep track of my own word.', tr: 'Ne me regarde pas. J\'arrive à peine à suivre mon propre mot.', best: true, note: 'keep track of + une pointe d\'autodérision : tu joues l\'idiot sans en faire trop. Parfait pour te fondre dans la masse (blend in).',
+            then: [{ type: 'line', who: 'J', text: 'Ha! Classic. You always play dumb at the start.', tr: 'Ha ! Classique. Tu fais toujours l\'idiot au début.' }] },
+          { text: 'I am not the undercover, I swear on my head.', tr: '(calque) Je ne suis pas l\'imposteur, je le jure sur ma tête.', ok: false, note: '« Je le jure sur ma tête » se dit I swear (on my life). Et nier trop vite, c\'est tout sauf un poker face.',
+            then: [{ type: 'line', who: 'J', text: 'On your head? That\'s exactly what the undercover would say.', tr: 'Sur ta tête ? C\'est exactement ce que dirait l\'imposteur.' }] },
+          { text: 'I am a civilian. My word is very normal.', tr: 'Je suis un civil. Mon mot est très normal.', note: 'Correct, mais trop direct : un vrai bluffeur reste flou et détendu.',
+            then: [{ type: 'line', who: 'J', text: 'Very normal, huh? Suspicious.', tr: 'Très normal, hein ? Suspect.' }] },
+        ] },
+        { type: 'line', who: 'J', text: 'Wait. You sandbagged the first two rounds, didn\'t you? You were lulling us into a false sense of security.', tr: 'Attends. Tu as fait exprès de mal jouer les deux premières manches, non ? Tu endormais notre méfiance.' },
+        { type: 'q', prompt: 'Que veut dire « you sandbagged » ?', opts: ['Tu as triché aux cartes', 'Tu as fait exprès de mal jouer', 'Tu es parti tôt'], ans: 1 },
+        { type: 'choice', who: 'Y', prompt: 'Le groupe vote. Tu dois éliminer ton alliée pour brouiller les pistes :', opts: [
+          { text: 'Sorry, Jess. I\'m voting you out. It\'s the only way to throw them off the scent.', tr: 'Désolé, Jess. Je vote contre toi. C\'est le seul moyen de brouiller les pistes.', best: true, note: 'vote out + throw off the scent : exactement le vocabulaire des jeux à rôles cachés.',
+            then: [{ type: 'line', who: 'J', text: 'You did NOT just do that. I\'m your ally!', tr: 'Tu n\'as PAS fait ça. Je suis ton alliée !' }] },
+          { text: 'Sorry, Jess. I have to kill you to mix the tracks.', tr: '(calque) Désolé, Jess. Je dois te tuer pour brouiller les pistes.', ok: false, note: 'Au jeu, on n\'élimine pas en « tuant » : vote out. Et « brouiller les pistes » = throw sb off the scent.',
+            then: [{ type: 'line', who: 'J', text: 'Kill me? We\'re in a bar, not a horror movie. But fine, vote me out.', tr: 'Me tuer ? On est dans un bar, pas dans un film d\'horreur. Mais d\'accord, vote contre moi.' }] },
+          { text: 'Sorry, Jess. I vote against you.', tr: 'Désolé, Jess. Je vote contre toi.', note: 'Correct. Vote you out est plus naturel, et dire pourquoi rend le bluff crédible.',
+            then: [{ type: 'line', who: 'J', text: 'Against me? Wow. Okay.', tr: 'Contre moi ? Waouh. D\'accord.' }] },
+        ] },
+        { type: 'line', who: 'J', text: 'And… you won. You were the undercover the whole time. You caught everyone off guard!', tr: 'Et… tu as gagné. Tu étais l\'imposteur depuis le début. Tu as pris tout le monde au dépourvu !' },
+        { type: 'choice', who: 'Y', prompt: 'Jess est vexée. Tu la consoles :', opts: [
+          { text: 'Hey, she got mad at me last time too. Think of it as a blessing in disguise.', tr: 'Hé, elle s\'était énervée contre moi la dernière fois aussi. Vois ça comme un mal pour un bien.', best: true, note: 'got mad at me (et pas became mad) + a blessing in disguise : l\'expression que tu as apprise à ce jeu.',
+            then: [{ type: 'line', who: 'J', text: 'A blessing in disguise? You owe me a drink.', tr: 'Un mal pour un bien ? Tu me dois un verre.' }] },
+          { text: 'Don\'t be angry. People get used that I am bad, it\'s my strategy.', tr: '(calque) Ne sois pas fâchée. Les gens s\'habituent que je suis nul, c\'est ma stratégie.', ok: false, note: 'Get used to + -ing, jamais that : people get used to me being bad.',
+            then: [{ type: 'line', who: 'J', text: 'You mean people get used to you being bad. Clever. Annoying, but clever.', tr: 'Tu veux dire que les gens s\'habituent à ce que tu sois nul. Malin. Énervant, mais malin.' }] },
+        ] },
+        { type: 'line', who: 'J', text: 'Wait, where\'s your wallet? You\'re so scatterbrained.', tr: 'Attends, où est ton portefeuille ? Tu es tellement tête en l\'air.' },
+        { type: 'q', prompt: '« Scatterbrained » veut dire…', opts: ['Tête en l\'air', 'Très intelligent', 'Fatigué'], ans: 0 },
+        { type: 'choice', who: 'Y', prompt: 'Tu le cherches partout. Tu dis :', opts: [
+          { text: 'I must have misplaced it. Don\'t worry, it always turns up.', tr: 'J\'ai dû l\'égarer. T\'inquiète, il finit toujours par réapparaître.', best: true, note: 'misplace + turn up : égarer, puis retrouver. Exactement ton rapport de la semaine.',
+            then: [{ type: 'line', who: 'J', text: 'Found it! It was under your chair. Now pay for my drink.', tr: 'Trouvé ! Il était sous ta chaise. Maintenant paie mon verre.' }] },
+          { text: 'I have lost it since one hour. Did you see it?', tr: '(calque) Je l\'ai perdu depuis une heure. Tu l\'as vu ?', ok: false, note: '« Depuis une heure » pour un fait passé : an hour ago. Et ici, misplace convient mieux que lose.',
+            then: [{ type: 'line', who: 'J', text: 'An hour ago, you mean? Oh, it\'s right here under your chair.', tr: 'Il y a une heure, tu veux dire ? Oh, il est juste là, sous ta chaise.' }] },
+        ] },
+      ]
+    },
     { id: 'outage', title: '🔀 The Outage', desc: 'Internet coupe juste avant une deadline. À toi de choisir tes répliques : l\'histoire suit tes choix.', level: 'C1',
       chars: { Y: ['🧑', 'You'], M: ['👩', 'Maya'] },
       steps: [
