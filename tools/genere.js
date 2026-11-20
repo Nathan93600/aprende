@@ -4,6 +4,7 @@
 //   node tools/genere.js doublons <sauvegarde.json>      mots en attente déjà présents dans l'appli
 //   node tools/genere.js doublons en:"pay off" es:lujo   idem, mots donnés à la main
 //   node tools/genere.js complet [liste.txt] [sauvegarde.json]   chaque mot de la liste a-t-il unité, exemple, fiche, voix… ?
+//   node tools/genere.js traites                     formes notées puis intégrées autrement (=>) ou laissées de côté (!) → courses/genere_traites.js
 //   node tools/genere.js verif                           format des données, rien de perdu depuis le dernier commit, cache, secrets
 //   node tools/genere.js voix                            met à jour tools/voix_textes.json (textes sans enregistrement, marqués n:1)
 //   node tools/genere.js audio <dossier ou .zip>         range les mp3 reçus dans audio/ et met à jour audio/manifest.js
@@ -427,6 +428,9 @@ function cmdComplet(args) {
       ns.forEach(s => { const txt = norm(JSON.stringify(s.steps)), used = nw.filter(w => txt.includes(norm(w))); (used.length >= Math.min(3, nw.length) ? ok : wn)(`${l} histoire « ${s.title} » : réemploie ${used.length} des ${nw.length} mots nouveaux`); });
     }
   }
+  { const want = traitesData(); let have = null; try { const t = readWork(TRAITES_FILE); have = t ? JSON.parse(t.slice(t.indexOf('{'), t.lastIndexOf('}') + 1)) : null; } catch(e) {}
+    const lack = []; for(const l in want) for(const k in want[l]) if(!have || !have[l] || have[l][k] !== want[l][k]) lack.push(`${l}: ${k}`);
+    lack.length ? ko(`${lack.length} forme(s) notée(s) puis traitée(s) autrement (=> ou !) ne quitteraient pas « Mots en attente » : lance « node tools/genere.js traites »`) : ok('les formes traitées autrement (=> ou !) quitteront « Mots en attente »'); }
   const wk = D.week || {}, wkB = B.week || {};
   if(JSON.stringify(wk) === JSON.stringify(wkB)) ko('le bilan de la semaine (CRS_WEEK) n\'a pas été mis à jour');
   else { const m = String(wk.date || '').match(/^(\d{2})\/(\d{2})\/(\d{4})$/), age = m ? (Date.now() - new Date(+m[3], +m[2] - 1, +m[1])) / 864e5 : 99; (age >= -1 && age < 8 ? ok : ko)(`bilan de la semaine daté du ${wk.date}`); }
@@ -439,6 +443,23 @@ function cmdComplet(args) {
 
   console.log('\n' + (errs.length ? C.r(`Génère incomplet : ${errs.length} point(s) à corriger.`) : voice.length ? C.y(`Données complètes. Reste les voix : ${pendingVoice} texte(s) à enregistrer sur le PC, puis « audio » et relancer.`) : C.g('Génère complet.')) + (warns.length ? C.y(` ${warns.length} avertissement(s).`) : ''));
   return errs.length ? 1 : 0;
+}
+// ── Formes notées puis traitées autrement (=> ou !) : l'appli les retire de « Mots en attente » ──
+const TRAITES_FILE = 'courses/genere_traites.js';
+function traitesData() {
+  const dir = path.join(ROOT, 'tools', 'genere'), T = { es: {}, en: {}, ln: {} };
+  if(!fs.existsSync(dir)) return T;
+  fs.readdirSync(dir).filter(f => /^\d{4}-\d{2}-\d{2}\.txt$/.test(f)).sort().forEach(f => parseListe(path.join(dir, f)).items.forEach(x => {
+    const l = x.srcLang === 'fr' ? null : x.l; if(!l || !T[l]) return;
+    if(x.skip) T[l][x.src] = '! ' + x.skip; else if(x.word !== x.src) T[l][x.src] = x.word;
+  }));
+  return T;
+}
+function cmdTraites() {
+  const T = traitesData(), n = Object.values(T).reduce((a, o) => a + Object.keys(o).length, 0);
+  fs.writeFileSync(path.join(ROOT, TRAITES_FILE), '// ¡Aprende! — Mots notés sous une forme et intégrés sous une autre (=>) ou laissés de côté (!)\n// Généré par « node tools/genere.js traites » à partir de tools/genere/*.txt : ne pas modifier à la main.\n// js/pending.js s\'en sert pour retirer ces mots de « Mots en attente ».\nconst GENERE_TRAITES = ' + JSON.stringify(T, null, 1) + ';\n');
+  console.log(C.g(`${TRAITES_FILE} : ${n} forme(s) traitée(s) autrement`));
+  return 0;
 }
 // Un génère est-il en cours ? (liste nouvelle ou modifiée dans tools/genere/)
 function genereEnCours() {
@@ -469,6 +490,6 @@ function cmdPret(args) {
 }
 
 const [cmd, ...args] = process.argv.slice(2);
-const run = { doublons: cmdDoublons, verif: cmdVerif, complet: cmdComplet, cache: cmdCache, voix: cmdVoix, audio: cmdAudio, pret: cmdPret }[cmd];
-if(!run) { console.log(fs.readFileSync(__filename, 'utf8').split('\n').slice(1, 13).map(l => l.replace(/^\/\/ ?/, '')).join('\n')); process.exit(cmd ? 1 : 0); }
+const run = { traites: cmdTraites, doublons: cmdDoublons, verif: cmdVerif, complet: cmdComplet, cache: cmdCache, voix: cmdVoix, audio: cmdAudio, pret: cmdPret }[cmd];
+if(!run) { console.log(fs.readFileSync(__filename, 'utf8').split('\n').slice(1, 14).map(l => l.replace(/^\/\/ ?/, '')).join('\n')); process.exit(cmd ? 1 : 0); }
 Promise.resolve(run(args)).then(c => process.exit(c || 0)).catch(e => { console.error(C.r(e.stack || e)); process.exit(1); });

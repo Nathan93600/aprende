@@ -24,6 +24,8 @@ function pwKnownMap(lang) {
   try { (COURSES[lang].units || []).forEach(u => (u.w || []).forEach(w => add(w[0]))); } catch(e) {}
   try { JOURNAL_SESSIONS.forEach(s => (s[lang] || (lang === 'es' ? s.mots : null) || []).forEach(x => add(x[0]))); } catch(e) {}
   try { Object.keys((CRS_FB && CRS_FB[lang]) || {}).forEach(add); } catch(e) {}
+  // Formes notées puis intégrées sous une autre forme (=>) ou laissées de côté (!) au génère
+  try { Object.entries((GENERE_TRAITES && GENERE_TRAITES[lang]) || {}).forEach(([k, v]) => { const n = pwNorm(k); if(n && !m.has(n)) m.set(n, String(v).startsWith('! ') ? k : v); }); } catch(e) {}
   return (_pwKnown[lang] = m);
 }
 function pwKnown(lang, word) { return lang === 'fr' ? null : (pwKnownMap(lang).get(pwNorm(word)) || null); }

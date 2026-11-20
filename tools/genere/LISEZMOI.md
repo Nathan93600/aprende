@@ -18,3 +18,6 @@ Et autour : nouvelles unités en accès libre, histoire qui réemploie les mots,
 mots notés dans l'appli tous présents dans la liste. `node tools/genere.js pret` le lance tout seul
 pendant un génère. Rien n'est poussé tant qu'il n'affiche pas « Génère complet » (ou « Données complètes »
 en attendant les voix).
+
+Les lignes avec `=>` ou `!` : lancer `node tools/genere.js traites` pour que l'appli retire aussi ces formes de
+« Mots en attente » (sinon elles y restent, puisqu'elles ne sont pas dans l'appli sous ce nom). `complet` le vérifie.

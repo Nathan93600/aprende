@@ -211,7 +211,7 @@ const AUDIT = (min) => {
       const r = await p.evaluate(() => {
         const o = {}; localStorage.removeItem('pending_words'); localStorage.removeItem('oral_reports'); localStorage.removeItem('c1_log');
         const deck = getDeckForLang('en')[0].en;
-        const txt = `Bien sûr ! Voici le rapport :\n\n**=== RAPPORT APRENDE ===**\nDATE: 2026-11-17\nTHEME: my family tree\n**NIVEAU:** B2\nPOINTS FORTS:\n- Bon débit\n- Vocabulaire varié\nERREURS:\n- I have two cousin => I have two cousins | pluriel : le S final\n- she don't know everything about the family history that we have => she doesn't know everything about our family history that we have | 3e personne\nA DIRE PLUTOT:\n- 1. I am agree → I agree | pas de « be »\nMOTS FRANCAIS:\n- famille recomposée => a stepladder of cousins | We are a a stepladder of cousins.\nVOCABULAIRE:\n- ${deck} = déjà dans l'appli | exemple\n- on my dad's side = du côté de mon père | My cousins on my dad's side.\nPRONONCIATION:\n- cousins : prononce le Z final\nNON VERIFIE:\n- aucun\nPRIORITE: le S final\n=== FIN ===`;
+        const txt = `Bien sûr ! Voici le rapport :\n\n**=== RAPPORT APRENDE ===**\nDATE: 2026-11-17\nTHEME: my family tree\n**NIVEAU:** B2\nPOINTS FORTS:\n- Bon débit\n- Vocabulaire varié\nERREURS:\n- I have two cousin => I have two cousins | pluriel : le S final\n- she don't know everything about the family history that we have => she doesn't know everything about our family history that we have | 3e personne\nA DIRE PLUTOT:\n- 1. I am agree → I agree | pas de « be »\nMOTS FRANCAIS:\n- famille recomposée => a stepladder of cousins | We are a a stepladder of cousins.\nVOCABULAIRE:\n- ${deck} = déjà dans l'appli | exemple\n- on my neighbor's porch = du côté de mon père | My cousins on my neighbor's porch.\nPRONONCIATION:\n- cousins : prononce le Z final\nNON VERIFIE:\n- aucun\nPRIORITE: le S final\n=== FIN ===`;
         const R = orParse(txt);
         o.parse = [R.ok, R.date, R.theme, R.level, R.priority, R.strengths.length, R.errors.length, R.better.length, R.french.length, R.vocab.length, R.pron.length, R.unchecked.length, R.better[0].a, R.better[0].b, R.errors[0].n, R.pron[0].a];
         o.bad = orParse('Super session aujourd\'hui, tu as bien parlé !').ok;
@@ -233,7 +233,7 @@ const AUDIT = (min) => {
       });
       ok('le rapport est lu malgré le texte autour et le gras', JSON.stringify(r.parse) === JSON.stringify([true, '2026-11-17', 'my family tree', 'B2', 'le S final', 2, 2, 1, 1, 2, 1, 0, 'I am agree', 'I agree', 'pluriel : le S final', 'cousins']), JSON.stringify(r.parse));
       ok('un texte libre est signalé comme non reconnu ; les deux consignes contiennent le format', r.bad === false && r.prompts.every(Boolean), JSON.stringify(r.prompts));
-      ok('les éléments cochés rejoignent les mots en attente, sans doublon', r.review === 6 && r.unchecked === 1 && JSON.stringify(r.added) === JSON.stringify([4, 1, "I agree|a stepladder of cousins|on my dad's side|I have two cousins", true]), JSON.stringify([r.review, r.unchecked, r.added]));
+      ok('les éléments cochés rejoignent les mots en attente, sans doublon', r.review === 6 && r.unchecked === 1 && JSON.stringify(r.added) === JSON.stringify([4, 1, "I agree|a stepladder of cousins|on my neighbor's porch|I have two cousins", true]), JSON.stringify([r.review, r.unchecked, r.added]));
       ok('le rapport est gardé, la conversation du jour cochée, le tout dans la sauvegarde', r.stored && r.talk && r.exported && r.dash && p.errs.length === 0, JSON.stringify(r) + p.errs.join(' | '));
       await p.close();
     }
@@ -680,6 +680,15 @@ const AUDIT = (min) => {
         if(p.errs.length > n || steps < 3) broken.push(`${l}:${id} (${steps} actions) ${p.errs.slice(n).join(' | ')}`);
       }
       ok(`${list.length} histoires se jouent jusqu'au bout`, broken.length === 0, broken.join('\n      '));
+      await p.close();
+    }
+
+    if(want('mots')) {
+      console.log('\nMots en attente traités autrement au génère');
+      const p = await open(browser, base, { fn: () => localStorage.setItem('pending_words', JSON.stringify([
+        { w: 'eatch', l: 'en', t: 1 }, { w: 'step asside', l: 'en', t: 2 }, { w: 'with my friends', l: 'en', t: 3 }, { w: 'zzz pas encore traité', l: 'en', t: 4 }])) });
+      const r = await p.evaluate(() => { const n = pwClean(); return { n, left: pwLoad().map(x => x.w) }; });
+      ok('un mot intégré sous une autre forme (=>) ou laissé de côté (!) quitte la liste', r.n === 3 && JSON.stringify(r.left) === '["zzz pas encore traité"]', JSON.stringify(r));
       await p.close();
     }
 
