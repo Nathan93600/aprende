@@ -138,7 +138,8 @@ function openOralTexts() {
   box.innerHTML = list.map((r, i) => {
     const d = r.d ? new Date(r.d + 'T00:00:00').toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }) : '?';
     const hasCorr = r.corrected && r.corrected.trim();
-    const hasIdio = r.idiomatic && r.idiomatic.trim();
+    const idio = r.idiomatic || (typeof ORAL_IDIOMATIC !== 'undefined' && ORAL_IDIOMATIC[(r.d || '') + '|' + (r.theme || '')]) || '';
+    const hasIdio = idio && idio.trim();
     const stats = [r.level && `niveau ${esc(r.level)}`, r.n && `${r.n.errors || 0} erreurs`, r.n && `${r.n.better || 0} tournures`].filter(Boolean).join(' · ');
     return `<details class="ot-card" ${i === 0 ? 'open' : ''}>
       <summary class="ot-sum">
@@ -147,8 +148,8 @@ function openOralTexts() {
         <span class="ot-stats">${stats}</span>
       </summary>
       <div class="ot-body">
-        ${hasCorr ? `<div class="ot-section"><div class="ot-label">✅ Texte corrigé <small>(Gemini)</small></div><div class="ot-text">${esc(r.corrected)}</div></div>` : '<div class="ot-section"><div class="ot-label dim">Pas de texte corrigé dans ce rapport</div></div>'}
-        ${hasIdio ? `<div class="ot-section"><div class="ot-label">💎 Version idiomatique <small>(génère)</small></div><div class="ot-text idio">${r.idiomatic}</div></div>` : ''}
+        ${hasCorr ? `<div class="ot-section"><div class="ot-label">✅ Texte corrigé <small>(Gemini)</small></div><div class="ot-text">${esc(r.corrected)}</div></div>` : hasIdio ? '' : '<div class="ot-section"><div class="ot-label dim">Pas de texte corrigé dans ce rapport</div></div>'}
+        ${hasIdio ? `<div class="ot-section"><div class="ot-label">💎 Version idiomatique <small>(génère)</small></div><div class="ot-text idio">${idio}</div><div class="ot-label dim">En gras : les expressions de tes cartes. Lis-le à voix haute.</div></div>` : ''}
         ${r.priority ? `<div class="ot-section"><div class="ot-label">🎯 Priorité</div><div class="ot-text small">${esc(r.priority)}</div></div>` : ''}
         ${r.strengths && r.strengths.length ? `<div class="ot-section"><div class="ot-label">💪 Points forts</div><ul class="ot-ul">${r.strengths.map(s => `<li>${esc(s)}</li>`).join('')}</ul></div>` : ''}
       </div>
@@ -158,6 +159,6 @@ function openOralTexts() {
 // badge count
 function oralTextsBadge() {
   const el = document.getElementById('oral-texts-badge'); if(!el) return;
-  const n = orLoad().filter(r => r.lang === 'en' && r.corrected && r.corrected.trim()).length;
+  const n = orLoad().filter(r => r.lang === 'en' && ((r.corrected && r.corrected.trim()) || (typeof ORAL_IDIOMATIC !== 'undefined' && ORAL_IDIOMATIC[(r.d || '') + '|' + (r.theme || '')]))).length;
   el.textContent = n ? `${n} texte${n > 1 ? 's' : ''}` : 'Lecture';
 }

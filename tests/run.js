@@ -692,6 +692,16 @@ const AUDIT = (min) => {
       await p.close();
     }
 
+    if(want('rapport')) {
+      console.log('\nVersions idiomatiques des rapports');
+      const p = await open(browser, base);
+      const r = await p.evaluate(() => { const key = Object.keys(ORAL_IDIOMATIC)[0], [d, theme] = key.split('|');
+        localStorage.setItem('oral_reports', JSON.stringify([{ d, theme, lang: 'en', t: 1, n: { errors: 1, better: 0 } }]));
+        openOralTexts(); const t = document.querySelector('.ot-text.idio'); return { ok: !!t, bold: t ? t.querySelectorAll('b').length : 0 }; });
+      ok('le rapport affiche sa version idiomatique, expressions de l\'appli en gras', r.ok && r.bold > 3, JSON.stringify(r));
+      await p.close();
+    }
+
     if(want('pieges')) {
       console.log('\nPièges des QCM');
       const p = await open(browser, base);

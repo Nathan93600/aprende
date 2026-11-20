@@ -344,6 +344,7 @@ entrées dans `AUDIO_MAP`. Coût Google Chirp 3 HD : 1 million de caractères gr
    - une fiche par nouveau mot (`courses/feedback_*.js`), astuce « Pour retenir » comprise ;
    - les exemples, les phrases de prononciation (`PRON_DATA`), une histoire (`STORIES`) qui réemploie les mots ;
    - le bilan `CRS_WEEK`, à partir des cartes les plus ratées de la sauvegarde ;
+   - une version idiomatique de chaque rapport d'oral anglais (`courses/oral_idiomatic.js`, clé « date|thème »), avec les expressions de l'appli en gras ;
    - les voix (script lancé par l'apprenant), puis `AUDIO_MAP`.
 
 ### L'outil `tools/genere.js`

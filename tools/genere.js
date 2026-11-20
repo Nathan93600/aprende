@@ -362,6 +362,13 @@ function cmdComplet(args) {
     const missing = pend.filter(x => !listed.has(x.l + ':' + norm(x.w)));
     missing.length ? missing.forEach(x => ko(`noté dans l'appli mais absent de la liste : ${x.l}: ${x.w}`)) : ok(`les ${pend.length} mots notés dans l'appli sont tous dans la liste`);
   } else wn('pas de sauvegarde donnée : impossible de vérifier que les mots notés dans l\'appli (« + mot ») sont tous dans la liste');
+  // Rapports d'oral anglais : chacun a sa version idiomatique retravaillée avec les mots de l'appli
+  if(backup) {
+    const j = JSON.parse(fs.readFileSync(backup, 'utf8')), raw = (j.data || j).oral_reports, reps = (typeof raw === 'string' ? JSON.parse(raw) : raw || []).filter(r => r && r.lang === 'en');
+    let idio = {}; try { const t = readWork('courses/oral_idiomatic.js') || ''; idio = JSON.parse(t.slice(t.indexOf('{'), t.lastIndexOf('}') + 1)); } catch(e) {}
+    const lack = reps.filter(r => !idio[(r.d || '') + '|' + (r.theme || '')]);
+    lack.length ? lack.forEach(r => ko(`rapport d'oral sans version idiomatique (courses/oral_idiomatic.js) : ${r.d} | ${r.theme}`)) : reps.length && ok(`les ${reps.length} rapports d'oral anglais ont leur version idiomatique`);
+  }
   const seen = new Set();
   items.forEach(x => { if(x.skip !== undefined && x.skip !== null) return; const id = x.l + ':' + norm(x.word); if(seen.has(id)) wn(`deux fois dans la liste : ${x.l}: ${x.word}`); seen.add(id); });
 

@@ -63,6 +63,9 @@ g. Les voix : `node tools/genere.js voix` ajoute les nouveaux textes à tools/vo
    puis donne-moi la commande pour lancer tools/voix_google.py sur mon ordinateur. Ma clé Google, je la
    tape moi-même dans le terminal : ne me la demande jamais. Quand je te dis « c'est fait », range les
    MP3 avec `node tools/genere.js audio <dossier ou zip>` (il complète audio/manifest.js).
+f bis. Pour chaque rapport d'oral anglais de la sauvegarde : une version idiomatique dans courses/oral_idiomatic.js
+   (clé « date|thème »), mon texte retravaillé avec des expressions qui sont dans l'appli, en <b>gras</b>.
+   Elle s'affiche dans « Mes textes oraux ». `complet` vérifie qu'aucun rapport n'en manque.
 g bis. `node tools/genere.js traites` : les mots notés sous une forme et intégrés sous une autre (=>), ou laissés
    de côté (!), quittent ainsi ma liste « Mots en attente » dans l'appli.
 h. `node tools/genere.js cache` (incrémente CACHE_NAME dans sw.js, sinon mon téléphone garde

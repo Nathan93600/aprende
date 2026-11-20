@@ -2702,3 +2702,4 @@ body.pop .ot-text.small { background: var(--sun) !important; color: #2b1408 !imp
 body.pop .ot-ul li { color: var(--tx); font: 500 .84rem/1.45 'Poppins', sans-serif; padding: .3rem 0; }
 body.pop .ot-ul li::before { color: #1f9d4a; }
 body.pop.dark .ot-ul li::before { color: var(--mint); }
+body.pop .ot-text.idio b { font-weight: 800; background: rgba(255,255,255,.6); border-radius: 5px; padding: 0 .2em; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
